@@ -12,7 +12,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Gateway API");
+        c.SwaggerEndpoint("http://localhost:5271/swagger/v1/swagger.json", "Identity API (Auth)");
+    });
 }
 
 app.UseHttpsRedirection();

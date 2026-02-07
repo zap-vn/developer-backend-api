@@ -1,6 +1,26 @@
-@Zap.Identity.Api_HostAddress = http://localhost:5271
+@Zap.Identity.Api_HostAddress = http://localhost:5034
 
 GET {{Zap.Identity.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
-###
+### Login Test (Success)
+POST {{Zap.Identity.Api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+    "UserName": "admin@pho24.vn",
+    "Password": "backend3.0",
+    "MerchantName": "pho24",
+    "IsRemember": true
+}
+
+### Login Test (Wrong Password)
+POST {{Zap.Identity.Api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+    "UserName": "admin@pho24.vn",
+    "Password": "wrongpassword",
+    "MerchantName": "pho24",
+    "IsRemember": true
+}

@@ -3,4 +3,13 @@
 GET {{Zap.Gateway.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
-###
+### Login via Gateway
+POST {{Zap.Gateway.Api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+    "UserName": "admin@pho24.vn",
+    "Password": "backend3.0",
+    "MerchantName": "pho24",
+    "IsRemember": true
+}

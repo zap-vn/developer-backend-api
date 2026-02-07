@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zap.Identity.Domain\Zap.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\shared\Zap.Contracts\Zap.Contracts.csproj" />
+    <ProjectReference Include="..\..\shared\Zap.BuildingBlocks\Zap.BuildingBlocks.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

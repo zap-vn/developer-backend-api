@@ -1,0 +1,6 @@
+@Zap.Gateway.Api_HostAddress = http://localhost:5221
+
+GET {{Zap.Gateway.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

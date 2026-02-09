@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 using MongoDB.Driver;
 using Zap.Identity.Application.DTOs;
 using Zap.Identity.Application.Interfaces;
+using Zap.Identity.Domain;
 using Zap.Identity.Domain.Entities;
 
 namespace Zap.Identity.Infrastructure.Services;
@@ -20,9 +21,10 @@ public class ResourceService : IResourceService
     {
         _systemDb = mongoClient.GetDatabase("SinglePoint_System");
         _cache = cache;
+
     }
 
-    public async Task<SetupMetadataDto> GetSetupMetadataAsync()
+    public async Task<SetupMetadataDto> GetSetupMetadataAsync(string languageCode = "en")
     {
         // Try to get data from local cache first
         if (_cache.TryGetValue(CacheKey, out SetupMetadataDto? cachedMetadata) && cachedMetadata != null)
@@ -32,29 +34,35 @@ public class ResourceService : IResourceService
 
         // If not in cache, fetch from database
         var businessTypesTask = _systemDb.GetCollection<SystemBusinessType>("SystemBussinessType")
-            .Find(b => b.Visible == 1)
+            .Find(_ => true)
             .ToListAsync();
         
         var languagesTask = _systemDb.GetCollection<SystemLanguage>("SystemLanguages")
-            .Find(l => l.Visible == 1)
+            .Find(_ => true) 
+            .ToListAsync();
+            
+        var languageTranslationsTask = _systemDb.GetCollection<SystemLanguageTranslate>("SystemLanguagesTranslate")
+            .Find(_ => true) // Fetch all translations
             .ToListAsync();
 
         var timeZonesTask = _systemDb.GetCollection<SystemTimeZone>("SystemTimeZone")
-            .Find(t => t.Visible == 1)
+            .Find(_ => true)
             .ToListAsync();
 
         var dateFormatsTask = _systemDb.GetCollection<SystemFormatDate>("SystemFormatDate")
-            .Find(d => d.Visible == 1)
+            .Find(_ => true)
             .ToListAsync();
 
         var timeFormatsTask = _systemDb.GetCollection<SystemFormatTime>("SystemFormatTime")
-            .Find(t => t.Visible == 1)
+            .Find(_ => true)
             .ToListAsync();
 
-        await Task.WhenAll(businessTypesTask, languagesTask, timeZonesTask, dateFormatsTask, timeFormatsTask);
+        await Task.WhenAll(businessTypesTask, languagesTask, languageTranslationsTask, timeZonesTask, dateFormatsTask, timeFormatsTask);
 
         var businessTypes = await businessTypesTask;
         var languages = await languagesTask;
+        var translations = await languageTranslationsTask;
+
         var timeZones = await timeZonesTask;
         var dateFormats = await dateFormatsTask;
         var timeFormats = await timeFormatsTask;
@@ -63,17 +71,33 @@ public class ResourceService : IResourceService
         {
             BusinessTypes = businessTypes.Select(b => new ResourceDto 
             { 
-                Value = b.BussinessTypeEn, 
-                Label = b.BussinessTypeVi 
+                Value = b.SystemBussinessTypeId.ToString(), 
+                Label = languageCode == "vi" ? b.BussinessTypeVi : b.BussinessTypeEn 
             }),
-            Languages = languages.Select(l => new ResourceDto 
-            { 
-                Value = l.LanguageCode, 
-                Label = l.LanguageName 
+            Languages = languages.Select(l => 
+            {
+                string label = l.EnglishName;
+                if (languageCode == "vi")
+                {
+                    var translation = translations.FirstOrDefault(t => t.TwoLetterISOLanguageName == l.TwoLetterISOLanguageName);
+                    if (translation != null)
+                    {
+                        label = translation.Name;
+                    }
+                }
+                
+                return new ResourceDto 
+                { 
+                    Value = l.SystemLanguagesId.ToString(), 
+                    Label = label,
+                    DisplayName = l.DisplayName,
+                    NumericCode = l.NumericCode,
+                    RegionDisplayName = l.RegionDisplayName
+                };
             }),
             TimeZones = timeZones.Select(t => new ResourceDto 
             { 
-                Value = t.StandardName, 
+                Value = t.TimeZoneId, 
                 Label = t.DisplayName 
             }),
             DateFormats = dateFormats.Select(df => new ResourceDto 
@@ -88,9 +112,9 @@ public class ResourceService : IResourceService
             }),
             Countries = new List<ResourceDto>
             {
-                new() { Value = "VN", Label = "Viet Nam" },
-                new() { Value = "US", Label = "United States" },
-                new() { Value = "SG", Label = "Singapore" }
+                new() { Value = "VN", Label = languageCode == "vi" ? "Việt Nam" : "Viet Nam" },
+                new() { Value = "US", Label = languageCode == "vi" ? "Hoa Kỳ" : "United States" },
+                new() { Value = "SG", Label = languageCode == "vi" ? "Singapore" : "Singapore" }
             }
         };
 

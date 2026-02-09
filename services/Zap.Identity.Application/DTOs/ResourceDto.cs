@@ -7,6 +7,9 @@ public class ResourceDto
     public string Value { get; set; } = string.Empty;
     public string Label { get; set; } = string.Empty;
     public string? Extra { get; set; }
+    public string DisplayName { get; set; } = string.Empty;
+    public int? NumericCode { get; set; }
+    public string RegionDisplayName { get; set; } = string.Empty;
 }
 
 public class SetupMetadataDto

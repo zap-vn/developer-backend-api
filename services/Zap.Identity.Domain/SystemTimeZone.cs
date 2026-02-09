@@ -1,14 +1,22 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Zap.Identity.Domain.Entities;
+namespace Zap.Identity.Domain;
 
 [BsonIgnoreExtraElements]
 public class SystemTimeZone
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
+
+    [BsonElement("Id")]
+    public int LegacyId { get; set; }
+
+    [BsonElement("TimeZoneId")]
+    public string TimeZoneId { get; set; } = string.Empty;
+
+    [BsonElement("OrderNo")]
+    public int OrderNo { get; set; }
 
     [BsonElement("DisplayName")]
     public string DisplayName { get; set; } = string.Empty;

@@ -31,11 +31,25 @@ public class ResourceService : IResourceService
         }
 
         // If not in cache, fetch from database
-        var businessTypesTask = _systemDb.GetCollection<SystemBusinessType>("SystemBussinessType").Find(b => true).ToListAsync();
-        var languagesTask = _systemDb.GetCollection<SystemLanguage>("SystemLanguages").Find(l => true).ToListAsync();
-        var timeZonesTask = _systemDb.GetCollection<SystemTimeZone>("SystemTimeZone").Find(t => true).ToListAsync();
-        var dateFormatsTask = _systemDb.GetCollection<SystemFormatDate>("SystemFormatDate").Find(d => d.Visible == 1).ToListAsync();
-        var timeFormatsTask = _systemDb.GetCollection<SystemFormatTime>("SystemFormatTime").Find(t => t.Visible == 1).ToListAsync();
+        var businessTypesTask = _systemDb.GetCollection<SystemBusinessType>("SystemBussinessType")
+            .Find(b => b.Visible == 1)
+            .ToListAsync();
+        
+        var languagesTask = _systemDb.GetCollection<SystemLanguage>("SystemLanguages")
+            .Find(l => true)
+            .ToListAsync();
+
+        var timeZonesTask = _systemDb.GetCollection<SystemTimeZone>("SystemTimeZone")
+            .Find(t => true)
+            .ToListAsync();
+
+        var dateFormatsTask = _systemDb.GetCollection<SystemFormatDate>("SystemFormatDate")
+            .Find(d => d.Visible == 1)
+            .ToListAsync();
+
+        var timeFormatsTask = _systemDb.GetCollection<SystemFormatTime>("SystemFormatTime")
+            .Find(t => t.Visible == 1)
+            .ToListAsync();
 
         await Task.WhenAll(businessTypesTask, languagesTask, timeZonesTask, dateFormatsTask, timeFormatsTask);
 
@@ -49,8 +63,8 @@ public class ResourceService : IResourceService
         {
             BusinessTypes = businessTypes.Select(b => new ResourceDto 
             { 
-                Value = b.Code, 
-                Label = b.Name 
+                Value = b.BussinessTypeEn, 
+                Label = b.BussinessTypeVi 
             }),
             Languages = languages.Select(l => new ResourceDto 
             { 

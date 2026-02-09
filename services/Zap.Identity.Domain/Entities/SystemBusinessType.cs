@@ -10,9 +10,12 @@ public class SystemBusinessType
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; } = string.Empty;
 
-    [BsonElement("Name")]
-    public string Name { get; set; } = string.Empty;
+    [BsonElement("BussinessType_en")]
+    public string BussinessTypeEn { get; set; } = string.Empty;
 
-    [BsonElement("Code")]
-    public string Code { get; set; } = string.Empty;
+    [BsonElement("BussinessType_vi")]
+    public string BussinessTypeVi { get; set; } = string.Empty;
+
+    [BsonElement("Visible")]
+    public int Visible { get; set; }
 }

@@ -15,21 +15,24 @@ public class ResourceService : IResourceService
 
     public ResourceService(IMongoClient mongoClient)
     {
-        // Fetching from the specific system database requested by the user
         _systemDb = mongoClient.GetDatabase("SinglePoint_System");
     }
 
     public async Task<SetupMetadataDto> GetSetupMetadataAsync()
     {
-        var businessTypesTask = _systemDb.GetCollection<SystemBusinessType>("SystemBussinessType").Find(_ => true).ToListAsync();
-        var languagesTask = _systemDb.GetCollection<SystemLanguage>("SystemLanguages").Find(_ => true).ToListAsync();
-        var timeZonesTask = _systemDb.GetCollection<SystemTimeZone>("SystemTimeZone").Find(_ => true).ToListAsync();
+        var businessTypesTask = _systemDb.GetCollection<SystemBusinessType>("SystemBussinessType").Find(b => true).ToListAsync();
+        var languagesTask = _systemDb.GetCollection<SystemLanguage>("SystemLanguages").Find(l => true).ToListAsync();
+        var timeZonesTask = _systemDb.GetCollection<SystemTimeZone>("SystemTimeZone").Find(t => true).ToListAsync();
+        var dateFormatsTask = _systemDb.GetCollection<SystemFormatDate>("SystemFormatDate").Find(d => d.Visible == 1).ToListAsync();
+        var timeFormatsTask = _systemDb.GetCollection<SystemFormatTime>("SystemFormatTime").Find(t => t.Visible == 1).ToListAsync();
 
-        await Task.WhenAll(businessTypesTask, languagesTask, timeZonesTask);
+        await Task.WhenAll(businessTypesTask, languagesTask, timeZonesTask, dateFormatsTask, timeFormatsTask);
 
         var businessTypes = await businessTypesTask;
         var languages = await languagesTask;
         var timeZones = await timeZonesTask;
+        var dateFormats = await dateFormatsTask;
+        var timeFormats = await timeFormatsTask;
 
         return new SetupMetadataDto
         {
@@ -48,16 +51,16 @@ public class ResourceService : IResourceService
                 Value = t.StandardName, 
                 Label = t.DisplayName 
             }),
-            DateFormats = timeZones
-                .Where(t => !string.IsNullOrEmpty(t.DateFormat))
-                .Select(t => t.DateFormat)
-                .Distinct()
-                .Select(df => new ResourceDto { Value = df, Label = df }),
-            TimeFormats = timeZones
-                .Where(t => !string.IsNullOrEmpty(t.TimeFormat))
-                .Select(t => t.TimeFormat)
-                .Distinct()
-                .Select(tf => new ResourceDto { Value = tf, Label = tf }),
+            DateFormats = dateFormats.Select(df => new ResourceDto 
+            { 
+                Value = df.DisplayFormat, 
+                Label = df.DisplayFormat 
+            }),
+            TimeFormats = timeFormats.Select(tf => new ResourceDto 
+            { 
+                Value = tf.DisplayFormat, 
+                Label = tf.DisplayFormat 
+            }),
             Countries = new List<ResourceDto>
             {
                 new() { Value = "VN", Label = "Viet Nam" },

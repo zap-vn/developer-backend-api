@@ -1,5 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace Zap.Identity.Domain.Entities;
 
@@ -59,7 +60,28 @@ public class Customer
     public string TimeZoneDisplayName { get; set; } = string.Empty;
 
     [BsonElement("Country")]
-    public int Country { get; set; }
+    public string Country { get; set; } = string.Empty;
+
+    [BsonElement("ProjectName")]
+    public string ProjectName { get; set; } = string.Empty;
+
+    [BsonElement("BusinessType")]
+    public string BusinessType { get; set; } = string.Empty;
+
+    [BsonElement("UseAiContentGeneration")]
+    public bool UseAiContentGeneration { get; set; }
+
+    [BsonElement("Language")]
+    public string Language { get; set; } = string.Empty;
+
+    [BsonElement("DateFormat")]
+    public string DateFormat { get; set; } = string.Empty;
+
+    [BsonElement("TimeFormat")]
+    public string TimeFormat { get; set; } = string.Empty;
+
+    [BsonElement("ReferenceAssets")]
+    public List<string> ReferenceAssets { get; set; } = new();
 
     [BsonElement("PublicKey")]
     public string PublicKey { get; set; } = string.Empty;

@@ -27,9 +27,35 @@ public class CustomerRepository : ICustomerRepository
         return await _customerCollection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<Customer?> GetByIdAsync(int customerId)
+    public async Task<Customer?> GetByIdAsync(string id)
     {
-        var filter = Builders<Customer>.Filter.Eq(c => c.CustomerId, customerId);
+        var filter = Builders<Customer>.Filter.Eq(c => c.Id, id);
         return await _customerCollection.Find(filter).FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<Customer>> GetAllAsync()
+    {
+        return await _customerCollection.Find(_ => true).ToListAsync();
+    }
+
+    public async Task CreateAsync(Customer customer)
+    {
+        if (string.IsNullOrEmpty(customer.Id))
+        {
+            customer.Id = Guid.NewGuid().ToString();
+        }
+        await _customerCollection.InsertOneAsync(customer);
+    }
+
+    public async Task UpdateAsync(Customer customer)
+    {
+        var filter = Builders<Customer>.Filter.Eq(c => c.Id, customer.Id);
+        await _customerCollection.ReplaceOneAsync(filter, customer);
+    }
+
+    public async Task DeleteAsync(string id)
+    {
+        var filter = Builders<Customer>.Filter.Eq(c => c.Id, id);
+        await _customerCollection.DeleteOneAsync(filter);
     }
 }

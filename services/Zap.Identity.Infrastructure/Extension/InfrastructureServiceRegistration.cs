@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Zap.Identity.Application.Interfaces;
@@ -14,6 +15,7 @@ public static class InfrastructureServiceRegistration
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddMemoryCache();
         // Configure settings
         services.Configure<Persistence.DatabaseSettings>(configuration.GetSection("DatabaseSettings"));
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using MongoDB.Driver;
 using Zap.Identity.Application.DTOs;
 using Zap.Identity.Application.Interfaces;
@@ -12,14 +13,24 @@ namespace Zap.Identity.Infrastructure.Services;
 public class ResourceService : IResourceService
 {
     private readonly IMongoDatabase _systemDb;
+    private readonly IMemoryCache _cache;
+    private const string CacheKey = "SetupMetadata";
 
-    public ResourceService(IMongoClient mongoClient)
+    public ResourceService(IMongoClient mongoClient, IMemoryCache cache)
     {
         _systemDb = mongoClient.GetDatabase("SinglePoint_System");
+        _cache = cache;
     }
 
     public async Task<SetupMetadataDto> GetSetupMetadataAsync()
     {
+        // Try to get data from local cache first
+        if (_cache.TryGetValue(CacheKey, out SetupMetadataDto? cachedMetadata) && cachedMetadata != null)
+        {
+            return cachedMetadata;
+        }
+
+        // If not in cache, fetch from database
         var businessTypesTask = _systemDb.GetCollection<SystemBusinessType>("SystemBussinessType").Find(b => true).ToListAsync();
         var languagesTask = _systemDb.GetCollection<SystemLanguage>("SystemLanguages").Find(l => true).ToListAsync();
         var timeZonesTask = _systemDb.GetCollection<SystemTimeZone>("SystemTimeZone").Find(t => true).ToListAsync();
@@ -34,7 +45,7 @@ public class ResourceService : IResourceService
         var dateFormats = await dateFormatsTask;
         var timeFormats = await timeFormatsTask;
 
-        return new SetupMetadataDto
+        var metadata = new SetupMetadataDto
         {
             BusinessTypes = businessTypes.Select(b => new ResourceDto 
             { 
@@ -68,5 +79,14 @@ public class ResourceService : IResourceService
                 new() { Value = "SG", Label = "Singapore" }
             }
         };
+
+        // Cache the metadata for 60 minutes
+        var cacheEntryOptions = new MemoryCacheEntryOptions()
+            .SetSlidingExpiration(TimeSpan.FromMinutes(60))
+            .SetAbsoluteExpiration(TimeSpan.FromHours(24));
+
+        _cache.Set(CacheKey, metadata, cacheEntryOptions);
+
+        return metadata;
     }
 }

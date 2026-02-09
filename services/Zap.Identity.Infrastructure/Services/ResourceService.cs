@@ -36,11 +36,11 @@ public class ResourceService : IResourceService
             .ToListAsync();
         
         var languagesTask = _systemDb.GetCollection<SystemLanguage>("SystemLanguages")
-            .Find(l => true)
+            .Find(l => l.Visible == 1)
             .ToListAsync();
 
         var timeZonesTask = _systemDb.GetCollection<SystemTimeZone>("SystemTimeZone")
-            .Find(t => true)
+            .Find(t => t.Visible == 1)
             .ToListAsync();
 
         var dateFormatsTask = _systemDb.GetCollection<SystemFormatDate>("SystemFormatDate")

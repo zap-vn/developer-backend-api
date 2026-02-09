@@ -24,4 +24,7 @@ public class SystemTimeZone
 
     [BsonElement("UtcOffset")]
     public string UtcOffset { get; set; } = string.Empty;
+
+    [BsonElement("Visible")]
+    public int Visible { get; set; }
 }

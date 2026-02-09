@@ -15,4 +15,7 @@ public class SystemLanguage
 
     [BsonElement("LanguageCode")]
     public string LanguageCode { get; set; } = string.Empty;
+
+    [BsonElement("Visible")]
+    public int Visible { get; set; }
 }

@@ -38,6 +38,7 @@ public static class InfrastructureServiceRegistration
         // Register services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<IResourceService, ResourceService>();
 
         return services;
     }

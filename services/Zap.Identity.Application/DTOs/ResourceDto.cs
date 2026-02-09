@@ -11,6 +11,7 @@ public class ResourceDto
 
 public class SetupMetadataDto
 {
+    public IEnumerable<ResourceDto> BusinessTypes { get; set; } = new List<ResourceDto>();
     public IEnumerable<ResourceDto> Countries { get; set; } = new List<ResourceDto>();
     public IEnumerable<ResourceDto> Languages { get; set; } = new List<ResourceDto>();
     public IEnumerable<ResourceDto> DateFormats { get; set; } = new List<ResourceDto>();

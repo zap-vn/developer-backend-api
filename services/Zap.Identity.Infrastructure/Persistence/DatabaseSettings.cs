@@ -5,4 +5,5 @@ public class DatabaseSettings
     public const string SectionName = "DatabaseSettings";
     public string ConnectionString { get; set; } = string.Empty;
     public string DatabaseName { get; set; } = string.Empty;
+    public Dictionary<string, string> Databases { get; set; } = new();
 }

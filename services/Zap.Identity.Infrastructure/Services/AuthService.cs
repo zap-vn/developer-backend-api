@@ -61,26 +61,19 @@ public class AuthService : IAuthService
 
         // Generate JWT token
         var token = GenerateJwtToken(customer, request.IsRemember);
-        var expiresAt = DateTime.UtcNow.AddMinutes(
-            request.IsRemember ? _jwtSettings.ExpirationInMinutes * 24 : _jwtSettings.ExpirationInMinutes);
 
         return new LoginResponse
         {
             Success = true,
             Message = "Login successful",
-            Token = token,
-            ExpiresAt = expiresAt,
-            Customer = new CustomerInfo
-            {
-                CustomerId = customer.CustomerId,
-                CustomerCode = customer.CustomerCode,
-                Email = customer.Email,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                BusinessName = customer.BusinessName,
-                MerchantName = customer.MerchantName,
-                TimeZoneId = customer.TimeZoneId
-            }
+            MerchantName = customer.MerchantName,
+            AccessToken = token,
+            Avatar = customer.Url,
+            ExpiresIn = (request.IsRemember ? _jwtSettings.ExpirationInMinutes * 24 : _jwtSettings.ExpirationInMinutes) * 60,
+            FullName = $"{customer.FirstName} {customer.LastName}".Trim(),
+            RefreshToken = Guid.NewGuid().ToString(),
+            Role = "Owner (Super Admin)",
+            UserGuid = $"Customer/{customer.CustomerId}"
         };
     }
 
@@ -122,15 +115,18 @@ public class AuthService : IAuthService
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+        // Map claims to match the requested legacy/required structure
         var claims = new[]
         {
+            new Claim("UserGuid", $"Customer/{customer.CustomerId}"),
+            new Claim("EmployeeGuid", $"Customer/{customer.CustomerId}"),
+            new Claim("RoleName", "Owner (Super Admin)"),
+            new Claim("RolePermission_id", "657ab15d54f17333f3d89c65"), // From user example
+            new Claim("Language", string.IsNullOrEmpty(customer.Language) ? "vi" : customer.Language),
             new Claim(JwtRegisteredClaimNames.Sub, customer.CustomerId.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, customer.Email),
-            new Claim("customer_code", customer.CustomerCode),
-            new Claim("merchant_name", customer.MerchantName),
-            new Claim("first_name", customer.FirstName),
-            new Claim("last_name", customer.LastName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
         };
 
         var expirationMinutes = isRemember 
@@ -138,8 +134,8 @@ public class AuthService : IAuthService
             : _jwtSettings.ExpirationInMinutes;
 
         var token = new JwtSecurityToken(
-            issuer: _jwtSettings.Issuer,
-            audience: _jwtSettings.Audience,
+            issuer: "https://dev-crm-merchant-api.diadiem.vn", // From user example
+            audience: "tranvuong MJ", // From user example
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
             signingCredentials: credentials

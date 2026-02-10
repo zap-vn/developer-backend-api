@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Zap.Identity.Application.DTOs;
 using Zap.Identity.Application.Interfaces;
 using Zap.Identity.Domain;
 using Zap.Identity.Domain.Entities;
+using Zap.Identity.Infrastructure.Persistence;
 
 namespace Zap.Identity.Infrastructure.Services;
 
@@ -17,11 +19,11 @@ public class ResourceService : IResourceService
     private readonly IMemoryCache _cache;
     private const string CacheKey = "SetupMetadata";
 
-    public ResourceService(IMongoClient mongoClient, IMemoryCache cache)
+    public ResourceService(IMongoClient mongoClient, IMemoryCache cache, IOptions<DatabaseSettings> settings)
     {
-        _systemDb = mongoClient.GetDatabase("SinglePoint_System");
+        string dbName = settings.Value.Databases.TryGetValue("System", out var name) ? name : "SinglePoint_System";
+        _systemDb = mongoClient.GetDatabase(dbName);
         _cache = cache;
-
     }
 
     public async Task<SetupMetadataDto> GetSetupMetadataAsync(string languageCode = "en")

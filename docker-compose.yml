@@ -22,8 +22,10 @@ services:
       - "5001:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - MongoDB__ConnectionString=mongodb://mongodb:27017
-      - MongoDB__DatabaseName=ZapIdentity
+      # Override appsettings.json settings for Docker
+      - DatabaseSettings__DBProvider=mongodb
+      - DatabaseSettings__ConnectionString=mongodb://mongodb:27017/?connectTimeoutMS=5000
+      - DatabaseSettings__DatabaseName=SinglePoint_en
     depends_on:
       - mongodb
     networks:
@@ -32,7 +34,7 @@ services:
   mongodb:
     image: mongo:7.0
     ports:
-      - "27017:27017"
+      - "27017:27017" # Exposed to host for debugging tools
     volumes:
       - mongodb_data:/data/db
     networks:
@@ -44,6 +46,19 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - zap-network
+
+  # Optional: Web-based MongoDB admin interface
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    depends_on:
+      - mongodb
     networks:
       - zap-network
 

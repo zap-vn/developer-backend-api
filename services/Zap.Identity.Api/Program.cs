@@ -7,7 +7,11 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        });
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(c =>
     {
@@ -33,6 +37,8 @@ try
 
     var app = builder.Build();
 
+    app.UseCors("AllowAll"); // Enable CORS before Swagger and Auth
+
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
@@ -43,8 +49,6 @@ try
     {
         app.UseHttpsRedirection();
     }
-
-    app.UseCors("AllowAll"); // Enable CORS
 
     app.UseAuthorization();
 

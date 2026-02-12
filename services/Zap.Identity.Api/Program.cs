@@ -96,22 +96,24 @@ try
 
     app.UseCors("AllowAll");
 
-    // Luôn bật Swagger để dễ dàng test trên môi trường khác nhau
+    // Enable Swagger early in the pipeline
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Zap Identity API v1");
-        c.RoutePrefix = "swagger"; 
+        c.RoutePrefix = string.Empty; // Fail-safe: Serve Swagger at root
     });
 
     if (!app.Environment.IsDevelopment())
     {
-        // Tạm thời tắt HTTPS redirection để tránh lỗi redirect khi test port 8080
         // app.UseHttpsRedirection();
     }
 
     app.UseAuthentication();
     app.UseAuthorization();
+
+    // Simple health check
+    app.MapGet("/health", () => "OK");
 
     app.MapControllers();
 

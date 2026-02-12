@@ -7,6 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: https://zap-identity-api-openclaw-zap-as.a.run.app/swagger/index.html
     
     steps:
     - name: Checkout code

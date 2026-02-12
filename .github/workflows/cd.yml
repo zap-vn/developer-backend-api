@@ -1,7 +1,8 @@
 # Triggering run to verify permissions - v2
-name: CD Pipeline
+name: Deploy Identity API
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
     tags: [ 'v*.*.*' ]

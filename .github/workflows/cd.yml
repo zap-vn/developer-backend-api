@@ -1,4 +1,4 @@
-# Triggering run to verify permissions
+# Triggering run to verify permissions - v2
 name: CD Pipeline
 
 on:

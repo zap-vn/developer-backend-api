@@ -17,7 +17,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: staging
-      url: http://localhost:8080 # Đây là URL tạm thời, sẽ đổi khi bạn có server thực.
+      url: http://localhost:8080/swagger/index.html # Link Swagger cho môi trường test local/staging
     permissions:
       contents: read
       packages: write

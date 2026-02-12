@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -36,11 +38,14 @@ public static class InfrastructureServiceRegistration
 
         // Register repositories
         services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IDynamicRepository, DynamicRepository>();
 
         // Register services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IResourceService, ResourceService>();
+        services.AddScoped<ICategoryService, CategoryService>();
 
         return services;
     }

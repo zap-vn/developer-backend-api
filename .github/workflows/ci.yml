@@ -154,4 +154,4 @@ jobs:
           --platform managed \
           --allow-unauthenticated \
           --port 8080 \
-          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development,JwtSettings:Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890"
+          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development,JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890,DatabaseSettings__ConnectionString=${{ secrets.MONGODB_CONNECTION_STRING }}"

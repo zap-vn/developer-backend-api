@@ -45,7 +45,7 @@ public class DataController : BaseApiController
         return Ok(result);
     }
 
-    [HttpGet("{collectionName}/{id}")]
+    [HttpGet("{collectionName}/{*id}")]
     public async Task<IActionResult> Get(string collectionName, string id)
     {
         try
@@ -88,7 +88,7 @@ public class DataController : BaseApiController
         return Ok(BsonTypeMapper.MapToDotNetValue(created));
     }
 
-    [HttpPut("{collectionName}/{id}")]
+    [HttpPut("{collectionName}/{*id}")]
     public async Task<IActionResult> Update(string collectionName, string id, [FromBody] IDictionary<string, object> data)
     {
         var doc = new BsonDocument();
@@ -102,7 +102,7 @@ public class DataController : BaseApiController
         return NoContent();
     }
 
-    [HttpDelete("{collectionName}/{id}")]
+    [HttpDelete("{collectionName}/{*id}")]
     public async Task<IActionResult> Delete(string collectionName, string id)
     {
         await _dynamicRepository.DeleteAsync(collectionName, id, CurrentUserGuid);

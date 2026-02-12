@@ -94,17 +94,20 @@ try
         }
     });
 
-    app.UseCors("AllowAll"); // Enable CORS before Swagger and Auth
+    app.UseCors("AllowAll");
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+    // Luôn bật Swagger để dễ dàng test trên môi trường khác nhau
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-    else 
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Zap Identity API v1");
+        c.RoutePrefix = "swagger"; 
+    });
+
+    if (!app.Environment.IsDevelopment())
     {
-        app.UseHttpsRedirection();
+        // Tạm thời tắt HTTPS redirection để tránh lỗi redirect khi test port 8080
+        // app.UseHttpsRedirection();
     }
 
     app.UseAuthentication();

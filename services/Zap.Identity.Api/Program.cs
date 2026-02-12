@@ -30,7 +30,15 @@ try
     });
 
     // Add Infrastructure services (MongoDB, Repositories, AuthService)
-    builder.Services.AddInfrastructureServices(builder.Configuration);
+    try 
+    {
+        builder.Services.AddInfrastructureServices(builder.Configuration);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"--> WARNING: Failed to initialize Infrastructure Services (Database): {ex.Message}");
+        // Continuing startup to allow Swagger UI to load even without DB
+    }
 
     // Add JWT Authentication
     var jwtSettings = new JwtSettings();

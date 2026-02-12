@@ -2,10 +2,9 @@
 name: Deploy Identity API
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   push:
-    branches: [ main ]
-    tags: [ 'v*.*.*' ]
+    branches: [ "main" ]
 
 env:
   DOTNET_VERSION: '8.0.x'

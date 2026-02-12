@@ -7,9 +7,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: dev
-      url: http://localhost:8080/swagger/index.html
     
     steps:
     - name: Checkout code

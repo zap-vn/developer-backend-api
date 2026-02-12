@@ -1,0 +1,25 @@
+  Determining projects to restore...
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Infrastructure\Zap.Identity.Infrastructure.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj [D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Api\Zap.Identity.Api.csproj]
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Infrastructure\Zap.Identity.Infrastructure.csproj : warning NU1902: Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52 [D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Api\Zap.Identity.Api.csproj]
+  All projects are up-to-date for restore.
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Infrastructure\Zap.Identity.Infrastructure.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Infrastructure\Zap.Identity.Infrastructure.csproj : warning NU1902: Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\shared\Zap.BuildingBlocks\Entity.cs(7,16): warning CS8618: Non-nullable property 'Id' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\PROJECTS\2026\AllCRMAll\Zap.Backend\shared\Zap.BuildingBlocks\Zap.BuildingBlocks.csproj]
+  Zap.Contracts -> D:\PROJECTS\2026\AllCRMAll\Zap.Backend\shared\Zap.Contracts\bin\Debug\net8.0\Zap.Contracts.dll
+  Zap.BuildingBlocks -> D:\PROJECTS\2026\AllCRMAll\Zap.Backend\shared\Zap.BuildingBlocks\bin\Debug\net8.0\Zap.BuildingBlocks.dll
+  Zap.Identity.Domain -> D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Domain\bin\Debug\net8.0\Zap.Identity.Domain.dll
+  Zap.Identity.Application -> D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Application\bin\Debug\net8.0\Zap.Identity.Application.dll
+  Zap.Identity.Infrastructure -> D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Infrastructure\bin\Debug\net8.0\Zap.Identity.Infrastructure.dll
+  Zap.Identity.Api -> D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Api\bin\Debug\net8.0\Zap.Identity.Api.dll
+
+Build succeeded.
+
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Infrastructure\Zap.Identity.Infrastructure.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj [D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Api\Zap.Identity.Api.csproj]
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Infrastructure\Zap.Identity.Infrastructure.csproj : warning NU1902: Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52 [D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Api\Zap.Identity.Api.csproj]
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Infrastructure\Zap.Identity.Infrastructure.csproj : warning NU1903: Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\services\Zap.Identity.Infrastructure\Zap.Identity.Infrastructure.csproj : warning NU1902: Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52
+D:\PROJECTS\2026\AllCRMAll\Zap.Backend\shared\Zap.BuildingBlocks\Entity.cs(7,16): warning CS8618: Non-nullable property 'Id' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\PROJECTS\2026\AllCRMAll\Zap.Backend\shared\Zap.BuildingBlocks\Zap.BuildingBlocks.csproj]
+    5 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:07.22

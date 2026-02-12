@@ -46,7 +46,8 @@ jobs:
 
     - name: 'Build and Push Identity API'
       run: |
-        docker build -t gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -o type=registry,dest=gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -f services/Zap.Identity.Api/Dockerfile .
+        docker build -t gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -f services/Zap.Identity.Api/Dockerfile .
+        docker push gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }}
 
     - name: 'Deploy to Cloud Run'
       run: |

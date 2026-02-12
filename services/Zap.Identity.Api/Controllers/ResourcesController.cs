@@ -19,7 +19,23 @@ public class ResourcesController : ControllerBase
     [HttpGet("setup-metadata")]
     public async Task<ActionResult<SetupMetadataDto>> GetSetupMetadata()
     {
-        var metadata = await _resourceService.GetSetupMetadataAsync();
-        return Ok(metadata);
+        try 
+        {
+            Console.WriteLine("--> Fetching setup metadata...");
+            var metadata = await _resourceService.GetSetupMetadataAsync();
+            Console.WriteLine($"--> Metadata counts: " +
+                $"BusinessTypes: {metadata.BusinessTypes?.Count() ?? 0}, " +
+                $"Languages: {metadata.Languages?.Count() ?? 0}, " +
+                $"TimeZones: {metadata.TimeZones?.Count() ?? 0}, " +
+                $"DateFormats: {metadata.DateFormats?.Count() ?? 0}, " +
+                $"TimeFormats: {metadata.TimeFormats?.Count() ?? 0}");
+            return Ok(metadata);
+        }
+        catch (System.Exception ex)
+        {
+            Console.WriteLine($"--> Error fetching metadata: {ex.Message}");
+            Console.WriteLine(ex.StackTrace);
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 }

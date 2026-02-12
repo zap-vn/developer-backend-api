@@ -6,6 +6,20 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
+builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration["Jwt:Authority"];
+        options.Audience = "gateway-api";
+        options.RequireHttpsMetadata = false; // For development
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Public", policy => policy.RequireAssertion(_ => true));
+    options.AddPolicy("Authenticated", policy => policy.RequireAuthenticatedUser());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,6 +34,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapReverseProxy();
 
 var summaries = new[]
@@ -39,8 +56,8 @@ app.MapGet("/weatherforecast", () =>
         .ToArray();
     return forecast;
 })
-.WithName("GetWeatherForecast");
-
+.WithName("GetWeatherForecast")
+.RequireAuthorization(); 
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

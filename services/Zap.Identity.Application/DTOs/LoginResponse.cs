@@ -1,22 +1,25 @@
+using System.Collections.Generic;
+
 namespace Zap.Identity.Application.DTOs;
 
 public class LoginResponse
 {
+    // Meta info for the internal API logic
     public bool Success { get; set; }
     public string Message { get; set; } = string.Empty;
-    public string? Token { get; set; }
-    public DateTime? ExpiresAt { get; set; }
-    public CustomerInfo? Customer { get; set; }
-}
 
-public class CustomerInfo
-{
-    public int CustomerId { get; set; }
-    public string CustomerCode { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string BusinessName { get; set; } = string.Empty;
+    // The flat properties requested by the user
     public string MerchantName { get; set; } = string.Empty;
-    public string TimeZoneId { get; set; } = string.Empty;
+    public string AccessToken { get; set; } = string.Empty;
+    public string Acronym { get; set; } = string.Empty;
+    public string Avatar { get; set; } = string.Empty;
+    public string Color { get; set; } = string.Empty;
+    public int ExpiresIn { get; set; }
+    public string FullName { get; set; } = string.Empty;
+    public string RefreshToken { get; set; } = string.Empty;
+    public string Role { get; set; } = string.Empty;
+    public string UpdateDate { get; set; } = string.Empty;
+    public string UserGuid { get; set; } = string.Empty;
+    public List<string> Permissions { get; set; } = new();
+    public List<string> Screens { get; set; } = new();
 }

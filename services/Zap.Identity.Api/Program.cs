@@ -101,8 +101,8 @@ try
             throw;
         }
     });
-
-    app.UseCors("AllowAll");
+   
+    
 
     // Enable Swagger early in the pipeline
     app.UseSwagger();
@@ -116,7 +116,8 @@ try
     {
         // app.UseHttpsRedirection();
     }
-
+    app.UseRouting();
+    app.UseCors("AllowAll");
     app.UseAuthentication();
     app.UseAuthorization();
 

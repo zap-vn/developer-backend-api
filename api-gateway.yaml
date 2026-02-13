@@ -1,0 +1,20 @@
+swagger: "2.0"
+info:
+  title: "Zap Identity API Gateway"
+  description: "Public Gateway for Zap Identity API"
+  version: "1.0.0"
+schemes:
+  - "https"
+produces:
+  - "application/json"
+x-google-backend:
+  address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
+  protocol: "h2" # Dùng h2 cho Cloud Run để tối ưu tốc độ
+paths:
+  /api/Auth/login:
+    post:
+      summary: "Login endpoint"
+      operationId: "login"
+      responses:
+        200:
+          description: "OK"

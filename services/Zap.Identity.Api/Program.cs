@@ -116,7 +116,7 @@ try
     {
         // app.UseHttpsRedirection();
     }
-    app.UseRouting();
+    app.UseRouting();// thay đổi ngay 2026-02-13
     app.UseCors("AllowAll");
     app.UseAuthentication();
     app.UseAuthorization();

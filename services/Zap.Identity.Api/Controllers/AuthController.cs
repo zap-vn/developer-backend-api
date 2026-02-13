@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Zap.Identity.Application.DTOs;
 using Zap.Identity.Application.Interfaces;
 
@@ -22,6 +23,7 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="request">Login request</param>
     /// <returns>JWT token và thông tin customer</returns>
+    [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status401Unauthorized)]

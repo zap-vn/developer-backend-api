@@ -22,10 +22,30 @@ paths:
       responses:
         200:
           description: "OK"
+    options:
+      summary: "CORS support"
+      operationId: "cors_login"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login"
+        protocol: "h2"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/Auth/login:
     post:
       summary: "Legacy Login endpoint"
       operationId: "login_legacy"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login"
+        protocol: "h2"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Legacy CORS support"
+      operationId: "cors_login_legacy"
       x-google-backend:
         address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login"
         protocol: "h2"

@@ -77,7 +77,7 @@ try
     
     builder.Services.AddAuthorization();
 
-    // Add CORS
+    // Add CORS chưa có
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowAll",

@@ -23,6 +23,8 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="request">Login request</param>
     /// <returns>JWT token và thông tin customer</returns>
+    /// 
+    [HttpOptions]
     [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]

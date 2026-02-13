@@ -29,7 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Gateway API");
-        c.SwaggerEndpoint("http://localhost:5271/swagger/v1/swagger.json", "Identity API (Auth)");
+        c.SwaggerEndpoint("https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/v1/swagger.json", "Identity API (Auth)");
     });
 }
 

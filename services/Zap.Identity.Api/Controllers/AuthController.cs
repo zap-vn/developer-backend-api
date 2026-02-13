@@ -24,7 +24,6 @@ public class AuthController : ControllerBase
     /// <param name="request">Login request</param>
     /// <returns>JWT token và thông tin customer</returns>
     /// 
-  
     [AllowAnonymous]
     [HttpOptions("login")]
     [HttpPost("login")]
@@ -34,6 +33,11 @@ public class AuthController : ControllerBase
     {
         try 
         {
+            if (string.IsNullOrEmpty(request.MerchantName))
+            {
+                return Unauthorized(new LoginResponse { Success = false, Message = "MerchantName is required." });
+            }
+
             _logger.LogInformation("Login attempt for user: {UserName}, merchant: {MerchantName}", 
                 request.UserName, request.MerchantName);
 

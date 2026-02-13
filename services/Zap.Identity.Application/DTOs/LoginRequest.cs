@@ -11,8 +11,7 @@ public class LoginRequest
     [Required(ErrorMessage = "Password is required")]
     public string Password { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "MerchantName is required")]
-    public string MerchantName { get; set; } = string.Empty;
+    public string? MerchantName { get; set; }
 
     public bool IsRemember { get; set; }
 }

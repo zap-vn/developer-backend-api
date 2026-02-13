@@ -11,10 +11,13 @@ x-google-backend:
   address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
   protocol: "h2" # Dùng h2 cho Cloud Run để tối ưu tốc độ
 paths:
-  /api/Auth/login:
+  /api/Authentication/login:
     post:
       summary: "Login endpoint"
       operationId: "login"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login"
+        protocol: "h2"
       responses:
         200:
           description: "OK"

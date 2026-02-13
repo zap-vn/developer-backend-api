@@ -32,12 +32,11 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/v1/swagger.json", "Identity API (Auth)");
     });
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapReverseProxy();
+    app.UseRouting();
+    app.UseCors("AllowAll");
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapReverseProxy();
 
 var summaries = new[]
 {

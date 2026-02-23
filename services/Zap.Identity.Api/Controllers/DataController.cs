@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Zap.Identity.Application.Interfaces;
 using Zap.Identity.Application.DTOs;
@@ -48,6 +49,7 @@ public class DataController : BaseApiController
     [HttpGet("{collectionName}/{*id}")]
     public async Task<IActionResult> Get(string collectionName, string id)
     {
+        id = Uri.UnescapeDataString(id);
         try
         {
             Console.WriteLine($"--> Getting {collectionName} with ID: {id}");
@@ -91,6 +93,7 @@ public class DataController : BaseApiController
     [HttpPut("{collectionName}/{*id}")]
     public async Task<IActionResult> Update(string collectionName, string id, [FromBody] IDictionary<string, object> data)
     {
+        id = Uri.UnescapeDataString(id);
         var doc = new BsonDocument();
         foreach (var kvp in data)
         {
@@ -105,6 +108,7 @@ public class DataController : BaseApiController
     [HttpDelete("{collectionName}/{*id}")]
     public async Task<IActionResult> Delete(string collectionName, string id)
     {
+        id = Uri.UnescapeDataString(id);
         await _dynamicRepository.DeleteAsync(collectionName, id, CurrentUserGuid);
         return NoContent();
     }

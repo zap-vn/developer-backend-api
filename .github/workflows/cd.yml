@@ -4,7 +4,7 @@ name: Deploy Identity API
 on:
   workflow_dispatch: {}
   push:
-    branches: [ "main", "dev_api_linh_20260207" ]
+    branches: [ "main" ]
 
 env:
   DOTNET_VERSION: '8.0.x'
@@ -14,7 +14,7 @@ jobs:
   deploy-dev:
     name: Deploy to Dev
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev_api_linh_20260207'
+    if: github.ref == 'refs/heads/main'
     environment:
       name: dev
       url: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html

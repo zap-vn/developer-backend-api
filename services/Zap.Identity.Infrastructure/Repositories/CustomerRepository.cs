@@ -80,15 +80,84 @@ public class CustomerRepository : ICustomerRepository
 
     public async Task CreateAsync(Customer customer)
     {
-        if (string.IsNullOrEmpty(customer.Id))
+        try 
         {
-            customer.Id = Guid.NewGuid().ToString();
+            // 1. Check if MerchantName or Email already exists
+            if (!string.IsNullOrEmpty(customer.MerchantName) || !string.IsNullOrEmpty(customer.Email))
+            {
+                var filterDuplicate = Builders<Customer>.Filter.Or(
+                    Builders<Customer>.Filter.Eq(c => c.MerchantName, customer.MerchantName),
+                    Builders<Customer>.Filter.Eq(c => c.Email, customer.Email)
+                );
+
+                var existing = await _customerCollection.Find(filterDuplicate).FirstOrDefaultAsync();
+
+                if (existing != null)
+                {
+                    if (existing.MerchantName == customer.MerchantName)
+                        throw new InvalidOperationException($"MerchantName '{customer.MerchantName}' already exists.");
+                    if (existing.Email == customer.Email)
+                        throw new InvalidOperationException($"Email '{customer.Email}' already exists.");
+                }
+            }
+
+            // 2. Get sequence from ManagementIndex
+            var mgmtIndexCol = _customerCollection.Database.GetCollection<BsonDocument>("ManagementIndex");
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", "Customer_id");
+            var update = Builders<BsonDocument>.Update
+                .Inc("Value", 1)
+                .Set("UpdateDate", DateTime.UtcNow.ToString("O"));
+            
+            var options = new FindOneAndUpdateOptions<BsonDocument>
+            {
+                ReturnDocument = ReturnDocument.After,
+                IsUpsert = true
+            };
+
+            var result = await mgmtIndexCol.FindOneAndUpdateAsync(filter, update, options);
+            int nextId = result["Value"].ToInt32();
+
+            // Set custom ID and Key
+            customer.Id = $"Customer/{nextId}";
+            customer.Key = nextId;
+            customer.CustomerId = nextId; // Syncing CustomerId for consistency
+            customer.Revision = Guid.NewGuid().ToString("N").Substring(0, 9); // Mimicking "ad0c70c4E" format
+
+            Console.WriteLine($"--> ATTEMPTING INSERT: _id={customer.Id}, MerchantName={customer.MerchantName}, Email={customer.Email}");
+            await _customerCollection.InsertOneAsync(customer);
+            Console.WriteLine($"--> INSERT SUCCESSFUL: _id={customer.Id}");
         }
-        await _customerCollection.InsertOneAsync(customer);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"--> DATABASE ERROR in CreateAsync: {ex.Message}");
+            if (ex.InnerException != null) Console.WriteLine($"--> Inner Exception: {ex.InnerException.Message}");
+            throw;
+        }
     }
 
     public async Task UpdateAsync(Customer customer)
     {
+        // 1. Check if MerchantName or Email is already taken by someone else
+        if (!string.IsNullOrEmpty(customer.MerchantName) || !string.IsNullOrEmpty(customer.Email))
+        {
+            var filterDuplicate = Builders<Customer>.Filter.And(
+                Builders<Customer>.Filter.Or(
+                    Builders<Customer>.Filter.Eq(c => c.MerchantName, customer.MerchantName),
+                    Builders<Customer>.Filter.Eq(c => c.Email, customer.Email)
+                ),
+                Builders<Customer>.Filter.Ne(c => c.Id, customer.Id) // Exclude current record
+            );
+
+            var duplicate = await _customerCollection.Find(filterDuplicate).FirstOrDefaultAsync();
+            if (duplicate != null)
+            {
+                if (duplicate.MerchantName == customer.MerchantName)
+                    throw new InvalidOperationException($"MerchantName '{customer.MerchantName}' is already taken by another merchant.");
+                if (duplicate.Email == customer.Email)
+                    throw new InvalidOperationException($"Email '{customer.Email}' is already taken by another user.");
+            }
+        }
+
         var filter = Builders<Customer>.Filter.Eq(c => c.Id, customer.Id);
         await _customerCollection.ReplaceOneAsync(filter, customer);
     }

@@ -37,8 +37,15 @@ public class CustomersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<CustomerDto>> Create(CustomerDto customerDto)
     {
-        var created = await _customerService.CreateAsync(customerDto);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        try
+        {
+            var created = await _customerService.CreateAsync(customerDto);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        }
+        catch (System.InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpPut("{id}")]
@@ -49,9 +56,13 @@ public class CustomersController : ControllerBase
             await _customerService.UpdateAsync(id, customerDto);
             return NoContent();
         }
+        catch (System.InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
         catch (System.Exception ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new { message = ex.Message });
         }
     }
 

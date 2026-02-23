@@ -114,7 +114,7 @@ public class CustomerService : ICustomerService
             TimeFormat = dto.TimeFormat ?? string.Empty,
             TimeZoneId = dto.TimeZoneId ?? string.Empty,
             TimeZoneDisplayName = dto.TimeZoneDisplayName ?? string.Empty,
-            Country = dto.Country ?? string.Empty,
+            Country = dto.Country ?? 0,
             ReferenceAssets = dto.ReferenceAssets,
             Phone = dto.Phone ?? string.Empty,
             CustomerStatusId = dto.CustomerStatusId

@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Zap.Identity.Application.DTOs;
 
 public class CustomerDto
 {
+    [JsonPropertyName("_id")]
     public string? Id { get; set; }
     public string? CustomerCode { get; set; }
     public string Email { get; set; } = string.Empty;
@@ -20,7 +20,7 @@ public class CustomerDto
     public string? TimeFormat { get; set; }
     public string? TimeZoneId { get; set; }
     public string? TimeZoneDisplayName { get; set; }
-    public string? Country { get; set; }
+    public int? Country { get; set; }
     public List<string> ReferenceAssets { get; set; } = new();
     public string? Phone { get; set; }
     public int CustomerStatusId { get; set; }

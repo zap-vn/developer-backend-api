@@ -77,8 +77,8 @@ public class Customer
     public string TimeZoneDisplayName { get; set; } = string.Empty;
 
     [BsonElement("Country")]
-    [BsonSerializer(typeof(FlexibleStringSerializer))]
-    public string Country { get; set; } = string.Empty;
+    [BsonSerializer(typeof(FlexibleIntSerializer))]
+    public int Country { get; set; }
 
     [BsonElement("ProjectName")]
     [BsonSerializer(typeof(FlexibleStringSerializer))]
@@ -113,4 +113,8 @@ public class Customer
     [BsonElement("Url")]
     [BsonSerializer(typeof(FlexibleStringSerializer))]
     public string Url { get; set; } = string.Empty;
+
+    [BsonElement("_rev")]
+    [BsonSerializer(typeof(FlexibleStringSerializer))]
+    public string Revision { get; set; } = string.Empty;
 }

@@ -17,18 +17,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: dev
-      url: http://localhost:8080/swagger/index.html
-    permissions:
-      contents: read
-      id-token: write
-
-  deploy-staging:
-    name: Deploy to Staging
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    environment:
-      name: staging
-      url: http://localhost:8080/swagger/index.html
+      url: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html
     permissions:
       contents: read
       id-token: write
@@ -79,9 +68,9 @@ jobs:
           --location=us-central1 \
           --project=openclaw-zap
 
-    - name: Notify staging deployment
+    - name: Notify deployment
       run: |
-        echo "🚀 Deployed to GCP Staging"
+        echo "🚀 Deployed to GCP Dev"
         echo "URL: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html"
 
   deploy-production:

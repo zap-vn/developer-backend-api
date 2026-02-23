@@ -63,7 +63,9 @@ try
             ValidateIssuerSigningKey = false,  // Temporarily disabled for legacy token support
             ValidIssuer = jwtSettings.Issuer,
             ValidAudience = jwtSettings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret ?? "default_secret_key_must_be_long_enough"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret ?? "default_secret_key_must_be_long_enough")),
+            // Completely bypass signature validation for legacy tokens
+            SignatureValidator = (token, parameters) => new Microsoft.IdentityModel.JsonWebTokens.JsonWebToken(token)
         };
     });
     

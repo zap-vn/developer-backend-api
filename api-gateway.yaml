@@ -169,6 +169,16 @@ paths:
       responses:
         200:
           description: "OK"
+    post:
+      summary: "Create Customer"
+      operationId: "customers_create"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
+        protocol: "h2"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        201:
+          description: "Created"
   /api/Categories:
     get:
       summary: "Categories API"

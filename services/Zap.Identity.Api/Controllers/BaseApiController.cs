@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace Zap.Identity.Api.Controllers;
 
@@ -14,18 +16,35 @@ public abstract class BaseApiController : ControllerBase
     {
         get
         {
+            // First try standard claims from Authentication middleware
             var claim = User.FindFirst("UserGuid");
-            if (claim == null) 
+            if (claim != null) return claim.Value;
+
+            // Fallback: Google API Gateway moves original token to x-forwarded-authorization
+            var forwardedAuth = Request.Headers["x-forwarded-authorization"].ToString();
+            if (!string.IsNullOrEmpty(forwardedAuth))
             {
-                Console.WriteLine("--> ERROR: Missing UserGuid claim.");
-                Console.WriteLine("--> Available Claims:");
-                foreach (var c in User.Claims)
+                var token = forwardedAuth.Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase).Trim();
+                try
                 {
-                    Console.WriteLine($"   - {c.Type}: {c.Value}");
+                    var handler = new JwtSecurityTokenHandler();
+                    var jwt = handler.ReadJwtToken(token);
+                    var userGuid = jwt.Claims.FirstOrDefault(c => c.Type == "UserGuid")?.Value;
+                    if (!string.IsNullOrEmpty(userGuid)) return userGuid;
                 }
-                throw new UnauthorizedAccessException("Missing UserGuid claim.");
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"--> ERROR: Failed to parse x-forwarded-authorization token: {ex.Message}");
+                }
             }
-            return claim.Value;
+
+            Console.WriteLine("--> ERROR: Missing UserGuid claim.");
+            Console.WriteLine("--> Available Claims:");
+            foreach (var c in User.Claims)
+            {
+                Console.WriteLine($"   - {c.Type}: {c.Value}");
+            }
+            throw new UnauthorizedAccessException("Missing UserGuid claim.");
         }
     }
 
@@ -41,3 +60,4 @@ public abstract class BaseApiController : ControllerBase
         }
     }
 }
+

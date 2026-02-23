@@ -196,3 +196,18 @@ paths:
       responses:
         200:
           description: "OK"
+    post:
+      summary: "Resources API POST"
+      operationId: "resources_post"
+      parameters:
+        - name: action
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
+        protocol: "h2"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"

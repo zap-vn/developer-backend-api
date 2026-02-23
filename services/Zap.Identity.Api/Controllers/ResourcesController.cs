@@ -5,9 +5,7 @@ using Zap.Identity.Application.Interfaces;
 
 namespace Zap.Identity.Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class ResourcesController : ControllerBase
+public class ResourcesController : BaseApiController
 {
     private readonly IResourceService _resourceService;
 
@@ -16,25 +14,51 @@ public class ResourcesController : ControllerBase
         _resourceService = resourceService;
     }
 
-    [HttpGet("setup-metadata")]
-    public async Task<ActionResult<SetupMetadataDto>> GetSetupMetadata()
+    [HttpPost("setup-metadata")]
+    public async Task<ActionResult<IEnumerable<MapResourceDto>>> GetResourceMaps([FromBody] System.Text.Json.JsonElement requestBody)
     {
-        try 
+        try
         {
-            Console.WriteLine("--> Fetching setup metadata...");
-            var metadata = await _resourceService.GetSetupMetadataAsync();
-            Console.WriteLine($"--> Metadata counts: " +
-                $"BusinessTypes: {metadata.BusinessTypes?.Count() ?? 0}, " +
-                $"Languages: {metadata.Languages?.Count() ?? 0}, " +
-                $"TimeZones: {metadata.TimeZones?.Count() ?? 0}, " +
-                $"DateFormats: {metadata.DateFormats?.Count() ?? 0}, " +
-                $"TimeFormats: {metadata.TimeFormats?.Count() ?? 0}");
-            return Ok(metadata);
+            var ids = new List<string>();
+
+            // Case 1: Root is a list [ { "_id": ... }, { "_id": ... } ]
+            if (requestBody.ValueKind == System.Text.Json.JsonValueKind.Array)
+            {
+                foreach (var item in requestBody.EnumerateArray())
+                {
+                    if (item.TryGetProperty("_id", out var idProp)) ids.Add(idProp.GetString() ?? "");
+                    else if (item.TryGetProperty("id", out idProp)) ids.Add(idProp.GetString() ?? "");
+                }
+            }
+            // Case 2: Root is an object { "Data": [ ... ] } or { "data": [ ... ] }
+            else if (requestBody.ValueKind == System.Text.Json.JsonValueKind.Object)
+            {
+                System.Text.Json.JsonElement dataArray;
+                if (requestBody.TryGetProperty("Data", out dataArray) || requestBody.TryGetProperty("data", out dataArray))
+                {
+                    if (dataArray.ValueKind == System.Text.Json.JsonValueKind.Array)
+                    {
+                        foreach (var item in dataArray.EnumerateArray())
+                        {
+                            if (item.TryGetProperty("_id", out var idProp)) ids.Add(idProp.GetString() ?? "");
+                            else if (item.TryGetProperty("id", out idProp)) ids.Add(idProp.GetString() ?? "");
+                        }
+                    }
+                }
+            }
+
+            if (ids.Count == 0)
+            {
+                return BadRequest("No IDs found in request body. Supported formats: { 'Data': [ { '_id': '...' } ] } or [ { '_id': '...' } ]");
+            }
+
+            Console.WriteLine($"--> Fetching resource maps for {ids.Count} IDs for User: {CurrentUserGuid}...");
+            var result = await _resourceService.GetResourcesByMapIdsAsync(ids, CurrentUserGuid, CurrentLanguage);
+            return Ok(result);
         }
         catch (System.Exception ex)
         {
-            Console.WriteLine($"--> Error fetching metadata: {ex.Message}");
-            Console.WriteLine(ex.StackTrace);
+            Console.WriteLine($"--> Error processing resource request: {ex.Message}");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }

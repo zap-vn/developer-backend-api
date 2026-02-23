@@ -65,6 +65,20 @@ jobs:
           --port 8080 \
           --set-env-vars "ASPNETCORE_ENVIRONMENT=Development,JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890,DatabaseSettings__ConnectionString=mongodb+srv://tommy_db_user:Tommy123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en,DatabaseSettings__DatabaseName=SinglePoint_en,DatabaseSettings__DBProvider=mongodb"
 
+    - name: 'Deploy API Gateway'
+      run: |
+        CONFIG_ID="zap-config-${{ github.sha }}"
+        gcloud api-gateway api-configs create $CONFIG_ID \
+          --api=zap-api \
+          --openapi-spec=api-gateway.yaml \
+          --project=openclaw-zap
+        
+        gcloud api-gateway gateways update zap-gateway \
+          --api=zap-api \
+          --api-config=$CONFIG_ID \
+          --location=us-central1 \
+          --project=openclaw-zap
+
     - name: Notify staging deployment
       run: |
         echo "🚀 Deployed to GCP Staging"

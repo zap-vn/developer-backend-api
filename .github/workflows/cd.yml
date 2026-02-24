@@ -52,7 +52,10 @@ jobs:
           --platform managed \
           --allow-unauthenticated \
           --port 8080 \
-          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development,JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890,DatabaseSettings__ConnectionString=mongodb+srv://tommy_db_user:Tommy%40123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en,DatabaseSettings__DatabaseName=SinglePoint_en,DatabaseSettings__DBProvider=mongodb"
+          --min-instances 1 \
+          --cpu-boost \
+          --timeout 60 \
+          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development,JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890,DatabaseSettings__ConnectionString=mongodb+srv://tommy_db_user:Tommy%40123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en?connectTimeoutMS=5000&serverSelectionTimeoutMS=5000&socketTimeoutMS=10000,DatabaseSettings__DatabaseName=SinglePoint_en,DatabaseSettings__DBProvider=mongodb"
 
     - name: 'Deploy API Gateway'
       run: |

@@ -45,6 +45,8 @@ jobs:
         docker push gcr.io/openclaw-zap/zap-identity-api:latest
 
     - name: 'Deploy to Cloud Run'
+      env:
+        DB_CONNECTION_STRING: 'mongodb+srv://tommy_db_user:Tommy%40123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en?connectTimeoutMS=5000&serverSelectionTimeoutMS=5000&socketTimeoutMS=10000'
       run: |
         gcloud run deploy zap-identity-api \
           --image gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} \
@@ -55,11 +57,11 @@ jobs:
           --min-instances 1 \
           --cpu-boost \
           --timeout 60 \
-          --set-env-vars 'ASPNETCORE_ENVIRONMENT=Development' \
-          --set-env-vars 'JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890' \
-          --set-env-vars 'DatabaseSettings__ConnectionString=mongodb+srv://tommy_db_user:Tommy%40123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en?connectTimeoutMS=5000&serverSelectionTimeoutMS=5000&socketTimeoutMS=10000' \
-          --set-env-vars 'DatabaseSettings__DatabaseName=SinglePoint_en' \
-          --set-env-vars 'DatabaseSettings__DBProvider=mongodb'
+          --update-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
+          --update-env-vars "JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" \
+          --update-env-vars "DatabaseSettings__ConnectionString=${DB_CONNECTION_STRING}" \
+          --update-env-vars "DatabaseSettings__DatabaseName=SinglePoint_en" \
+          --update-env-vars "DatabaseSettings__DBProvider=mongodb"
 
     - name: 'Deploy API Gateway'
       run: |

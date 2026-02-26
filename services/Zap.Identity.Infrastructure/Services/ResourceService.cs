@@ -45,9 +45,6 @@ public class ResourceService : IResourceService
             .Find(_ => true) 
             .ToListAsync();
             
-        var languageTranslationsTask = _systemDb.GetCollection<SystemLanguageTranslate>("SystemLanguagesTranslate")
-            .Find(_ => true) // Fetch all translations
-            .ToListAsync();
 
         var timeZonesTask = _systemDb.GetCollection<SystemTimeZone>("SystemTimeZone")
             .Find(_ => true)
@@ -61,11 +58,10 @@ public class ResourceService : IResourceService
             .Find(_ => true)
             .ToListAsync();
 
-        await Task.WhenAll(businessTypesTask, languagesTask, languageTranslationsTask, timeZonesTask, dateFormatsTask, timeFormatsTask);
+        await Task.WhenAll(businessTypesTask, languagesTask, timeZonesTask, dateFormatsTask, timeFormatsTask);
 
         var businessTypes = await businessTypesTask;
         var languages = await languagesTask;
-        var translations = await languageTranslationsTask;
 
         var timeZones = await timeZonesTask;
         var dateFormats = await dateFormatsTask;
@@ -80,23 +76,18 @@ public class ResourceService : IResourceService
             }),
             Languages = languages.Select(l => 
             {
-                string label = l.EnglishName;
-                if (languageCode == "vi")
-                {
-                    var translation = translations.FirstOrDefault(t => t.TwoLetterISOLanguageName == l.TwoLetterISOLanguageName);
-                    if (translation != null)
-                    {
-                        label = translation.Name;
-                    }
-                }
-                
+                // Root+Delta logic for Language labels
+                string label = (l.Locales != null && l.Locales.ContainsKey(languageCode)) 
+                             ? l.Locales[languageCode].Name 
+                             : l.Name;
+
                 return new ResourceDto 
                 { 
-                    Value = l.SystemLanguagesId.ToString(), 
+                    Value = l.Id, 
                     Label = label,
-                    DisplayName = l.DisplayName,
-                    NumericCode = l.NumericCode,
-                    RegionDisplayName = l.RegionDisplayName
+                    DisplayName = label,
+                    NumericCode = int.TryParse(l.DialCode?.Replace("+", ""), out int n) ? n : null,
+                    RegionDisplayName = label
                 };
             }),
             TimeZones = timeZones.Select(t => new ResourceDto 

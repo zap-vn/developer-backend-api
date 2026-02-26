@@ -40,12 +40,16 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IDynamicRepository, DynamicRepository>();
+        services.AddScoped<IPostRepository, PostRepository>();
+        services.AddScoped<ICommentRepository, CommentRepository>();
 
         // Register services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IResourceService, ResourceService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IPostService, PostService>();
+        services.AddScoped<ICommentService, CommentService>();
 
         return services;
     }

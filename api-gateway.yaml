@@ -179,6 +179,17 @@ paths:
       responses:
         201:
           description: "Created"
+  /api/Customers/list:
+    post:
+      summary: "Search Customers"
+      operationId: "customers_search"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
+        protocol: "h2"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/Categories:
     get:
       summary: "Categories API"
@@ -211,6 +222,84 @@ paths:
       operationId: "resources_post"
       parameters:
         - name: action
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
+        protocol: "h2"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/Posts/{postId}/comments:
+    get:
+      summary: "Get comments for a post"
+      operationId: "posts_get_comments"
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
+        protocol: "h2"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    post:
+      summary: "Create a comment for a post"
+      operationId: "posts_create_comment"
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
+        protocol: "h2"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/Comments/{id}:
+    put:
+      summary: "Update a comment"
+      operationId: "comments_update"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
+        protocol: "h2"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        204:
+          description: "No Content"
+    delete:
+      summary: "Delete a comment"
+      operationId: "comments_delete"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
+        protocol: "h2"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        204:
+          description: "No Content"
+  /api/Comments/{id}/reply:
+    post:
+      summary: "Reply to a comment"
+      operationId: "comments_reply"
+      parameters:
+        - name: id
           in: path
           required: true
           type: string

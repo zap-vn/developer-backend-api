@@ -17,11 +17,41 @@ public class CustomerService : ICustomerService
         _customerRepository = customerRepository;
     }
 
-    public async Task<IEnumerable<CustomerDto>> GetAllAsync()
+    public async Task<PagedResult<CustomerDto>> SearchAsync(FilterDto filter)
     {
-        var customers = await _customerRepository.GetAllAsync();
-        return customers.Select(MapToDto);
+        // Standardize pagination
+        int limit = filter.Limit > 0 ? filter.Limit : 20;
+        int skip = filter.Skip >= 0 ? filter.Skip : 0;
+        
+        // Calculate page for the repository (1-indexed)
+        int page = (skip / limit) + 1;
+        int pageSize = limit;
+
+        // Use global Search first, if missing check filters for legacy support
+        string? search = filter.Search;
+        if (string.IsNullOrEmpty(search) && filter.Filter != null && filter.Filter.Any())
+        {
+            var searchFilter = filter.Filter.FirstOrDefault(f => 
+                string.IsNullOrEmpty(f.SearchKey) || 
+                f.SearchKey.Equals("Search", StringComparison.OrdinalIgnoreCase) ||
+                f.SearchKey.Equals("Global", StringComparison.OrdinalIgnoreCase));
+            
+            search = searchFilter?.Value?.ToString();
+        }
+
+        var (items, totalCount) = await _customerRepository.GetPagedAsync(page, pageSize, search, filter.Sort);
+        
+        return new PagedResult<CustomerDto>
+        {
+            Items = items.Select(MapToDto),
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize
+        };
     }
+
+
+
 
     public async Task<CustomerDto?> GetByIdAsync(string id)
     {

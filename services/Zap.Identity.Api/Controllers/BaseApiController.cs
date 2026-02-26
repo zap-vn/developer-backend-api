@@ -55,8 +55,28 @@ public abstract class BaseApiController : ControllerBase
             var lang = Request.Headers["Accept-Language"].ToString();
             if (string.IsNullOrEmpty(lang)) return "vi";
             
+            lang = lang.ToLower();
+            
+            // Xử lý các chuỗi đặc biệt (tiếng Việt hoặc tên đầy đủ)
+            if (lang.Contains("tiếng hàn") || lang.Contains("korean") || lang.StartsWith("ko")) return "ko";
+            if (lang.Contains("tiếng anh") || lang.Contains("english") || lang.StartsWith("en")) return "en";
+            if (lang.Contains("tiếng nhật") || lang.Contains("japanese") || lang.StartsWith("ja") || lang.StartsWith("jp")) return "ja";
+            if (lang.Contains("tiếng trung") || lang.Contains("chinese") || lang.StartsWith("zh")) return "zh";
+            if (lang.Contains("tiếng việt") || lang.Contains("vietnamese") || lang.StartsWith("vi")) return "vi";
+
             var primaryLang = lang.Split(',')[0].Split(';')[0].Trim();
-            return primaryLang.Length >= 2 ? primaryLang.Substring(0, 2).ToLower() : "vi";
+            return primaryLang.Length >= 2 ? primaryLang.Substring(0, 2) : "vi";
+        }
+    }
+
+    protected bool IsAdmin
+    {
+        get
+        {
+            try {
+                var role = User.FindFirst("RoleName")?.Value;
+                return role != null && (role.Contains("Admin") || role.Contains("Owner"));
+            } catch { return false; }
         }
     }
 }

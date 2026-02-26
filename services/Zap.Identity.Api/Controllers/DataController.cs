@@ -56,7 +56,6 @@ public class DataController : BaseApiController
             // Use property accessors to trigger logs if missing
             var userGuid = CurrentUserGuid; 
             var lang = CurrentLanguage;
-            Console.WriteLine($"--> User: {userGuid}, Lang: {lang}");
 
             var doc = await _dynamicRepository.GetByIdAsync(collectionName, id, userGuid, lang);
             

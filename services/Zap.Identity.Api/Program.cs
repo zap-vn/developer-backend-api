@@ -1,9 +1,14 @@
 using Microsoft.OpenApi.Models;
+using NSwag.Annotations;
+
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Zap.Identity.Infrastructure;
 using Zap.Identity.Infrastructure.Settings;
+using Zap.Identity.Api.Middleware;
+
 
 Console.WriteLine("--> Zap Identity API Starting...");
 try
@@ -24,11 +29,41 @@ try
         {
             Title = "Zap Identity API",
             Version = "v1",
-            Description = "Authentication API for Zap Platform"
+            Description = "Authentication and Customer Management API for Zap Platform"
         });
+        
+        // Add Bearer Token Support
+        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "Enter 'Bearer {your_token}'"
+        });
+
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                },
+                Array.Empty<string>()
+            }
+        });
+
         // Sắp xếp các API (Actions) theo Controller/Path
         c.OrderActionsBy((apiDesc) => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.RelativePath}");
+
+        // Add support for NSwag OpenApiOperation attribute in Swashbuckle
+        c.OperationFilter<NSwagOperationFilter>();
     });
+
+
+
+
 
     // Add Infrastructure services (MongoDB, Repositories, AuthService)
     try 
@@ -68,8 +103,9 @@ try
             // TODO: Re-enable for production or after migrating to new token system
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = false,  // Temporarily disabled for legacy token support
+            ValidateLifetime = false, // Temporarily disabled for dev integration
+            ValidateIssuerSigningKey = false,
+
             ValidIssuer = jwtSettings.Issuer,
             ValidAudience = jwtSettings.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret ?? "default_secret_key_must_be_long_enough")),
@@ -91,7 +127,10 @@ try
 
     var app = builder.Build();
 
+    app.UseMiddleware<ExceptionMiddleware>();
+
     app.Use(async (context, next) =>
+
     {
         try
         {
@@ -141,3 +180,20 @@ finally
 {
     Console.WriteLine("--> Zap Identity API Exiting...");
 }
+
+public class NSwagOperationFilter : Swashbuckle.AspNetCore.SwaggerGen.IOperationFilter
+{
+    public void Apply(OpenApiOperation operation, Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext context)
+    {
+        var nswagAttribute = context.MethodInfo
+            .GetCustomAttributes(typeof(OpenApiOperationAttribute), true)
+            .FirstOrDefault() as OpenApiOperationAttribute;
+
+        if (nswagAttribute != null)
+        {
+            operation.Summary = nswagAttribute.Summary;
+            operation.Description = nswagAttribute.Description;
+        }
+    }
+}
+

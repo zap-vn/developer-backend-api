@@ -4,7 +4,7 @@ namespace Zap.BuildingBlocks;
 
 public abstract class Entity<TId>
 {
-    public TId Id { get; protected set; }
+    public TId Id { get; protected set; } = default!;
 
     private readonly List<IDomainEvent> _domainEvents = new();
     

@@ -2,6 +2,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Zap.Identity.Application.Interfaces;
+using Zap.Identity.Application.DTOs;
 using Zap.Identity.Domain.Entities;
 using Zap.Identity.Infrastructure.Persistence;
 
@@ -69,16 +70,89 @@ public class CustomerRepository : ICustomerRepository
 
     public async Task<Customer?> GetByIdAsync(string id)
     {
-        var filter = Builders<Customer>.Filter.Eq(c => c.Id, id);
+        var filter = Builders<Customer>.Filter.And(
+            Builders<Customer>.Filter.Eq(c => c.Id, id),
+            Builders<Customer>.Filter.Eq(c => c.Visible, 1)
+        );
         return await _customerCollection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<Customer>> GetAllAsync()
+    public async Task<IEnumerable<Customer>> GetByIdsAsync(IEnumerable<string> ids)
     {
-        return await _customerCollection.Find(_ => true).ToListAsync();
+        var filter = Builders<Customer>.Filter.And(
+            Builders<Customer>.Filter.In(c => c.Id, ids),
+            Builders<Customer>.Filter.Eq(c => c.Visible, 1)
+        );
+        return await _customerCollection.Find(filter).ToListAsync();
     }
 
+
+    public async Task<IEnumerable<Customer>> GetAllAsync()
+    {
+        return await _customerCollection.Find(c => c.Visible == 1).ToListAsync();
+    }
+
+    public async Task<(IEnumerable<Customer> Items, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search, List<SortItemDto>? sorts = null)
+    {
+        var filter = Builders<Customer>.Filter.Eq(c => c.Visible, 1);
+        
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var searchRegex = new BsonRegularExpression(search, "i");
+            var searchFilter = Builders<Customer>.Filter.Or(
+                Builders<Customer>.Filter.Regex(c => c.MerchantName, searchRegex),
+                Builders<Customer>.Filter.Regex(c => c.Email, searchRegex),
+                Builders<Customer>.Filter.Regex(c => c.FirstName, searchRegex),
+                Builders<Customer>.Filter.Regex(c => c.LastName, searchRegex),
+                Builders<Customer>.Filter.Regex(c => c.BusinessName, searchRegex),
+                Builders<Customer>.Filter.Regex(c => c.Phone, searchRegex)
+            );
+            filter = Builders<Customer>.Filter.And(filter, searchFilter);
+        }
+
+        var totalCount = (int)await _customerCollection.CountDocumentsAsync(filter);
+        
+        var findOptions = _customerCollection.Find(filter)
+            .Skip((page - 1) * pageSize)
+            .Limit(pageSize);
+
+        if (sorts != null && sorts.Any())
+        {
+            SortDefinition<Customer>? sortDef = null;
+            foreach (var s in sorts)
+            {
+                if (string.IsNullOrEmpty(s.SortKey)) continue;
+
+                var fieldSort = (s.SortMode == -1) // -1 for Descending
+                    ? Builders<Customer>.Sort.Descending(s.SortKey) 
+                    : Builders<Customer>.Sort.Ascending(s.SortKey);
+                
+                sortDef = (sortDef == null) ? fieldSort : Builders<Customer>.Sort.Combine(sortDef, fieldSort);
+            }
+            
+            if (sortDef != null)
+            {
+                findOptions = findOptions.Sort(sortDef);
+            }
+            else
+            {
+                findOptions = findOptions.Sort(Builders<Customer>.Sort.Descending(c => c.CreateDate));
+            }
+        }
+        else
+        {
+            // Default sort
+            findOptions = findOptions.Sort(Builders<Customer>.Sort.Descending(c => c.CreateDate).Ascending(c => c.Key));
+        }
+
+        var items = await findOptions.ToListAsync();
+
+        return (items, totalCount);
+    }
+
+
     public async Task CreateAsync(Customer customer)
+
     {
         try 
         {
@@ -165,6 +239,8 @@ public class CustomerRepository : ICustomerRepository
     public async Task DeleteAsync(string id)
     {
         var filter = Builders<Customer>.Filter.Eq(c => c.Id, id);
-        await _customerCollection.DeleteOneAsync(filter);
+        var update = Builders<Customer>.Update.Set(c => c.Visible, 0);
+        await _customerCollection.UpdateOneAsync(filter, update);
     }
+
 }

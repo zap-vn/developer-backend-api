@@ -1,4 +1,6 @@
+using BCrypt.Net;
 using System.IdentityModel.Tokens.Jwt;
+
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,8 +28,9 @@ public class AuthService : IAuthService
     {
         // Find customer by email and merchant name
         var customer = await _customerRepository.GetByEmailAndMerchantAsync(
-            request.UserName, 
-            request.MerchantName);
+            request.UserName ?? string.Empty, 
+            request.MerchantName ?? string.Empty);
+
 
         if (customer == null)
         {
@@ -39,8 +42,20 @@ public class AuthService : IAuthService
         }
 
         // Verify password
-        var hashedPassword = HashPassword(request.Password);
-        if (customer.Password != hashedPassword)
+        var isLegacyMatch = customer.Password == HashPassword(request.Password);
+        var isBCryptMatch = false;
+        
+        try 
+        {
+            // BCrypt hashes start with $2a$, $2b$ or $2y$
+            if (customer.Password.StartsWith("$2"))
+            {
+                isBCryptMatch = BCrypt.Net.BCrypt.Verify(request.Password, customer.Password);
+            }
+        }
+        catch { /* Not a BCrypt hash */ }
+
+        if (!isLegacyMatch && !isBCryptMatch)
         {
             return new LoginResponse
             {
@@ -50,7 +65,7 @@ public class AuthService : IAuthService
         }
 
         // Check if customer is active
-        if (customer.CustomerStatusId != 1 || customer.Visible != 1)
+        if (customer.Visible != 1)
         {
             return new LoginResponse
             {
@@ -59,8 +74,12 @@ public class AuthService : IAuthService
             };
         }
 
+
         // Generate JWT token
         var token = GenerateJwtToken(customer, request.IsRemember);
+
+        var fullName = $"{customer.FirstName} {customer.LastName}".Trim();
+        var acronym = GenerateAcronym(fullName);
 
         return new LoginResponse
         {
@@ -68,14 +87,46 @@ public class AuthService : IAuthService
             Message = "Login successful",
             MerchantName = customer.MerchantName,
             AccessToken = token,
+            Acronym = acronym,
             Avatar = customer.Url,
             ExpiresIn = (request.IsRemember ? _jwtSettings.ExpirationInMinutes * 24 : _jwtSettings.ExpirationInMinutes) * 60,
-            FullName = $"{customer.FirstName} {customer.LastName}".Trim(),
+            FullName = fullName,
             RefreshToken = Guid.NewGuid().ToString(),
             Role = "Owner (Super Admin)",
             UserGuid = $"Customer/{customer.CustomerId}"
         };
     }
+
+    public async Task<LoginResponse> RegisterAsync(RegisterRequest request)
+    {
+        var customer = new Customer
+        {
+            Email = request.Email,
+            Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            MerchantName = request.MerchantName,
+            Phone = request.Phone ?? string.Empty,
+            CustomerStatusId = 1,
+            Visible = 1,
+            CreateDate = DateTime.UtcNow.ToString("O"),
+            Language = "vi",
+            DateFormat = "dd/MM/yyyy",
+            TimeFormat = "HH:mm"
+        };
+
+
+        await _customerRepository.CreateAsync(customer);
+
+        // Auto login after registration
+        return await LoginAsync(new LoginRequest
+        {
+            UserName = request.Email,
+            Password = request.Password,
+            MerchantName = request.MerchantName
+        });
+    }
+
 
     private string HashPassword(string password)
     {
@@ -110,6 +161,25 @@ public class AuthService : IAuthService
         return Convert.ToBase64String(hash);
     }
 
+    private string GenerateAcronym(string fullName)
+    {
+        if (string.IsNullOrWhiteSpace(fullName))
+            return "??";
+
+        var words = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (words.Length >= 2)
+        {
+            // Multiple words: take first character of first 2 words
+            return $"{words[0][0]}{words[1][0]}".ToUpper();
+        }
+
+        // Single word: take first 2 characters
+        return fullName.Length >= 2
+            ? fullName.Substring(0, 2).ToUpper()
+            : fullName.ToUpper().PadRight(2, 'X');
+    }
+
     private string GenerateJwtToken(Customer customer, bool isRemember)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
@@ -134,12 +204,13 @@ public class AuthService : IAuthService
             : _jwtSettings.ExpirationInMinutes;
 
         var token = new JwtSecurityToken(
-            issuer: "https://dev-crm-merchant-api.diadiem.vn", // From user example
-            audience: "tranvuong MJ", // From user example
+            issuer: _jwtSettings.Issuer,
+            audience: _jwtSettings.Audience,
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
             signingCredentials: credentials
         );
+
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

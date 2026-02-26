@@ -1,77 +1,43 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace Zap.Identity.Domain;
 
+/// <summary>
+/// Optimized System Language model using Root+Delta localization pattern.
+/// Matches Accept-Language header logic.
+/// </summary>
 [BsonIgnoreExtraElements]
 public class SystemLanguage
 {
     [BsonId]
-    public string Id { get; set; } = string.Empty;
+    [BsonRepresentation(BsonType.String)]
+    public string Id { get; set; } = string.Empty; // e.g., "vi", "en"
 
-    [BsonElement("Id")]
-    public int LegacyId { get; set; }
+    [BsonElement("Code")]
+    public string Code { get; set; } = string.Empty; // e.g., "vi", "en", "ko"
 
-    [BsonElement("SystemLanguagesId")]
-    public int SystemLanguagesId { get; set; }
+    [BsonElement("Name")]
+    public string Name { get; set; } = string.Empty; // Root Value (Default language name)
 
-    [BsonElement("DialCodes")]
-    public List<string> DialCodes { get; set; } = new();
-
-    [BsonElement("DisplayName")]
-    public string DisplayName { get; set; } = string.Empty;
-
-    [BsonElement("EnglishName")]
-    public string EnglishName { get; set; } = string.Empty;
+    [BsonElement("Locales")]
+    public Dictionary<string, SystemLanguageTranslation> Locales { get; set; } = new();
 
     [BsonElement("Flag")]
     public string Flag { get; set; } = string.Empty;
 
-    [BsonElement("Name")]
-    public string Name { get; set; } = string.Empty;
-
-    [BsonElement("NumericCode")]
-    public int NumericCode { get; set; }
+    [BsonElement("DialCode")]
+    public string DialCode { get; set; } = string.Empty; // e.g., "+84"
 
     [BsonElement("OrderNo")]
     public int OrderNo { get; set; }
 
-    [BsonElement("Parent")]
-    public string Parent { get; set; } = string.Empty;
-
-    [BsonElement("Region")]
-    public string Region { get; set; } = string.Empty;
-
-    [BsonElement("RegionDisplayName")]
-    public string RegionDisplayName { get; set; } = string.Empty;
-
-    [BsonElement("RegionEnglishName")]
-    public string RegionEnglishName { get; set; } = string.Empty;
-
-    [BsonElement("RegionName")]
-    public string RegionName { get; set; } = string.Empty;
-
-    [BsonElement("RegionNativeName")]
-    public string RegionNativeName { get; set; } = string.Empty;
-
-    [BsonElement("RegionThreeLetterWindowsRegionName")]
-    public string RegionThreeLetterWindowsRegionName { get; set; } = string.Empty;
-
-    [BsonElement("RegionTwoLetterISORegionName")]
-    public string RegionTwoLetterISORegionName { get; set; } = string.Empty;
-
-    [BsonElement("TextInfo")]
-    public string TextInfo { get; set; } = string.Empty;
-
-    [BsonElement("ThreeLetterISOLanguageName")]
-    public string ThreeLetterISOLanguageName { get; set; } = string.Empty;
-
-    [BsonElement("ThreeLetterWindowsLanguageName")]
-    public string ThreeLetterWindowsLanguageName { get; set; } = string.Empty;
-
-    [BsonElement("TwoLetterISOLanguageName")]
-    public string TwoLetterISOLanguageName { get; set; } = string.Empty;
-
     [BsonElement("Visible")]
     public int Visible { get; set; }
+}
+
+public class SystemLanguageTranslation
+{
+    public string Name { get; set; } = string.Empty;
 }

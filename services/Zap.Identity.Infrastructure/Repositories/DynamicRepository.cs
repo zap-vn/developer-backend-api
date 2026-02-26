@@ -28,7 +28,7 @@ public class DynamicRepository : IDynamicRepository
 
     private IMongoDatabase GetDatabase(string collectionName)
     {
-        if (collectionName.Contains("Discount") || collectionName.Equals("Category") || collectionName.Equals("Product") || collectionName.Contains("Image") || collectionName.Contains("Translate"))
+        if (collectionName.Contains("Discount") || collectionName.Equals("Category") || collectionName.Equals("Product") || collectionName.Equals("Products") || collectionName.Contains("Image") || collectionName.Contains("Translate"))
         {
             return _mongoClient.GetDatabase("SinglePoint_en");
         }
@@ -45,7 +45,9 @@ public class DynamicRepository : IDynamicRepository
             dbName = _dbSettings.DatabaseName;
         }
 
-        return _mongoClient.GetDatabase(dbName);
+        var db = _mongoClient.GetDatabase(dbName);
+        Console.WriteLine($"--> Using Database: {db.DatabaseNamespace.DatabaseName} for Collection: {collectionName}");
+        return db;
     }
 
     private FilterDefinition<BsonDocument> GetUserFilter(string collectionName, string userGuid)
@@ -113,14 +115,16 @@ public class DynamicRepository : IDynamicRepository
         pipeline.Add(new BsonDocument("$match", filter.Render(BsonSerializer.SerializerRegistry.GetSerializer<BsonDocument>(), BsonSerializer.SerializerRegistry)));
 
         var translates = new Dictionary<string, (string table, string foreignKey)> {
-            { "CustomerDiscounts", ("TranslateCustomerDiscounts", "CustomerDiscountGuid") },
+            { "CustomerDiscounts", ("TranslateCustomerDiscounts", "ReferenceId") },
             { "Category", ("TranslateCategory", "ReferenceId") },
-            { "Product", ("TranslateProduct", "ReferenceId") }
+            { "Product", ("TranslateProduct", "ProductGuid") },
+            { "Products", ("TranslateProduct", "ProductGuid") }
         };
 
         var images = new Dictionary<string, (string table, string foreignKey)> {
             { "CustomerDiscounts", ("DiscountsImages", "DiscountGuid") },
-            { "Product", ("ProductImages", "ProductGuid") }
+            { "Product", ("ProductImages", "ProductGuid") },
+            { "Products", ("ProductImages", "ProductGuid") }
         };
 
         // 1. Join Translate
@@ -131,8 +135,10 @@ public class DynamicRepository : IDynamicRepository
                 { "let", new BsonDocument("mainId", "$_id") },
                 { "pipeline", new BsonArray {
                     new BsonDocument("$match", new BsonDocument {
-                        { "$expr", new BsonDocument("$eq", new BsonArray { "$" + t.foreignKey, "$$mainId" }) },
-                        { "Code", langCode }
+                        { "$expr", new BsonDocument("$and", new BsonArray {
+                            new BsonDocument("$eq", new BsonArray { "$" + t.foreignKey, "$$mainId" }),
+                            new BsonDocument("$eq", new BsonArray { "$Code", langCode })
+                        })}
                     })
                 }},
                 { "as", "Translations" }
@@ -157,31 +163,40 @@ public class DynamicRepository : IDynamicRepository
             }));
         }
 
-        // 3. Mapping fields thông minh
+        // 3. Mapping fields thông minh (Áp dụng cho TẤT CẢ các bảng)
         var addFields = new BsonDocument();
-        if (translates.ContainsKey(collectionName))
+        string[] mappingFields = { "Name", "Title", "Description", "ShortDescription", "TermsConditions", "Content", "NativeName" };
+        
+        foreach (var field in mappingFields)
         {
-            // $ifNull only accepts 2 args, so we nest them for multiple fallbacks
-            addFields.Add("DiscountName", new BsonDocument("$ifNull", new BsonArray { 
-                "$Translation.Title", 
-                new BsonDocument("$ifNull", new BsonArray { 
-                    "$DiscountName", 
-                    new BsonDocument("$ifNull", new BsonArray { "$Title", "$Name" })
-                })
-            }));
-            addFields.Add("Name", new BsonDocument("$ifNull", new BsonArray { 
-                "$Translation.Title", 
-                new BsonDocument("$ifNull", new BsonArray { 
-                    "$Translation.Name", 
-                    new BsonDocument("$ifNull", new BsonArray { 
-                        "$Name", 
-                        new BsonDocument("$ifNull", new BsonArray { "$DiscountName", "$Title" })
-                    })
-                })
-            }));
-            addFields.Add("Description", new BsonDocument("$ifNull", new BsonArray { "$Translation.Description", "$Description" }));
-            addFields.Add("TermsConditions", "$Translation.TermsConditions");
+            string f = field;
+            string fLow = field.ToLower();
+            
+            // Sử dụng mảng phẳng $ifNull (Hỗ trợ từ MongoDB 4.4+) - Sạch sẽ và dễ bảo trì hơn
+            var options = new BsonArray
+            {
+                $"${f}_{langCode}",         // 1. Name_en (Pascal)
+                $"${fLow}_{langCode}",      // 2. name_en (camel)
+                f == "Name" || f == "Title" ? "$Translation.Title" : (f == "Description" ? "$Translation.Description" : BsonNull.Value), // 3. Dịch
+                $"$Locales.{langCode}.{f}", // 4. Locales.en.Name
+                $"$Locales.{langCode}.{fLow}",// 5. Locales.en.name
+                $"${f}_vi",                 // 6. Name_vi (Fallback Việt)
+                $"${fLow}_vi",              // 7. name_vi
+                $"${f}_en",                 // 8. Name_en (Fallback Anh)
+                $"${fLow}_en",              // 9. name_en
+                "$" + f,                    // 10. Name (Gốc Pascal)
+                "$" + fLow,                 // 11. name (Gốc camel)
+            };
+
+            // Cross-fallback cho Name/Title
+            if (f == "Name") options.Add("$Title");
+            else if (f == "Title") options.Add("$Name");
+            
+            options.Add(BsonNull.Value); // Kết thúc
+
+            addFields.Add(f, new BsonDocument("$ifNull", options));
         }
+
         if (images.ContainsKey(collectionName))
         {
             addFields.Add("ImageUrl", new BsonDocument("$let", new BsonDocument {
@@ -190,25 +205,28 @@ public class DynamicRepository : IDynamicRepository
             }));
         }
 
-        // Xử lý bảng System: Tự động map Title_vi/Title_en sang Title dựa trên langCode
-        if (collectionName.StartsWith("System"))
-        {
-            string suffix = "_" + langCode; // _vi hoặc _en
-            // $ifNull only accepts 2 args, nest for multiple fallbacks
-            addFields.Add("Title", new BsonDocument("$ifNull", new BsonArray { "$" + "Title" + suffix, "$Title" }));
-            addFields.Add("Name", new BsonDocument("$ifNull", new BsonArray { 
-                "$" + "Title" + suffix, 
-                new BsonDocument("$ifNull", new BsonArray { 
-                    "$" + "Name" + suffix, 
-                    new BsonDocument("$ifNull", new BsonArray { "$Name", "$Title" })
-                })
-            }));
-        }
-        
         if (addFields.ElementCount > 0) pipeline.Add(new BsonDocument("$addFields", addFields));
 
-        // 4. Cleanup & Sorting
-        pipeline.Add(new BsonDocument("$project", new BsonDocument("Translations", 0).Add("Translation", 0).Add("Images", 0)));
+        // 4. Cleanup & Sorting - Loại bỏ sạch các cột ngôn ngữ thừa để API gọn gàng
+        var projectExclusions = new BsonDocument {
+            { "Translations", 0 },
+            { "Translation", 0 },
+            { "Images", 0 },
+            { "Locales", 0 }
+        };
+
+        // Danh sách các ngôn ngữ và field cần dọn dẹp
+        string[] commonLangs = { "vi", "en", "ko", "zh", "ja", "jp", "th", "lo", "km", "fr", "de" };
+        foreach (var l in commonLangs)
+        {
+            foreach (var f in mappingFields)
+            {
+                projectExclusions.Add(f + "_" + l, 0);
+                projectExclusions.Add(f.ToLower() + "_" + l, 0);
+            }
+        }
+
+        pipeline.Add(new BsonDocument("$project", projectExclusions));
 
         if (!string.IsNullOrEmpty(sortBy)) pipeline.Add(new BsonDocument("$sort", new BsonDocument(sortBy, sortDescending ? -1 : 1)));
         else pipeline.Add(new BsonDocument("$sort", new BsonDocument("CreateDate", -1).Add("OrderNo", 1)));
@@ -221,6 +239,7 @@ public class DynamicRepository : IDynamicRepository
 
     public async Task<IEnumerable<BsonDocument>> GetAllAsync(string collectionName, string userGuid, List<FilterItemDto>? filters = null, int limit = 100, int skip = 0, string? sortBy = null, bool sortDescending = false, string? language = "vi")
     {
+        if (collectionName.Equals("Product", StringComparison.OrdinalIgnoreCase)) collectionName = "Products";
         var db = GetDatabase(collectionName);
         var collection = db.GetCollection<BsonDocument>(collectionName);
         var finalFilter = GetUserFilter(collectionName, userGuid);
@@ -237,7 +256,23 @@ public class DynamicRepository : IDynamicRepository
                     continue;
                 }
                 
-                var val = ParseValue(item.Value, item.ValueType);
+                var val = ParseValue(item.Value, item.ValueType ?? 0);
+                var langCode = string.IsNullOrEmpty(language) ? "vi" : (language.Length >= 2 ? language.Substring(0, 2).ToLower() : "vi");
+
+                // Smart Search for Name/Title fields
+                if (item.SearchQueryType == 7 && (item.SearchKey == "Name" || item.SearchKey == "Title" || item.SearchKey == "FullAccessName"))
+                {
+                    var regex = new BsonRegularExpression(val.ToString(), "i");
+                    var searchFields = new List<FilterDefinition<BsonDocument>>
+                    {
+                        _fb.Regex(item.SearchKey, regex), // Root
+                        _fb.Regex($"Locales.{langCode}.Name", regex), // New Hybrid Pattern
+                        _fb.Regex($"{item.SearchKey}_{langCode}", regex) // Old Flat Column Pattern (e.g., Name_en)
+                    };
+                    extraFilters.Add(_fb.Or(searchFields));
+                    continue;
+                }
+
                 if (item.SearchKey == "_id")
                 {
                     if (item.SearchQueryType == 1 && val is string sid) { extraFilters.Add(_fb.Eq("_id", ToBsonValue(sid))); continue; }
@@ -273,28 +308,77 @@ public class DynamicRepository : IDynamicRepository
 
     public async Task<BsonDocument?> GetByIdAsync(string collectionName, string id, string userGuid, string? language = "vi")
     {
+        if (collectionName.Equals("Product", StringComparison.OrdinalIgnoreCase)) collectionName = "Products";
         var db = GetDatabase(collectionName);
         var collection = db.GetCollection<BsonDocument>(collectionName);
         var idFilter = ToBsonValue(id).IsObjectId ? _fb.Eq("_id", ToBsonValue(id)) : _fb.Eq("_id", id);
         var finalFilter = _fb.And(idFilter, GetUserFilter(collectionName, userGuid));
         
         var pipeline = BuildPipeline(collectionName, finalFilter, language, 1, 0, null, false);
-        return await collection.Aggregate<BsonDocument>(pipeline).FirstOrDefaultAsync();
+        var doc = await collection.Aggregate<BsonDocument>(pipeline).FirstOrDefaultAsync();
+        
+        return doc;
     }
 
     public async Task<BsonDocument> CreateAsync(string collectionName, BsonDocument document, string userGuid)
     {
+        if (collectionName.Equals("Product", StringComparison.OrdinalIgnoreCase)) collectionName = "Products";
         var collection = GetDatabase(collectionName).GetCollection<BsonDocument>(collectionName);
+        
+        // 1. Assign Ownership
         if (collectionName.Equals("Product", StringComparison.OrdinalIgnoreCase)) document["EmpGuid"] = userGuid;
         else if (!collectionName.StartsWith("System")) document["UserGuid"] = userGuid;
+
+        // 2. Backward Compatibility Mirroring (Mirror Locales to Flat Fields)
+        if (document.Contains("Locales") && document["Locales"].IsBsonDocument)
+        {
+            var locales = document["Locales"].AsBsonDocument;
+            foreach (var langCode in locales.Names)
+            {
+                var langData = locales[langCode];
+                if (langData.IsBsonDocument)
+                {
+                    var dataDoc = langData.AsBsonDocument;
+                    if (dataDoc.Contains("Name")) document[$"Name_{langCode}"] = dataDoc["Name"];
+                    if (dataDoc.Contains("Title")) document[$"Title_{langCode}"] = dataDoc["Title"];
+                    if (dataDoc.Contains("Description")) document[$"Description_{langCode}"] = dataDoc["Description"];
+                }
+            }
+        }
+
+        // 3. Ensure CreateDate for old systems
+        if (!document.Contains("CreateDate"))
+        {
+            document["CreateDate"] = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss");
+        }
+
         await collection.InsertOneAsync(document);
         return document;
     }
 
     public async Task UpdateAsync(string collectionName, string id, BsonDocument document, string userGuid)
     {
+        if (collectionName.Equals("Product", StringComparison.OrdinalIgnoreCase)) collectionName = "Products";
         var collection = GetDatabase(collectionName).GetCollection<BsonDocument>(collectionName);
         var filter = _fb.And(ToBsonValue(id).IsObjectId ? _fb.Eq("_id", ToBsonValue(id)) : _fb.Eq("_id", id), GetUserFilter(collectionName, userGuid));
+        
+        // 1. Backward Compatibility Mirroring (Sync Locales to Flat Fields during Update)
+        if (document.Contains("Locales") && document["Locales"].IsBsonDocument)
+        {
+            var locales = document["Locales"].AsBsonDocument;
+            foreach (var langCode in locales.Names)
+            {
+                var langData = locales[langCode];
+                if (langData.IsBsonDocument)
+                {
+                    var dataDoc = langData.AsBsonDocument;
+                    if (dataDoc.Contains("Name")) document[$"Name_{langCode}"] = dataDoc["Name"];
+                    if (dataDoc.Contains("Title")) document[$"Title_{langCode}"] = dataDoc["Title"];
+                    if (dataDoc.Contains("Description")) document[$"Description_{langCode}"] = dataDoc["Description"];
+                }
+            }
+        }
+
         document.Remove("_id");
         var result = await collection.ReplaceOneAsync(filter, document);
         if (result.MatchedCount == 0) throw new Exception("Not found or no permission.");
@@ -302,6 +386,7 @@ public class DynamicRepository : IDynamicRepository
 
     public async Task DeleteAsync(string collectionName, string id, string userGuid)
     {
+        if (collectionName.Equals("Product", StringComparison.OrdinalIgnoreCase)) collectionName = "Products";
         var collection = GetDatabase(collectionName).GetCollection<BsonDocument>(collectionName);
         var filter = _fb.And(ToBsonValue(id).IsObjectId ? _fb.Eq("_id", ToBsonValue(id)) : _fb.Eq("_id", id), GetUserFilter(collectionName, userGuid));
         var result = await collection.DeleteOneAsync(filter);

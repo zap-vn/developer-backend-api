@@ -1,0 +1,33 @@
+
+# .NET
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDEs
+.vs/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Secrets
+appsettings.Development.json
+appsettings.Local.json
+
+# Tooling/Logs
+.agent/
+.gemini/
+/tmp/
+*.log
+*.json.resolved
+hr_result.json
+login.json
+register.json
+test_result*.json
+inspect_db.cs
+test_hash.cs
+implementation_plan.md.resolved
+tmp_mongo_test/

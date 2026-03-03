@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>↶*ೃ✧˚. ❃ ↷ ˊ-Diadiem API JSC Connect</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css">
+    <style>
+        html {
+            box-sizing: border-box;
+            overflow: -moz-scrollbars-vertical;
+            overflow-y: scroll;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            margin: 0;
+            background: #fafafa;
+        }
+
+        .swagger-ui .topbar {
+            background-color: #1b1b1b;
+            padding: 10px 0;
+        }
+
+        .swagger-ui .topbar .download-url-wrapper input {
+            border: 2px solid #547f00;
+            border-radius: 4px;
+        }
+
+        .swagger-ui .info .title {
+            color: #2c3e50;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="swagger-ui"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js"></script>
+    <script>
+        window.onload = function () {
+            const ui = SwaggerUIBundle({
+                urls: [
+                    { url: "/api/Auth/swagger/v1/swagger.json", name: "Authentication Service" },
+                    { url: "/api/Employees/swagger/v1/swagger.json", name: "HR Service" },
+                    { url: "/api/Customer/swagger/v1/swagger.json", name: "Customer Service" },
+                    { url: "/api/Sales/swagger/v1/swagger.json", name: "Sales Service" },
+                    { url: "/api/Product/swagger/v1/swagger.json", name: "Product Service" },
+                    { url: "/api/Order/swagger/v1/swagger.json", name: "Order Service" },
+                    { url: "/api/Payment/swagger/v1/swagger.json", name: "Payment Service" },
+                    { url: "/api/Organization/swagger/v1/swagger.json", name: "Organization Service" },
+                    { url: "/api/Report/swagger/v1/swagger.json", name: "Report Service" }
+                ],
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                validatorUrl: null
+            });
+            window.ui = ui;
+        };
+    </script>
+</body>
+
+</html>

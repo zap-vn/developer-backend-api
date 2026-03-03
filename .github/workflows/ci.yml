@@ -1,0 +1,157 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore Zap.Backend.sln
+
+    - name: Build
+      run: dotnet build Zap.Backend.sln --configuration Release --no-restore
+
+    - name: Run tests
+      run: dotnet test Zap.Backend.sln --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install dotnet-format
+      run: dotnet tool install -g dotnet-format
+
+    - name: Run code analysis
+      run: dotnet build Zap.Backend.sln --configuration Release /p:TreatWarningsAsErrors=false
+
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    
+    strategy:
+      matrix:
+        service: [gateway, identity-api]
+        include:
+          - service: gateway
+            dockerfile: gateway/Zap.Gateway.Api/Dockerfile
+            context: .
+          - service: identity-api
+            dockerfile: services/Zap.Identity.Api/Dockerfile
+            context: .
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Lowercase repo name
+      run: echo "REPO_LC=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Google Auth
+      id: auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        token_format: 'access_token'
+        workload_identity_provider: 'projects/882473783707/locations/global/workloadIdentityPools/github-pool/providers/github-provider-final'
+        service_account: 'github-deployer@openclaw-zap.iam.gserviceaccount.com'
+
+    - name: Login to GCR
+      uses: docker/login-action@v3
+      with:
+        registry: gcr.io
+        username: oauth2accesstoken
+        password: ${{ steps.auth.outputs.access_token }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: gcr.io/openclaw-zap/${{ matrix.service }}
+        tags: |
+          type=sha,prefix=
+          type=ref,event=branch
+          latest
+
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: ${{ matrix.context }}
+        file: ${{ matrix.dockerfile }}
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  deploy-staging:
+    name: Deploy to Staging
+    needs: docker-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: staging
+      url: https://zap-identity-api-882473783707.asia-southeast1.run.app
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Google Auth
+      id: auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        workload_identity_provider: 'projects/882473783707/locations/global/workloadIdentityPools/github-pool/providers/github-provider-final'
+        service_account: 'github-deployer@openclaw-zap.iam.gserviceaccount.com'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+
+    - name: 'Deploy to Cloud Run'
+      run: |
+        gcloud run deploy zap-identity-api \
+          --image gcr.io/openclaw-zap/identity-api:latest \
+          --region asia-southeast1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development,JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890,DatabaseSettings__ConnectionString=${{ secrets.MONGODB_CONNECTION_STRING }}"

@@ -1,0 +1,150 @@
+# Triggering run to verify permissions - v2
+name: Deploy Identity API
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ "main" ]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  REGISTRY: ghcr.io
+  DB_CONNECTION_STRING: 'mongodb+srv://tommy_db_user:Tommy%40123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en?connectTimeoutMS=10000&serverSelectionTimeoutMS=10000&socketTimeoutMS=10000'
+  
+jobs:
+  deploy-dev:
+    name: Deploy to Dev
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: dev
+      url: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Google Auth
+      id: auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        workload_identity_provider: 'projects/882473783707/locations/global/workloadIdentityPools/github-pool/providers/github-provider-final'
+        service_account: 'github-deployer@openclaw-zap.iam.gserviceaccount.com'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+
+    - name: 'Configure Docker'
+      run: gcloud auth configure-docker --quiet
+
+    - name: 'Build and Push Identity API'
+      run: |
+        docker build -t gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-identity-api:latest -f Services/Authentication/ZAP.Authentication.Api/Dockerfile .
+        docker push gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }}
+        docker push gcr.io/openclaw-zap/zap-identity-api:latest
+
+    - name: 'Deploy to Cloud Run'
+      run: |
+        gcloud run deploy zap-identity-api \
+          --image gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} \
+          --region asia-southeast1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --min-instances 1 \
+          --cpu 1 \
+          --memory 512Mi \
+          --cpu-boost \
+          --timeout 120 \
+          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
+          --set-env-vars "Jwt__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" \
+          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en"
+
+    - name: 'Deploy API Gateway'
+      run: |
+        CONFIG_ID="zap-config-${{ github.sha }}"
+        gcloud api-gateway api-configs create $CONFIG_ID \
+          --api=zap-api \
+          --openapi-spec=api-gateway.yaml \
+          --project=openclaw-zap
+        
+        gcloud api-gateway gateways update zap-gateway \
+          --api=zap-api \
+          --api-config=$CONFIG_ID \
+          --location=us-central1 \
+          --project=openclaw-zap
+
+    - name: Notify deployment
+      run: |
+        echo "🚀 Deployed to GCP Dev"
+        echo "URL: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html"
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+      packages: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Get version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and Push Gateway
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: Gateway/ZAP.Gateway.Api/Dockerfile
+        push: true
+        tags: |
+          ${{ env.REGISTRY }}/${{ github.repository }}/gateway:${{ steps.version.outputs.VERSION }}
+          ${{ env.REGISTRY }}/${{ github.repository }}/gateway:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Build and Push Identity API
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: Services/Authentication/ZAP.Authentication.Api/Dockerfile
+        push: true
+        tags: |
+          ${{ env.REGISTRY }}/${{ github.repository }}/identity-api:${{ steps.version.outputs.VERSION }}
+          ${{ env.REGISTRY }}/${{ github.repository }}/identity-api:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    # Create GitHub Release
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        generate_release_notes: true
+        body: |
+          ## Docker Images
+          - Gateway: `${{ env.REGISTRY }}/${{ github.repository }}/gateway:${{ steps.version.outputs.VERSION }}`
+          - Identity API: `${{ env.REGISTRY }}/${{ github.repository }}/identity-api:${{ steps.version.outputs.VERSION }}`
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

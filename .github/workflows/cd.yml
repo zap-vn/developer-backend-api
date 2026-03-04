@@ -9,7 +9,7 @@ on:
 env:
   DOTNET_VERSION: '9.0.x'
   REGISTRY: ghcr.io
-  DB_CONNECTION_STRING: 'mongodb+srv://tommy_db_user:Tommy%40123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en?connectTimeoutMS=10000&serverSelectionTimeoutMS=10000&socketTimeoutMS=10000'
+  DB_CONNECTION_STRING: 'mongodb+srv://tommy_db_user:Tommy123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en?authSource=admin&connectTimeoutMS=10000&serverSelectionTimeoutMS=10000&socketTimeoutMS=10000'
   
 jobs:
   deploy-dev:

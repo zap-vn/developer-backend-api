@@ -7,6 +7,7 @@ namespace ZAP.Report.Infrastructure.Persistence
     public class MongoDbContext
     {
         private readonly IMongoDatabase _database;
+        public IMongoDatabase Database => _database;
 
         public MongoDbContext(IOptions<MongoSettings> settings)
         {

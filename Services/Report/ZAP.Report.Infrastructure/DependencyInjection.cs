@@ -17,6 +17,7 @@ namespace ZAP.Report.Infrastructure
 
             services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
             services.AddSingleton<MongoDbContext>();
+            services.AddScoped<ZAP.Report.Application.Common.Interfaces.IReportRepository, ZAP.Report.Infrastructure.Repositories.ReportRepository>();
 
             return services;
         }

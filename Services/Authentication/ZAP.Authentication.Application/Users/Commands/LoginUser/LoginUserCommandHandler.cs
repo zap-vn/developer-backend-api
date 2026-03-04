@@ -76,7 +76,7 @@ namespace ZAP.Authentication.Application.Users.Commands.LoginUser
                 Screens = new List<string>(),
                 User = new UserDto
                 {
-                    _id = user._id,
+                    Id = user._id,
                     Username = user.Username,
                     Email = user.Email,
                     FullName = user.FullName,

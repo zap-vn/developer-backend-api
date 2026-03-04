@@ -2,6 +2,7 @@ namespace ZAP.Authentication.Application.Users.DTOs
 {
     public class LoginResponseDto
     {
+        [System.Text.Json.Serialization.JsonPropertyName("Success")]
         public bool Success { get; set; }
         public string Message { get; set; } = string.Empty;
         public string MerchantName { get; set; } = string.Empty;

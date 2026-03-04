@@ -16,20 +16,15 @@ Write-Host "Setting project to openclaw-zap..."
 Write-Host "Enabling Google Cloud Services..."
 gcloud services enable run.googleapis.com containerregistry.googleapis.com cloudbuild.googleapis.com
 
-# 4. Build Image using Cloud Build (No local Docker needed)
-$IMAGE_TAG = "gcr.io/openclaw-zap/zap-identity-api:latest"
-Write-Host "Building Container with Cloud Build..."
-gcloud builds submit --tag $IMAGE_TAG .
-
-# 5. Deploy to Cloud Run
-Write-Host "Deploying Identity API..."
+# 4. Deploy using the existing image but inject the correct ConnectionString
+Write-Host "Deploying Identity API with correct connection string..."
 gcloud run deploy zap-identity-api `
-    --image $IMAGE_TAG `
+    --image gcr.io/openclaw-zap/zap-identity-api:latest `
     --platform managed `
     --region asia-southeast1 `
     --allow-unauthenticated `
     --port 8080 `
-    --set-env-vars "ASPNETCORE_ENVIRONMENT=Development,JwtSettings:Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" `
+    --set-env-vars "MongoDB__ConnectionString=mongodb+srv://tommy_db_user:Tommy123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en?connectTimeoutMS=10000&serverSelectionTimeoutMS=10000&socketTimeoutMS=10000,ASPNETCORE_ENVIRONMENT=Development,Jwt:Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" `
     --quiet
 
 Write-Host "✅ Deployment Complete!" -ForegroundColor Green

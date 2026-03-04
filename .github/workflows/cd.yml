@@ -41,7 +41,7 @@ jobs:
 
     - name: 'Build and Push Identity API'
       run: |
-        docker build -t gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-identity-api:latest -f Services/Authentication/ZAP.Authentication.Api/Dockerfile .
+        docker build -t gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-identity-api:latest -f Dockerfile .
         docker push gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }}
         docker push gcr.io/openclaw-zap/zap-identity-api:latest
 
@@ -129,7 +129,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: Services/Authentication/ZAP.Authentication.Api/Dockerfile
+        file: Dockerfile
         push: true
         tags: |
           ${{ env.REGISTRY }}/${{ github.repository }}/identity-api:${{ steps.version.outputs.VERSION }}

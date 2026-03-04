@@ -6,6 +6,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY . .
+WORKDIR /src/Gateway/ZAP.Gateway.Api
 RUN dotnet publish "ZAP.Gateway.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final

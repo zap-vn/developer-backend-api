@@ -5,6 +5,8 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using ZAP.Product.Infrastructure.Persistence;
 using ZAP.Product.Infrastructure.Persistence.Configurations;
+using ZAP.Product.Domain.Interfaces;
+using ZAP.Product.Infrastructure.Persistence.Repositories;
 
 namespace ZAP.Product.Infrastructure
 {
@@ -17,6 +19,7 @@ namespace ZAP.Product.Infrastructure
 
             services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
             services.AddSingleton<MongoDbContext>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             return services;
         }

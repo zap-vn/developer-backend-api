@@ -191,6 +191,43 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/Product:
+    get:
+      summary: "List Products"
+      operationId: "products_list"
+      x-google-backend:
+        address: "https://zap-product-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    post:
+      summary: "Create Product"
+      operationId: "products_create"
+      x-google-backend:
+        address: "https://zap-product-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        201:
+          description: "Created"
+  /api/Product/{id}:
+    get:
+      summary: "Get Product by ID"
+      operationId: "products_get"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zap-product-api-882473783707.asia-southeast1.run.app"
+        protocol: "h2"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/Categories:
     get:
       summary: "Categories API"

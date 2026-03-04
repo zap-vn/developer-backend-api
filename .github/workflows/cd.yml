@@ -63,6 +63,23 @@ jobs:
           --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
           --set-env-vars "MongoDB__DatabaseName=SinglePoint_en"
 
+    - name: 'Build and Push Product API'
+      run: |
+        docker build -t gcr.io/openclaw-zap/zap-product-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-product-api:latest -f Services/Product/ZAP.Product.Api/Dockerfile .
+        docker push gcr.io/openclaw-zap/zap-product-api:${{ github.sha }}
+        docker push gcr.io/openclaw-zap/zap-product-api:latest
+
+    - name: 'Deploy Product API'
+      run: |
+        gcloud run deploy zap-product-api \
+          --image gcr.io/openclaw-zap/zap-product-api:${{ github.sha }} \
+          --region asia-southeast1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "MongoDB__DatabaseName=ZAP_Product_DB"
+
     - name: 'Deploy API Gateway'
       run: |
         CONFIG_ID="zap-config-${{ github.sha }}"
@@ -131,6 +148,23 @@ jobs:
           --set-env-vars "Jwt__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" \
           --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
           --set-env-vars "MongoDB__DatabaseName=SinglePoint_en"
+
+    - name: 'Build and Push Product API Staging'
+      run: |
+        docker build -t gcr.io/openclaw-zap/zap-product-api-staging:${{ github.sha }} -t gcr.io/openclaw-zap/zap-product-api-staging:latest -f Services/Product/ZAP.Product.Api/Dockerfile .
+        docker push gcr.io/openclaw-zap/zap-product-api-staging:${{ github.sha }}
+        docker push gcr.io/openclaw-zap/zap-product-api-staging:latest
+
+    - name: 'Deploy Product API Staging'
+      run: |
+        gcloud run deploy zap-product-api-staging \
+          --image gcr.io/openclaw-zap/zap-product-api-staging:${{ github.sha }} \
+          --region asia-southeast1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "MongoDB__DatabaseName=ZAP_Product_DB"
 
     - name: 'Deploy API Gateway Staging'
       run: |

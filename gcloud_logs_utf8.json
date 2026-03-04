@@ -1,0 +1,2031 @@
+﻿[
+  {
+    "insertId": "69a793b90009f7870a456bf3",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Request finished HTTP/1.1 POST http://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login - 500 - application/json;+charset=utf-8 45.0534ms",
+    "timestamp": "2026-03-04T02:06:49.653191Z"
+  },
+  {
+    "insertId": "69a793b90009f7825f537e61",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Hosting.Diagnostics[2]",
+    "timestamp": "2026-03-04T02:06:49.653186Z"
+  },
+  {
+    "insertId": "69a793b90009f77eac347e5c",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Executed endpoint 'Zap.Identity.Api.Controllers.AuthController.Login (Zap.Identity.Api)'",
+    "timestamp": "2026-03-04T02:06:49.653182Z"
+  },
+  {
+    "insertId": "69a793b90009f7794eee4477",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]",
+    "timestamp": "2026-03-04T02:06:49.653177Z"
+  },
+  {
+    "insertId": "69a793b90009f7682689a9eb",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Executed action Zap.Identity.Api.Controllers.AuthController.Login (Zap.Identity.Api) in 43.9538ms",
+    "timestamp": "2026-03-04T02:06:49.653160Z"
+  },
+  {
+    "insertId": "69a793b90009f7634951ad71",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]",
+    "timestamp": "2026-03-04T02:06:49.653155Z"
+  },
+  {
+    "insertId": "69a793b90009f75322b10cf5",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Executing ObjectResult, writing value of type '<>f__AnonymousType0`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.",
+    "timestamp": "2026-03-04T02:06:49.653139Z"
+  },
+  {
+    "insertId": "69a793b90009f74decd0c8be",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]",
+    "timestamp": "2026-03-04T02:06:49.653133Z"
+  },
+  {
+    "insertId": "69a793b90009f734fddb4f50",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at Zap.Identity.Api.Controllers.AuthController.Login(LoginRequest request) in /src/services/Zap.Identity.Api/Controllers/AuthController.cs:line 45",
+    "timestamp": "2026-03-04T02:06:49.653108Z"
+  },
+  {
+    "insertId": "69a793b90009f72f46f12050",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at Zap.Identity.Infrastructure.Services.AuthService.LoginAsync(LoginRequest request) in /src/services/Zap.Identity.Infrastructure/Services/AuthService.cs:line 30",
+    "timestamp": "2026-03-04T02:06:49.653103Z"
+  },
+  {
+    "insertId": "69a793b90009f72a5d12d0ee",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at Zap.Identity.Infrastructure.Repositories.CustomerRepository.GetByEmailAndMerchantAsync(String email, String merchantName) in /src/services/Zap.Identity.Infrastructure/Repositories/CustomerRepository.cs:line 51",
+    "timestamp": "2026-03-04T02:06:49.653098Z"
+  },
+  {
+    "insertId": "69a793b90009f712c9896968",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.IAsyncCursorSourceExtensions.FirstOrDefaultAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653074Z"
+  },
+  {
+    "insertId": "69a793b90009f70dc4435a41",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.MongoCollectionImpl`1.UsingImplicitSessionAsync[TResult](Func`2 funcAsync, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653069Z"
+  },
+  {
+    "insertId": "69a793b90009f708ac2fc849",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653064Z"
+  },
+  {
+    "insertId": "69a793b90009f703277acdca",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](IReadBinding binding, IReadOperation`1 operation, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653059Z"
+  },
+  {
+    "insertId": "69a793b90009f6fe38bf95b5",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(IReadBinding binding, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653054Z"
+  },
+  {
+    "insertId": "69a793b90009f6f95a9f8131",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Operations.RetryableReadContext.CreateAsync(IReadBinding binding, Boolean retryRequested, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653049Z"
+  },
+  {
+    "insertId": "69a793b90009f6f5658026a4",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Operations.RetryableReadContext.InitializeAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653045Z"
+  },
+  {
+    "insertId": "69a793b90009f6f0b828cf0b",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Servers.Server.GetChannelAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653040Z"
+  },
+  {
+    "insertId": "69a793b90009f6ea8cb54e61",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.AcquireConnectionAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653034Z"
+  },
+  {
+    "insertId": "69a793b90009f6e6632ffa5a",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.AcquireConnectionHelper.AcquireConnectionAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653030Z"
+  },
+  {
+    "insertId": "69a793b90009f6e1fa5d50a6",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.ConnectionCreator.CreateOpenedOrReuseAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653025Z"
+  },
+  {
+    "insertId": "69a793b90009f6dcb5bd3b0e",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.ConnectionCreator.CreateOpenedInternalAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653020Z"
+  },
+  {
+    "insertId": "69a793b90009f6d7fabb74ec",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.PooledConnection.OpenAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653015Z"
+  },
+  {
+    "insertId": "69a793b90009f6d2224017d0",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Connections.BinaryConnection.OpenHelperAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653010Z"
+  },
+  {
+    "insertId": "69a793b90009f6ce5849ceb6",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Connections.ConnectionInitializer.AuthenticateAsync(IConnection connection, ConnectionInitializerContext connectionInitializerContext, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653006Z"
+  },
+  {
+    "insertId": "69a793b90009f6c951cec6e2",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Authentication.AuthenticationHelper.AuthenticateAsync(IConnection connection, ConnectionDescription description, IReadOnlyList`1 authenticators, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.653001Z"
+  },
+  {
+    "insertId": "69a793b90009f6c15f78d1f7",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Authentication.DefaultAuthenticator.AuthenticateAsync(IConnection connection, ConnectionDescription description, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.652993Z"
+  },
+  {
+    "insertId": "69a793b90009f6bcf1cadd84",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Authentication.SaslAuthenticator.AuthenticateAsync(IConnection connection, ConnectionDescription description, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.652988Z"
+  },
+  {
+    "insertId": "69a793b90009f6b6f75532ac",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         --- End of inner exception stack trace ---",
+    "timestamp": "2026-03-04T02:06:49.652982Z"
+  },
+  {
+    "insertId": "69a793b90009f6b281c36b91",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Authentication.SaslAuthenticator.AuthenticateAsync(IConnection connection, ConnectionDescription description, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.652978Z"
+  },
+  {
+    "insertId": "69a793b90009f6adc9945fc1",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.WireProtocol.CommandUsingQueryMessageWireProtocol`1.ExecuteAsync(IConnection connection, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:49.652973Z"
+  },
+  {
+    "insertId": "69a793b90009f6a864f00d23",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.WireProtocol.CommandUsingQueryMessageWireProtocol`1.ProcessReply(ConnectionId connectionId, ReplyMessage`1 reply)",
+    "timestamp": "2026-03-04T02:06:49.652968Z"
+  },
+  {
+    "insertId": "69a793b90009f6a2bae638cf",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "       ---> MongoDB.Driver.MongoCommandException: Command saslContinue failed: bad auth : authentication failed.",
+    "timestamp": "2026-03-04T02:06:49.652962Z"
+  },
+  {
+    "insertId": "69a793b90009f69f7057216f",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      MongoDB.Driver.MongoAuthenticationException: Unable to authenticate using sasl protocol mechanism SCRAM-SHA-1.",
+    "timestamp": "2026-03-04T02:06:49.652959Z"
+  },
+  {
+    "insertId": "69a793b90009f68894a1af8d",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Error processing login for user: admin@pho24.vn",
+    "timestamp": "2026-03-04T02:06:49.652936Z"
+  },
+  {
+    "insertId": "69a793b90009f66a3b25ea97",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "fail: Zap.Identity.Api.Controllers.AuthController[0]",
+    "timestamp": "2026-03-04T02:06:49.652906Z"
+  },
+  {
+    "insertId": "69a793b9000949af5d9ea64b",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "--> Searching for: Email='admin@pho24.vn', Merchant='pho24'",
+    "timestamp": "2026-03-04T02:06:49.608687Z"
+  },
+  {
+    "insertId": "69a793b9000949aabf87fc09",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Login attempt for user: admin@pho24.vn, merchant: pho24",
+    "timestamp": "2026-03-04T02:06:49.608682Z"
+  },
+  {
+    "insertId": "69a793b9000949a148f6f8ca",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Zap.Identity.Api.Controllers.AuthController[0]",
+    "timestamp": "2026-03-04T02:06:49.608673Z"
+  },
+  {
+    "insertId": "69a793b900094729bb3e7bc9",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Route matched with {action = \"Login\", controller = \"Auth\"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Zap.Identity.Application.DTOs.LoginRequest) on controller Zap.Identity.Api.Controllers.AuthController (Zap.Identity.Api).",
+    "timestamp": "2026-03-04T02:06:49.608041Z"
+  },
+  {
+    "insertId": "69a793b900094722563b8c81",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]",
+    "timestamp": "2026-03-04T02:06:49.608034Z"
+  },
+  {
+    "insertId": "69a793b90009471ce5f3a182",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Executing endpoint 'Zap.Identity.Api.Controllers.AuthController.Login (Zap.Identity.Api)'",
+    "timestamp": "2026-03-04T02:06:49.608028Z"
+  },
+  {
+    "insertId": "69a793b90009470f0ebc39d4",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]",
+    "timestamp": "2026-03-04T02:06:49.608015Z"
+  },
+  {
+    "insertId": "69a793b90009464dee46684d",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Request starting HTTP/1.1 POST http://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login - application/json 124",
+    "timestamp": "2026-03-04T02:06:49.607821Z"
+  },
+  {
+    "insertId": "69a793b90009463a79b664fe",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:49.918648639Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Hosting.Diagnostics[1]",
+    "timestamp": "2026-03-04T02:06:49.607802Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.049100244s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "34.34.233.128",
+      "requestMethod": "POST",
+      "requestSize": "2327",
+      "requestUrl": "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login",
+      "responseSize": "234",
+      "serverIp": "34.143.78.2",
+      "status": 500,
+      "userAgent": "PostmanRuntime/7.51.1"
+    },
+    "insertId": "69a793b90009fa5fc2ee2757",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-03-04T02:06:49.820801642Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "ERROR",
+    "spanId": "40aaea4637c7db0e",
+    "timestamp": "2026-03-04T02:06:49.602424Z",
+    "trace": "projects/openclaw-zap/traces/01f128df6faa7e2abb55bbf75c447927"
+  },
+  {
+    "insertId": "69a793b700023e02716efb62",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Request finished HTTP/1.1 POST http://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login - 500 - application/json;+charset=utf-8 231.9514ms",
+    "timestamp": "2026-03-04T02:06:47.146946Z"
+  },
+  {
+    "insertId": "69a793b700023df686b7881f",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Hosting.Diagnostics[2]",
+    "timestamp": "2026-03-04T02:06:47.146934Z"
+  },
+  {
+    "insertId": "69a793b700023df21665f9a0",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Executed endpoint 'Zap.Identity.Api.Controllers.AuthController.Login (Zap.Identity.Api)'",
+    "timestamp": "2026-03-04T02:06:47.146930Z"
+  },
+  {
+    "insertId": "69a793b700023deeed911c86",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]",
+    "timestamp": "2026-03-04T02:06:47.146926Z"
+  },
+  {
+    "insertId": "69a793b700023de95ee72354",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Executed action Zap.Identity.Api.Controllers.AuthController.Login (Zap.Identity.Api) in 230.8302ms",
+    "timestamp": "2026-03-04T02:06:47.146921Z"
+  },
+  {
+    "insertId": "69a793b700023dda576e092d",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]",
+    "timestamp": "2026-03-04T02:06:47.146906Z"
+  },
+  {
+    "insertId": "69a793b700023c6d3a6c5e55",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Executing ObjectResult, writing value of type '<>f__AnonymousType0`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.",
+    "timestamp": "2026-03-04T02:06:47.146541Z"
+  },
+  {
+    "insertId": "69a793b700023c684fef1ff4",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]",
+    "timestamp": "2026-03-04T02:06:47.146536Z"
+  },
+  {
+    "insertId": "69a793b700023c6598aab14f",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at Zap.Identity.Api.Controllers.AuthController.Login(LoginRequest request) in /src/services/Zap.Identity.Api/Controllers/AuthController.cs:line 45",
+    "timestamp": "2026-03-04T02:06:47.146533Z"
+  },
+  {
+    "insertId": "69a793b700023c61ae408e8f",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at Zap.Identity.Infrastructure.Services.AuthService.LoginAsync(LoginRequest request) in /src/services/Zap.Identity.Infrastructure/Services/AuthService.cs:line 30",
+    "timestamp": "2026-03-04T02:06:47.146529Z"
+  },
+  {
+    "insertId": "69a793b700023c5b8588c279",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at Zap.Identity.Infrastructure.Repositories.CustomerRepository.GetByEmailAndMerchantAsync(String email, String merchantName) in /src/services/Zap.Identity.Infrastructure/Repositories/CustomerRepository.cs:line 51",
+    "timestamp": "2026-03-04T02:06:47.146523Z"
+  },
+  {
+    "insertId": "69a793b700023c56f1471542",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.IAsyncCursorSourceExtensions.FirstOrDefaultAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146518Z"
+  },
+  {
+    "insertId": "69a793b700023c50e2178c81",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.MongoCollectionImpl`1.UsingImplicitSessionAsync[TResult](Func`2 funcAsync, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146512Z"
+  },
+  {
+    "insertId": "69a793b700023c4ae6efcc7c",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146506Z"
+  },
+  {
+    "insertId": "69a793b700023c1776d777c3",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](IReadBinding binding, IReadOperation`1 operation, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146455Z"
+  },
+  {
+    "insertId": "69a793b700023c132d85e52d",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(IReadBinding binding, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146451Z"
+  },
+  {
+    "insertId": "69a793b700023c0f3ee9c05c",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Operations.RetryableReadContext.CreateAsync(IReadBinding binding, Boolean retryRequested, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146447Z"
+  },
+  {
+    "insertId": "69a793b700023c0bcd3df78c",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Operations.RetryableReadContext.InitializeAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146443Z"
+  },
+  {
+    "insertId": "69a793b700023c08ce9c9c93",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Servers.Server.GetChannelAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146440Z"
+  },
+  {
+    "insertId": "69a793b700023c04dc394043",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.AcquireConnectionAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146436Z"
+  },
+  {
+    "insertId": "69a793b700023bff0ff6a04c",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.AcquireConnectionHelper.AcquireConnectionAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146431Z"
+  },
+  {
+    "insertId": "69a793b700023be514a0b20f",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.ConnectionCreator.CreateOpenedOrReuseAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146405Z"
+  },
+  {
+    "insertId": "69a793b700023be1d8a158d3",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.ConnectionCreator.CreateOpenedInternalAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146401Z"
+  },
+  {
+    "insertId": "69a793b700023bdd9148de31",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.ConnectionPools.ExclusiveConnectionPool.PooledConnection.OpenAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146397Z"
+  },
+  {
+    "insertId": "69a793b700023ba8a59b557c",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Connections.BinaryConnection.OpenHelperAsync(CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146344Z"
+  },
+  {
+    "insertId": "69a793b700023ba3f3317d52",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Connections.ConnectionInitializer.AuthenticateAsync(IConnection connection, ConnectionInitializerContext connectionInitializerContext, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146339Z"
+  },
+  {
+    "insertId": "69a793b700023b9d15cada15",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Authentication.AuthenticationHelper.AuthenticateAsync(IConnection connection, ConnectionDescription description, IReadOnlyList`1 authenticators, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146333Z"
+  },
+  {
+    "insertId": "69a793b700023b98a9984822",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Authentication.DefaultAuthenticator.AuthenticateAsync(IConnection connection, ConnectionDescription description, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146328Z"
+  },
+  {
+    "insertId": "69a793b700023b939dadee02",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Authentication.SaslAuthenticator.AuthenticateAsync(IConnection connection, ConnectionDescription description, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146323Z"
+  },
+  {
+    "insertId": "69a793b700023b8eb1ef3085",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         --- End of inner exception stack trace ---",
+    "timestamp": "2026-03-04T02:06:47.146318Z"
+  },
+  {
+    "insertId": "69a793b700023b8960deae35",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.Authentication.SaslAuthenticator.AuthenticateAsync(IConnection connection, ConnectionDescription description, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146313Z"
+  },
+  {
+    "insertId": "69a793b700023b7db3598187",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.WireProtocol.CommandUsingQueryMessageWireProtocol`1.ExecuteAsync(IConnection connection, CancellationToken cancellationToken)",
+    "timestamp": "2026-03-04T02:06:47.146301Z"
+  },
+  {
+    "insertId": "69a793b700023b74399affca",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "         at MongoDB.Driver.Core.WireProtocol.CommandUsingQueryMessageWireProtocol`1.ProcessReply(ConnectionId connectionId, ReplyMessage`1 reply)",
+    "timestamp": "2026-03-04T02:06:47.146292Z"
+  },
+  {
+    "insertId": "69a793b700023b6c0e2b20ff",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "       ---> MongoDB.Driver.MongoCommandException: Command saslContinue failed: bad auth : authentication failed.",
+    "timestamp": "2026-03-04T02:06:47.146284Z"
+  },
+  {
+    "insertId": "69a793b700023b6802ecff7e",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      MongoDB.Driver.MongoAuthenticationException: Unable to authenticate using sasl protocol mechanism SCRAM-SHA-1.",
+    "timestamp": "2026-03-04T02:06:47.146280Z"
+  },
+  {
+    "insertId": "69a793b700023b4ee53c838a",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Error processing login for user: admin@pho24.vn",
+    "timestamp": "2026-03-04T02:06:47.146254Z"
+  },
+  {
+    "insertId": "69a793b700023b2d07279a0a",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "fail: Zap.Identity.Api.Controllers.AuthController[0]",
+    "timestamp": "2026-03-04T02:06:47.146221Z"
+  },
+  {
+    "insertId": "69a793b6000dfe075fd1418b",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "--> Searching for: Email='admin@pho24.vn', Merchant='pho24'",
+    "timestamp": "2026-03-04T02:06:46.916999Z"
+  },
+  {
+    "insertId": "69a793b6000dfd4cc569859a",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Login attempt for user: admin@pho24.vn, merchant: pho24",
+    "timestamp": "2026-03-04T02:06:46.916812Z"
+  },
+  {
+    "insertId": "69a793b6000dfd3f6030bb68",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Zap.Identity.Api.Controllers.AuthController[0]",
+    "timestamp": "2026-03-04T02:06:46.916799Z"
+  },
+  {
+    "insertId": "69a793b6000df9ccd3dd83ea",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Route matched with {action = \"Login\", controller = \"Auth\"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Zap.Identity.Application.DTOs.LoginRequest) on controller Zap.Identity.Api.Controllers.AuthController (Zap.Identity.Api).",
+    "timestamp": "2026-03-04T02:06:46.915916Z"
+  },
+  {
+    "insertId": "69a793b6000df9c2f27c0f85",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:47.257099993Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]",
+    "timestamp": "2026-03-04T02:06:46.915906Z"
+  },
+  {
+    "insertId": "69a793b6000df948a56597e5",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:46.922148460Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Executing endpoint 'Zap.Identity.Api.Controllers.AuthController.Login (Zap.Identity.Api)'",
+    "timestamp": "2026-03-04T02:06:46.915784Z"
+  },
+  {
+    "insertId": "69a793b6000df942ef04715d",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:46.922148460Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]",
+    "timestamp": "2026-03-04T02:06:46.915778Z"
+  },
+  {
+    "insertId": "69a793b6000df93b33d41d85",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:46.922148460Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Request starting HTTP/1.1 POST http://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login - application/json 124",
+    "timestamp": "2026-03-04T02:06:46.915771Z"
+  },
+  {
+    "insertId": "69a793b6000df91cb5f2f05b",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:06:46.922148460Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "info: Microsoft.AspNetCore.Hosting.Diagnostics[1]",
+    "timestamp": "2026-03-04T02:06:46.915740Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.235523719s",
+      "protocol": "HTTP/1.1",
+      "remoteIp": "34.34.233.128",
+      "requestMethod": "POST",
+      "requestSize": "2228",
+      "requestUrl": "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/login",
+      "responseSize": "234",
+      "serverIp": "34.143.78.2",
+      "status": 500,
+      "userAgent": "PostmanRuntime/7.51.1"
+    },
+    "insertId": "69a793b70002423fb3e39e8a",
+    "labels": {
+      "instanceId": "00da6cd2c4bfa98a3f1f7d7c1ffbc944958516fa2a965c0c734ea66d3ae4582e7fa842ec08eeb73177290e494d5f8f58a963036afdfe5bbaab62adfc776c976afbadc7468b6af9412a7444bf85a8bea32c0a"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-03-04T02:06:47.155807715Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00103-hnp",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "ERROR",
+    "spanId": "eb4b86b723682673",
+    "timestamp": "2026-03-04T02:06:46.893934Z",
+    "trace": "projects/openclaw-zap/traces/dcbd512ad0cbdf2cbb55bbf75c447a1b",
+    "traceSampled": true
+  },
+  {
+    "insertId": "69a7930f000c5ebf9e6ca838",
+    "labels": {
+      "instanceId": "00da6cd2c4b87ad3485b0b1974b13aa1bf15a732af0200a38680748bc123f6fde47354253559db6835db6409a364e7fe6a3f52808fad1608d3b2bf7a75750ef8c33e54f173366b0636816fe773a8ae9066"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:04:00.138140177Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00102-t2v",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "--> Zap Identity API Exiting...",
+    "timestamp": "2026-03-04T02:03:59.810687Z"
+  },
+  {
+    "insertId": "69a7930f000c50e6010e1419",
+    "labels": {
+      "instanceId": "00da6cd2c4b87ad3485b0b1974b13aa1bf15a732af0200a38680748bc123f6fde47354253559db6835db6409a364e7fe6a3f52808fad1608d3b2bf7a75750ef8c33e54f173366b0636816fe773a8ae9066"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:04:00.138140177Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00102-t2v",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Hosting stopped",
+    "timestamp": "2026-03-04T02:03:59.807142Z"
+  },
+  {
+    "insertId": "69a7930f000c50d5321126e8",
+    "labels": {
+      "instanceId": "00da6cd2c4b87ad3485b0b1974b13aa1bf15a732af0200a38680748bc123f6fde47354253559db6835db6409a364e7fe6a3f52808fad1608d3b2bf7a75750ef8c33e54f173366b0636816fe773a8ae9066"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:04:00.138140177Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00102-t2v",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "dbug: Microsoft.Extensions.Hosting.Internal.Host[4]",
+    "timestamp": "2026-03-04T02:03:59.807125Z"
+  },
+  {
+    "insertId": "69a7930f000c2a50d430a649",
+    "labels": {
+      "instanceId": "00da6cd2c4b87ad3485b0b1974b13aa1bf15a732af0200a38680748bc123f6fde47354253559db6835db6409a364e7fe6a3f52808fad1608d3b2bf7a75750ef8c33e54f173366b0636816fe773a8ae9066"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:04:00.138140177Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00102-t2v",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Hosting stopping",
+    "timestamp": "2026-03-04T02:03:59.797264Z"
+  },
+  {
+    "insertId": "69a7930f000c2a447d48c90f",
+    "labels": {
+      "instanceId": "00da6cd2c4b87ad3485b0b1974b13aa1bf15a732af0200a38680748bc123f6fde47354253559db6835db6409a364e7fe6a3f52808fad1608d3b2bf7a75750ef8c33e54f173366b0636816fe773a8ae9066"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:04:00.138140177Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00102-t2v",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "dbug: Microsoft.Extensions.Hosting.Internal.Host[3]",
+    "timestamp": "2026-03-04T02:03:59.797252Z"
+  },
+  {
+    "insertId": "69a7930f000c273f6207dc13",
+    "labels": {
+      "instanceId": "00da6cd2c4b87ad3485b0b1974b13aa1bf15a732af0200a38680748bc123f6fde47354253559db6835db6409a364e7fe6a3f52808fad1608d3b2bf7a75750ef8c33e54f173366b0636816fe773a8ae9066"
+    },
+    "logName": "projects/openclaw-zap/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-03-04T02:03:59.803457432Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "zap-identity-api",
+        "location": "asia-southeast1",
+        "project_id": "openclaw-zap",
+        "revision_name": "zap-identity-api-00102-t2v",
+        "service_name": "zap-identity-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "      Application is shutting down...",
+    "timestamp": "2026-03-04T02:03:59.796479Z"
+  }
+]

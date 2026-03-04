@@ -32,12 +32,11 @@ namespace ZAP.Report.Api.Controllers
                 UserGuid = userGuid
             });
 
-            return Ok(new 
+            return Ok(new ReportResponseDto<OverviewResponse>
             {
-                Code = 200,
+                Success = true,
                 Message = "Thành công",
-                DidError = false,
-                Model = new { Overview = result }
+                Model = new OverviewResponse { Overview = result }
             });
         }
     }

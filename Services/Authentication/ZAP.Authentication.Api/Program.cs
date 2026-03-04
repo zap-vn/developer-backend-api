@@ -15,6 +15,11 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLocalization();
+builder.Services.AddMemoryCache();
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+});
 
 builder.Services.AddCors(options =>
 {
@@ -55,6 +60,7 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseResponseCompression();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();

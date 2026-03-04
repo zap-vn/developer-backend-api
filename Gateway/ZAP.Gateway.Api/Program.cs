@@ -11,15 +11,17 @@ public class Program
     {
         try
         {
-            Console.WriteLine(">>> DEBUG: BEFORE BUILDER <<<");
-            Console.WriteLine(">>> STARTUP BEGIN <<<");
-
             var builder = WebApplication.CreateBuilder(args);
 
             // Configure console logging
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
             Console.WriteLine("🚀 Starting ZAP.Gateway.Api...");
+
+            builder.Services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+            });
 
             // Services
             builder.Services.AddReverseProxy()
@@ -51,14 +53,10 @@ public class Program
 
             var app = builder.Build();
 
+            app.UseResponseCompression();
+
             // Minimal health‑check endpoint
             app.MapGet("/health", () => Results.Ok("Gateway is healthy"));
-            
-            // Redirect root to our new doc page to bypass cache
-            app.MapGet("/", (HttpContext context) => {
-                context.Response.Redirect("/api-docs.html");
-                return Task.CompletedTask;
-            });
 
             // Enable static files for index.html
             app.UseDefaultFiles();

@@ -13,8 +13,6 @@ namespace ZAP.Authentication.Infrastructure.Persistence
         public MongoDbContext(IOptions<MongoSettings> settings)
         {
             var mongoSettings = settings.Value;
-            var maskedConn = mongoSettings.ConnectionString.Replace("Tommy123456", "******");
-            Console.WriteLine($"[MongoDB] Initializing context: {maskedConn}, DB: {mongoSettings.DatabaseName}");
 
             if (_client == null)
             {
@@ -24,11 +22,9 @@ namespace ZAP.Authentication.Infrastructure.Persistence
                     clientSettings.ConnectTimeout = TimeSpan.FromSeconds(10);
                     clientSettings.ServerSelectionTimeout = TimeSpan.FromSeconds(10);
                     _client = new MongoClient(clientSettings);
-                    Console.WriteLine("[MongoDB] Client created successfully.");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Console.WriteLine($"[MongoDB Error] Failed to create client: {ex.Message}");
                     throw;
                 }
             }

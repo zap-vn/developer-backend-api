@@ -16,8 +16,7 @@ gcloud services enable run.googleapis.com containerregistry.googleapis.com cloud
 
 # 4. Build the Docker image (assumes Dockerfile exists in the Report API folder)
 $imageName = "gcr.io/openclaw-zap/zap-report-api:latest"
-Write-Host "Building Docker image $imageName..." -ForegroundColor Cyan
-docker build -t $imageName d:\PROJECTS\2026\3_2\src\Services\Report\ZAP.Report.Api
+docker build -t $imageName -f d:\PROJECTS\2026\3_2\src\Services\Report\ZAP.Report.Api\Dockerfile d:\PROJECTS\2026\3_2\src
 
 # 5. Push the image to Google Container Registry
 Write-Host "Pushing Docker image to GCR..." -ForegroundColor Cyan

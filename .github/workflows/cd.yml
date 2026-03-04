@@ -4,7 +4,7 @@ name: Deploy Identity API
 on:
   workflow_dispatch: {}
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev_api_linh_20260207" ]
 
 env:
   DOTNET_VERSION: '9.0.x'
@@ -81,6 +81,74 @@ jobs:
       run: |
         echo "🚀 Deployed to GCP Dev"
         echo "URL: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html"
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev_api_linh_20260207'
+    environment:
+      name: staging
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Google Auth
+      id: auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        workload_identity_provider: 'projects/882473783707/locations/global/workloadIdentityPools/github-pool/providers/github-provider-final'
+        service_account: 'github-deployer@openclaw-zap.iam.gserviceaccount.com'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+
+    - name: 'Configure Docker'
+      run: gcloud auth configure-docker --quiet
+
+    - name: 'Build and Push Identity API Staging'
+      run: |
+        docker build -t gcr.io/openclaw-zap/zap-identity-api-staging:${{ github.sha }} -t gcr.io/openclaw-zap/zap-identity-api-staging:latest -f Dockerfile .
+        docker push gcr.io/openclaw-zap/zap-identity-api-staging:${{ github.sha }}
+        docker push gcr.io/openclaw-zap/zap-identity-api-staging:latest
+
+    - name: 'Deploy to Cloud Run Staging'
+      run: |
+        gcloud run deploy zap-identity-api-staging \
+          --image gcr.io/openclaw-zap/zap-identity-api-staging:${{ github.sha }} \
+          --region asia-southeast1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --min-instances 1 \
+          --cpu 1 \
+          --memory 512Mi \
+          --cpu-boost \
+          --timeout 120 \
+          --set-env-vars "ASPNETCORE_ENVIRONMENT=Staging" \
+          --set-env-vars "Jwt__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" \
+          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en"
+
+    - name: 'Deploy API Gateway Staging'
+      run: |
+        CONFIG_ID="zap-config-stg-${{ github.sha }}"
+        gcloud api-gateway api-configs create $CONFIG_ID \
+          --api=zap-api \
+          --openapi-spec=api-gateway.yaml \
+          --project=openclaw-zap || true
+        
+        gcloud api-gateway gateways update zap-gateway-staging \
+          --api=zap-api \
+          --api-config=$CONFIG_ID \
+          --location=us-central1 \
+          --project=openclaw-zap || true
+
+    - name: Notify deployment
+      run: |
+        echo "🚀 Deployed to GCP Staging"
 
   deploy-production:
     name: Deploy to Production

@@ -84,6 +84,23 @@ jobs:
           --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
           --set-env-vars "MongoDB__DatabaseName=ZAP_Product_DB"
 
+    - name: 'Build and Push Report API'
+      run: |
+        docker build -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:${{ github.sha }} -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:latest -f Services/Report/ZAP.Report.Api/Dockerfile .
+        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:${{ github.sha }}
+        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:latest
+
+    - name: 'Deploy Report API'
+      run: |
+        gcloud run deploy zap-report-api \
+          --image asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:${{ github.sha }} \
+          --region asia-southeast1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "MongoDB__DatabaseName=ZAP_Report_DB"
+
     - name: 'Deploy API Gateway'
       run: |
         CONFIG_ID="zap-config-${{ github.sha }}"
@@ -169,6 +186,23 @@ jobs:
           --port 8080 \
           --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
           --set-env-vars "MongoDB__DatabaseName=ZAP_Product_DB"
+
+    - name: 'Build and Push Report API Staging'
+      run: |
+        docker build -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:${{ github.sha }} -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:latest -f Services/Report/ZAP.Report.Api/Dockerfile .
+        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:${{ github.sha }}
+        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:latest
+
+    - name: 'Deploy Report API Staging'
+      run: |
+        gcloud run deploy zap-report-api-staging \
+          --image asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:${{ github.sha }} \
+          --region asia-southeast1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "MongoDB__DatabaseName=ZAP_Report_DB"
 
     - name: 'Deploy API Gateway Staging'
       run: |

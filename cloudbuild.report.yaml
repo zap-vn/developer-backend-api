@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:latest', '-f', 'Services/Report/ZAP.Report.Api/Dockerfile', '.']
+images:
+- 'asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:latest'

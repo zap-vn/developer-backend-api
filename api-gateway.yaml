@@ -348,3 +348,24 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/v1/Report/overview-list-location:
+    post:
+      summary: "Get report overview list location"
+      operationId: "get_report_overview"
+      x-google-backend:
+        address: "https://zap-report-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "CORS support for report overview"
+      operationId: "cors_report_overview"
+      x-google-backend:
+        address: "https://zap-report-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"

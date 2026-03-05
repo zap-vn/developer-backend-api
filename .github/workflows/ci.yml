@@ -62,6 +62,9 @@ jobs:
           - service: product-api
             dockerfile: Services/Product/ZAP.Product.Api/Dockerfile
             context: .
+          - service: report-api
+            dockerfile: Services/Report/ZAP.Report.Api/Dockerfile
+            context: .
     
     steps:
     - name: Checkout code

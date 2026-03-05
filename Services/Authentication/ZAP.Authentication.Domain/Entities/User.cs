@@ -13,13 +13,8 @@ namespace ZAP.Authentication.Domain.Entities
         public int CustomerId { get; set; }
 
         public string Username { get; set; } = string.Empty;
-        
-        [BsonIgnore]
-        public string Email 
-        { 
-            get => Username; 
-            set => Username = value; 
-        }
+        public string AccountName { get; set; } = string.Empty; // Workspace identifier mapping to login screen
+        public string EmailAddress { get; set; } = string.Empty;
         
         public string Password { get; set; } = string.Empty;
         

@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ZAP.Product.Domain.Entities;
 using ZAP.Product.Domain.Interfaces;
+using ZAP.Product.Api;
 
 namespace ZAP.Product.Api.Controllers
 {
@@ -19,21 +21,22 @@ namespace ZAP.Product.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductEntity>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ProductResponseDto>>> GetAll([FromQuery] string? lang)
         {
-            var products = await _productRepository.GetAllAsync();
-            return Ok(products);
+            var entities = await _productRepository.GetAllAsync();
+            var response = entities.Select(e => ProductResponseDto.FromEntity(e, lang));
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductEntity>> GetById(Guid id)
+        public async Task<ActionResult<ProductResponseDto>> GetById(Guid id, [FromQuery] string? lang)
         {
-            var product = await _productRepository.GetByIdAsync(id);
-            if (product == null)
+            var entity = await _productRepository.GetByIdAsync(id);
+            if (entity == null)
             {
                 return NotFound();
             }
-            return Ok(product);
+            return Ok(ProductResponseDto.FromEntity(entity, lang));
         }
 
         [HttpPost]

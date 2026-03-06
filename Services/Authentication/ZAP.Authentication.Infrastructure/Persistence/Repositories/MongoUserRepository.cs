@@ -64,6 +64,11 @@ namespace ZAP.Authentication.Infrastructure.Persistence.Repositories
             return await _context.Users.Find(Builders<User>.Filter.Eq("MerchantName", merchantName)).AnyAsync();
         }
 
+        public async Task<long> GetCountAsync()
+        {
+            return await _context.Users.CountDocumentsAsync(FilterDefinition<User>.Empty);
+        }
+
         public async Task CreateAsync(User user)
         {
             await _context.Users.InsertOneAsync(user);

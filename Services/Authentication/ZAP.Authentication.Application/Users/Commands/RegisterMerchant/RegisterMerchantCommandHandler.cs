@@ -35,25 +35,34 @@ namespace ZAP.Authentication.Application.Users.Commands.RegisterMerchant
                 throw new System.Exception($"Duplicate data: Username '{request.Username}' already exists.");
             }
 
+            var count = await _userRepository.GetCountAsync();
+            var nextId = (int)count + 1;
+            var customerIdStr = $"Customer/{nextId}";
+
             var user = new User
             {
-                _id = System.Guid.NewGuid().ToString(),
+                _id = customerIdStr,
+                CustomerId = nextId,
                 Username = request.Username,
                 Email = request.Email,
                 MerchantName = request.MerchantName,
                 Password = request.Password,
-                Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" }
+                Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
+                Visible = 1,
+                CreatedAt = System.DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss")
             };
-
+            
             await _userRepository.CreateAsync(user);
 
-            // Connect to Customer table via HTTP API call
+            // Connect to Customer table via HTTP API call to ensure any Customer-specific logic triggers
             try
             {
                 using var client = new HttpClient();
                 var customerPayload = new 
                 {
-                    CustomerCode = "MERCHANT-" + user._id.Substring(0, 6).ToUpper(),
+                    _id = customerIdStr, // Pass the same ID
+                    CustomerId = nextId,
+                    CustomerCode = "MERCHANT-" + nextId,
                     MerchantName = request.MerchantName,
                     BusinessName = request.MerchantName,
                     Email = request.Email,
@@ -63,11 +72,18 @@ namespace ZAP.Authentication.Application.Users.Commands.RegisterMerchant
                     LanguageId = request.LanguageId,
                     RegistrationSource = request.Provider
                 };
-                await client.PostAsJsonAsync("http://localhost:5003/api/customers", customerPayload, cancellationToken);
+                
+                var response = await client.PostAsJsonAsync("http://localhost:5003/api/customers", customerPayload, cancellationToken);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorDetails = await response.Content.ReadAsStringAsync();
+                    System.Console.WriteLine($"[Warning] Customer API failed: {response.StatusCode} - {errorDetails}");
+                }
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                // Silently handle if Customer API is unreachable
+                // Log but don't fail the whole registration if just the sync fails
+                System.Console.WriteLine($"[Error] Failed to connect to Customer API: {ex.Message}");
             }
 
             return new UserDto

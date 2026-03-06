@@ -15,6 +15,8 @@ namespace ZAP.Customer.Domain.Entities
     [BsonIgnoreExtraElements]
     public class CustomerEntity : BaseEntity, ILocalizable<CustomerTranslation>
     {
+        [BsonId]
+        public string _id { get; set; } = string.Empty;
         public int _key { get; set; }
         public string _rev { get; set; } = string.Empty;
         public string BusinessName { get; set; } = string.Empty;

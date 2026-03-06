@@ -20,9 +20,11 @@ namespace ZAP.Customer.Application.Features.Customers.Commands
         {
             var entity = new CustomerEntity
             {
+                _id = request._id,
+                CustomerId = request.CustomerId,
                 BusinessName = request.BusinessName,
                 MerchantName = request.MerchantName,
-                Email = request.Email,
+                Email = request.Email ?? string.Empty,
                 Password = request.Password,
                 CustomerCode = request.CustomerCode,
                 Visible = request.Visible,
@@ -30,15 +32,15 @@ namespace ZAP.Customer.Application.Features.Customers.Commands
                 LanguageId = request.LanguageId,
                 RegistrationSource = request.RegistrationSource,
                 
-                // Keep backward compatible fields
+                // Keep backward compatible fields if needed
                 Name = string.IsNullOrEmpty(request.Name) ? request.MerchantName : request.Name,
-                PhoneNumber = request.PhoneNumber,
-                Address = request.Address,
+                PhoneNumber = request.PhoneNumber ?? string.Empty,
+                Address = request.Address ?? string.Empty,
                 IsActive = request.IsActive
             };
 
             await _repository.CreateAsync(entity);
-            return entity.Id.ToString();
+            return entity._id;
         }
     }
 }

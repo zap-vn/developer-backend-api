@@ -185,8 +185,8 @@ paths:
       summary: "Customers API"
       operationId: "customers_list"
       x-google-backend:
-        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
-        protocol: "h2"
+        address: "https://zap-customer-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:
@@ -195,8 +195,8 @@ paths:
       summary: "Create Customer"
       operationId: "customers_create"
       x-google-backend:
-        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
-        protocol: "h2"
+        address: "https://zap-customer-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         201:
@@ -206,8 +206,8 @@ paths:
       summary: "Search Customers"
       operationId: "customers_search"
       x-google-backend:
-        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app"
-        protocol: "h2"
+        address: "https://zap-customer-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:

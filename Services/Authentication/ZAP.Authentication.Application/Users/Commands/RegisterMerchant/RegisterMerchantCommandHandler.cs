@@ -12,6 +12,7 @@ namespace ZAP.Authentication.Application.Users.Commands.RegisterMerchant
     public class RegisterMerchantCommandHandler : IRequestHandler<RegisterMerchantCommand, UserDto>
     {
         private readonly IUserRepository _userRepository;
+        private static readonly string _customerApiUrl = System.Environment.GetEnvironmentVariable("CUSTOMER_API_URL") ?? "http://localhost:5003";
         private static readonly HttpClient _httpClient = new HttpClient { Timeout = System.TimeSpan.FromSeconds(10) };
 
         public RegisterMerchantCommandHandler(IUserRepository userRepository)
@@ -78,11 +79,12 @@ namespace ZAP.Authentication.Application.Users.Commands.RegisterMerchant
                     Url = request.Url
                 };
                 
-                var response = await _httpClient.PostAsJsonAsync("http://localhost:5003/api/customers", customerPayload, cancellationToken);
+                var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";
+                var response = await _httpClient.PostAsJsonAsync(syncUrl, customerPayload, cancellationToken);
                 if (!response.IsSuccessStatusCode)
                 {
                     var errorDetails = await response.Content.ReadAsStringAsync();
-                    System.Console.WriteLine($"[Warning] Customer API failed: {response.StatusCode} - {errorDetails} (URL: http://localhost:5003/api/customers)");
+                    System.Console.WriteLine($"[Warning] Customer API failed: {response.StatusCode} - {errorDetails} (URL: {syncUrl})");
                 }
             }
             catch (System.Exception ex)

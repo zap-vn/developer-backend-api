@@ -54,6 +54,27 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/Auth/register-merchant:
+    post:
+      summary: "Register Merchant endpoint"
+      operationId: "register_merchant"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/register-merchant"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Register Merchant CORS support"
+      operationId: "cors_register_merchant"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/register-merchant"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/Data/{collectionName}/{id}:
     get:
       summary: "Get document by ID"

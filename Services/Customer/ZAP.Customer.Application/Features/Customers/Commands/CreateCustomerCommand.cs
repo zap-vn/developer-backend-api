@@ -7,6 +7,7 @@ namespace ZAP.Customer.Application.Features.Customers.Commands
     {
         public string _id { get; set; } = string.Empty;
         public int CustomerId { get; set; }
+        public int _key { get; set; }
         public string BusinessName { get; set; } = string.Empty;
         public string MerchantName { get; set; } = string.Empty;
         public string? Email { get; set; }
@@ -15,6 +16,7 @@ namespace ZAP.Customer.Application.Features.Customers.Commands
         public int Visible { get; set; } = 1;
         public string LanguageId { get; set; } = string.Empty;
         public string RegistrationSource { get; set; } = "Email";
+        public string Url { get; set; } = string.Empty;
 
         // Legacy compat (only if strictly necessary for existing handlers, otherwise can be removed if moved to features)
         public string? Name { get; set; }

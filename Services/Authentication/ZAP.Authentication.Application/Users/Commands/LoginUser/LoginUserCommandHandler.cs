@@ -80,7 +80,7 @@ namespace ZAP.Authentication.Application.Users.Commands.LoginUser
                 Screens = new List<string>(),
                 User = new UserDto
                 {
-                    Id = user._id,
+                    _id = user._id,
                     Username = user.Username,
                     Email = user.Email,
                     FullName = user.FullName,

@@ -21,6 +21,7 @@ namespace ZAP.Authentication.Infrastructure.Persistence
                     var clientSettings = MongoClientSettings.FromConnectionString(mongoSettings.ConnectionString);
                     clientSettings.ConnectTimeout = TimeSpan.FromSeconds(10);
                     clientSettings.ServerSelectionTimeout = TimeSpan.FromSeconds(10);
+                    clientSettings.MaxConnectionPoolSize = 100;
                     _client = new MongoClient(clientSettings);
                 }
                 catch (Exception)
@@ -39,15 +40,11 @@ namespace ZAP.Authentication.Infrastructure.Persistence
                     {
                         cm.AutoMap();
                         
-                        // Fix dual-mapping of 'Email' BSON element
-                        cm.UnmapProperty(u => u.Email);
-                        
-                        // Map _id property to the _id element in MongoDB
+                        // Map properties to their respective BSON elements
                         cm.MapIdProperty(u => u._id);
+                        cm.MapProperty(u => u.Email).SetElementName("Email");
+                        cm.MapProperty(u => u.Username).SetElementName("Username");
                         
-                        // Map Username to the legacy 'Email' element in database
-                        cm.MapProperty(u => u.Username).SetElementName("Email");
-
                         // Map MerchantName to 'BusinessName' if it exists in your schema
                         cm.MapProperty(u => u.MerchantName).SetElementName("MerchantName");
                         
@@ -67,5 +64,6 @@ namespace ZAP.Authentication.Infrastructure.Persistence
         }
 
         public IMongoCollection<User> Users => _database.GetCollection<User>("Customer");
+        public IMongoCollection<ManagementIndex> ManagementIndexes => _database.GetCollection<ManagementIndex>("ManagementIndex");
     }
 }

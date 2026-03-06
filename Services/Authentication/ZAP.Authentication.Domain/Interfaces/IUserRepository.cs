@@ -10,7 +10,7 @@ namespace ZAP.Authentication.Domain.Interfaces
         Task<bool> EmailExistsAsync(string email);
         Task<bool> UsernameExistsAsync(string username);
         Task<bool> MerchantNameExistsAsync(string merchantName);
-        Task<long> GetCountAsync();
+        Task<long> GetNextSequenceAsync(string sequenceName);
         Task CreateAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(string id);

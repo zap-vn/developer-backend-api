@@ -64,10 +64,20 @@ namespace ZAP.Authentication.Infrastructure.Persistence.Repositories
             return await _context.Users.Find(Builders<User>.Filter.Eq("MerchantName", merchantName)).AnyAsync();
         }
 
-        public async Task<long> GetCountAsync()
+        public async Task<long> GetNextSequenceAsync(string sequenceName)
         {
-            return await _context.Users.CountDocumentsAsync(FilterDefinition<User>.Empty);
+            var filter = Builders<ManagementIndex>.Filter.Eq(x => x._id, sequenceName);
+            var update = Builders<ManagementIndex>.Update.Inc(x => x.Value, 1);
+            var options = new FindOneAndUpdateOptions<ManagementIndex>
+            {
+                ReturnDocument = ReturnDocument.After,
+                IsUpsert = true
+            };
+
+            var result = await _context.ManagementIndexes.FindOneAndUpdateAsync(filter, update, options);
+            return result.Value;
         }
+
 
         public async Task CreateAsync(User user)
         {

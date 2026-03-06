@@ -1,101 +1,23 @@
-name: CI Pipeline
+name: CI
 
 on:
   push:
-    branches: [ main, develop, dev_api_linh_20260207 ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main, develop ]
-
-env:
-  DOTNET_VERSION: '9.0.x'
-  DOTNET_NOLOGO: true
-  DOTNET_CLI_TELEMETRY_OPTOUT: true
+    branches: [ "main" ]
 
 jobs:
   build:
-    name: Build and Test
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
+    - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-
+        dotnet-version: 9.0.x
     - name: Restore dependencies
       run: dotnet restore ZAP.sln
-
     - name: Build
-      run: dotnet build ZAP.sln --configuration Release --no-restore
-
-    - name: Run tests
-      # Skip tests if they don't exist yet or adjust path
-      run: |
-        if ls **/*Tests.csproj 1> /dev/null 2>&1; then
-          dotnet test ZAP.sln --configuration Release --no-build --verbosity normal
-        else
-          echo "No tests found, skipping."
-        fi
-
-  docker-build:
-    name: Docker Build
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev_api_linh_20260207')
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-    
-    strategy:
-      matrix:
-        include:
-          - service: gateway
-            dockerfile: Gateway/ZAP.Gateway.Api/Dockerfile
-            context: .
-          - service: identity-api
-            dockerfile: Dockerfile
-            context: .
-          - service: product-api
-            dockerfile: Services/Product/ZAP.Product.Api/Dockerfile
-            context: .
-          - service: report-api
-            dockerfile: Services/Report/ZAP.Report.Api/Dockerfile
-            context: .
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Google Auth
-      id: auth
-      uses: 'google-github-actions/auth@v2'
-      with:
-        token_format: 'access_token'
-        workload_identity_provider: 'projects/882473783707/locations/global/workloadIdentityPools/github-pool/providers/github-provider-final'
-        service_account: 'github-deployer@openclaw-zap.iam.gserviceaccount.com'
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Login to GAR
-      uses: docker/login-action@v3
-      with:
-        registry: asia-southeast1-docker.pkg.dev
-        username: oauth2accesstoken
-        password: ${{ steps.auth.outputs.access_token }}
-
-    - name: Build and push
-      uses: docker/build-push-action@v5
-      with:
-        context: ${{ matrix.context }}
-        file: ${{ matrix.dockerfile }}
-        push: true
-        tags: |
-          asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-${{ matrix.service }}:latest
-          asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-${{ matrix.service }}:${{ github.sha }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+      run: dotnet build ZAP.sln --no-restore
+    - name: Test
+      run: dotnet test ZAP.sln --no-build --verbosity normal

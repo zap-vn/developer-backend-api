@@ -16,6 +16,6 @@ namespace ZAP.Customer.Infrastructure.Persistence
         }
 
         public IMongoCollection<CustomerGroup> CustomerGroups => Database.GetCollection<CustomerGroup>("CustomerGroups");
-        public IMongoCollection<CustomerEntity> Customers => Database.GetCollection<CustomerEntity>("Customers");
+        public IMongoCollection<CustomerEntity> Customers => Database.GetCollection<CustomerEntity>("Customer");
     }
 }

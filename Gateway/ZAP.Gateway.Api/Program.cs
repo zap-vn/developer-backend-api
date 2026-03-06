@@ -23,6 +23,8 @@ public class Program
                 options.EnableForHttps = true;
             });
 
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
             // Services
             builder.Services.AddReverseProxy()
                 .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));

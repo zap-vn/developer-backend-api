@@ -1,3 +1,4 @@
+using ZAP.BuildingBlocks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ZAP.HR.Application;
@@ -10,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddLocalization();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 // TTL Application Services
 builder.Services.AddApplicationServices();
@@ -39,6 +40,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddBuildingBlocks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,3 +58,4 @@ app.UseMiddleware<LocalizationMiddleware>();
 app.MapControllers();
 
 app.Run();
+

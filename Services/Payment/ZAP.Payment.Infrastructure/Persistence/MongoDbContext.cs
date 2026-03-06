@@ -1,17 +1,21 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using ZAP.Payment.Domain.Entities;
 using ZAP.Payment.Infrastructure.Persistence.Configurations;
 
 namespace ZAP.Payment.Infrastructure.Persistence
 {
     public class MongoDbContext
     {
-        private readonly IMongoDatabase _database;
+        public readonly IMongoDatabase Database;
 
         public MongoDbContext(IOptions<MongoSettings> settings)
         {
             var client = new MongoClient(settings.Value.ConnectionString);
-            _database = client.GetDatabase(settings.Value.DatabaseName);
+            Database = client.GetDatabase(settings.Value.DatabaseName);
         }
+
+        public IMongoCollection<PaymentType> PaymentTypes => Database.GetCollection<PaymentType>("PaymentTypes");
+        public IMongoCollection<PaymentTerms> PaymentTerms => Database.GetCollection<PaymentTerms>("PaymentTerms");
     }
 }

@@ -7,14 +7,14 @@ namespace ZAP.Product.Infrastructure.Persistence
 {
     public class MongoDbContext
     {
-        private readonly IMongoDatabase _database;
+        public readonly IMongoDatabase Database;
 
         public MongoDbContext(IOptions<MongoSettings> settings)
         {
             var client = new MongoClient(settings.Value.ConnectionString);
-            _database = client.GetDatabase(settings.Value.DatabaseName);
+            Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<ProductEntity> Products => _database.GetCollection<ProductEntity>("Products");
+        public IMongoCollection<ProductEntity> Products => Database.GetCollection<ProductEntity>("Products");
     }
 }

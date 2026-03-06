@@ -8,6 +8,15 @@ namespace ZAP.BuildingBlocks.Middleware
     public class LocalizationMiddleware
     {
         private readonly RequestDelegate _next;
+        private static readonly Dictionary<string, string> SupportedLanguages = new(StringComparer.OrdinalIgnoreCase)
+        {
+            { "vi", "vi-VN" },
+            { "en", "en-US" },
+            { "de", "de-DE" },
+            { "ja", "ja-JP" }
+        };
+
+        private const string DefaultLanguage = "vi-VN";
 
         public LocalizationMiddleware(RequestDelegate next)
         {
@@ -16,21 +25,43 @@ namespace ZAP.BuildingBlocks.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
+            // 1. Try get from Query String
             var languageCode = context.Request.Query["lang"].ToString();
 
+            // 2. Try get from Header if query is empty
             if (string.IsNullOrEmpty(languageCode))
             {
-                languageCode = context.Request.Headers["Accept-Language"].ToString()?.Split(',')[0] ?? "vi-VN";
+                var acceptLang = context.Request.Headers["Accept-Language"].ToString();
+                if (!string.IsNullOrEmpty(acceptLang))
+                {
+                    languageCode = acceptLang.Split(',')[0].Split('-')[0];
+                }
             }
 
-            // Standardize language code (e.g., vi, en -> vi-VN, en-US)
-            if (languageCode.StartsWith("vi", System.StringComparison.OrdinalIgnoreCase)) languageCode = "vi-VN";
-            else if (languageCode.StartsWith("en", System.StringComparison.OrdinalIgnoreCase)) languageCode = "en-US";
-            else languageCode = "vi-VN"; // Default
+            // 3. Match against supported languages
+            var targetCulture = DefaultLanguage;
+            if (!string.IsNullOrEmpty(languageCode))
+            {
+                var prefix = languageCode.Split('-')[0].ToLower();
+                if (SupportedLanguages.TryGetValue(prefix, out var fullCulture))
+                {
+                    targetCulture = fullCulture;
+                }
+            }
 
-            var culture = new CultureInfo(languageCode);
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
+            try
+            {
+                var culture = new CultureInfo(targetCulture);
+                CultureInfo.CurrentCulture = culture;
+                CultureInfo.CurrentUICulture = culture;
+            }
+            catch (CultureNotFoundException)
+            {
+                // Fallback to default
+                var fallbackCulture = new CultureInfo(DefaultLanguage);
+                CultureInfo.CurrentCulture = fallbackCulture;
+                CultureInfo.CurrentUICulture = fallbackCulture;
+            }
 
             await _next(context);
         }

@@ -7,15 +7,15 @@ namespace ZAP.HR.Infrastructure.Persistence
 {
     public class MongoDbContext
     {
-        private readonly IMongoDatabase _database;
+        public readonly IMongoDatabase Database;
 
         public MongoDbContext(IOptions<MongoSettings> settings)
         {
             var client = new MongoClient(settings.Value.ConnectionString);
-            _database = client.GetDatabase(settings.Value.DatabaseName);
+            Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<Employee> Employees => _database.GetCollection<Employee>("Employees");
-        public IMongoCollection<EmployeeTranslation> EmployeeTranslations => _database.GetCollection<EmployeeTranslation>("Employee_translate");
+        public IMongoCollection<Employee> Employees => Database.GetCollection<Employee>("Employees");
+        public IMongoCollection<EmployeeTranslation> EmployeeTranslations => Database.GetCollection<EmployeeTranslation>("Employee_translate");
     }
 }

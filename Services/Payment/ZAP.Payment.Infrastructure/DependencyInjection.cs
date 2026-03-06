@@ -1,22 +1,24 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
+using ZAP.Payment.Domain.Interfaces;
 using ZAP.Payment.Infrastructure.Persistence;
 using ZAP.Payment.Infrastructure.Persistence.Configurations;
+using ZAP.Payment.Infrastructure.Persistence.Repositories;
 
 namespace ZAP.Payment.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            try { BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard)); }
-            catch (BsonSerializationException) { }
+            services.Configure<MongoSettings>(configuration.GetSection("MongoSettings"));
 
-            services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
             services.AddSingleton<MongoDbContext>();
+            services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
+
+            services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
+            services.AddScoped<IPaymentTermsRepository, PaymentTermsRepository>();
 
             return services;
         }

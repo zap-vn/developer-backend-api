@@ -2,6 +2,8 @@ using MediatR;
 using ZAP.Authentication.Application.Common.Interfaces;
 using ZAP.Authentication.Application.Users.DTOs;
 using ZAP.Authentication.Domain.Interfaces;
+using Microsoft.Extensions.Localization;
+using ZAP.BuildingBlocks.Localization;
 
 namespace ZAP.Authentication.Application.Users.Commands.LoginUser
 {
@@ -9,28 +11,30 @@ namespace ZAP.Authentication.Application.Users.Commands.LoginUser
     {
         private readonly IUserRepository _userRepository;
         private readonly ITokenGenerator _tokenGenerator;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         public LoginUserCommandHandler(
             IUserRepository userRepository,
-            ITokenGenerator tokenGenerator)
+            ITokenGenerator tokenGenerator,
+            IStringLocalizer<SharedResource> localizer)
         {
             _userRepository = userRepository;
             _tokenGenerator = tokenGenerator;
-            // _context = context; // Example of how it might be injected
+            _localizer = localizer;
         }
 
         public async Task<LoginResponseDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
-            Console.WriteLine($"[Legacy Login] START for Username: {request.Username}");
+            Console.WriteLine($"[Legacy Login] START for Email: {request.Email}");
             
-            var user = await _userRepository.GetByUsernameAsync(request.Username, request.MerchantName);
+            var user = await _userRepository.GetByUsernameAsync(request.Email, request.AccountName);
             Console.WriteLine($"[Perf] DB Lookup took: {sw.ElapsedMilliseconds}ms");
 
             if (user == null)
             {
-                Console.WriteLine($"[Login] User not found: {request.Username}");
-                throw new UnauthorizedAccessException("Invalid username or password.");
+                Console.WriteLine($"[Login] User not found: {request.Email}");
+                throw new UnauthorizedAccessException(_localizer["auth_invalid_credentials"] ?? "Invalid username or password.");
             }
 
             // Legacy Hashing Logic
@@ -42,14 +46,14 @@ namespace ZAP.Authentication.Application.Users.Commands.LoginUser
             if (!isPasswordValid)
             {
                 Console.WriteLine($"[Login] Password mismatch. Input hashed: {hashedInput}");
-                throw new UnauthorizedAccessException("Invalid username or password.");
+                throw new UnauthorizedAccessException(_localizer["auth_invalid_credentials"] ?? "Invalid username or password.");
             }
 
             // Account activation check
             if (user.Visible != 1)
             {
                 Console.WriteLine($"[Login] Account not active for user: {user.Username}");
-                throw new UnauthorizedAccessException("Account is not active.");
+                throw new UnauthorizedAccessException(_localizer["auth_account_inactive"] ?? "Account is not active.");
             }
 
             var tokenSw = System.Diagnostics.Stopwatch.StartNew();
@@ -60,7 +64,7 @@ namespace ZAP.Authentication.Application.Users.Commands.LoginUser
             return new LoginResponseDto
             {
                 Success = true,
-                Message = "Login successful",
+                Message = _localizer["auth_login_success"] ?? "Login successful",
                 MerchantName = user.MerchantName,
                 AccessToken = token,
                 Acronym = string.IsNullOrEmpty(user.Acronym) ? (user.FirstName.Length > 0 ? user.FirstName.Substring(0, 1) : "") + (user.LastName.Length > 0 ? user.LastName.Substring(0, 1) : "") : user.Acronym,

@@ -25,18 +25,25 @@ namespace ZAP.Authentication.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("register-merchant")]
+        public async Task<IActionResult> RegisterMerchant([FromBody] ZAP.Authentication.Application.Users.Commands.RegisterMerchant.RegisterMerchantCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
         [HttpOptions("login")]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            if (string.IsNullOrEmpty(request.UserName) || 
+            if (string.IsNullOrEmpty(request.Email) || 
                 string.IsNullOrEmpty(request.Password) || 
-                string.IsNullOrEmpty(request.MerchantName))
+                string.IsNullOrEmpty(request.AccountName))
             {
-                return BadRequest(new { Message = "UserName, Password and MerchantName are required." });
+                return BadRequest(new { Message = "AccountName, Email and Password are required." });
             }
 
-            var command = new LoginUserCommand(request.UserName, request.Password, request.MerchantName);
+            var command = new LoginUserCommand(request.AccountName, request.Email, request.Password);
             var result = await _mediator.Send(command);
             return Ok(result);
         }

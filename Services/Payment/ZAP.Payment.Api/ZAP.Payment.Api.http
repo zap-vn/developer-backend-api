@@ -1,6 +1,0 @@
-@ZAP.Payment.Api_HostAddress = http://localhost:5223
-
-GET {{ZAP.Payment.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

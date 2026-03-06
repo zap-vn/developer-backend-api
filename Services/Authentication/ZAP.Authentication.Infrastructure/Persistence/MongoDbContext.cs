@@ -39,6 +39,9 @@ namespace ZAP.Authentication.Infrastructure.Persistence
                     {
                         cm.AutoMap();
                         
+                        // Fix dual-mapping of 'Email' BSON element
+                        cm.UnmapProperty(u => u.Email);
+                        
                         // Map _id property to the _id element in MongoDB
                         cm.MapIdProperty(u => u._id);
                         

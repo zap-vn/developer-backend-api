@@ -36,14 +36,18 @@ namespace ZAP.Authentication.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            if (string.IsNullOrEmpty(request.Email) || 
+            // Support aliases: UserName -> Email, MerchantName -> AccountName
+            var email = request.Email ?? request.UserName;
+            var accountName = request.AccountName ?? request.MerchantName;
+
+            if (string.IsNullOrEmpty(email) || 
                 string.IsNullOrEmpty(request.Password) || 
-                string.IsNullOrEmpty(request.AccountName))
+                string.IsNullOrEmpty(accountName))
             {
-                return BadRequest(new { Message = "AccountName, Email and Password are required." });
+                return BadRequest(new { Message = "AccountName (MerchantName), Email (UserName) and Password are required." });
             }
 
-            var command = new LoginUserCommand(request.AccountName, request.Email, request.Password);
+            var command = new LoginUserCommand(accountName, email, request.Password);
             var result = await _mediator.Send(command);
             return Ok(result);
         }

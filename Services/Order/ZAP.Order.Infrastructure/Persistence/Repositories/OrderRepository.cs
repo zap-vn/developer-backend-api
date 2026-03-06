@@ -10,25 +10,20 @@ namespace ZAP.Order.Infrastructure.Persistence.Repositories
 {
     public class OrderRepository : BaseMongoRepository<OrderEntity>, IOrderRepository
     {
-        public OrderRepository(MongoDbContext context, ICurrentUserService currentUserService) 
-            : base(context.Database, "Orders", currentUserService)
+        public OrderRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
+            : base(database, "Orders", currentUserService)
         {
         }
 
         public async Task<IEnumerable<OrderEntity>> GetByStatusAsync(string status)
         {
-            // findAsync đã được ApplyTenantFilter tự động
             return await FindAsync(x => x.Status == status);
         }
 
-        /// <summary>
-        /// Mẫu Skill: Truy vấn tối ưu cho hàng triệu dòng dữ liệu (Projection)
-        /// </summary>
         public async Task<object> GetOrderSummaryAsync(string status, int page, int pageSize)
         {
             var filter = ApplyTenantFilter(x => x.Status == status);
             
-            // Chỉ lấy những trường cần thiết để tiết kiệm RAM và Băng thông
             var projection = Builders<OrderEntity>.Projection
                 .Include(x => x.OrderCode)
                 .Include(x => x.TotalAmount)

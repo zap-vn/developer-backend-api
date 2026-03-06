@@ -36,6 +36,34 @@ namespace ZAP.Authentication.Infrastructure.Persistence.Repositories
             return user;
         }
 
+        public async Task<bool> ExistsAsync(string email, string username, string merchantName)
+        {
+            var filters = new System.Collections.Generic.List<FilterDefinition<User>>();
+            if (!string.IsNullOrEmpty(email)) filters.Add(Builders<User>.Filter.Eq("Email", email));
+            if (!string.IsNullOrEmpty(username)) filters.Add(Builders<User>.Filter.Eq("Username", username));
+            if (!string.IsNullOrEmpty(merchantName)) filters.Add(Builders<User>.Filter.Eq("MerchantName", merchantName));
+
+            if (filters.Count == 0) return false;
+            
+            var orFilter = Builders<User>.Filter.Or(filters);
+            return await _context.Users.Find(orFilter).AnyAsync();
+        }
+
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            return await _context.Users.Find(Builders<User>.Filter.Eq("Email", email)).AnyAsync();
+        }
+
+        public async Task<bool> UsernameExistsAsync(string username)
+        {
+            return await _context.Users.Find(Builders<User>.Filter.Eq("Username", username)).AnyAsync();
+        }
+
+        public async Task<bool> MerchantNameExistsAsync(string merchantName)
+        {
+            return await _context.Users.Find(Builders<User>.Filter.Eq("MerchantName", merchantName)).AnyAsync();
+        }
+
         public async Task CreateAsync(User user)
         {
             await _context.Users.InsertOneAsync(user);

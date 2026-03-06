@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="auth_invalid_credentials" xml:space="preserve">
+    <value>Invalid username or password.</value>
+  </data>
+  <data name="auth_account_inactive" xml:space="preserve">
+    <value>Account is not active.</value>
+  </data>
+  <data name="auth_login_success" xml:space="preserve">
+    <value>Login successful</value>
+  </data>
+</root>

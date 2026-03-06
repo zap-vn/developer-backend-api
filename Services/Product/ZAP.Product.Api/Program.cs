@@ -1,30 +1,41 @@
-using ZAP.Product.Infrastructure;
 using ZAP.BuildingBlocks;
-using ZAP.BuildingBlocks.Middleware;
+using ZAP.Product.Application;
+using ZAP.Product.Infrastructure;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddBuildingBlocks();
+builder.Services.AddOpenApi();
 
-builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddBuildingBlocks();
+builder.Services.AddApplication(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ZAP Product API", Version = "v1" });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ZAP Product API V1");
+    });
 }
-
-app.UseMiddleware<LocalizationMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseMiddleware<ZAP.BuildingBlocks.Middleware.LocalizationMiddleware>();
 
 app.Run();

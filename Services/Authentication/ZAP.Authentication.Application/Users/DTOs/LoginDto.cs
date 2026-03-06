@@ -25,9 +25,9 @@ namespace ZAP.Authentication.Application.Users.DTOs
 
     public class LoginRequestDto
     {
-        public string UserName { get; set; } = string.Empty;
+        public string AccountName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string MerchantName { get; set; } = string.Empty;
         public bool IsRemember { get; set; }
     }
 }

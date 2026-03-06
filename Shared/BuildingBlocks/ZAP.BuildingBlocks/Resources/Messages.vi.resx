@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="auth_invalid_credentials" xml:space="preserve">
+    <value>Tên đăng nhập hoặc mật khẩu không chính xác.</value>
+  </data>
+  <data name="auth_account_inactive" xml:space="preserve">
+    <value>Tài khoản chưa được kích hoạt.</value>
+  </data>
+  <data name="auth_login_success" xml:space="preserve">
+    <value>Đăng nhập thành công</value>
+  </data>
+</root>

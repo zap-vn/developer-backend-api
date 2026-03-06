@@ -10,8 +10,8 @@ namespace ZAP.Product.Infrastructure.Persistence.Repositories
 {
     public class ProductRepository : BaseMongoRepository<ProductEntity>, IProductRepository
     {
-        public ProductRepository(MongoDbContext context, ICurrentUserService currentUserService) 
-            : base(context.Database, "Products", currentUserService)
+        public ProductRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
+            : base(database, "Products", currentUserService)
         {
         }
 

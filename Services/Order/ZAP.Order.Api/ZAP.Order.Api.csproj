@@ -7,12 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.13" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ZAP.Order.Application\ZAP.Order.Application.csproj" />
     <ProjectReference Include="..\ZAP.Order.Infrastructure\ZAP.Order.Infrastructure.csproj" />
+    <ProjectReference Include="..\ZAP.Order.Application\ZAP.Order.Application.csproj" />
+    <ProjectReference Include="..\..\..\Shared\BuildingBlocks\ZAP.BuildingBlocks\ZAP.BuildingBlocks.csproj" />
   </ItemGroup>
 
 </Project>

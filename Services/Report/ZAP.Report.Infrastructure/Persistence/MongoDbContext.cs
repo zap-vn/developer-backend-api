@@ -15,6 +15,6 @@ namespace ZAP.Report.Infrastructure.Persistence
             Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<ReportTemplate> ReportTemplates => Database.GetCollection<ReportTemplate>("ReportTemplates");
+        public IMongoCollection<ReportTemplate> Reports => Database.GetCollection<ReportTemplate>("Reports");
     }
 }

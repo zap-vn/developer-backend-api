@@ -1,5 +1,5 @@
 using ZAP.BuildingBlocks.Interfaces;
-using ZAP.Sales.Domain.Entities;
+using ZAP.Sales.Domain.Entities.Promotions;
 
 namespace ZAP.Sales.Domain.Interfaces
 {

@@ -7,7 +7,7 @@ namespace ZAP.Order.Domain.Interfaces
 {
     public interface IOrderRepository : IMongoRepository<OrderEntity>
     {
-        // Thêm các phương thức đặc thù cho Order nếu cần
         Task<IEnumerable<OrderEntity>> GetByStatusAsync(string status);
+        Task<object> GetOrderSummaryAsync(string status, int page, int pageSize);
     }
 }

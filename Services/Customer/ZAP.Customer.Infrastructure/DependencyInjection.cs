@@ -5,6 +5,8 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using ZAP.Customer.Infrastructure.Persistence;
 using ZAP.Customer.Infrastructure.Persistence.Configurations;
+using ZAP.Customer.Domain.Interfaces;
+using ZAP.Customer.Infrastructure.Persistence.Repositories;
 
 namespace ZAP.Customer.Infrastructure
 {
@@ -19,6 +21,8 @@ namespace ZAP.Customer.Infrastructure
             catch (BsonSerializationException) { }
 
             services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
+            services.AddScoped<ICustomerGroupRepository, CustomerGroupRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<MongoDbContext>();
 
             return services;

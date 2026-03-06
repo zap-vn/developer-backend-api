@@ -1,3 +1,4 @@
+using ZAP.BuildingBlocks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ZAP.Authentication.Application;
@@ -14,7 +15,7 @@ builder.Services.AddControllers()
     });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddLocalization();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddMemoryCache();
 builder.Services.AddResponseCompression(options =>
 {
@@ -57,6 +58,8 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddBuildingBlocks();
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
@@ -82,3 +85,4 @@ app.UseMiddleware<LocalizationMiddleware>();
 app.MapControllers();
 
 app.Run();
+

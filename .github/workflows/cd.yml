@@ -4,17 +4,13 @@ name: Deploy Identity API
 on:
   workflow_dispatch: {}
   push:
-    branches: [ "main", "dev_api_linh_20260207" ]
+    branches: [ "main" ]
 
 env:
   DOTNET_VERSION: '9.0.x'
   REGISTRY: ghcr.io
-  DB_CONNECTION_STRING: 'mongodb+srv://tommy_db_user:Tommy123456@cluster0.dcuwhnu.mongodb.net/?appName=Cluster0&connectTimeoutMS=10000&serverSelectionTimeoutMS=10000&socketTimeoutMS=10000'
+  DB_CONNECTION_STRING: 'mongodb+srv://tommy_db_user:Tommy%40123456@cluster0.dcuwhnu.mongodb.net/SinglePoint_en?connectTimeoutMS=10000&serverSelectionTimeoutMS=10000&socketTimeoutMS=10000'
   
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
 jobs:
   deploy-dev:
     name: Deploy to Dev
@@ -43,16 +39,20 @@ jobs:
     - name: 'Configure Docker'
       run: gcloud auth configure-docker --quiet
 
-    - name: 'Build and Push Identity API'
+    - name: 'Build and Push API Images'
       run: |
-        docker build -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api:${{ github.sha }} -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api:latest -f Dockerfile .
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api:${{ github.sha }}
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api:latest
+        docker build -t gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-identity-api:latest -f Services/Authentication/ZAP.Authentication.Api/Dockerfile .
+        docker build -t gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-customer-api:latest -f Services/Customer/ZAP.Customer.Api/Dockerfile .
+        
+        docker push gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }}
+        docker push gcr.io/openclaw-zap/zap-identity-api:latest
+        docker push gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }}
+        docker push gcr.io/openclaw-zap/zap-customer-api:latest
 
-    - name: 'Deploy to Cloud Run'
+    - name: 'Deploy Identity to Cloud Run'
       run: |
         gcloud run deploy zap-identity-api \
-          --image asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api:${{ github.sha }} \
+          --image gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} \
           --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \
@@ -63,43 +63,29 @@ jobs:
           --cpu-boost \
           --timeout 120 \
           --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
-          --set-env-vars "Jwt__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" \
-          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en"
+          --set-env-vars "JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" \
+          --set-env-vars "DatabaseSettings__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "DatabaseSettings__DatabaseName=SinglePoint_en" \
+          --set-env-vars "DatabaseSettings__DBProvider=mongodb" \
+          --set-env-vars "CUSTOMER_API_URL=https://zap-customer-api-882473783707.asia-southeast1.run.app"
 
-    - name: 'Build and Push Product API'
+    - name: 'Deploy Customer to Cloud Run'
       run: |
-        docker build -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api:${{ github.sha }} -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api:latest -f Services/Product/ZAP.Product.Api/Dockerfile .
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api:${{ github.sha }}
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api:latest
-
-    - name: 'Deploy Product API'
-      run: |
-        gcloud run deploy zap-product-api \
-          --image asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api:${{ github.sha }} \
+        gcloud run deploy zap-customer-api \
+          --image gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }} \
           --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \
           --port 8080 \
-          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "MongoDB__DatabaseName=ZAP_Product_DB"
-
-    - name: 'Build and Push Report API'
-      run: |
-        docker build -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:${{ github.sha }} -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:latest -f Services/Report/ZAP.Report.Api/Dockerfile .
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:${{ github.sha }}
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:latest
-
-    - name: 'Deploy Report API'
-      run: |
-        gcloud run deploy zap-report-api \
-          --image asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api:${{ github.sha }} \
-          --region asia-southeast1 \
-          --platform managed \
-          --allow-unauthenticated \
-          --port 8080 \
-          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "MongoDB__DatabaseName=ZAP_Report_DB"
+          --min-instances 1 \
+          --cpu 1 \
+          --memory 512Mi \
+          --cpu-boost \
+          --timeout 120 \
+          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
+          --set-env-vars "DatabaseSettings__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "DatabaseSettings__DatabaseName=SinglePoint_en" \
+          --set-env-vars "DatabaseSettings__DBProvider=mongodb"
 
     - name: 'Deploy API Gateway'
       run: |
@@ -119,108 +105,6 @@ jobs:
       run: |
         echo "🚀 Deployed to GCP Dev"
         echo "URL: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html"
-
-  deploy-staging:
-    name: Deploy to Staging
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev_api_linh_20260207'
-    environment:
-      name: staging
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Google Auth
-      id: auth
-      uses: 'google-github-actions/auth@v2'
-      with:
-        workload_identity_provider: 'projects/882473783707/locations/global/workloadIdentityPools/github-pool/providers/github-provider-final'
-        service_account: 'github-deployer@openclaw-zap.iam.gserviceaccount.com'
-
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v2'
-
-    - name: 'Configure Docker'
-      run: gcloud auth configure-docker --quiet
-
-    - name: 'Build and Push Identity API Staging'
-      run: |
-        docker build -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api-staging:${{ github.sha }} -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api-staging:latest -f Dockerfile .
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api-staging:${{ github.sha }}
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api-staging:latest
-
-    - name: 'Deploy to Cloud Run Staging'
-      run: |
-        gcloud run deploy zap-identity-api-staging \
-          --image asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-identity-api-staging:${{ github.sha }} \
-          --region asia-southeast1 \
-          --platform managed \
-          --allow-unauthenticated \
-          --port 8080 \
-          --min-instances 1 \
-          --cpu 1 \
-          --memory 512Mi \
-          --cpu-boost \
-          --timeout 120 \
-          --set-env-vars "ASPNETCORE_ENVIRONMENT=Staging" \
-          --set-env-vars "Jwt__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" \
-          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en"
-
-    - name: 'Build and Push Product API Staging'
-      run: |
-        docker build -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api-staging:${{ github.sha }} -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api-staging:latest -f Services/Product/ZAP.Product.Api/Dockerfile .
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api-staging:${{ github.sha }}
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api-staging:latest
-
-    - name: 'Deploy Product API Staging'
-      run: |
-        gcloud run deploy zap-product-api-staging \
-          --image asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-product-api-staging:${{ github.sha }} \
-          --region asia-southeast1 \
-          --platform managed \
-          --allow-unauthenticated \
-          --port 8080 \
-          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "MongoDB__DatabaseName=ZAP_Product_DB"
-
-    - name: 'Build and Push Report API Staging'
-      run: |
-        docker build -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:${{ github.sha }} -t asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:latest -f Services/Report/ZAP.Report.Api/Dockerfile .
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:${{ github.sha }}
-        docker push asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:latest
-
-    - name: 'Deploy Report API Staging'
-      run: |
-        gcloud run deploy zap-report-api-staging \
-          --image asia-southeast1-docker.pkg.dev/openclaw-zap/zap-repo/zap-report-api-staging:${{ github.sha }} \
-          --region asia-southeast1 \
-          --platform managed \
-          --allow-unauthenticated \
-          --port 8080 \
-          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "MongoDB__DatabaseName=ZAP_Report_DB"
-
-    - name: 'Deploy API Gateway Staging'
-      run: |
-        CONFIG_ID="zap-config-stg-${{ github.sha }}"
-        gcloud api-gateway api-configs create $CONFIG_ID \
-          --api=zap-api \
-          --openapi-spec=api-gateway.yaml \
-          --project=openclaw-zap || true
-        
-        gcloud api-gateway gateways update zap-gateway-staging \
-          --api=zap-api \
-          --api-config=$CONFIG_ID \
-          --location=us-central1 \
-          --project=openclaw-zap || true
-
-    - name: Notify deployment
-      run: |
-        echo "🚀 Deployed to GCP Staging"
 
   deploy-production:
     name: Deploy to Production
@@ -269,7 +153,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: Dockerfile
+        file: Services/Authentication/ZAP.Authentication.Api/Dockerfile
         push: true
         tags: |
           ${{ env.REGISTRY }}/${{ github.repository }}/identity-api:${{ steps.version.outputs.VERSION }}

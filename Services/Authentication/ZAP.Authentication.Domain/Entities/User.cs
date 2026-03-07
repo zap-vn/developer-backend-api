@@ -10,8 +10,10 @@ namespace ZAP.Authentication.Domain.Entities
         public string _id { get; set; } = string.Empty;
         
         [BsonSerializer(typeof(FlexibleIntSerializer))]
+        [BsonElement("CustomerId")]
         public long CustomerId { get; set; }
 
+        [BsonElement("_key")]
         public long _key { get; set; }
 
         public string Username { get; set; } = string.Empty;
@@ -33,6 +35,7 @@ namespace ZAP.Authentication.Domain.Entities
         [BsonElement("LanguageId")]
         public string LanguageId { get; set; } = string.Empty;
 
+        [BsonElement("Url")]
         public string Avatar { get; set; } = string.Empty; // Mapped to Url
 
         [BsonElement("Provider")]
@@ -43,9 +46,10 @@ namespace ZAP.Authentication.Domain.Entities
         public List<string> Roles { get; set; } = new() { "Admin" };
         
         public string FullName => $"{FirstName} {LastName}";
-
+ 
         public int Visible { get; set; }
 
+        [BsonElement("CreateDate")]
         public string CreatedAt { get; set; } = string.Empty; // Mapped to CreateDate
 
         public string UpdatedAt { get; set; } = string.Empty;

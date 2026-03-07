@@ -9,10 +9,11 @@ namespace ZAP.Authentication.Domain.Entities
         [BsonId]
         public string _id { get; set; } = string.Empty;
         
-        [BsonSerializer(typeof(FlexibleIntSerializer))]
+        [BsonSerializer(typeof(FlexibleLongSerializer))]
         [BsonElement("CustomerId")]
         public long CustomerId { get; set; }
 
+        [BsonSerializer(typeof(FlexibleLongSerializer))]
         [BsonElement("_key")]
         public long _key { get; set; }
 

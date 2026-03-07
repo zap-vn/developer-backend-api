@@ -1,16 +1,16 @@
 # Deploy Identity API to Google Cloud Run
-# Project: openclaw-zap
+# Project: openclaw-CRM
 
 Write-Host "🚀 Starting Deployment to Google Cloud Run..." -ForegroundColor Green
-Write-Host "Project ID: openclaw-zap" -ForegroundColor Cyan
+Write-Host "Project ID: openclaw-CRM" -ForegroundColor Cyan
 
 # 1. Login if needed
 Write-Host "Checking authentication..."
 # gcloud auth login
 
 # 2. Set Project
-Write-Host "Setting project to openclaw-zap..."
-# gcloud config set project openclaw-zap
+Write-Host "Setting project to openclaw-CRM..."
+# gcloud config set project openclaw-CRM
 
 # 3. Enable Required Services
 Write-Host "Enabling Google Cloud Services..."
@@ -18,8 +18,8 @@ gcloud services enable run.googleapis.com containerregistry.googleapis.com cloud
 
 # 4. Deploy using the existing image but inject the correct ConnectionString
 Write-Host "Deploying Identity API with correct connection string..."
-gcloud run deploy zap-identity-api `
-    --image gcr.io/openclaw-zap/zap-identity-api:latest `
+gcloud run deploy CRM-identity-api `
+    --image gcr.io/openclaw-CRM/CRM-identity-api:latest `
     --platform managed `
     --region asia-southeast1 `
     --allow-unauthenticated `

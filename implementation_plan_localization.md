@@ -1,7 +1,7 @@
 # Kế hoạch Triển khai Đa ngôn ngữ (Localization Skill Plan)
 
 ## 1. Mục tiêu
-Triển khai hệ thống đa ngôn ngữ đồng nhất cho toàn bộ các dịch vụ (Services) trong dự án ZAP. Hệ thống sẽ sử dụng cơ chế lưu trữ "Bảng gốc" (Main Entity) và "Bảng dịch" (Translation Entity) theo từng tính năng hoặc Collection.
+Triển khai hệ thống đa ngôn ngữ đồng nhất cho toàn bộ các dịch vụ (Services) trong dự án CRM. Hệ thống sẽ sử dụng cơ chế lưu trữ "Bảng gốc" (Main Entity) và "Bảng dịch" (Translation Entity) theo từng tính năng hoặc Collection.
 
 ## 2. Thông tin môi trường
 - **Cơ sở dữ liệu:** MongoDB
@@ -11,7 +11,7 @@ Triển khai hệ thống đa ngôn ngữ đồng nhất cho toàn bộ các d�
 
 ## 3. Kiến trúc dữ liệu (Pattern)
 
-Dựa trên cấu trúc sẵn có trong `ZAP.BuildingBlocks`, chúng ta sẽ áp dụng pattern sau cho tất cả các Collection cần đa ngôn ngữ:
+Dựa trên cấu trúc sẵn có trong `CRM.BuildingBlocks`, chúng ta sẽ áp dụng pattern sau cho tất cả các Collection cần đa ngôn ngữ:
 
 ### A. Thực thể Dịch (Translation Entity)
 Tất cả các thực thể dịch phải kế thừa từ `BaseTranslationEntity`.

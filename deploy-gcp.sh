@@ -3,10 +3,10 @@
 # GCP Configuration
 PROJECT_ID="your-gcp-project-id"  # Thay bằng GCP Project ID của bạn
 REGION="asia-southeast1"          # Singapore region (gần VN nhất)
-SERVICE_NAME="zap-identity-api"
+SERVICE_NAME="CRM-identity-api"
 IMAGE_NAME="gcr.io/${PROJECT_ID}/${SERVICE_NAME}"
 
-echo "=== Deploying Zap Identity API to GCP Cloud Run ==="
+echo "=== Deploying CRM Identity API to GCP Cloud Run ==="
 echo "Project: ${PROJECT_ID}"
 echo "Region: ${REGION}"
 echo "Service: ${SERVICE_NAME}"
@@ -14,7 +14,7 @@ echo ""
 
 # Step 1: Build Docker image
 echo "Step 1: Building Docker image..."
-docker build -t ${IMAGE_NAME}:latest -f services/Zap.Identity.Api/Dockerfile .
+docker build -t ${IMAGE_NAME}:latest -f services/CRM.Identity.Api/Dockerfile .
 
 if [ $? -ne 0 ]; then
     echo "❌ Docker build failed!"

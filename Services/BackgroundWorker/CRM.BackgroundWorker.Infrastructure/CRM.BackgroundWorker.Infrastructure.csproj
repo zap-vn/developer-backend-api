@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CRM.BackgroundWorker.Application\CRM.BackgroundWorker.Application.csproj" />
+    <ProjectReference Include="..\CRM.BackgroundWorker.Domain\CRM.BackgroundWorker.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\BuildingBlocks\CRM.BuildingBlocks\CRM.BuildingBlocks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Bson" Version="3.7.0" />
+    <PackageReference Include="MongoDB.Driver" Version="3.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.2" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseAppHost>false</UseAppHost>
+  </PropertyGroup>
+
+</Project>

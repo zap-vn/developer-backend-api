@@ -1,9 +1,0 @@
-using ZAP.BuildingBlocks.Models;
-
-namespace ZAP.Payment.Application.Features.PaymentTypes.DTOs
-{
-    public class PaymentTypeFilterDto : PaginationDto
-    {
-        public string? Keyword { get; set; }
-    }
-}

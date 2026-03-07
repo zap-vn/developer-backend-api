@@ -18,7 +18,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: dev
-      url: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html
+      url: https://CRM-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html
     permissions:
       contents: read
       id-token: write
@@ -31,7 +31,7 @@ jobs:
       uses: 'google-github-actions/auth@v2'
       with:
         workload_identity_provider: 'projects/882473783707/locations/global/workloadIdentityPools/github-pool/providers/github-provider-final'
-        service_account: 'github-deployer@openclaw-zap.iam.gserviceaccount.com'
+        service_account: 'github-deployer@openclaw-CRM.iam.gserviceaccount.com'
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
@@ -41,18 +41,18 @@ jobs:
 
     - name: 'Build and Push API Images'
       run: |
-        docker build -t gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-identity-api:latest -f Services/Authentication/ZAP.Authentication.Api/Dockerfile .
-        docker build -t gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-customer-api:latest -f Services/Customer/ZAP.Customer.Api/Dockerfile .
+        docker build -t gcr.io/openclaw-CRM/CRM-identity-api:${{ github.sha }} -t gcr.io/openclaw-CRM/CRM-identity-api:latest -f Services/Authentication/CRM.Authentication.Api/Dockerfile .
+        docker build -t gcr.io/openclaw-CRM/CRM-customer-api:${{ github.sha }} -t gcr.io/openclaw-CRM/CRM-customer-api:latest -f Services/Customer/CRM.Customer.Api/Dockerfile .
         
-        docker push gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }}
-        docker push gcr.io/openclaw-zap/zap-identity-api:latest
-        docker push gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }}
-        docker push gcr.io/openclaw-zap/zap-customer-api:latest
+        docker push gcr.io/openclaw-CRM/CRM-identity-api:${{ github.sha }}
+        docker push gcr.io/openclaw-CRM/CRM-identity-api:latest
+        docker push gcr.io/openclaw-CRM/CRM-customer-api:${{ github.sha }}
+        docker push gcr.io/openclaw-CRM/CRM-customer-api:latest
 
     - name: 'Deploy Identity to Cloud Run'
       run: |
-        gcloud run deploy zap-identity-api \
-          --image gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} \
+        gcloud run deploy CRM-identity-api \
+          --image gcr.io/openclaw-CRM/CRM-identity-api:${{ github.sha }} \
           --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \
@@ -67,12 +67,12 @@ jobs:
           --set-env-vars "DatabaseSettings__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
           --set-env-vars "DatabaseSettings__DatabaseName=SinglePoint_en" \
           --set-env-vars "DatabaseSettings__DBProvider=mongodb" \
-          --set-env-vars "CUSTOMER_API_URL=https://zap-customer-api-882473783707.asia-southeast1.run.app"
+          --set-env-vars "CUSTOMER_API_URL=https://CRM-customer-api-882473783707.asia-southeast1.run.app"
 
     - name: 'Deploy Customer to Cloud Run'
       run: |
-        gcloud run deploy zap-customer-api \
-          --image gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }} \
+        gcloud run deploy CRM-customer-api \
+          --image gcr.io/openclaw-CRM/CRM-customer-api:${{ github.sha }} \
           --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \
@@ -89,22 +89,22 @@ jobs:
 
     - name: 'Deploy API Gateway'
       run: |
-        CONFIG_ID="zap-config-${{ github.sha }}"
+        CONFIG_ID="CRM-config-${{ github.sha }}"
         gcloud api-gateway api-configs create $CONFIG_ID \
-          --api=zap-api \
+          --api=CRM-api \
           --openapi-spec=api-gateway.yaml \
-          --project=openclaw-zap
+          --project=openclaw-CRM
         
-        gcloud api-gateway gateways update zap-gateway \
-          --api=zap-api \
+        gcloud api-gateway gateways update CRM-gateway \
+          --api=CRM-api \
           --api-config=$CONFIG_ID \
           --location=us-central1 \
-          --project=openclaw-zap
+          --project=openclaw-CRM
 
     - name: Notify deployment
       run: |
         echo "🚀 Deployed to GCP Dev"
-        echo "URL: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html"
+        echo "URL: https://CRM-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html"
 
   deploy-production:
     name: Deploy to Production
@@ -141,7 +141,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: Gateway/ZAP.Gateway.Api/Dockerfile
+        file: Gateway/CRM.Gateway.Api/Dockerfile
         push: true
         tags: |
           ${{ env.REGISTRY }}/${{ github.repository }}/gateway:${{ steps.version.outputs.VERSION }}
@@ -153,7 +153,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: Services/Authentication/ZAP.Authentication.Api/Dockerfile
+        file: Services/Authentication/CRM.Authentication.Api/Dockerfile
         push: true
         tags: |
           ${{ env.REGISTRY }}/${{ github.repository }}/identity-api:${{ steps.version.outputs.VERSION }}

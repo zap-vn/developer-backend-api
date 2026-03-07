@@ -16,8 +16,8 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore ZAP.sln
+      run: dotnet restore CRM.sln
     - name: Build
-      run: dotnet build ZAP.sln --no-restore
+      run: dotnet build CRM.sln --no-restore
     - name: Test
-      run: dotnet test ZAP.sln --no-build --verbosity normal
+      run: dotnet test CRM.sln --no-build --verbosity normal

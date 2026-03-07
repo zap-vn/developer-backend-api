@@ -1,6 +1,6 @@
 # CHIẾN LƯỢC TRIỂN KHAI ĐA NGÔN NGỮ CHI TIẾT (LOCALIZATION MASTER SKILL PLAN)
 
-Dựa trên phân tích hệ thống hiện tại tại Server MongoDB `172.16.10.153` và cấu trúc mã nguồn .NET Core, đây là kế hoạch chi tiết để triển khai tính năng đa ngôn ngữ đồng bộ cho toàn bộ hệ thống ZAP.
+Dựa trên phân tích hệ thống hiện tại tại Server MongoDB `172.16.10.153` và cấu trúc mã nguồn .NET Core, đây là kế hoạch chi tiết để triển khai tính năng đa ngôn ngữ đồng bộ cho toàn bộ hệ thống CRM.
 
 ## 1. PHÂN TÍCH KIẾN TRÚC (ARCHITECTURAL ANALYSIS)
 

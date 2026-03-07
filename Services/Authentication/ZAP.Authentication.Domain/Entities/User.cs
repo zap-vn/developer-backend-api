@@ -12,6 +12,8 @@ namespace ZAP.Authentication.Domain.Entities
         [BsonSerializer(typeof(FlexibleIntSerializer))]
         public int CustomerId { get; set; }
 
+        public string _key { get; set; } = string.Empty;
+
         public string Username { get; set; } = string.Empty;
         public string AccountName { get; set; } = string.Empty; // Workspace identifier mapping to login screen
         public string Email { get; set; } = string.Empty;

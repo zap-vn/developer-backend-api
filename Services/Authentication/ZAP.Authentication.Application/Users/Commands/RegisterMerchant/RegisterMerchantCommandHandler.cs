@@ -44,6 +44,7 @@ namespace ZAP.Authentication.Application.Users.Commands.RegisterMerchant
             {
                 _id = customerIdStr,
                 CustomerId = (int)nextId,
+                _key = request.LanguageId,
                 Email = request.Email,
                 Username = request.Username,
                 MerchantName = request.MerchantName,

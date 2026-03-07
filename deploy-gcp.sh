@@ -3,7 +3,7 @@
 # GCP Configuration
 PROJECT_ID="your-gcp-project-id"  # Thay bằng GCP Project ID của bạn
 REGION="asia-southeast1"          # Singapore region (gần VN nhất)
-SERVICE_NAME="CRM-identity-api"
+SERVICE_NAME="zap-identity-api"
 IMAGE_NAME="gcr.io/${PROJECT_ID}/${SERVICE_NAME}"
 
 echo "=== Deploying CRM Identity API to GCP Cloud Run ==="

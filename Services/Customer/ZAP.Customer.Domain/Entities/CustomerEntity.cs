@@ -17,7 +17,7 @@ namespace ZAP.Customer.Domain.Entities
     {
         [BsonId]
         public string _id { get; set; } = string.Empty;
-        public int _key { get; set; }
+        public long _key { get; set; }
         public string _rev { get; set; } = string.Empty;
         public string BusinessName { get; set; } = string.Empty;
         public string BussinessTypeId { get; set; } = string.Empty;
@@ -27,7 +27,7 @@ namespace ZAP.Customer.Domain.Entities
         public string CurrencyNativeName { get; set; } = string.Empty;
         public string CurrencySymbol { get; set; } = string.Empty;
         public string CustomerCode { get; set; } = string.Empty;
-        public int CustomerId { get; set; }
+        public long CustomerId { get; set; }
         public int CustomerStatusId { get; set; }
         public string Email { get; set; } = string.Empty;
         public string EmpGuid { get; set; } = string.Empty;

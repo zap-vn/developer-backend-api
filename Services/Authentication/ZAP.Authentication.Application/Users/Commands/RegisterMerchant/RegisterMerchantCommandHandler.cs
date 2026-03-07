@@ -43,8 +43,8 @@ namespace ZAP.Authentication.Application.Users.Commands.RegisterMerchant
             var user = new User
             {
                 _id = customerIdStr,
-                CustomerId = (int)nextId,
-                _key = request.LanguageId,
+                CustomerId = nextId,
+                _key = nextId,
                 Email = request.Email,
                 Username = request.Username,
                 MerchantName = request.MerchantName,
@@ -68,8 +68,8 @@ namespace ZAP.Authentication.Application.Users.Commands.RegisterMerchant
                 var customerPayload = new 
                 {
                     _id = customerIdStr, // Pass the same ID
-                    CustomerId = (int)nextId,
-                    _key = (int)nextId,
+                    CustomerId = nextId,
+                    _key = nextId,
                     CustomerCode = "MERCHANT-" + nextId,
                     MerchantName = request.MerchantName,
                     BusinessName = request.MerchantName,

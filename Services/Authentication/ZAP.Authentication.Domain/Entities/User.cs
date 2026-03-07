@@ -10,9 +10,9 @@ namespace ZAP.Authentication.Domain.Entities
         public string _id { get; set; } = string.Empty;
         
         [BsonSerializer(typeof(FlexibleIntSerializer))]
-        public int CustomerId { get; set; }
+        public long CustomerId { get; set; }
 
-        public string _key { get; set; } = string.Empty;
+        public long _key { get; set; }
 
         public string Username { get; set; } = string.Empty;
         public string AccountName { get; set; } = string.Empty; // Workspace identifier mapping to login screen

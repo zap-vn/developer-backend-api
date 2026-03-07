@@ -6,8 +6,8 @@ namespace ZAP.Customer.Application.Features.Customers.Commands
     public class CreateCustomerCommand : IRequest<string>
     {
         public string _id { get; set; } = string.Empty;
-        public int CustomerId { get; set; }
-        public int _key { get; set; }
+        public long CustomerId { get; set; }
+        public long _key { get; set; }
         public string BusinessName { get; set; } = string.Empty;
         public string MerchantName { get; set; } = string.Empty;
         public string? Email { get; set; }

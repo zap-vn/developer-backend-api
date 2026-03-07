@@ -30,10 +30,12 @@ namespace ZAP.Authentication.Domain.Entities
         
         public string Language { get; set; } = "vi";
         
+        [BsonElement("LanguageId")]
         public string LanguageId { get; set; } = string.Empty;
 
         public string Avatar { get; set; } = string.Empty; // Mapped to Url
 
+        [BsonElement("Provider")]
         public string Provider { get; set; } = "Email";
 
         public string Acronym { get; set; } = string.Empty;

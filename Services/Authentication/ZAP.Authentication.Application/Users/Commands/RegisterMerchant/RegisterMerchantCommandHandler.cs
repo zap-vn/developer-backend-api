@@ -50,7 +50,9 @@ namespace ZAP.Authentication.Application.Users.Commands.RegisterMerchant
                 BusinessName = request.MerchantName,
                 AccountName = request.MerchantName,
                 Language = request.LanguageId.Contains("Vietnamese") ? "vi" : "en",
+                LanguageId = request.LanguageId,
                 Password = HashLegacyPassword(request.Password),
+                Provider = request.Provider,
                 Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
                 Visible = 1,
                 Avatar = request.Url,
@@ -99,7 +101,10 @@ namespace ZAP.Authentication.Application.Users.Commands.RegisterMerchant
                 Username = user.Username,
                 Email = user.Email,
                 FullName = user.MerchantName, // Fallback FullName to MerchantName initially
-                Roles = user.Roles
+                LanguageId = user.LanguageId,
+                Provider = user.Provider,
+                Roles = user.Roles,
+                CreatedAt = user.CreatedAt
             };
         }
 

@@ -27,8 +27,12 @@ namespace ZAP.Authentication.Domain.Entities
         public string MerchantName { get; set; } = string.Empty;
         
         public string Language { get; set; } = "vi";
+        
+        public string LanguageId { get; set; } = string.Empty;
 
         public string Avatar { get; set; } = string.Empty; // Mapped to Url
+
+        public string Provider { get; set; } = "Email";
 
         public string Acronym { get; set; } = string.Empty;
 

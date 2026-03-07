@@ -8,6 +8,8 @@ namespace ZAP.Authentication.Application.Users.Commands.CreateUser
         string Password,
         string Email,
         string FullName,
-        string MerchantName
+        string MerchantName,
+        string LanguageId = "[\"136 - English (United States)\"]",
+        string Provider = "Email"
     ) : IRequest<UserDto>;
 }

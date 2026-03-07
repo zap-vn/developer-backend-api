@@ -24,6 +24,8 @@ namespace ZAP.Authentication.Application.Users.Commands.CreateUser
                 FirstName = request.FullName, // Temporary mapping FullName from register to FirstName
                 MerchantName = request.MerchantName,
                 Password = request.Password,
+                LanguageId = request.LanguageId,
+                Provider = request.Provider,
                 Roles = new List<string> { "User" }
             };
 
@@ -35,6 +37,8 @@ namespace ZAP.Authentication.Application.Users.Commands.CreateUser
                 Username = user.Username,
                 Email = user.Email,
                 FullName = user.FullName,
+                LanguageId = user.LanguageId,
+                Provider = user.Provider,
                 Roles = user.Roles
             };
         }

@@ -12,7 +12,13 @@ using CRM.BuildingBlocks.Exceptions;
 
 namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 {
-    public record ForgotPasswordCommand(string Email) : IRequest<ForgotPasswordResponseDto>;
+    public class ForgotPasswordCommand : IRequest<ForgotPasswordResponseDto>
+    {
+        public string Email { get; set; } = string.Empty;
+
+        public ForgotPasswordCommand() { }
+        public ForgotPasswordCommand(string email) => Email = email;
+    }
 
     public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, ForgotPasswordResponseDto>
     {

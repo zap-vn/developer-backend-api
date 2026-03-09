@@ -46,8 +46,7 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             }
 
             // Get user by its Guid (Customer/Id)
-            string customerIdStr = resetRequest.UserGuid.Replace("Customer/", "");
-            var user = await _userRepository.GetByIdAsync(customerIdStr);
+            var user = await _userRepository.GetByIdAsync(resetRequest.UserGuid);
 
             if (user == null)
             {

@@ -11,6 +11,8 @@ using CRM.Authentication.Infrastructure.Persistence.Configurations;
 using CRM.Authentication.Infrastructure.Persistence.Repositories;
 using CRM.Authentication.Infrastructure.Security;
 
+using CRM.Authentication.Application.Common.Models;
+
 namespace CRM.Authentication.Infrastructure
 {
     public static class DependencyInjection
@@ -28,6 +30,7 @@ namespace CRM.Authentication.Infrastructure
             }
 
             services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
+            services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
 
             services.AddSingleton<MongoDbContext>();
             services.AddScoped<IUserRepository, MongoUserRepository>();

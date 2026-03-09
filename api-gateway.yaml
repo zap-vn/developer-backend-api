@@ -75,6 +75,27 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/Auth/forgot-password:
+    post:
+      summary: "Forgot Password endpoint"
+      operationId: "forgot_password"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/forgot-password"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Forgot Password CORS support"
+      operationId: "cors_forgot_password"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/forgot-password"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/Data/{collectionName}/{id}:
     get:
       summary: "Get document by ID"

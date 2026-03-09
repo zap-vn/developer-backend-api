@@ -95,5 +95,24 @@ namespace CRM.Authentication.Infrastructure.Security
 
             await SendEmailAsync(to, "Mã xác thực OTP của bạn", body);
         }
+
+        public async Task SendResetLinkEmailAsync(string to, string link)
+        {
+            string body = $@"
+                <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;'>
+                    <h2 style='color: #007bff; text-align: center;'>Xác thực tài khoản CRM</h2>
+                    <p>Xin chào,</p>
+                    <p>Bạn vừa yêu cầu lấy lại mật khẩu. Vui lòng nhấn vào nút bên dưới để đặt lại mật khẩu mới:</p>
+                    <div style='text-align: center; margin: 30px 0;'>
+                        <a href='{link}' style='background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;'>Đặt lại mật khẩu</a>
+                    </div>
+                    <p style='color: #666;'>Hoặc copy link này vào trình duyệt: <br> <a href='{link}' style='color: #007bff; word-break: break-all;'>{link}</a></p>
+                    <p style='color: #666; margin-top: 20px;'>Link này có hiệu lực trong <b>15 phút</b>.</p>
+                    <hr style='border: 0; border-top: 1px solid #eee; margin: 20px 0;'>
+                    <p style='font-size: 12px; color: #999; text-align: center;'>Đây là tin nhắn tự động, vui lòng không trả lời.</p>
+                </div>";
+
+            await SendEmailAsync(to, "Link đặt lại mật khẩu của bạn", body);
+        }
     }
 }

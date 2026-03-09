@@ -40,14 +40,8 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 
         public async Task<int> GetRecentRequestCountAsync(string identifier, DateTime since)
         {
-            // For MongoDB, we can use the CreatedAt field
-            // Note: identifier here could be email or phone, but we only have UserGuid in the entity.
-            // However, we can track by identifier if we add it to the entity or search by it.
-            // Let's assume we search for requests created since 'since' for any identifier.
-            // In a real system, we'd filter by the specific email/phone.
-            
             return (int)await _context.PasswordResetRequests
-                .CountDocumentsAsync(x => x.CreatedAt >= since);
+                .CountDocumentsAsync(x => x.Email == identifier && x.CreatedAt >= since);
         }
     }
 }

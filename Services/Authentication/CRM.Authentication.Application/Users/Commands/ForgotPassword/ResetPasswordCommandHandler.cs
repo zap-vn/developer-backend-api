@@ -4,6 +4,7 @@ using Microsoft.Extensions.Localization;
 using CRM.BuildingBlocks.Localization;
 using System.Security.Cryptography;
 using System.Text;
+using CRM.BuildingBlocks.Exceptions;
 
 namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 {
@@ -29,20 +30,28 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
         {
             if (request.NewPassword != request.ConfirmPassword)
             {
-                throw new Exception("PASSWORD_MISMATCH");
+                throw new ValidationException("PASSWORD_MISMATCH");
             }
 
-            var resetRequest = await _resetRepository.GetByConfirmTokenAsync(request.ConfirmToken);
-
+            var resetRequest = await _resetRepository.GetByConfirmTokenAsync(request.ConfirmToken)
+                               ?? await _resetRepository.GetByResetTokenAsync(request.ConfirmToken);
+ 
             if (resetRequest == null)
             {
-                throw new Exception("TOKEN_INVALID");
+                throw new ValidationException("TOKEN_INVALID");
+            }
+            
+            // Nếu là ResetToken (từ link), đảm bảo chưa bị dùng để verify OTP (nếu còn dùng OTP)
+            // Hoặc đơn giản là chưa bị đánh dấu IsUsed.
+            if (resetRequest.IsUsed)
+            {
+                throw new ValidationException("TOKEN_ALREADY_USED");
             }
 
             // Confirm token should expire shortly (e.g., 15 mins after creation)
             if (resetRequest.CreatedAt.AddMinutes(15) < DateTime.UtcNow)
             {
-                throw new Exception("TOKEN_EXPIRED");
+                throw new ValidationException("TOKEN_EXPIRED");
             }
 
             // Get user by its Guid (Customer/Id)
@@ -50,7 +59,7 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 
             if (user == null)
             {
-                throw new Exception("USER_NOT_FOUND");
+                throw new ValidationException("USER_NOT_FOUND");
             }
 
             // Hash new password using LEGACY logic to match existing system
@@ -58,6 +67,10 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             user.UpdatedAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
 
             await _userRepository.UpdateAsync(user);
+            
+            // Mark token as used
+            resetRequest.IsUsed = true;
+            await _resetRepository.UpdateAsync(resetRequest);
 
             return true;
         }

@@ -33,6 +33,7 @@ namespace CRM.Authentication.Infrastructure
             services.AddScoped<IUserRepository, MongoUserRepository>();
             services.AddScoped<IPasswordResetRepository, MongoPasswordResetRepository>();
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

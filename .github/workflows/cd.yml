@@ -67,9 +67,9 @@ jobs:
           --timeout 120 \
           --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
           --set-env-vars "JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" \
-          --set-env-vars "DatabaseSettings__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "DatabaseSettings__DatabaseName=SinglePoint_en" \
           --set-env-vars "DatabaseSettings__DBProvider=mongodb" \
+          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en" \
           --set-env-vars "CUSTOMER_API_URL=https://zap-customer-api-882473783707.asia-southeast1.run.app"
 
     - name: 'Deploy Customer to Cloud Run'
@@ -86,9 +86,8 @@ jobs:
           --cpu-boost \
           --timeout 120 \
           --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
-          --set-env-vars "DatabaseSettings__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "DatabaseSettings__DatabaseName=SinglePoint_en" \
-          --set-env-vars "DatabaseSettings__DBProvider=mongodb"
+          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en" 
 
     - name: 'Deploy Product to Cloud Run'
       run: |
@@ -104,9 +103,8 @@ jobs:
           --cpu-boost \
           --timeout 120 \
           --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
-          --set-env-vars "DatabaseSettings__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "DatabaseSettings__DatabaseName=SinglePoint_en" \
-          --set-env-vars "DatabaseSettings__DBProvider=mongodb"
+          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en" 
 
     - name: 'Deploy API Gateway'
       run: |

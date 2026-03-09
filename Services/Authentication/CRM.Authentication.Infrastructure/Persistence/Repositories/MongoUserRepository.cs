@@ -28,6 +28,11 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
             return await _context.Users.Find(filter).FirstOrDefaultAsync();
         }
 
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.Users.Find(u => u.Email == email).FirstOrDefaultAsync();
+        }
+
         public async Task<bool> ExistsAsync(string email, string username, string merchantName)
         {
             var filters = new System.Collections.Generic.List<FilterDefinition<User>>();

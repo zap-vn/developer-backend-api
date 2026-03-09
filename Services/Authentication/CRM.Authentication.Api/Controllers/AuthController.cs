@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using CRM.Authentication.Application.Users.Commands.CreateUser;
 using CRM.Authentication.Application.Users.Commands.LoginUser;
 using CRM.Authentication.Application.Users.Commands.RegisterMerchant;
+using CRM.Authentication.Application.Users.Commands.ForgotPassword;
 using CRM.Authentication.Application.Users.DTOs;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -54,6 +55,27 @@ namespace CRM.Authentication.Api.Controllers
             var command = new LoginUserCommand(accountName, email, request.Password);
             var result = await _mediator.Send(command);
             return Ok(result);
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(new { Success = result, Message = result ? "Mật khẩu đã được cập nhật" : "Thất bại" });
         }
 
         [HttpGet("health")]

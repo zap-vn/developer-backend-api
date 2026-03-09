@@ -65,5 +65,6 @@ namespace CRM.Authentication.Infrastructure.Persistence
 
         public IMongoCollection<User> Users => _database.GetCollection<User>("Customer");
         public IMongoCollection<ManagementIndex> ManagementIndexes => _database.GetCollection<ManagementIndex>("ManagementIndex");
+        public IMongoCollection<PasswordResetRequest> PasswordResetRequests => _database.GetCollection<PasswordResetRequest>("PasswordResetRequests");
     }
 }

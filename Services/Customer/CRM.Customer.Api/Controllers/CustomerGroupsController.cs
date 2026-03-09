@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using CRM.Customer.Application.Features.CustomerGroups.Commands;
 using CRM.Customer.Application.Features.CustomerGroups.Queries;
 using CRM.Customer.Application.Features.CustomerGroups.DTOs;
+using CRM.BuildingBlocks.Models;
+using CRM.BuildingBlocks.Extensions;
 
 namespace CRM.Customer.Api.Controllers
 {
@@ -25,9 +27,10 @@ namespace CRM.Customer.Api.Controllers
         }
 
         [HttpPost("list")]
-        public async Task<IActionResult> List([FromBody] GetCustomerGroupListQuery request)
+        public async Task<IActionResult> List()
         {
-            var result = await _mediator.Send(request);
+            var filter = await Request.GetRawBodyAsync<FilterDTOs>();
+            var result = await _mediator.Send(new GetCustomerGroupListQuery { Filter = filter });
             return Ok(result);
         }
 

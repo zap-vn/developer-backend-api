@@ -18,14 +18,13 @@ namespace CRM.Payment.Application.Features.PaymentTypes.Queries
 
         public async Task<PaymentTypeDto> Handle(GetPaymentTypeByIdQuery request, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(request.Id, out Guid parsedId)) return null;
-            var entity = await _repository.GetByIdAsync(parsedId);
+            if (string.IsNullOrEmpty(request.Id)) return null;
+            var entity = await _repository.GetByIdAsync(request.Id);
             if (entity == null) return null;
 
-            return new PaymentTypeDto 
-            { 
-#pragma warning disable CS8602
-                Id = entity.Id.ToString(),
+            return new PaymentTypeDto
+            {
+                Id = entity.Id,
                 Code = entity.Code,
                 Name = entity.Name,
                 Description = entity.Description,

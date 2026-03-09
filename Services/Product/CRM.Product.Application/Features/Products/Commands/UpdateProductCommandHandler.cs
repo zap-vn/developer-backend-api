@@ -17,8 +17,8 @@ namespace CRM.Product.Application.Features.Products.Commands
 
         public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(request.Id, out Guid parsedId)) return false;
-            var entity = await _repository.GetByIdAsync(parsedId);
+            if (string.IsNullOrEmpty(request.Id)) return false;
+            var entity = await _repository.GetByIdAsync(request.Id);
             if (entity == null) return false;
 
             entity.Name = request.Name;

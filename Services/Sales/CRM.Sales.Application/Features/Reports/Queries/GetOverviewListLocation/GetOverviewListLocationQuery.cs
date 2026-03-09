@@ -6,6 +6,6 @@ namespace CRM.Sales.Application.Features.Reports.Queries.GetOverviewListLocation
     public class GetOverviewListLocationQuery : IRequest<SalesSummaryDto>
     {
         public ReportRequestDto Request { get; set; } = new();
-        public Guid UserGuid { get; set; }
+        public string UserGuid { get; set; } = string.Empty;
     }
 }

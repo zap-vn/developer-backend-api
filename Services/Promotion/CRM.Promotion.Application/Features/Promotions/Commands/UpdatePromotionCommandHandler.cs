@@ -16,8 +16,8 @@ namespace CRM.Promotion.Application.Features.Promotions.Commands
 
         public async Task<bool> Handle(UpdatePromotionCommand request, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(request.Id, out Guid parsedId)) return false;
-            var entity = await _repository.GetByIdAsync(parsedId);
+            if (string.IsNullOrEmpty(request.Id)) return false;
+            var entity = await _repository.GetByIdAsync(request.Id);
             if (entity == null) return false;
 
             entity.Title = request.Title;

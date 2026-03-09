@@ -6,6 +6,6 @@ namespace CRM.Promotion.Application.Features.Promotions.Queries
 {
     public class GetPromotionListQuery : IRequest<PagedResult<PromotionDto>>
     {
-        public PromotionFilterDto Filter { get; set; } = new();
+        public FilterDTOs Filter { get; set; } = new();
     }
 }

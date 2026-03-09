@@ -17,13 +17,13 @@ namespace CRM.Report.Application.Features.Reports.Queries
 
         public async Task<ReportDto> Handle(GetReportByIdQuery request, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(request.Id, out Guid parsedId)) return null;
-            var entity = await _repository.GetByIdAsync(parsedId);
+            if (string.IsNullOrEmpty(request.Id)) return null;
+            var entity = await _repository.GetByIdAsync(request.Id);
             if (entity == null) return null;
 
             return new ReportDto 
             { 
-                Id = entity.Id.ToString(),
+                Id = entity.Id,
                 Code = entity.Code,
                 Name = entity.Name,
                 Type = entity.Type,

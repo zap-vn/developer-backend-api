@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using CRM.Report.Application.Features.Reports.Commands;
 using CRM.Report.Application.Features.Reports.Queries;
 using CRM.Report.Application.Features.Reports.DTOs;
+using CRM.BuildingBlocks.Models;
+using CRM.BuildingBlocks.Extensions;
 
 namespace CRM.Report.Api.Controllers
 {
@@ -25,9 +27,10 @@ namespace CRM.Report.Api.Controllers
         }
 
         [HttpPost("list")]
-        public async Task<IActionResult> List([FromBody] GetReportListQuery request)
+        public async Task<IActionResult> List()
         {
-            var result = await _mediator.Send(request);
+            var filter = await Request.GetRawBodyAsync<FilterDTOs>();
+            var result = await _mediator.Send(new GetReportListQuery { Filter = filter });
             return Ok(result);
         }
 

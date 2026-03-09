@@ -6,6 +6,6 @@ namespace CRM.Payment.Application.Features.PaymentTerms.Queries
 {
     public class GetPaymentTermsListQuery : IRequest<PagedResult<PaymentTermsDto>>
     {
-        public PaymentTermsFilterDto Filter { get; set; } = new();
+        public FilterDTOs Filter { get; set; } = new();
     }
 }

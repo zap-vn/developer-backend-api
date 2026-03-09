@@ -21,7 +21,7 @@ namespace CRM.HR.Infrastructure.Persistence.Repositories
             return await _collection.Find(ApplyTenantFilter(e => e.EmployeeCode == code)).FirstOrDefaultAsync();
         }
 
-        public async Task<EmployeeTranslation?> GetTranslationAsync(Guid employeeId, string languageCode)
+        public async Task<EmployeeTranslation?> GetTranslationAsync(string employeeId, string languageCode)
         {
             // Note: In the new pattern, translations are embedded. 
             // This method is for backward compatibility or specific lookups.

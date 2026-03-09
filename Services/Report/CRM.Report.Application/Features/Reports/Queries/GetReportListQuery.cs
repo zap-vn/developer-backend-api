@@ -6,6 +6,6 @@ namespace CRM.Report.Application.Features.Reports.Queries
 {
     public class GetReportListQuery : IRequest<PagedResult<ReportDto>>
     {
-        public ReportFilterDto Filter { get; set; } = new();
+        public FilterDTOs Filter { get; set; } = new();
     }
 }

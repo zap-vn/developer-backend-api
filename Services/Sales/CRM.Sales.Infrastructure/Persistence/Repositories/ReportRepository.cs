@@ -17,7 +17,7 @@ namespace CRM.Sales.Infrastructure.Persistence.Repositories
         {
         }
 
-        public async Task<SalesSummaryDto> GetOverviewListLocationAsync(ReportRequestDto request, Guid userGuid)
+        public async Task<SalesSummaryDto> GetOverviewListLocationAsync(ReportRequestDto request, string userGuid)
         {
             // Mock implementation to fix build
             return await Task.FromResult(new SalesSummaryDto());

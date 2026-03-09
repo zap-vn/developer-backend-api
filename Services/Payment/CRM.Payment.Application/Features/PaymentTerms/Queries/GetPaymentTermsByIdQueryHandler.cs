@@ -18,20 +18,18 @@ namespace CRM.Payment.Application.Features.PaymentTerms.Queries
 
         public async Task<PaymentTermsDto> Handle(GetPaymentTermsByIdQuery request, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(request.Id, out Guid parsedId)) return null;
-            var entity = await _repository.GetByIdAsync(parsedId);
+            if (string.IsNullOrEmpty(request.Id)) return null;
+            var entity = await _repository.GetByIdAsync(request.Id);
             if (entity == null) return null;
 
             return new PaymentTermsDto 
             { 
-#pragma warning disable CS8602
-                Id = entity.Id.ToString(),
+                Id = entity.Id,
                 Code = entity.Code,
                 Name = entity.Name,
                 Description = entity.Description,
                 Days = entity.Days,
                 IsActive = entity.IsActive
-#pragma warning restore CS8602
             };
         }
     }

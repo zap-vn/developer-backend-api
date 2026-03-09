@@ -75,11 +75,12 @@ public class Program
                 c.SwaggerEndpoint("/api/Employees/swagger/v1/swagger.json", "HR Service");
                 c.SwaggerEndpoint("/api/Customer/swagger/v1/swagger.json", "Customer Service");
                 c.SwaggerEndpoint("/api/Sales/swagger/v1/swagger.json", "Sales Service");
-                c.SwaggerEndpoint("/api/Product/swagger/v1/swagger.json", "Product Service");
-                c.SwaggerEndpoint("/api/Order/swagger/v1/swagger.json", "Order Service");
-                c.SwaggerEndpoint("/api/Payment/swagger/v1/swagger.json", "Payment Service");
-                c.SwaggerEndpoint("/api/Organization/swagger/v1/swagger.json", "Organization Service");
-                c.SwaggerEndpoint("/api/Report/swagger/v1/swagger.json", "Report Service");
+                c.SwaggerEndpoint("/api/Products/swagger/v1/swagger.json", "Product Service");
+                c.SwaggerEndpoint("/api/Orders/swagger/v1/swagger.json", "Order Service");
+                c.SwaggerEndpoint("/api/Payments/swagger/v1/swagger.json", "Payment Service");
+                c.SwaggerEndpoint("/api/Organizations/swagger/v1/swagger.json", "Organization Service");
+                c.SwaggerEndpoint("/api/Reports/swagger/v1/swagger.json", "Report Service");
+                c.SwaggerEndpoint("/api/Promotions/swagger/v1/swagger.json", "Promotion Service");
                 
                 c.RoutePrefix = string.Empty; // Magic: Show this at http://localhost:5000/
             });
@@ -93,6 +94,7 @@ public class Program
             app.MapControllers();
 
             Console.WriteLine("✅ Gateway is now running. Listening for requests...");
+            Console.WriteLine("👉 Swagger UI: http://localhost:5000/index.html");
             Console.WriteLine(">>> DEBUG: BEFORE RunAsync <<<");
             await app.RunAsync();
 

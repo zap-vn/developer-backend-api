@@ -20,7 +20,7 @@ namespace CRM.Sales.Domain.Entities.Orders
 
     public class OrderItemSnapshot
     {
-        public Guid ProductId { get; set; }
+        public string ProductId { get; set; } = string.Empty;
         public string ProductName { get; set; } = string.Empty; // Store product name directly (translated) at the time of purchase
         public decimal Price { get; set; }
         public int Quantity { get; set; }

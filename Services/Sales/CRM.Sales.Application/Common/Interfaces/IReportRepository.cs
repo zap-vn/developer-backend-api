@@ -8,6 +8,6 @@ namespace CRM.Sales.Application.Common.Interfaces
 {
     public interface IReportRepository : IMongoRepository<ReportTemplate>
     {
-        Task<SalesSummaryDto> GetOverviewListLocationAsync(ReportRequestDto request, Guid userGuid);
+        Task<SalesSummaryDto> GetOverviewListLocationAsync(ReportRequestDto request, string userGuid);
     }
 }

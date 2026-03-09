@@ -25,15 +25,7 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
                 Builders<User>.Filter.Eq("MerchantName", merchantCode)
             );
             
-            var user = await _context.Users.Find(filter).FirstOrDefaultAsync();
-            
-            if (user == null)
-            {
-                var emailOnlyFilter = Builders<User>.Filter.Eq("Email", username);
-                user = await _context.Users.Find(emailOnlyFilter).FirstOrDefaultAsync();
-            }
-
-            return user;
+            return await _context.Users.Find(filter).FirstOrDefaultAsync();
         }
 
         public async Task<bool> ExistsAsync(string email, string username, string merchantName)

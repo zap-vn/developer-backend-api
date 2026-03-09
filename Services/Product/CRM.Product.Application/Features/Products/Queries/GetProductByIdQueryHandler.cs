@@ -18,22 +18,22 @@ namespace CRM.Product.Application.Features.Products.Queries
 
         public async Task<ProductDto> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(request.Id, out Guid parsedId)) return null;
-            var entity = await _repository.GetByIdAsync(parsedId);
+            if (string.IsNullOrEmpty(request.Id)) return null;
+            var entity = await _repository.GetByIdAsync(request.Id);
             if (entity == null) return null;
 
             return new ProductDto 
             { 
 #pragma warning disable CS8602
-                Id = entity.Id.ToString(),
+                Id = entity.Id,
                 Code = entity.Code,
                 Name = entity.Name,
                 Description = entity.Description,
                 Price = entity.Price,
                 Stock = entity.Stock,
                 Category = entity.Category,
-                ImageUrl = entity.ImageUrl
-#pragma warning restore CS8602
+                ImageUrl = entity.ImageUrl,
+                IsActive = entity.IsActive
             };
         }
     }

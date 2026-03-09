@@ -18,18 +18,16 @@ namespace CRM.Customer.Application.Features.CustomerGroups.Queries
 
         public async Task<CustomerGroupDto> Handle(GetCustomerGroupByIdQuery request, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(request.Id, out Guid parsedId)) return null;
-            var entity = await _repository.GetByIdAsync(parsedId);
+            if (string.IsNullOrEmpty(request.Id)) return null;
+            var entity = await _repository.GetByIdAsync(request.Id);
             if (entity == null) return null;
 
-            return new CustomerGroupDto 
-            { 
-#pragma warning disable CS8602
-                Id = entity.Id.ToString(),
+            return new CustomerGroupDto
+            {
+                Id = entity.Id,
                 Name = entity.Name,
                 Description = entity.Description,
                 DiscountPercentage = entity.DiscountPercentage
-#pragma warning restore CS8602
             };
         }
     }

@@ -6,6 +6,6 @@ namespace CRM.Customer.Application.Features.CustomerGroups.Queries
 {
     public class GetCustomerGroupListQuery : IRequest<PagedResult<CustomerGroupDto>>
     {
-        public CustomerGroupFilterDto Filter { get; set; } = new();
+        public FilterDTOs Filter { get; set; } = new();
     }
 }

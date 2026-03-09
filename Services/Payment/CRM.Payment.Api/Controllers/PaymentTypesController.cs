@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using CRM.Payment.Application.Features.PaymentTypes.Commands;
 using CRM.Payment.Application.Features.PaymentTypes.Queries;
 using CRM.Payment.Application.Features.PaymentTypes.DTOs;
+using CRM.BuildingBlocks.Models;
+using CRM.BuildingBlocks.Extensions;
 
 namespace CRM.Payment.Api.Controllers
 {
@@ -25,9 +27,10 @@ namespace CRM.Payment.Api.Controllers
         }
 
         [HttpPost("list")]
-        public async Task<IActionResult> List([FromBody] GetPaymentTypeListQuery request)
+        public async Task<IActionResult> List()
         {
-            var result = await _mediator.Send(request);
+            var filter = await Request.GetRawBodyAsync<FilterDTOs>();
+            var result = await _mediator.Send(new GetPaymentTypeListQuery { Filter = filter });
             return Ok(result);
         }
 

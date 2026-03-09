@@ -11,7 +11,7 @@ namespace CRM.HR.Domain.Interfaces
         Task<Employee?> GetByCodeAsync(string code);
         
         // i18n support
-        Task<EmployeeTranslation?> GetTranslationAsync(Guid employeeId, string languageCode);
+        Task<EmployeeTranslation?> GetTranslationAsync(string employeeId, string languageCode);
         Task UpsertTranslationAsync(EmployeeTranslation translation);
     }
 }

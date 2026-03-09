@@ -84,5 +84,7 @@ app.UseAuthorization();
 app.UseMiddleware<LocalizationMiddleware>();
 app.MapControllers();
 
+Console.WriteLine("✅ Authentication API is running.");
+Console.WriteLine("👉 Local URL: http://localhost:5001/swagger/index.html");
 app.Run();
 

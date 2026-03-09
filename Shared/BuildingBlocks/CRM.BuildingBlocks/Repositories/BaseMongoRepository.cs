@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CRM.BuildingBlocks.Interfaces;
+using CRM.BuildingBlocks.Models;
 
 namespace CRM.BuildingBlocks.Repositories
 {
@@ -18,7 +19,7 @@ namespace CRM.BuildingBlocks.Repositories
             _currentUserService = currentUserService;
         }
 
-        public virtual async Task<T> GetByIdAsync(Guid id)
+        public virtual async Task<T> GetByIdAsync(string id)
         {
             return await _collection.Find(ApplyTenantFilter(x => x.Id == id)).FirstOrDefaultAsync();
         }
@@ -46,7 +47,22 @@ namespace CRM.BuildingBlocks.Repositories
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
 
-        public virtual async Task<bool> DeleteAsync(Guid id)
+        public virtual async Task<PagedResult<T>> GetPagedAsync(int page, int pageSize, Expression<Func<T, bool>>? filter = null)
+        {
+            var filterDef = filter != null 
+                ? ApplyTenantFilter(filter) 
+                : ApplyTenantFilter(_ => true);
+
+            var totalCount = await _collection.CountDocumentsAsync(filterDef);
+            var items = await _collection.Find(filterDef)
+                .Skip((page - 1) * pageSize)
+                .Limit(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<T>(items, (int)totalCount, page, pageSize);
+        }
+
+        public virtual async Task<bool> DeleteAsync(string id)
         {
             var result = await _collection.DeleteOneAsync(ApplyTenantFilter(x => x.Id == id));
             return result.IsAcknowledged && result.DeletedCount > 0;

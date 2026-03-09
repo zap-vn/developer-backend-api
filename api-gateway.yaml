@@ -12,6 +12,39 @@ x-google-backend:
   protocol: "http/1.1" # Thử đổi về http/1.1 để tránh lỗi protocol với Gateway
   deadline: 120.0
 paths:
+  /api/Auth/forgot-password:
+    post:
+      summary: "Forgot Password endpoint"
+      operationId: "forgot_password"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/forgot-password"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/Auth/verify-otp:
+    post:
+      summary: "Verify OTP endpoint"
+      operationId: "verify_otp"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/verify-otp"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/Auth/reset-password:
+    post:
+      summary: "Reset Password endpoint"
+      operationId: "reset_password"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/reset-password"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/Authentication/login:
     post:
       summary: "Login endpoint"

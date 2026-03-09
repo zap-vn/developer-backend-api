@@ -42,6 +42,11 @@ namespace CRM.BuildingBlocks.Middleware
                 statusCode = (int)HttpStatusCode.NotFound;
                 message = exception.Message;
             }
+            else if (exception.GetType().Name == "TooManyRequestsException" || exception.Message == "TOO_MANY_REQUESTS")
+            {
+                statusCode = 429; // Too Many Requests
+                message = "Too many requests. Please try again later.";
+            }
             // Add more exception types here (e.g., ValidationException)
 
             context.Response.StatusCode = statusCode;

@@ -8,6 +8,8 @@ using CRM.BuildingBlocks.Localization;
 using System.Security.Cryptography;
 using System.Text;
 
+using CRM.BuildingBlocks.Exceptions;
+
 namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 {
     public record ForgotPasswordCommand(string Email) : IRequest<ForgotPasswordResponseDto>;
@@ -45,7 +47,7 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             int recentRequests = await _resetRepository.GetRecentRequestCountAsync(request.Email, DateTime.UtcNow.AddHours(-1));
             if (recentRequests >= 10)
             {
-                throw new Exception("TOO_MANY_REQUESTS");
+                throw new TooManyRequestsException();
             }
 
             // 3. Generate OTP (6 digits)

@@ -41,9 +41,9 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
                 throw new KeyNotFoundException("USER_NOT_FOUND");
             }
 
-            // 2. Check Rate Limit
+            // 2. Check Rate Limit (Tạm thời tăng lên 10 để bạn test cho thoải mái)
             int recentRequests = await _resetRepository.GetRecentRequestCountAsync(request.Email, DateTime.UtcNow.AddHours(-1));
-            if (recentRequests >= 3)
+            if (recentRequests >= 10)
             {
                 throw new Exception("TOO_MANY_REQUESTS");
             }

@@ -37,6 +37,11 @@ namespace CRM.BuildingBlocks.Middleware
                 statusCode = (int)HttpStatusCode.Unauthorized;
                 message = exception.Message;
             }
+            else if (exception is KeyNotFoundException)
+            {
+                statusCode = (int)HttpStatusCode.NotFound;
+                message = exception.Message;
+            }
             // Add more exception types here (e.g., ValidationException)
 
             context.Response.StatusCode = statusCode;

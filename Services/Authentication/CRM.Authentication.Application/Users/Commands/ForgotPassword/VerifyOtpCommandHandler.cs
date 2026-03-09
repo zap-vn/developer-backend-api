@@ -6,6 +6,8 @@ using CRM.BuildingBlocks.Localization;
 using System.Security.Cryptography;
 using System.Text;
 
+using CRM.BuildingBlocks.Exceptions;
+
 namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 {
     public record VerifyOtpCommand(string ResetToken, string Otp) : IRequest<VerifyOtpResponseDto>;
@@ -29,25 +31,25 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 
             if (resetRequest == null || resetRequest.IsUsed)
             {
-                throw new Exception("TOKEN_INVALID");
+                throw new ValidationException("TOKEN_INVALID");
             }
 
             if (resetRequest.ExpiresAt < DateTime.UtcNow)
             {
-                throw new Exception("OTP_EXPIRED");
+                throw new ValidationException("OTP_EXPIRED");
             }
 
             if (resetRequest.Attempts >= 3)
             {
-                throw new Exception("OTP_MAX_ATTEMPTS");
+                throw new ValidationException("OTP_MAX_ATTEMPTS");
             }
 
-            string inputOtpHash = HashString(request.Otp);
+            string inputOtpHash = HashString(request.Otp?.Trim() ?? string.Empty);
             if (resetRequest.OtpHash != inputOtpHash)
             {
                 resetRequest.Attempts++;
                 await _resetRepository.UpdateAsync(resetRequest);
-                throw new Exception("INVALID_OTP");
+                throw new ValidationException("INVALID_OTP");
             }
 
             // OTP is correct - Generate Confirm Token

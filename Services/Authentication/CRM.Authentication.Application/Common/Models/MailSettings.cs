@@ -8,5 +8,6 @@ namespace CRM.Authentication.Application.Common.Models
         public string Host { get; set; } = string.Empty;
         public int Port { get; set; }
         public bool UseSsl { get; set; } = true;
+        public string FrontendResetPasswordUrl { get; set; } = string.Empty;
     }
 }

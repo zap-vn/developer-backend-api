@@ -10,6 +10,7 @@ namespace CRM.Authentication.Domain.Entities
         public string Id { get; set; } = Guid.NewGuid().ToString();
         
         public string UserGuid { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string Method { get; set; } = string.Empty; // 'email' | 'sms'
         public string OtpHash { get; set; } = string.Empty;
         public string ResetToken { get; set; } = string.Empty;

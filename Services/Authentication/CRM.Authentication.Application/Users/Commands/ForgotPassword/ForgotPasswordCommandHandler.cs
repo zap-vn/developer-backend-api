@@ -9,6 +9,8 @@ using System.Security.Cryptography;
 using System.Text;
 
 using CRM.BuildingBlocks.Exceptions;
+using Microsoft.Extensions.Options;
+using CRM.Authentication.Application.Common.Models;
 
 namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 {
@@ -26,23 +28,27 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
         private readonly IPasswordResetRepository _resetRepository;
         private readonly IEmailService _emailService;
         private readonly IStringLocalizer<SharedResource> _localizer;
-
+        private readonly MailSettings _mailSettings;
+ 
         public ForgotPasswordCommandHandler(
             IUserRepository userRepository,
             IPasswordResetRepository resetRepository,
             IEmailService emailService,
-            IStringLocalizer<SharedResource> localizer)
+            IStringLocalizer<SharedResource> localizer,
+            IOptions<MailSettings> mailSettings)
         {
             _userRepository = userRepository;
             _resetRepository = resetRepository;
             _emailService = emailService;
             _localizer = localizer;
+            _mailSettings = mailSettings.Value;
         }
 
         public async Task<ForgotPasswordResponseDto> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
         {
+            var email = request.Email?.Trim() ?? string.Empty;
             // 1. Find User
-            var user = await _userRepository.GetByEmailAsync(request.Email);
+            var user = await _userRepository.GetByEmailAsync(email);
             if (user == null)
             {
                 // We throw 404 as per skill requirement or security preference
@@ -50,30 +56,30 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             }
 
             // 2. Check Rate Limit (Tạm thời tăng lên 10 để bạn test cho thoải mái)
-            int recentRequests = await _resetRepository.GetRecentRequestCountAsync(request.Email, DateTime.UtcNow.AddHours(-1));
+            int recentRequests = await _resetRepository.GetRecentRequestCountAsync(email, DateTime.UtcNow.AddHours(-1));
             if (recentRequests >= 10)
             {
                 throw new TooManyRequestsException();
             }
 
-            // 3. Generate OTP (6 digits)
-            string otp = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
-            
-            // Gửi mail OTP cho người dùng
-            await _emailService.SendOtpEmailAsync(request.Email, otp); 
-            Console.WriteLine($"[EMAIL_SENT] OTP for {request.Email}: {otp}"); 
-
-            // 4. Generate Reset Token
+            // 3. Generate Reset Token
             string resetToken = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
-
+ 
+            // 4. Construct Reset Link
+            string resetLink = $"{_mailSettings.FrontendResetPasswordUrl}?token={resetToken}";
+             
+            // Gửi mail LINK cho người dùng
+            await _emailService.SendResetLinkEmailAsync(email, resetLink); 
+            Console.WriteLine($"[EMAIL_SENT] Reset Link for {email}: {resetLink}"); 
+ 
             // 5. Save Request
             var resetRequest = new PasswordResetRequest
             {
                 UserGuid = $"Customer/{user.CustomerId}",
+                Email = email,
                 Method = "email",
-                OtpHash = HashString(otp),
                 ResetToken = resetToken,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(5)
+                ExpiresAt = DateTime.UtcNow.AddMinutes(15) // Tăng lên 15 phút cho link
             };
 
             await _resetRepository.CreateAsync(resetRequest);
@@ -81,9 +87,9 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             return new ForgotPasswordResponseDto
             {
                 Success = true,
-                Message = _localizer["auth_otp_sent"] ?? "OTP đã được gửi",
+                Message = "Link đặt lại mật khẩu đã được gửi qua email của bạn",
                 ResetToken = resetToken,
-                ExpiresIn = 300
+                ExpiresIn = 900 // 15 mins
             };
         }
 

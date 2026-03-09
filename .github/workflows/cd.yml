@@ -43,11 +43,14 @@ jobs:
       run: |
         docker build -t gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-identity-api:latest -f Services/Authentication/CRM.Authentication.Api/Dockerfile .
         docker build -t gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-customer-api:latest -f Services/Customer/CRM.Customer.Api/Dockerfile .
+        docker build -t gcr.io/openclaw-zap/zap-product-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-product-api:latest -f Services/Product/CRM.Product.Api/Dockerfile .
         
         docker push gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }}
         docker push gcr.io/openclaw-zap/zap-identity-api:latest
         docker push gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }}
         docker push gcr.io/openclaw-zap/zap-customer-api:latest
+        docker push gcr.io/openclaw-zap/zap-product-api:${{ github.sha }}
+        docker push gcr.io/openclaw-zap/zap-product-api:latest
 
     - name: 'Deploy Identity to Cloud Run'
       run: |
@@ -73,6 +76,24 @@ jobs:
       run: |
         gcloud run deploy zap-customer-api \
           --image gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }} \
+          --region asia-southeast1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --min-instances 1 \
+          --cpu 1 \
+          --memory 512Mi \
+          --cpu-boost \
+          --timeout 120 \
+          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
+          --set-env-vars "DatabaseSettings__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
+          --set-env-vars "DatabaseSettings__DatabaseName=SinglePoint_en" \
+          --set-env-vars "DatabaseSettings__DBProvider=mongodb"
+
+    - name: 'Deploy Product to Cloud Run'
+      run: |
+        gcloud run deploy zap-product-api \
+          --image gcr.io/openclaw-zap/zap-product-api:${{ github.sha }} \
           --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \

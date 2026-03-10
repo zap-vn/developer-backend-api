@@ -29,7 +29,7 @@ namespace CRM.Report.Application.Features.Reports.Queries
                 ConfigurationJson = x.ConfigurationJson
             }).ToList();
 
-            return new PagedResult<ReportDto>(dtos, dtos.Count, request.Filter.Page, request.Filter.PageSize);
+            return new PagedResult<ReportDto>(dtos, dtos.Count, request.Filter.PageIndex, request.Filter.PageSize);
         }
     }
 }

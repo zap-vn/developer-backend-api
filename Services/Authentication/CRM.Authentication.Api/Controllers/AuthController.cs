@@ -41,18 +41,14 @@ namespace CRM.Authentication.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            // Support aliases: UserName -> Email, MerchantName -> AccountName
-            var email = request.Email ?? request.UserName;
-            var accountName = request.AccountName ?? request.MerchantName;
-
-            if (string.IsNullOrEmpty(email) || 
+            if (string.IsNullOrEmpty(request.Email) || 
                 string.IsNullOrEmpty(request.Password) || 
-                string.IsNullOrEmpty(accountName))
+                string.IsNullOrEmpty(request.MerchantName))
             {
-                return BadRequest(new { Message = "AccountName (MerchantName), Email (UserName) and Password are required." });
+                return BadRequest(new { Message = "MerchantName, Email and Password are required." });
             }
 
-            var command = new LoginUserCommand(accountName, email, request.Password);
+            var command = new LoginUserCommand(request.MerchantName, request.Email, request.Password);
             var result = await _mediator.Send(command);
             return Ok(result);
         }

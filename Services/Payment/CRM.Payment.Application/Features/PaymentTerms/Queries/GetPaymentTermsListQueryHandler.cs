@@ -32,7 +32,7 @@ namespace CRM.Payment.Application.Features.PaymentTerms.Queries
 #pragma warning restore CS8602
             }).ToList();
 
-            return new PagedResult<PaymentTermsDto>(dtos, dtos.Count, request.Filter.Page, request.Filter.PageSize);
+            return new PagedResult<PaymentTermsDto>(dtos, dtos.Count, request.Filter.PageIndex, request.Filter.PageSize);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace CRM.Customer.Application.Features.CustomerGroups.Queries
 #pragma warning restore CS8602
             }).ToList();
 
-            return new PagedResult<CustomerGroupDto>(dtos, dtos.Count, request.Filter.Page, request.Filter.PageSize);
+            return new PagedResult<CustomerGroupDto>(dtos, dtos.Count, request.Filter.PageIndex, request.Filter.PageSize);
         }
     }
 }

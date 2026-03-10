@@ -33,7 +33,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 (string.IsNullOrEmpty(filter.Category) || x.Category == filter.Category) &&
                 (!filter.IsActive.HasValue || x.IsActive == filter.IsActive.Value);
 
-            var pagedResult = await _repository.GetPagedAsync(filter.Page, filter.PageSize, predicate);
+            var pagedResult = await _repository.GetPagedAsync(filter.PageIndex, filter.PageSize, predicate);
 
             var dtos = pagedResult.Items.Select(x => new ProductDto 
             { 

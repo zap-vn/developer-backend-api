@@ -47,7 +47,7 @@ namespace CRM.BuildingBlocks.Repositories
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
 
-        public virtual async Task<PagedResult<T>> GetPagedAsync(int page, int pageSize, Expression<Func<T, bool>>? filter = null)
+        public virtual async Task<PagedResult<T>> GetPagedAsync(int pageIndex = 1, int pageSize = 10, Expression<Func<T, bool>>? filter = null)
         {
             var filterDef = filter != null 
                 ? ApplyTenantFilter(filter) 
@@ -55,11 +55,11 @@ namespace CRM.BuildingBlocks.Repositories
 
             var totalCount = await _collection.CountDocumentsAsync(filterDef);
             var items = await _collection.Find(filterDef)
-                .Skip((page - 1) * pageSize)
+                .Skip((pageIndex - 1) * pageSize)
                 .Limit(pageSize)
                 .ToListAsync();
 
-            return new PagedResult<T>(items, (int)totalCount, page, pageSize);
+            return new PagedResult<T>(items, (int)totalCount, pageIndex, pageSize);
         }
 
         public virtual async Task<bool> DeleteAsync(string id)

@@ -13,7 +13,7 @@ namespace CRM.BuildingBlocks.Interfaces
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
         Task<T> CreateAsync(T entity);
         Task<bool> UpdateAsync(T entity);
-        Task<PagedResult<T>> GetPagedAsync(int page, int pageSize, Expression<Func<T, bool>>? filter = null);
+        Task<PagedResult<T>> GetPagedAsync(int pageIndex = 1, int pageSize = 10, Expression<Func<T, bool>>? filter = null);
         Task<bool> DeleteAsync(string id);
     }
 }

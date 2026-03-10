@@ -34,7 +34,7 @@ namespace CRM.Promotion.Application.Features.Promotions.Queries
                 DiscountType = x.DiscountType
             }).ToList();
 
-            return new PagedResult<PromotionDto>(dtos, dtos.Count, request.Filter.Page, request.Filter.PageSize);
+            return new PagedResult<PromotionDto>(dtos, dtos.Count, request.Filter.PageIndex, request.Filter.PageSize);
         }
     }
 }

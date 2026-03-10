@@ -26,7 +26,8 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
                 FirstName = request.FullName, // Temporary mapping FullName from register to FirstName
                 MerchantName = request.MerchantName,
                 Password = request.Password,
-                LanguageId = request.LanguageId,
+                Language = string.IsNullOrEmpty(request.Language) ? request.LanguageId?.ToString() ?? "" : request.Language, 
+                LanguageId = ExtractLanguageId(request.LanguageId), 
                 Provider = request.Provider,
                 Roles = new List<string> { "User" }
             };
@@ -39,10 +40,20 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
                 Username = user.Username,
                 Email = user.Email,
                 FullName = user.FullName,
-                LanguageId = user.LanguageId,
+                LanguageId = user.LanguageId.ToString(),
                 Provider = user.Provider,
                 Roles = user.Roles
             };
+        }
+
+        private long ExtractLanguageId(object languageIdObj)
+        {
+            if (languageIdObj == null) return 0;
+            string languageIdStr = languageIdObj.ToString() ?? "";
+            if (string.IsNullOrEmpty(languageIdStr)) return 0;
+            // Example input: ["136 - English (United States)"] or "136"
+            var match = System.Text.RegularExpressions.Regex.Match(languageIdStr, @"\d+");
+            return match.Success ? long.Parse(match.Value) : 0;
         }
     }
 }

@@ -6,7 +6,6 @@ namespace CRM.Customer.Application.Features.Customers.Commands
     public class CreateCustomerCommand : IRequest<string>
     {
         public string _id { get; set; } = string.Empty;
-        public long CustomerId { get; set; }
         public long _key { get; set; }
         public string BusinessName { get; set; } = string.Empty;
         public string MerchantName { get; set; } = string.Empty;
@@ -14,7 +13,8 @@ namespace CRM.Customer.Application.Features.Customers.Commands
         public string Password { get; set; } = string.Empty;
         public string CustomerCode { get; set; } = string.Empty;
         public int Visible { get; set; } = 1;
-        public string LanguageId { get; set; } = string.Empty;
+        public long LanguageId { get; set; }
+        public string Language { get; set; } = string.Empty;
         public string RegistrationSource { get; set; } = "Email";
         public string Url { get; set; } = string.Empty;
 

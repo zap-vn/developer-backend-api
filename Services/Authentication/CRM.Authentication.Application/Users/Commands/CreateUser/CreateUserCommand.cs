@@ -9,7 +9,8 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
         string Email,
         string FullName,
         string MerchantName,
-        string LanguageId = "[\"136 - English (United States)\"]",
+        object LanguageId, // Supports string ["136 - ..."] or numeric 136
+        string? Language = null,
         string Provider = "Email"
     ) : IRequest<UserDto>;
 }

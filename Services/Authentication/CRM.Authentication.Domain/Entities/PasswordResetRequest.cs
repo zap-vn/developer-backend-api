@@ -11,7 +11,9 @@ namespace CRM.Authentication.Domain.Entities
         
         public string UserGuid { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Method { get; set; } = string.Empty; // 'email' | 'sms'
+        public string Phone { get; set; } = string.Empty;
+        public string Method { get; set; } = string.Empty; // 'email' | 'phone'
+        public string Channel { get; set; } = string.Empty; // 'email', 'sms', 'zalo'
         public string OtpHash { get; set; } = string.Empty;
         public string ResetToken { get; set; } = string.Empty;
         public string ConfirmToken { get; set; } = string.Empty;

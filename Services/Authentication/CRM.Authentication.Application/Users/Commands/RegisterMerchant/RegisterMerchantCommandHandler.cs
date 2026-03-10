@@ -43,15 +43,14 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
             var user = new User
             {
                 _id = customerIdStr,
-                CustomerId = nextId,
                 _key = nextId,
                 Email = request.Email,
                 Username = request.Username,
                 MerchantName = request.MerchantName,
                 BusinessName = request.MerchantName,
-                AccountName = request.MerchantName,
-                Language = request.LanguageId.Contains("Vietnamese") ? "vi" : "en",
-                LanguageId = request.LanguageId,
+                // AccountName = request.MerchantName, // Removed as per request to remove AccountName/CustomerId from customer-related data
+                Language = string.IsNullOrEmpty(request.Language) ? request.LanguageId?.ToString() ?? "" : request.Language, 
+                LanguageId = ExtractLanguageId(request.LanguageId), 
                 Password = HashLegacyPassword(request.Password),
                 Provider = request.Provider,
                 Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
@@ -68,7 +67,6 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 var customerPayload = new 
                 {
                     _id = customerIdStr, // Pass the same ID
-                    CustomerId = nextId,
                     _key = nextId,
                     CustomerCode = "MERCHANT-" + nextId,
                     MerchantName = request.MerchantName,
@@ -77,7 +75,8 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                     Password = HashLegacyPassword(request.Password),
                     Visible = 1,
                     IsActive = true,
-                    LanguageId = request.LanguageId,
+                    LanguageId = ExtractLanguageId(request.LanguageId),
+                    Language = string.IsNullOrEmpty(request.Language) ? request.LanguageId?.ToString() ?? "" : request.Language, 
                     RegistrationSource = request.Provider,
                     Url = request.Url
                 };
@@ -102,11 +101,21 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 Username = user.Username,
                 Email = user.Email,
                 FullName = user.MerchantName, // Fallback FullName to MerchantName initially
-                LanguageId = user.LanguageId,
+                LanguageId = user.LanguageId.ToString(),
                 Provider = user.Provider,
                 Roles = user.Roles,
                 CreatedAt = user.CreatedAt
             };
+        }
+
+        private long ExtractLanguageId(object languageIdObj)
+        {
+            if (languageIdObj == null) return 0;
+            string languageIdStr = languageIdObj.ToString() ?? "";
+            if (string.IsNullOrEmpty(languageIdStr)) return 0;
+            // Example input: ["136 - English (United States)"] or "136"
+            var match = System.Text.RegularExpressions.Regex.Match(languageIdStr, @"\d+");
+            return match.Success ? long.Parse(match.Value) : 0;
         }
 
         private string HashLegacyPassword(string password)

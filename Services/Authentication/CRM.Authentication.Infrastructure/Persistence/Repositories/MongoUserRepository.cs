@@ -33,6 +33,11 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
             return await _context.Users.Find(u => u.Email == email).FirstOrDefaultAsync();
         }
 
+        public async Task<User?> GetByPhoneAsync(string phone)
+        {
+            return await _context.Users.Find(u => u.Phone == phone).FirstOrDefaultAsync();
+        }
+
         public async Task<bool> ExistsAsync(string email, string username, string merchantName)
         {
             var filters = new System.Collections.Generic.List<FilterDefinition<User>>();

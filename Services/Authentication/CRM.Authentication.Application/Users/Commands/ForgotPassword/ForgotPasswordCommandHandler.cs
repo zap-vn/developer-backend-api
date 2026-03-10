@@ -55,6 +55,11 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
                 throw new KeyNotFoundException("USER_NOT_FOUND");
             }
 
+            // Allow social users to set a local password via the reset flow
+            // This enables hybrid login (Social + Email/Password) 
+            // if (string.IsNullOrEmpty(user.Password) && ... ) block removed to support this requirement.
+
+
             // 2. Check Rate Limit (Tạm thời tăng lên 10 để bạn test cho thoải mái)
             int recentRequests = await _resetRepository.GetRecentRequestCountAsync(email, DateTime.UtcNow.AddHours(-1));
             if (recentRequests >= 10)
@@ -75,7 +80,7 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             // 5. Save Request
             var resetRequest = new PasswordResetRequest
             {
-                UserGuid = $"Customer/{user.CustomerId}",
+                UserGuid = $"Customer/{user._key}",
                 Email = email,
                 Method = "email",
                 ResetToken = resetToken,

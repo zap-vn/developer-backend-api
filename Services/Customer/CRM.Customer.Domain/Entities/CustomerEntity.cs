@@ -27,7 +27,14 @@ namespace CRM.Customer.Domain.Entities
         public string CurrencyNativeName { get; set; } = string.Empty;
         public string CurrencySymbol { get; set; } = string.Empty;
         public string CustomerCode { get; set; } = string.Empty;
-        public long CustomerId { get; set; }
+        
+        [BsonSerializer(typeof(CRM.BuildingBlocks.FlexibleLongSerializer))]
+        [BsonElement("LanguageId")]
+        public long LanguageId { get; set; }
+        
+        [BsonElement("Language")]
+        public string Language { get; set; } = string.Empty;
+        
         public int CustomerStatusId { get; set; }
         public string Email { get; set; } = string.Empty;
         public string EmpGuid { get; set; } = string.Empty;
@@ -49,7 +56,6 @@ namespace CRM.Customer.Domain.Entities
         public string Plural { get; set; } = string.Empty;
         public string Singular { get; set; } = string.Empty;
         public int NotificationId { get; set; }
-        public string LanguageId { get; set; } = string.Empty;
         public string PublicKey { get; set; } = string.Empty;
         public string AdminUpdate { get; set; } = string.Empty;
         public string BatchCode { get; set; } = string.Empty;

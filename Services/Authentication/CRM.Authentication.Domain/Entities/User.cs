@@ -11,17 +11,12 @@ namespace CRM.Authentication.Domain.Entities
         public string _id { get; set; } = string.Empty;
         
         [BsonSerializer(typeof(FlexibleLongSerializer))]
-        [BsonElement("CustomerId")]
-        public long CustomerId { get; set; }
-
-        [BsonSerializer(typeof(FlexibleLongSerializer))]
         [BsonElement("_key")]
         public long _key { get; set; }
 
         public string Username { get; set; } = string.Empty;
-        public string AccountName { get; set; } = string.Empty; // Workspace identifier mapping to login screen
         public string Email { get; set; } = string.Empty;
-        
+        public string Phone { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         
         public string FirstName { get; set; } = string.Empty;
@@ -32,10 +27,11 @@ namespace CRM.Authentication.Domain.Entities
         
         public string MerchantName { get; set; } = string.Empty;
         
-        public string Language { get; set; } = "vi";
+        public string Language { get; set; } = "en";
         
+        [BsonSerializer(typeof(FlexibleLongSerializer))]
         [BsonElement("LanguageId")]
-        public string LanguageId { get; set; } = string.Empty;
+        public long LanguageId { get; set; }
 
         [BsonElement("Url")]
         public string Avatar { get; set; } = string.Empty; // Mapped to Url

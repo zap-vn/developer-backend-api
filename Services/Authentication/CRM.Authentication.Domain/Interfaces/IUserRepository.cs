@@ -7,6 +7,7 @@ namespace CRM.Authentication.Domain.Interfaces
         Task<User?> GetByIdAsync(string id);
         Task<User?> GetByUsernameAsync(string username, string merchantCode);
         Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByPhoneAsync(string phone);
         Task<bool> ExistsAsync(string email, string username, string merchantName);
         Task<bool> EmailExistsAsync(string email);
         Task<bool> UsernameExistsAsync(string username);

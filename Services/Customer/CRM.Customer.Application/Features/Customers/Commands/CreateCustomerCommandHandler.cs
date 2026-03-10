@@ -21,7 +21,6 @@ namespace CRM.Customer.Application.Features.Customers.Commands
             var entity = new CustomerEntity
             {
                 _id = request._id,
-                CustomerId = request.CustomerId,
                 _key = request._key,
                 BusinessName = request.BusinessName,
                 MerchantName = request.MerchantName,
@@ -31,6 +30,7 @@ namespace CRM.Customer.Application.Features.Customers.Commands
                 Visible = request.Visible,
                 CreateDate = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss"),
                 LanguageId = request.LanguageId,
+                Language = request.Language,
                 RegistrationSource = request.RegistrationSource,
                 Url = request.Url,
                 

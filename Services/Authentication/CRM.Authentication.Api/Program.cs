@@ -60,31 +60,35 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddBuildingBlocks();
 
-var app = builder.Build();
+try {
+    var app = builder.Build();
 
-app.UseMiddleware<ExceptionMiddleware>();
-app.UseResponseCompression();
+    app.UseMiddleware<ExceptionMiddleware>();
+    app.UseResponseCompression();
 
-// Configure the HTTP request pipeline.
-app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Auth API v1");
-        c.RoutePrefix = "swagger"; // Explicitly set or keep empty, but let's see why it failed.
-    });
+    // Configure the HTTP request pipeline.
+    app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Auth API v1");
+            c.RoutePrefix = "swagger"; // Explicitly set or keep empty, but let's see why it failed.
+        });
 
-app.UseRouting();
+    app.UseRouting();
 
-app.UseCors("AllowAll");
+    app.UseCors("AllowAll");
 
-// app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
+    // app.UseHttpsRedirection();
+    app.UseAuthentication();
+    app.UseAuthorization();
 
-app.UseMiddleware<LocalizationMiddleware>();
-app.MapControllers();
+    app.UseMiddleware<LocalizationMiddleware>();
+    app.MapControllers();
 
-Console.WriteLine("✅ Authentication API is running.");
-Console.WriteLine("👉 Local URL: http://localhost:5001/swagger/index.html");
-app.Run();
-
+    Console.WriteLine("✅ Authentication API is running.");
+    Console.WriteLine("👉 Local URL: http://localhost:5001/swagger/index.html");
+    app.Run();
+} catch (Exception ex) {
+    System.IO.File.WriteAllText("d:\\PROJECTS\\2026\\3_2\\src\\api_fatal.txt", ex.ToString());
+    throw;
+}

@@ -14,4 +14,10 @@ namespace CRM.Authentication.Application.Users.DTOs
         public string Message { get; set; } = string.Empty;
         public string ConfirmToken { get; set; } = string.Empty;
     }
+
+    public class ForgotPasswordPhoneRequestDto
+    {
+        public string Phone { get; set; } = string.Empty;
+        public string Channel { get; set; } = "sms"; // sms | zalo
+    }
 }

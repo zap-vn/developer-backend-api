@@ -25,12 +25,12 @@ namespace CRM.Authentication.Infrastructure.Security
 
             var claims = new List<Claim>
             {
-                new Claim("UserGuid", $"Customer/{user.CustomerId}"),
-                new Claim("EmployeeGuid", $"Customer/{user.CustomerId}"),
+                new Claim("UserGuid", $"Customer/{user._key}"),
+                new Claim("EmployeeGuid", $"Customer/{user._key}"),
                 new Claim("RoleName", user.Roles.FirstOrDefault() ?? "Admin"),
                 new Claim("RolePermission_id", "657ab15d54f17333f3d89c65"), // Constant from legacy project example
                 new Claim("Language", string.IsNullOrEmpty(user.Language) ? "vi" : user.Language),
-                new Claim(JwtRegisteredClaimNames.Sub, user.CustomerId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, user._key.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

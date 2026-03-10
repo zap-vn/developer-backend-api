@@ -64,6 +64,14 @@ namespace CRM.Authentication.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("forgot-password/phone")]
+        public async Task<IActionResult> ForgotPasswordPhone([FromBody] ForgotPasswordPhoneRequestDto request)
+        {
+            var command = new ForgotPasswordPhoneCommand(request.Phone, request.Channel);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
         [HttpPost("verify-otp")]
         public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpCommand command)
         {

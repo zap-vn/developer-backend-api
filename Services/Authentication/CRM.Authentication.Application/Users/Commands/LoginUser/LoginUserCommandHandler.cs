@@ -75,7 +75,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 RefreshToken = Guid.NewGuid().ToString(),
                 Role = user.Roles.FirstOrDefault() ?? "Admin",
                 UpdateDate = user.UpdatedAt,
-                UserGuid = $"Customer/{user.CustomerId}",
+                UserGuid = $"Customer/{user._key}",
                 Permissions = new List<string>(),
                 Screens = new List<string>(),
                 User = new UserDto

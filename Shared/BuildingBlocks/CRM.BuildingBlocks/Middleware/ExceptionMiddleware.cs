@@ -62,13 +62,21 @@ namespace CRM.BuildingBlocks.Middleware
                 var locTitle = localizer[parts[0]];
                 var locDetail = localizer[parts[1]];
 
-                title = locTitle.ResourceNotFound ? GetHardcodedFallback(parts[0], "en") : locTitle.Value;
-                detail = locDetail.ResourceNotFound ? GetHardcodedFallback(parts[1], "en") : locDetail.Value;
+                // In some .NET versions, even if not found, it returns the key and ResourceNotFound might be false
+                title = (locTitle.ResourceNotFound || locTitle.Value == parts[0]) 
+                        ? GetHardcodedFallback(parts[0], "en") 
+                        : locTitle.Value;
+                        
+                detail = (locDetail.ResourceNotFound || locDetail.Value == parts[1]) 
+                         ? GetHardcodedFallback(parts[1], "en") 
+                         : locDetail.Value;
             }
             else
             {
                 var loc = localizer[rawMessage];
-                title = loc.ResourceNotFound ? GetHardcodedFallback(rawMessage, "en") : loc.Value;
+                title = (loc.ResourceNotFound || loc.Value == rawMessage) 
+                        ? GetHardcodedFallback(rawMessage, "en") 
+                        : loc.Value;
                 detail = title; 
             }
 
@@ -94,6 +102,7 @@ namespace CRM.BuildingBlocks.Middleware
                 "auth_account_inactive" => "Account is not active.",
                 "auth_too_many_requests" => "Too many requests",
                 "auth_too_many_requests_detail" => "Please try again later.",
+                "auth_login_success" => "Login successful",
                 _ => key
             };
         }

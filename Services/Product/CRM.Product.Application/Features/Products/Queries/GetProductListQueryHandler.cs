@@ -29,9 +29,9 @@ namespace CRM.Product.Application.Features.Products.Queries
             
             Expression<Func<ProductEntity, bool>> predicate = x => 
                 (string.IsNullOrEmpty(currentUserGuid) || x.UserGuid == currentUserGuid) &&
-                (string.IsNullOrEmpty(filter.Keyword) || x.Name.Contains(filter.Keyword) || x.Code.Contains(filter.Keyword)) &&
+                (string.IsNullOrEmpty(filter.Keyword) || (x.Name != null && x.Name.Contains(filter.Keyword)) || (x.Code != null && x.Code.Contains(filter.Keyword))) &&
                 (string.IsNullOrEmpty(filter.Category) || x.Category == filter.Category) &&
-                (!filter.IsActive.HasValue || x.IsActive == filter.IsActive.Value);
+                (!filter.IsActive.HasValue || (filter.IsActive.Value ? x.Visible == 1 : x.Visible == 0));
 
             var pagedResult = await _repository.GetPagedAsync(filter.PageIndex, filter.PageSize, predicate);
 

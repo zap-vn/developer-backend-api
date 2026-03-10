@@ -78,11 +78,16 @@ namespace CRM.Authentication.Infrastructure.Security
             Console.WriteLine("--------------------------------------------------");
         }
 
-        public async Task SendOtpEmailAsync(string to, string otp)
+        public async Task SendOtpEmailAsync(string to, string otp, string? merchantName = null)
         {
+            // TODO: Fetch template from DB by (merchantName, "OTP"). 
+            // If not found, fallback to "Default".
+            
+            _logger.LogInformation($"[EMAIL_SERVICE] Sending OTP email for Merchant: {merchantName ?? "Default"}");
+
             string body = $@"
                 <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;'>
-                    <h2 style='color: #007bff; text-align: center;'>Xác thực tài khoản CRM</h2>
+                    <h2 style='color: #007bff; text-align: center;'>{(string.IsNullOrEmpty(merchantName) ? "Xác thực tài khoản CRM" : $"Xác thực tài khoản {merchantName}")}</h2>
                     <p>Xin chào,</p>
                     <p>Bạn vừa yêu cầu lấy lại mật khẩu. Mã OTP của bạn là:</p>
                     <div style='background-color: #f8f9fa; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; color: #333; letter-spacing: 5px; border-radius: 5px;'>
@@ -90,17 +95,21 @@ namespace CRM.Authentication.Infrastructure.Security
                     </div>
                     <p style='color: #666; margin-top: 20px;'>Mã này có hiệu lực trong <b>5 phút</b>. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
                     <hr style='border: 0; border-top: 1px solid #eee; margin: 20px 0;'>
-                    <p style='font-size: 12px; color: #999; text-align: center;'>Đây là tin nhắn tự động, vui lòng không trả lời.</p>
+                    <p style='font-size: 12px; color: #999; text-align: center;'>Đây là tin nhắn tự động từ {(merchantName ?? "hệ thống CRM")}, vui lòng không trả lời.</p>
                 </div>";
 
             await SendEmailAsync(to, "Mã xác thực OTP của bạn", body);
         }
 
-        public async Task SendResetLinkEmailAsync(string to, string link)
+        public async Task SendResetLinkEmailAsync(string to, string link, string? merchantName = null)
         {
+             // TODO: Fetch template from DB by (merchantName, "ResetPassword").
+            
+            _logger.LogInformation($"[EMAIL_SERVICE] Sending Reset Link for Merchant: {merchantName ?? "Default"}");
+
             string body = $@"
                 <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;'>
-                    <h2 style='color: #007bff; text-align: center;'>Xác thực tài khoản CRM</h2>
+                    <h2 style='color: #007bff; text-align: center;'>{(string.IsNullOrEmpty(merchantName) ? "Xác thực tài khoản CRM" : $"Xác thực tài khoản {merchantName}")}</h2>
                     <p>Xin chào,</p>
                     <p>Bạn vừa yêu cầu lấy lại mật khẩu. Vui lòng nhấn vào nút bên dưới để đặt lại mật khẩu mới:</p>
                     <div style='text-align: center; margin: 30px 0;'>
@@ -109,7 +118,7 @@ namespace CRM.Authentication.Infrastructure.Security
                     <p style='color: #666;'>Hoặc copy link này vào trình duyệt: <br> <a href='{link}' style='color: #007bff; word-break: break-all;'>{link}</a></p>
                     <p style='color: #666; margin-top: 20px;'>Link này có hiệu lực trong <b>15 phút</b>.</p>
                     <hr style='border: 0; border-top: 1px solid #eee; margin: 20px 0;'>
-                    <p style='font-size: 12px; color: #999; text-align: center;'>Đây là tin nhắn tự động, vui lòng không trả lời.</p>
+                    <p style='font-size: 12px; color: #999; text-align: center;'>Đây là tin nhắn tự động từ {(merchantName ?? "hệ thống CRM")}, vui lòng không trả lời.</p>
                 </div>";
 
             await SendEmailAsync(to, "Link đặt lại mật khẩu của bạn", body);

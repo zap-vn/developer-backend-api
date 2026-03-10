@@ -73,8 +73,8 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             // 4. Construct Reset Link
             string resetLink = $"{_mailSettings.FrontendResetPasswordUrl}?token={resetToken}";
              
-            // Gửi mail LINK cho người dùng
-            await _emailService.SendResetLinkEmailAsync(email, resetLink); 
+            // Gửi mail LINK cho người dùng với MerchantName để cá nhân hóa
+            await _emailService.SendResetLinkEmailAsync(email, resetLink, user.MerchantName); 
             Console.WriteLine($"[EMAIL_SENT] Reset Link for {email}: {resetLink}"); 
  
             // 5. Save Request

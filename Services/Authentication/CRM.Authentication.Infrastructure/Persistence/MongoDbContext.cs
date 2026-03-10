@@ -8,7 +8,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
     public class MongoDbContext
     {
         private static IMongoClient? _client;
-        private readonly IMongoDatabase _database;
+        public readonly IMongoDatabase Database;
 
         public MongoDbContext(IOptions<MongoSettings> settings)
         {
@@ -29,7 +29,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
                     throw;
                 }
             }
-            _database = _client.GetDatabase(mongoSettings.DatabaseName);
+            Database = _client.GetDatabase(mongoSettings.DatabaseName);
 
             // Configure BsonClassMap for User to match existing schema without messing up _id
             if (!MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(User)))
@@ -63,8 +63,8 @@ namespace CRM.Authentication.Infrastructure.Persistence
             }
         }
 
-        public IMongoCollection<User> Users => _database.GetCollection<User>("Customer");
-        public IMongoCollection<ManagementIndex> ManagementIndexes => _database.GetCollection<ManagementIndex>("ManagementIndex");
-        public IMongoCollection<PasswordResetRequest> PasswordResetRequests => _database.GetCollection<PasswordResetRequest>("PasswordResetRequests");
+        public IMongoCollection<User> Users => Database.GetCollection<User>("Customer");
+        public IMongoCollection<ManagementIndex> ManagementIndexes => Database.GetCollection<ManagementIndex>("ManagementIndex");
+        public IMongoCollection<PasswordResetRequest> PasswordResetRequests => Database.GetCollection<PasswordResetRequest>("PasswordResetRequests");
     }
 }

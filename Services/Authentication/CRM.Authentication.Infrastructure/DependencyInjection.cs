@@ -33,6 +33,7 @@ namespace CRM.Authentication.Infrastructure
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
 
             services.AddSingleton<MongoDbContext>();
+            services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
             services.AddScoped<IUserRepository, MongoUserRepository>();
             services.AddScoped<IPasswordResetRepository, MongoPasswordResetRepository>();
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();

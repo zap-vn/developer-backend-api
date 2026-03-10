@@ -9,7 +9,9 @@ namespace CRM.BuildingBlocks
         public static IServiceCollection AddBuildingBlocks(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
+            services.AddMemoryCache();
             services.AddScoped<ILocalizationService, LocalizationService>();
+            services.AddScoped<ISystemLanguageProvider, SystemLanguageProvider>();
             services.AddScoped<ICurrentUserService, MockCurrentUserService>();
 
             // Configure JSON Response to return PascalCase for all APIs (Minimal & MVC)

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 using CRM.Customer.Infrastructure.Persistence;
 using CRM.Customer.Infrastructure.Persistence.Configurations;
 using CRM.Customer.Domain.Interfaces;
@@ -24,6 +25,7 @@ namespace CRM.Customer.Infrastructure
             services.AddScoped<ICustomerGroupRepository, CustomerGroupRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<MongoDbContext>();
+            services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
 
             return services;
         }

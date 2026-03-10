@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CRM.Authentication.Application;
 using CRM.Authentication.Infrastructure;
 using CRM.BuildingBlocks.Middleware;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,14 +60,15 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddBuildingBlocks();
+builder.Services.AddHealthChecks(); // Register health checks
 
 try {
     var app = builder.Build();
 
+    app.UseMiddleware<LocalizationMiddleware>();
     app.UseMiddleware<ExceptionMiddleware>();
-    app.UseResponseCompression();
 
-    // Configure the HTTP request pipeline.
+    app.UseResponseCompression();
     app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
@@ -82,7 +84,8 @@ try {
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.UseMiddleware<LocalizationMiddleware>();
+    // Duplicate LocalizationMiddleware removed
+    app.MapHealthChecks("/healthz");
     app.MapControllers();
 
     Console.WriteLine("✅ Authentication API is running.");

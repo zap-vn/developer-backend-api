@@ -63,19 +63,23 @@ namespace CRM.BuildingBlocks.Middleware
                 var locDetail = localizer[parts[1]];
 
                 // In some .NET versions, even if not found, it returns the key and ResourceNotFound might be false
+                string currentLang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
                 title = (locTitle.ResourceNotFound || locTitle.Value == parts[0]) 
-                        ? GetHardcodedFallback(parts[0], "en") 
+                        ? GetHardcodedFallback(parts[0], currentLang) 
                         : locTitle.Value;
                         
                 detail = (locDetail.ResourceNotFound || locDetail.Value == parts[1]) 
-                         ? GetHardcodedFallback(parts[1], "en") 
+                         ? GetHardcodedFallback(parts[1], currentLang) 
                          : locDetail.Value;
             }
             else
             {
                 var loc = localizer[rawMessage];
+                string currentLang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
                 title = (loc.ResourceNotFound || loc.Value == rawMessage) 
-                        ? GetHardcodedFallback(rawMessage, "en") 
+                        ? GetHardcodedFallback(rawMessage, currentLang) 
                         : loc.Value;
                 detail = title; 
             }
@@ -92,17 +96,19 @@ namespace CRM.BuildingBlocks.Middleware
             return context.Response.WriteAsync(result);
         }
 
-        private static string GetHardcodedFallback(string key, string culture)
+        private static string GetHardcodedFallback(string key, string lang)
         {
             // Emergency fallback if .resx files are not loaded correctly
+            bool isVi = lang.Equals("vi", StringComparison.OrdinalIgnoreCase);
+
             return key switch
             {
-                "auth_invalid_credentials" => "Invalid credentials",
-                "auth_invalid_credentials_detail" => "The username or password you entered is incorrect.",
-                "auth_account_inactive" => "Account is not active.",
-                "auth_too_many_requests" => "Too many requests",
-                "auth_too_many_requests_detail" => "Please try again later.",
-                "auth_login_success" => "Login successful",
+                "auth_invalid_credentials" => isVi ? "Thông tin đăng nhập không chính xác" : "Invalid credentials",
+                "auth_invalid_credentials_detail" => isVi ? "Tên đăng nhập hoặc mật khẩu bạn nhập không đúng." : "The username or password you entered is incorrect.",
+                "auth_account_inactive" => isVi ? "Tài khoản chưa được kích hoạt." : "Account is not active.",
+                "auth_too_many_requests" => isVi ? "Quá nhiều lượt yêu cầu" : "Too many requests",
+                "auth_too_many_requests_detail" => isVi ? "Vui lòng thử lại sau vài phút." : "Please try again later.",
+                "auth_login_success" => isVi ? "Đăng nhập thành công" : "Login successful",
                 _ => key
             };
         }

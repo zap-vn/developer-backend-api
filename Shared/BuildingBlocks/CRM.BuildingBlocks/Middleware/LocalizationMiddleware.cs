@@ -28,13 +28,22 @@ namespace CRM.BuildingBlocks.Middleware
             // 1. Try get from Query String
             var languageCode = context.Request.Query["lang"].ToString();
 
-            // 2. Try get from Header if query is empty
+            // 2. Try get from Header (Language, Languge, Accept-Language)
             if (string.IsNullOrEmpty(languageCode))
             {
-                var acceptLang = context.Request.Headers["Accept-Language"].ToString();
-                if (!string.IsNullOrEmpty(acceptLang))
+                languageCode = context.Request.Headers["Language"].ToString();
+                if (string.IsNullOrEmpty(languageCode))
                 {
-                    languageCode = acceptLang.Split(',')[0].Split('-')[0];
+                    languageCode = context.Request.Headers["Languge"].ToString(); // Fail-safe for misspelled headers
+                }
+
+                if (string.IsNullOrEmpty(languageCode))
+                {
+                    var acceptLang = context.Request.Headers["Accept-Language"].ToString();
+                    if (!string.IsNullOrEmpty(acceptLang))
+                    {
+                        languageCode = acceptLang.Split(',')[0].Split('-')[0];
+                    }
                 }
             }
 

@@ -1,4 +1,7 @@
 using CRM.BuildingBlocks;
+using CRM.Customer.Application;
+using CRM.Customer.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddBuildingBlocks();
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 

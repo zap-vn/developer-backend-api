@@ -34,7 +34,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             if (user == null)
             {
                 Console.WriteLine($"[Login] User not found: {request.Email}");
-                throw new UnauthorizedAccessException(_localizer["auth_invalid_credentials"] ?? "Invalid username or password.");
+                throw new UnauthorizedAccessException("auth_invalid_credentials|auth_invalid_credentials_detail");
             }
 
             // Legacy Hashing Logic
@@ -46,7 +46,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             if (!isPasswordValid)
             {
                 Console.WriteLine($"[Login] Password mismatch. Input hashed: {hashedInput}");
-                throw new UnauthorizedAccessException(_localizer["auth_invalid_credentials"] ?? "Invalid username or password.");
+                throw new UnauthorizedAccessException("auth_invalid_credentials|auth_invalid_credentials_detail");
             }
 
             // Account activation check

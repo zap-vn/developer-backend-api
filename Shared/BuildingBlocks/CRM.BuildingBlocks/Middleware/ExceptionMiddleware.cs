@@ -7,10 +7,12 @@ namespace CRM.BuildingBlocks.Middleware
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly Microsoft.Extensions.Localization.IStringLocalizer<CRM.BuildingBlocks.Localization.SharedResource> _localizer;
 
-        public ExceptionMiddleware(RequestDelegate next)
+        public ExceptionMiddleware(RequestDelegate next, Microsoft.Extensions.Localization.IStringLocalizer<CRM.BuildingBlocks.Localization.SharedResource> localizer)
         {
             _next = next;
+            _localizer = localizer;
         }
 
         public async Task InvokeAsync(HttpContext httpContext)
@@ -21,47 +23,60 @@ namespace CRM.BuildingBlocks.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(httpContext, ex);
+                await HandleExceptionAsync(httpContext, ex, _localizer);
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception, Microsoft.Extensions.Localization.IStringLocalizer<CRM.BuildingBlocks.Localization.SharedResource> localizer)
         {
             context.Response.ContentType = "application/json";
             
             var statusCode = (int)HttpStatusCode.InternalServerError;
-            var message = "An internal server error occurred.";
-
+            var rawMessage = exception.Message;
+            
             if (exception is UnauthorizedAccessException)
             {
                 statusCode = (int)HttpStatusCode.Unauthorized;
-                message = exception.Message;
             }
             else if (exception is KeyNotFoundException)
             {
                 statusCode = (int)HttpStatusCode.NotFound;
-                message = exception.Message;
             }
             else if (exception is CRM.BuildingBlocks.Exceptions.ValidationException)
             {
                 statusCode = (int)HttpStatusCode.BadRequest;
-                message = exception.Message;
             }
             else if (exception.GetType().Name == "TooManyRequestsException" || exception.Message == "TOO_MANY_REQUESTS")
             {
-                statusCode = 429; // Too Many Requests
-                message = "Too many requests. Please try again later.";
+                statusCode = 429;
+                rawMessage = "auth_too_many_requests|auth_too_many_requests_detail";
             }
-            // Add more exception types here (e.g., ValidationException)
+
+            // Support pipe-delimited message for multi-part localization (Title|Detail)
+            string title = rawMessage;
+            string detail = rawMessage;
+
+            if (rawMessage.Contains("|"))
+            {
+                var parts = rawMessage.Split('|');
+                title = localizer[parts[0]] ?? parts[0];
+                detail = localizer[parts[1]] ?? parts[1];
+            }
+            else
+            {
+                title = localizer[rawMessage] ?? rawMessage;
+                // If no pipe, detail can be the same or empty. Let's keep it as localized message.
+                detail = title; 
+            }
 
             context.Response.StatusCode = statusCode;
 
             var result = JsonSerializer.Serialize(new
             {
-                StatusCode = statusCode,
-                Message = message,
-                Detail = exception.Message // Optional: include for debugging
-            });
+                statusCode = statusCode,
+                message = title,
+                detail = detail
+            }, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
             return context.Response.WriteAsync(result);
         }

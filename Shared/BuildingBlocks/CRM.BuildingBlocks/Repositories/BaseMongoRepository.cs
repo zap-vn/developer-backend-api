@@ -53,13 +53,15 @@ namespace CRM.BuildingBlocks.Repositories
                 ? ApplyTenantFilter(filter) 
                 : ApplyTenantFilter(_ => true);
 
-            var totalCount = await _collection.CountDocumentsAsync(filterDef);
-            var items = await _collection.Find(filterDef)
+            var countTask = _collection.CountDocumentsAsync(filterDef);
+            var itemsTask = _collection.Find(filterDef)
                 .Skip((pageIndex - 1) * pageSize)
                 .Limit(pageSize)
                 .ToListAsync();
 
-            return new PagedResult<T>(items, (int)totalCount, pageIndex, pageSize);
+            await Task.WhenAll(countTask, itemsTask);
+
+            return new PagedResult<T>(itemsTask.Result, (int)countTask.Result, pageIndex, pageSize);
         }
 
         public virtual async Task<bool> DeleteAsync(string id)

@@ -17,20 +17,18 @@ namespace CRM.BuildingBlocks.Middleware
 
         public async Task InvokeAsync(HttpContext context, ISystemLanguageProvider languageProvider)
         {
-            // Fetch dynamic languages from provider (with caching)
             var supportedLanguages = await languageProvider.GetSupportedLanguagesAsync();
             var defaultLanguage = languageProvider.GetDefaultLanguage();
 
-            // 1. Try get from Query String
+            // 1. Language detection priority: Query -> Custom Header -> Accept-Language
             var languageCode = context.Request.Query["lang"].ToString();
 
-            // 2. Try get from Header (Language, Languge, Accept-Language)
             if (string.IsNullOrEmpty(languageCode))
             {
                 languageCode = context.Request.Headers["Language"].ToString();
                 if (string.IsNullOrEmpty(languageCode))
                 {
-                    languageCode = context.Request.Headers["Languge"].ToString(); // Fail-safe for misspelled headers
+                    languageCode = context.Request.Headers["Languge"].ToString(); // Fail-safe for legacy
                 }
 
                 if (string.IsNullOrEmpty(languageCode))
@@ -38,13 +36,12 @@ namespace CRM.BuildingBlocks.Middleware
                     var acceptLang = context.Request.Headers["Accept-Language"].ToString();
                     if (!string.IsNullOrEmpty(acceptLang))
                     {
-                        languageCode = acceptLang.Split(',')[0].Split('-')[0];
+                        languageCode = acceptLang.Split(',')[0].Split(';')[0]; // Simplify split
                     }
-                    Console.WriteLine($"[Localization] Detected language code: '{languageCode}'");
                 }
             }
 
-            // 3. Match against supported languages
+            // 2. Match against supported languages
             var targetCulture = defaultLanguage;
             if (!string.IsNullOrEmpty(languageCode))
             {
@@ -55,19 +52,10 @@ namespace CRM.BuildingBlocks.Middleware
                 }
             }
 
-            try
-            {
-                var culture = new CultureInfo(targetCulture);
-                CultureInfo.CurrentCulture = culture;
-                CultureInfo.CurrentUICulture = culture;
-            }
-            catch (CultureNotFoundException)
-            {
-                // Fallback to default
-                var fallbackCulture = new CultureInfo(defaultLanguage);
-                CultureInfo.CurrentCulture = fallbackCulture;
-                CultureInfo.CurrentUICulture = fallbackCulture;
-            }
+            // 3. Set Culture
+            var culture = new CultureInfo(targetCulture);
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
 
             await _next(context);
         }

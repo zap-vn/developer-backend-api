@@ -59,12 +59,16 @@ namespace CRM.BuildingBlocks.Middleware
             if (rawMessage.Contains("|"))
             {
                 var parts = rawMessage.Split('|');
-                title = localizer[parts[0]].Value;
-                detail = localizer[parts[1]].Value;
+                var locTitle = localizer[parts[0]];
+                var locDetail = localizer[parts[1]];
+
+                title = locTitle.ResourceNotFound ? GetHardcodedFallback(parts[0], "en") : locTitle.Value;
+                detail = locDetail.ResourceNotFound ? GetHardcodedFallback(parts[1], "en") : locDetail.Value;
             }
             else
             {
-                title = localizer[rawMessage].Value;
+                var loc = localizer[rawMessage];
+                title = loc.ResourceNotFound ? GetHardcodedFallback(rawMessage, "en") : loc.Value;
                 detail = title; 
             }
 
@@ -78,6 +82,20 @@ namespace CRM.BuildingBlocks.Middleware
             }, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
             return context.Response.WriteAsync(result);
+        }
+
+        private static string GetHardcodedFallback(string key, string culture)
+        {
+            // Emergency fallback if .resx files are not loaded correctly
+            return key switch
+            {
+                "auth_invalid_credentials" => "Invalid credentials",
+                "auth_invalid_credentials_detail" => "The username or password you entered is incorrect.",
+                "auth_account_inactive" => "Account is not active.",
+                "auth_too_many_requests" => "Too many requests",
+                "auth_too_many_requests_detail" => "Please try again later.",
+                _ => key
+            };
         }
     }
 }

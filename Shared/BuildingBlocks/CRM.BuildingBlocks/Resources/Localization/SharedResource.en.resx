@@ -12,4 +12,10 @@
   <data name="auth_login_success" xml:space="preserve">
     <value>Login successful</value>
   </data>
+  <data name="auth_too_many_requests" xml:space="preserve">
+    <value>Too many requests</value>
+  </data>
+  <data name="auth_too_many_requests_detail" xml:space="preserve">
+    <value>Please try again in a few minutes.</value>
+  </data>
 </root>

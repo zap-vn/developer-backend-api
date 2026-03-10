@@ -12,4 +12,10 @@
   <data name="auth_login_success" xml:space="preserve">
     <value>Đăng nhập thành công</value>
   </data>
+  <data name="auth_too_many_requests" xml:space="preserve">
+    <value>Quá nhiều lượt yêu cầu</value>
+  </data>
+  <data name="auth_too_many_requests_detail" xml:space="preserve">
+    <value>Vui lòng thử lại sau vài phút.</value>
+  </data>
 </root>

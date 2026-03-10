@@ -1,4 +1,5 @@
 using MongoDB.Driver;
+using CRM.BuildingBlocks;
 using CRM.BuildingBlocks.Interfaces;
 using CRM.BuildingBlocks.Repositories;
 

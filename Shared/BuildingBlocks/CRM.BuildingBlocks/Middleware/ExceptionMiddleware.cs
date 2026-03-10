@@ -53,19 +53,18 @@ namespace CRM.BuildingBlocks.Middleware
             }
 
             // Support pipe-delimited message for multi-part localization (Title|Detail)
-            string title = rawMessage;
-            string detail = rawMessage;
+            string title;
+            string detail;
 
             if (rawMessage.Contains("|"))
             {
                 var parts = rawMessage.Split('|');
-                title = localizer[parts[0]] ?? parts[0];
-                detail = localizer[parts[1]] ?? parts[1];
+                title = localizer[parts[0]].Value;
+                detail = localizer[parts[1]].Value;
             }
             else
             {
-                title = localizer[rawMessage] ?? rawMessage;
-                // If no pipe, detail can be the same or empty. Let's keep it as localized message.
+                title = localizer[rawMessage].Value;
                 detail = title; 
             }
 

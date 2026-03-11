@@ -82,7 +82,21 @@ namespace CRM.Authentication.Infrastructure.Persistence
                     .Descending(x => x.CreatedAt);
                 CustomerOtps.Indexes.CreateOne(new CreateIndexModel<CustomerOtp>(lookupKeys));
                 
-                Console.WriteLine("[MongoDB] CustomerOtps indexes ensured.");
+                // 3. Performance Indexes for User Login
+                try 
+                {
+                    var userEmailIndexKeys = Builders<User>.IndexKeys.Ascending(x => x.Email).Ascending(x => x.MerchantName);
+                    Users.Indexes.CreateOne(new CreateIndexModel<User>(userEmailIndexKeys));
+
+                    var userPhoneIndexKeys = Builders<User>.IndexKeys.Ascending(x => x.Phone).Ascending(x => x.MerchantName);
+                    Users.Indexes.CreateOne(new CreateIndexModel<User>(userPhoneIndexKeys));
+                }
+                catch (Exception idxEx)
+                {
+                    Console.WriteLine($"[MongoDB] User index creation skip (already exists or error): {idxEx.Message}");
+                }
+
+                Console.WriteLine("[MongoDB] Database indexes ensured.");
             }
             catch (Exception ex)
             {

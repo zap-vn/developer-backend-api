@@ -34,28 +34,22 @@ namespace CRM.BuildingBlocks.Middleware
             var statusCode = (int)HttpStatusCode.InternalServerError;
             var rawMessage = exception.Message;
             
-            string errorCodeToCheck = rawMessage.Contains("|") ? rawMessage.Split('|')[0] : rawMessage;
-
-            if (exception is UnauthorizedAccessException || errorCodeToCheck == "AUTH_001" || errorCodeToCheck == "AUTH_002" || errorCodeToCheck == "AUTH_004" || errorCodeToCheck == "AUTH_005")
+            if (exception is UnauthorizedAccessException)
             {
-                statusCode = (int)HttpStatusCode.Unauthorized; // 401
-            }
-            else if (errorCodeToCheck == "AUTH_003")
-            {
-                statusCode = (int)HttpStatusCode.Forbidden; // 403
+                statusCode = (int)HttpStatusCode.Unauthorized;
             }
             else if (exception is KeyNotFoundException)
             {
-                statusCode = (int)HttpStatusCode.NotFound; // 404
+                statusCode = (int)HttpStatusCode.NotFound;
             }
             else if (exception is CRM.BuildingBlocks.Exceptions.ValidationException)
             {
-                statusCode = (int)HttpStatusCode.BadRequest; // 400
+                statusCode = (int)HttpStatusCode.BadRequest;
             }
-            else if (exception.GetType().Name == "TooManyRequestsException" || exception.Message == "TOO_MANY_REQUESTS" || errorCodeToCheck == "AUTH_006")
+            else if (exception.GetType().Name == "TooManyRequestsException" || exception.Message == "TOO_MANY_REQUESTS")
             {
                 statusCode = 429;
-                rawMessage = errorCodeToCheck == "AUTH_006" ? rawMessage : "AUTH_006|AUTH_006_detail";
+                rawMessage = "auth_too_many_requests|auth_too_many_requests_detail";
             }
 
             // Support pipe-delimited message for multi-part localization (Title|Detail)
@@ -92,23 +86,27 @@ namespace CRM.BuildingBlocks.Middleware
 
             context.Response.StatusCode = statusCode;
 
-            string finalErrorCode = rawMessage.Contains("|") ? rawMessage.Split('|')[0] : rawMessage;
+            var errorCode = rawMessage.Contains("|") ? rawMessage.Split('|')[0] : rawMessage;
+            string? actionUrl = null;
 
-            var responseObj = new Dictionary<string, object>
+            if (errorCode == "AUTH_001" || errorCode == "auth_email_not_verified" || errorCode == "auth_phone_not_verified")
             {
-                { "statusCode", statusCode },
-                { "errorCode", finalErrorCode },
-                { "message", title },
-                { "detail", detail }
-            };
-
-            if (finalErrorCode == "AUTH_001" || finalErrorCode == "auth_email_not_verified" || finalErrorCode == "auth_phone_not_verified")
-            {
-                // Return redirect link for unverified accounts
-                responseObj.Add("redirectUrl", "http://localhost:3000/vi/active-account");
+                string currentLang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                actionUrl = $"http://localhost:3000/{currentLang}/active-account";
             }
 
-            var result = JsonSerializer.Serialize(responseObj, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            var result = JsonSerializer.Serialize(new
+            {
+                statusCode = statusCode,
+                errorCode = errorCode,
+                message = title,
+                detail = detail,
+                actionUrl = actionUrl
+            }, new JsonSerializerOptions 
+            { 
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            });
 
             return context.Response.WriteAsync(result);
         }

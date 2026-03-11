@@ -87,12 +87,26 @@ namespace CRM.BuildingBlocks.Middleware
             context.Response.StatusCode = statusCode;
 
             var errorCode = rawMessage.Contains("|") ? rawMessage.Split('|')[0] : rawMessage;
-            string? actionUrl = null;
+            string? redirectUrl = null;
 
             if (errorCode == "AUTH_001" || errorCode == "auth_email_not_verified" || errorCode == "auth_phone_not_verified")
             {
-                string currentLang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-                actionUrl = $"http://localhost:3000/{currentLang}/active-account";
+                // Try to get language from Accept-Language header, default to 'vi'
+                string lang = "vi";
+                var acceptLanguage = context.Request.Headers["Accept-Language"].ToString();
+                
+                if (!string.IsNullOrEmpty(acceptLanguage))
+                {
+                    // Usually format is "vi,en-US;q=0.9..." or just "vi-VN"
+                    var firstLang = acceptLanguage.Split(',').FirstOrDefault()?.Trim();
+                    if (!string.IsNullOrEmpty(firstLang))
+                    {
+                        // Extract just the two letter code if possible, or use the exact string if it's already short
+                        lang = firstLang.Length >= 2 ? firstLang.Substring(0, 2).ToLower() : firstLang.ToLower();
+                    }
+                }
+                
+                redirectUrl = $"http://localhost:3000/{lang}/active-account";
             }
 
             var result = JsonSerializer.Serialize(new
@@ -101,7 +115,7 @@ namespace CRM.BuildingBlocks.Middleware
                 errorCode = errorCode,
                 message = title,
                 detail = detail,
-                actionUrl = actionUrl
+                redirectUrl = redirectUrl
             }, new JsonSerializerOptions 
             { 
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

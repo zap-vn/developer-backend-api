@@ -14,6 +14,6 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
             set => Email = value; 
         }
 
-        public string Purpose { get; set; } = "register"; // register, login, reset_password
+        public string Purpose { get; set; } = "resend-otp"; // login, register, reset_password, resend-otp
     }
 }

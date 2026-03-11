@@ -41,7 +41,8 @@ namespace CRM.Authentication.Application.Users.Commands.ActiveAccount
             }
 
             // Verify OTP from database (CustomerOtps)
-            var customerOtp = await _otpRepository.GetLatestOtpAsync(user._id, "register");
+            // Look for both 'register' and 'resend-otp' purposes
+            var customerOtp = await _otpRepository.GetLatestOtpForPurposesAsync(user._id, new[] { "register", "resend-otp" });
             
             if (customerOtp == null)
             {

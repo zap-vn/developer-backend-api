@@ -12,6 +12,7 @@ namespace CRM.BuildingBlocks
             services.AddMemoryCache();
             services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<ISystemLanguageProvider, SystemLanguageProvider>();
+            services.AddScoped<ISystemErrorProvider, SystemErrorProvider>();
             services.AddScoped<ICurrentUserService, MockCurrentUserService>();
 
             // Configure JSON Response to return PascalCase for all APIs (Minimal & MVC)

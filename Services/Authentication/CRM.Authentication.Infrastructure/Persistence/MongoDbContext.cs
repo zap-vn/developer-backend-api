@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using CRM.Authentication.Domain.Entities;
+using CRM.BuildingBlocks;
 using CRM.Authentication.Infrastructure.Persistence.Configurations;
 
 namespace CRM.Authentication.Infrastructure.Persistence
@@ -93,5 +94,6 @@ namespace CRM.Authentication.Infrastructure.Persistence
         public IMongoCollection<ManagementIndex> ManagementIndexes => Database.GetCollection<ManagementIndex>("ManagementIndex");
         public IMongoCollection<PasswordResetRequest> PasswordResetRequests => Database.GetCollection<PasswordResetRequest>("PasswordResetRequests");
         public IMongoCollection<CustomerOtp> CustomerOtps => Database.GetCollection<CustomerOtp>("CustomerOtps");
+        public IMongoCollection<SystemError> SystemErrors => Database.GetCollection<SystemError>("SystemErrors");
     }
 }

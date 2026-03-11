@@ -56,14 +56,14 @@ namespace CRM.Authentication.Application.Users.Commands.ActiveAccount
 
             if (customerOtp.ExpiredAt < DateTime.UtcNow)
             {
-                throw new Exception("OTP has expired.");
+                throw new Exception("AUTH_005|AUTH_005_detail");
             }
 
             if (customerOtp.OtpCode != request.Otp)
             {
                 customerOtp.AttemptCount++;
                 await _otpRepository.UpdateAsync(customerOtp);
-                throw new Exception("Invalid OTP.");
+                throw new Exception("AUTH_004|AUTH_004_detail");
             }
 
             // Mark OTP as verified

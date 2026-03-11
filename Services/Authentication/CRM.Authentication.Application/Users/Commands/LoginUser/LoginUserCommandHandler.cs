@@ -34,7 +34,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             if (user == null)
             {
                 Console.WriteLine($"[Login] User not found: {request.Email}");
-                throw new UnauthorizedAccessException("auth_invalid_credentials|auth_invalid_credentials_detail");
+                throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
             }
 
             // Legacy Hashing Logic
@@ -46,23 +46,20 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             if (!isPasswordValid)
             {
                 Console.WriteLine($"[Login] Password mismatch. Input hashed: {hashedInput}");
-                throw new UnauthorizedAccessException("auth_invalid_credentials|auth_invalid_credentials_detail");
+                throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
             }
 
             // Account activation check
             if (!user.IsVerify)
             {
-                bool isPhone = !string.IsNullOrEmpty(user.Phone) && (user.Phone == request.Email || (System.Text.RegularExpressions.Regex.IsMatch(request.Email, @"^\d+$") && user.Phone.EndsWith(request.Email)));
-                string errorKey = isPhone ? "auth_phone_not_verified" : "auth_email_not_verified";
-                
                 Console.WriteLine($"[Login] Account not verified for user: {user.Email} (Identifier used: {request.Email})");
-                throw new UnauthorizedAccessException($"{errorKey}|{errorKey}_detail");
+                throw new UnauthorizedAccessException("AUTH_001|AUTH_001_detail");
             }
 
             if (user.Visible != 1)
             {
                 Console.WriteLine($"[Login] Account not active for user: {user.Email}");
-                throw new UnauthorizedAccessException(_localizer["auth_account_inactive"] ?? "Account is not active.");
+                throw new UnauthorizedAccessException("AUTH_003|AUTH_003_detail");
             }
 
             var tokenSw = System.Diagnostics.Stopwatch.StartNew();

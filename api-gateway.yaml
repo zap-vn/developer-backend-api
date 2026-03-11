@@ -23,6 +23,27 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/Auth/active-account:
+    post:
+      summary: "Active Account endpoint"
+      operationId: "active_account"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/active-account"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Active Account CORS support"
+      operationId: "cors_active_account"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/active-account"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/Auth/verify-otp:
     post:
       summary: "Verify OTP endpoint"

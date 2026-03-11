@@ -33,11 +33,18 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
 
         public async Task<bool> Handle(ResendOtpCommand request, CancellationToken cancellationToken)
         {
-            var identifier = request.Email;
+            User? user = null;
+
+            // 1. Find User
+            if (!string.IsNullOrEmpty(request.Phone))
+            {
+                user = await _userRepository.GetByPhoneAsync(request.Phone);
+            }
             
-            // Find user by Email or Phone
-            var user = await _userRepository.GetByEmailAsync(identifier) 
-                       ?? await _userRepository.GetByPhoneAsync(identifier);
+            if (user == null && !string.IsNullOrEmpty(request.Email))
+            {
+                user = await _userRepository.GetByEmailAsync(request.Email);
+            }
 
             if (user == null)
             {
@@ -50,10 +57,10 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
                 throw new Exception("Account already verified.");
             }
 
-            // Generate new 6-digit OTP
+            // 2. Generate new 6-digit OTP
             var otp = new Random().Next(111111, 999999).ToString();
 
-            // Store in database (CustomerOtps)
+            // 3. Store in database (CustomerOtps)
             var customerOtp = new CustomerOtp
             {
                 CustomerId = user._id,
@@ -66,14 +73,26 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
             };
             await _otpRepository.CreateAsync(customerOtp);
 
-            // Backwards compatibility Cache (optional)
-            _cache.Set($"OTP_ID_{identifier}", otp, TimeSpan.FromMinutes(15));
+            // Backwards compatibility Cache
+            string cacheKey = !string.IsNullOrEmpty(request.Phone) ? request.Phone : request.Email;
+            _cache.Set($"OTP_ID_{cacheKey}", otp, TimeSpan.FromMinutes(15));
 
-            // Send OTP based on Provider or availability
-            if (user.Provider == "Phone" || (!string.IsNullOrEmpty(user.Phone) && string.IsNullOrEmpty(user.Email)))
+            // 4. Send OTP based on Provider or availability
+            // Case: User specifically requested Phone or provider is Phone
+            if (user.Provider == "Phone" || !string.IsNullOrEmpty(request.Phone))
             {
-                await _phoneService.SendSmsOtpAsync(user.Phone, otp);
+                string targetPhone = !string.IsNullOrEmpty(request.Phone) ? request.Phone : user.Phone;
+                
+                if (request.Channel?.ToLower() == "zalo")
+                {
+                    await _phoneService.SendZaloOtpAsync(targetPhone, otp);
+                }
+                else
+                {
+                    await _phoneService.SendSmsOtpAsync(targetPhone, otp);
+                }
             }
+            // Case: Default to Email
             else if (!string.IsNullOrEmpty(user.Email))
             {
                 await _emailService.SendOtpEmailAsync(user.Email, otp, user.MerchantName);

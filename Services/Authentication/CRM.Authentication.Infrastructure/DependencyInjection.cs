@@ -36,6 +36,7 @@ namespace CRM.Authentication.Infrastructure
             services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
             services.AddScoped<IUserRepository, MongoUserRepository>();
             services.AddScoped<IPasswordResetRepository, MongoPasswordResetRepository>();
+            services.AddScoped<IOtpRepository, MongoOtpRepository>();
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IPhoneService, PhoneService>();

@@ -12,21 +12,23 @@ namespace CRM.Authentication.Application.Users.Commands.ActiveAccount
     public class ActiveAccountCommandHandler : IRequestHandler<ActiveAccountCommand, bool>
     {
         private readonly IUserRepository _userRepository;
+        private readonly IOtpRepository _otpRepository;
         private readonly IMemoryCache _cache;
         private static readonly string _customerApiUrl = System.Environment.GetEnvironmentVariable("CUSTOMER_API_URL") ?? "http://localhost:5003";
         private static readonly HttpClient _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
 
-        public ActiveAccountCommandHandler(IUserRepository userRepository, IMemoryCache cache)
+        public ActiveAccountCommandHandler(IUserRepository userRepository, IOtpRepository otpRepository, IMemoryCache cache)
         {
             _userRepository = userRepository;
+            _otpRepository = otpRepository;
             _cache = cache;
         }
 
         public async Task<bool> Handle(ActiveAccountCommand request, CancellationToken cancellationToken)
         {
             // Try finding user by Email first, then by Phone
-            var user = await _userRepository.GetByEmailAsync(request.Identifier) 
-                       ?? await _userRepository.GetByPhoneAsync(request.Identifier);
+            var user = await _userRepository.GetByEmailAsync(request.Email) 
+                       ?? await _userRepository.GetByPhoneAsync(request.Email);
 
             if (user == null)
             {
@@ -38,16 +40,34 @@ namespace CRM.Authentication.Application.Users.Commands.ActiveAccount
                 return true; // Already verified
             }
 
-            // Get OTP from Cache using the provided Identifier
-            if (!_cache.TryGetValue($"OTP_ID_{request.Identifier}", out string? cachedOtp))
+            // Verify OTP from database (CustomerOtps)
+            var customerOtp = await _otpRepository.GetLatestOtpAsync(user._id, "register");
+            
+            if (customerOtp == null)
             {
-                throw new Exception("OTP has expired or not found.");
+                throw new Exception("OTP not found.");
             }
 
-            if (cachedOtp != request.Otp)
+            if (customerOtp.VerifiedAt != null)
             {
+                throw new Exception("OTP already verified.");
+            }
+
+            if (customerOtp.ExpiredAt < DateTime.UtcNow)
+            {
+                throw new Exception("OTP has expired.");
+            }
+
+            if (customerOtp.OtpCode != request.Otp)
+            {
+                customerOtp.AttemptCount++;
+                await _otpRepository.UpdateAsync(customerOtp);
                 throw new Exception("Invalid OTP.");
             }
+
+            // Mark OTP as verified
+            customerOtp.VerifiedAt = DateTime.UtcNow;
+            await _otpRepository.UpdateAsync(customerOtp);
 
             // Mark as verified
             user.IsVerify = true;

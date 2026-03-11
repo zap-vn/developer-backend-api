@@ -49,12 +49,6 @@ namespace CRM.Authentication.Domain.Entities
         [BsonElement("IsVerify")]
         public bool IsVerify { get; set; } = false;
 
-        [BsonElement("EmailOtp")]
-        public string EmailOtp { get; set; } = string.Empty;
-
-        [BsonElement("OtpExpiry")]
-        public DateTime? OtpExpiry { get; set; }
-
         [BsonElement("CreateDate")]
         public string CreatedAt { get; set; } = string.Empty; // Mapped to CreateDate
 

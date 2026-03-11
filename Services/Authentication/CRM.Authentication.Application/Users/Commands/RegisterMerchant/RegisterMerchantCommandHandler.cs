@@ -14,6 +14,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
     {
         private readonly IUserRepository _userRepository;
         private readonly CRM.Authentication.Application.Common.Interfaces.IEmailService _emailService;
+        private readonly IOtpRepository _otpRepository;
         private readonly IMemoryCache _cache;
         private static readonly string _customerApiUrl = System.Environment.GetEnvironmentVariable("CUSTOMER_API_URL") ?? "http://localhost:5003";
         private static readonly HttpClient _httpClient = new HttpClient { Timeout = System.TimeSpan.FromSeconds(10) };
@@ -21,10 +22,12 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
         public RegisterMerchantCommandHandler(
             IUserRepository userRepository,
             CRM.Authentication.Application.Common.Interfaces.IEmailService emailService,
+            IOtpRepository otpRepository,
             IMemoryCache cache)
         {
             _userRepository = userRepository;
             _emailService = emailService;
+            _otpRepository = otpRepository;
             _cache = cache;
         }
 
@@ -83,12 +86,23 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 Visible = 1,
                 Avatar = "",
                 IsVerify = false,
-                EmailOtp = "", // Empty as per user request not to insert into table
-                OtpExpiry = null,
                 CreatedAt = System.DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss")
             };
 
-            // Store OTP in Cache for 15 minutes - Store for both if available
+            // Store OTP in database (CustomerOtps)
+            var customerOtp = new CustomerOtp
+            {
+                CustomerId = user._id,
+                Email = user.Email,
+                Phone = user.Phone,
+                OtpCode = otp,
+                Purpose = "register",
+                ExpiredAt = DateTime.UtcNow.AddMinutes(15),
+                CreatedAt = DateTime.UtcNow
+            };
+            await _otpRepository.CreateAsync(customerOtp);
+
+            // Keep cache for backward compatibility during transition if needed, or remove
             if (!string.IsNullOrWhiteSpace(request.Email))
             {
                 _cache.Set($"OTP_ID_{request.Email}", otp, System.TimeSpan.FromMinutes(15));

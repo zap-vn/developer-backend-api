@@ -57,13 +57,41 @@ namespace CRM.Authentication.Infrastructure.Persistence
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"[MongoDB Warning] ClassMap error (likely already registered): {ex.Message}");
+                    Console.WriteLine($"[MongoDB Warning] ClassMap error: {ex.Message}");
                 }
+            }
+
+            CreateIndexes();
+        }
+
+        private void CreateIndexes()
+        {
+            try
+            {
+                // 1. TTL Index for CustomerOtps: Auto delete expired records
+                var indexKeys = Builders<CustomerOtp>.IndexKeys.Ascending(x => x.ExpiredAt);
+                var indexOptions = new CreateIndexOptions { ExpireAfter = TimeSpan.Zero };
+                var indexModel = new CreateIndexModel<CustomerOtp>(indexKeys, indexOptions);
+                CustomerOtps.Indexes.CreateOne(indexModel);
+
+                // 2. Query Index: CustomerId + Purpose + CreatedAt for faster lookup
+                var lookupKeys = Builders<CustomerOtp>.IndexKeys
+                    .Ascending(x => x.CustomerId)
+                    .Ascending(x => x.Purpose)
+                    .Descending(x => x.CreatedAt);
+                CustomerOtps.Indexes.CreateOne(new CreateIndexModel<CustomerOtp>(lookupKeys));
+                
+                Console.WriteLine("[MongoDB] CustomerOtps indexes ensured.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[MongoDB] Index creation error: {ex.Message}");
             }
         }
 
         public IMongoCollection<User> Users => Database.GetCollection<User>("Customer");
         public IMongoCollection<ManagementIndex> ManagementIndexes => Database.GetCollection<ManagementIndex>("ManagementIndex");
         public IMongoCollection<PasswordResetRequest> PasswordResetRequests => Database.GetCollection<PasswordResetRequest>("PasswordResetRequests");
+        public IMongoCollection<CustomerOtp> CustomerOtps => Database.GetCollection<CustomerOtp>("CustomerOtps");
     }
 }

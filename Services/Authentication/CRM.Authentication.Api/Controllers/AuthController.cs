@@ -5,6 +5,7 @@ using CRM.Authentication.Application.Users.Commands.LoginUser;
 using CRM.Authentication.Application.Users.Commands.RegisterMerchant;
 using CRM.Authentication.Application.Users.Commands.ForgotPassword;
 using CRM.Authentication.Application.Users.Commands.ActiveAccount;
+using CRM.Authentication.Application.Users.Commands.ResendOtp;
 using CRM.Authentication.Application.Users.DTOs;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -43,6 +44,13 @@ namespace CRM.Authentication.Api.Controllers
         {
             var result = await _mediator.Send(command);
             return Ok(new { Success = result, Message = result ? "Tài khoản đã được kích hoạt" : "Kích hoạt thất bại" });
+        }
+
+        [HttpPost("resend-otp")]
+        public async Task<IActionResult> ResendOtp([FromBody] ResendOtpCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(new { Success = result, Message = result ? "Mã OTP đã được gửi lại" : "Gửi lại thất bại" });
         }
 
         [HttpOptions("login")]

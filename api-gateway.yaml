@@ -44,6 +44,27 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/Auth/resend-otp:
+    post:
+      summary: "Resend OTP endpoint"
+      operationId: "resend_otp"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/resend-otp"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Resend OTP CORS support"
+      operationId: "cors_resend_otp"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/resend-otp"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/Auth/verify-otp:
     post:
       summary: "Verify OTP endpoint"

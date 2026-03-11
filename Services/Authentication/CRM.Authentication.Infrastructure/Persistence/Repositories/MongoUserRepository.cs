@@ -21,7 +21,10 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
         public async Task<User?> GetByEmailAndMerchantAsync(string email, string merchantCode)
         {
             var filter = Builders<User>.Filter.And(
-                Builders<User>.Filter.Eq("Email", email),
+                Builders<User>.Filter.Or(
+                    Builders<User>.Filter.Eq("Email", email),
+                    Builders<User>.Filter.Eq("Phone", email)
+                ),
                 Builders<User>.Filter.Eq("MerchantName", merchantCode)
             );
             

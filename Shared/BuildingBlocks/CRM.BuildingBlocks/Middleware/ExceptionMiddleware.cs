@@ -89,6 +89,7 @@ namespace CRM.BuildingBlocks.Middleware
             var result = JsonSerializer.Serialize(new
             {
                 statusCode = statusCode,
+                errorCode = rawMessage.Contains("|") ? rawMessage.Split('|')[0] : rawMessage,
                 message = title,
                 detail = detail
             }, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
@@ -111,6 +112,8 @@ namespace CRM.BuildingBlocks.Middleware
                 "auth_login_success" => isVi ? "Đăng nhập thành công" : "Login successful",
                 "auth_email_not_verified" => isVi ? "Email chưa xác thực" : "Email not verified",
                 "auth_email_not_verified_detail" => isVi ? "Email chưa được xác thực. Vui lòng kiểm tra email để lấy mã OTP." : "Email not verified. Please check your email for the OTP code.",
+                "auth_phone_not_verified" => isVi ? "Số điện thoại chưa xác thực" : "Phone number not verified",
+                "auth_phone_not_verified_detail" => isVi ? "Số điện thoại chưa được xác thực. Vui lòng gửi lại mã OTP để xác nhận." : "Phone number not verified. Please resend OTP to verify your account.",
                 "error_duplicate_merchant_name" => isVi ? "Trùng tên Merchant" : "Duplicate Merchant Name",
                 "error_duplicate_merchant_name_detail" => isVi ? "Dữ liệu trùng lặp: Merchant Name đã tồn tại." : "Duplicate data: Merchant Name already exists.",
                 "error_duplicate_email" => isVi ? "Trùng Email" : "Duplicate Email",

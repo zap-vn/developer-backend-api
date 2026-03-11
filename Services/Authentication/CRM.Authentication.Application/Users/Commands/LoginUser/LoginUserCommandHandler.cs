@@ -52,8 +52,11 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             // Account activation check
             if (!user.IsVerify)
             {
-                Console.WriteLine($"[Login] Email not verified for user: {user.Email}");
-                throw new UnauthorizedAccessException("auth_email_not_verified|auth_email_not_verified_detail");
+                bool isPhone = !string.IsNullOrEmpty(user.Phone) && (user.Phone == request.Email || (System.Text.RegularExpressions.Regex.IsMatch(request.Email, @"^\d+$") && user.Phone.EndsWith(request.Email)));
+                string errorKey = isPhone ? "auth_phone_not_verified" : "auth_email_not_verified";
+                
+                Console.WriteLine($"[Login] Account not verified for user: {user.Email} (Identifier used: {request.Email})");
+                throw new UnauthorizedAccessException($"{errorKey}|{errorKey}_detail");
             }
 
             if (user.Visible != 1)

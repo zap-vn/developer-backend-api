@@ -114,52 +114,56 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
             
             await _userRepository.CreateAsync(user);
 
-            // Send Email OTP
-            try
+            // Run Email and Sync operations in background to speed up API response
+            _ = Task.Run(async () =>
             {
-                if (!string.IsNullOrEmpty(user.Email) && detectedProvider == "Email")
+                // Send Email OTP
+                try
                 {
-                    await _emailService.SendOtpEmailAsync(user.Email, otp, user.MerchantName);
+                    if (!string.IsNullOrEmpty(user.Email) && detectedProvider == "Email")
+                    {
+                        await _emailService.SendOtpEmailAsync(user.Email, otp, user.MerchantName);
+                    }
                 }
-            }
-            catch (System.Exception ex)
-            {
-                System.Console.WriteLine($"[Error] Failed to send OTP email: {ex.Message}");
-            }
+                catch (System.Exception ex)
+                {
+                    System.Console.WriteLine($"[Error] Failed to send OTP email: {ex.Message}");
+                }
 
-            // Connect to Customer service via HTTP API call
-            try
-            {
-                var customerPayload = new 
+                // Connect to Customer service via HTTP API call
+                try
                 {
-                    _id = customerIdStr, 
-                    _key = nextId,
-                    CustomerCode = "MERCHANT-" + nextId,
-                    MerchantName = request.MerchantName,
-                    BusinessName = request.MerchantName,
-                    Email = request.Email,
-                    Phone = request.Phone,
-                    Password = HashLegacyPassword(request.Password),
-                    Visible = 1,
-                    IsActive = false, // Set to false initially until activated
-                    LanguageId = langId,
-                    Language = langCode, 
-                    RegistrationSource = detectedProvider,
-                    Url = ""
-                };
-                
-                var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";
-                var response = await _httpClient.PostAsJsonAsync(syncUrl, customerPayload, cancellationToken);
-                if (!response.IsSuccessStatusCode)
-                {
-                    var errorDetails = await response.Content.ReadAsStringAsync();
-                    System.Console.WriteLine($"[Warning] Customer API failed: {response.StatusCode} - {errorDetails} (URL: {syncUrl})");
+                    var customerPayload = new 
+                    {
+                        _id = customerIdStr, 
+                        _key = nextId,
+                        CustomerCode = "MERCHANT-" + nextId,
+                        MerchantName = request.MerchantName,
+                        BusinessName = request.MerchantName,
+                        Email = request.Email,
+                        Phone = request.Phone,
+                        Password = HashLegacyPassword(request.Password),
+                        Visible = 1,
+                        IsActive = false, // Set to false initially until activated
+                        LanguageId = langId,
+                        Language = langCode, 
+                        RegistrationSource = detectedProvider,
+                        Url = ""
+                    };
+                    
+                    var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";
+                    var response = await _httpClient.PostAsJsonAsync(syncUrl, customerPayload);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorDetails = await response.Content.ReadAsStringAsync();
+                        System.Console.WriteLine($"[Warning] Customer API failed: {response.StatusCode} - {errorDetails} (URL: {syncUrl})");
+                    }
                 }
-            }
-            catch (System.Exception ex)
-            {
-                System.Console.WriteLine($"[Error] Failed to connect to Customer API: {ex.Message}");
-            }
+                catch (System.Exception ex)
+                {
+                    System.Console.WriteLine($"[Error] Failed to connect to Customer API: {ex.Message}");
+                }
+            });
 
             return new UserDto
             {

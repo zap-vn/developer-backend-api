@@ -4,6 +4,7 @@ using CRM.Authentication.Application.Users.Commands.CreateUser;
 using CRM.Authentication.Application.Users.Commands.LoginUser;
 using CRM.Authentication.Application.Users.Commands.RegisterMerchant;
 using CRM.Authentication.Application.Users.Commands.ForgotPassword;
+using CRM.Authentication.Application.Users.Commands.ActiveAccount;
 using CRM.Authentication.Application.Users.DTOs;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -35,6 +36,13 @@ namespace CRM.Authentication.Api.Controllers
         {
             var result = await _mediator.Send(command);
             return Ok(result);
+        }
+
+        [HttpPost("active-account")]
+        public async Task<IActionResult> ActiveAccount([FromBody] ActiveAccountCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(new { Success = result, Message = result ? "Tài khoản đã được kích hoạt" : "Kích hoạt thất bại" });
         }
 
         [HttpOptions("login")]

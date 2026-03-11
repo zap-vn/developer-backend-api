@@ -6,11 +6,9 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
     public record RegisterMerchantCommand(
         string MerchantName,
         string Email,
-        string Username,
+        string Phone,
         string Password,
-        object LanguageId, // Supports string ["136 - ..."] or numeric 136
         string? Language = null,
-        string Provider = "Email",
-        string Url = ""
+        object? LanguageId = null
     ) : IRequest<UserDto>;
 }

@@ -28,8 +28,8 @@ namespace CRM.Product.Application.Features.Products.Queries
             var currentUserGuid = _currentUserService.UserGuid;
             
             Expression<Func<ProductEntity, bool>> predicate = x => 
-                (string.IsNullOrEmpty(currentUserGuid) || x.UserGuid == currentUserGuid) &&
-                (string.IsNullOrEmpty(filter.Keyword) || (x.Name != null && x.Name.Contains(filter.Keyword)) || (x.Code != null && x.Code.Contains(filter.Keyword))) &&
+                (string.IsNullOrEmpty(currentUserGuid) || x.UserGuid == currentUserGuid || x.EmpGuid == currentUserGuid) &&
+                (string.IsNullOrEmpty(filter.Keyword) || (x.Name != null && x.Name.Contains(filter.Keyword)) || (x.Code != null && x.Code.Contains(filter.Keyword)) || (x.Barcode != null && x.Barcode.Contains(filter.Keyword))) &&
                 (string.IsNullOrEmpty(filter.Category) || x.Category == filter.Category) &&
                 (!filter.IsActive.HasValue || (filter.IsActive.Value ? x.Visible == 1 : x.Visible == 0));
 
@@ -39,6 +39,7 @@ namespace CRM.Product.Application.Features.Products.Queries
             { 
                 Id = x.Id,
                 Code = x.Code,
+                Barcode = x.Barcode,
                 Name = x.Name,
                 Description = x.Description,
                 Price = x.Price,

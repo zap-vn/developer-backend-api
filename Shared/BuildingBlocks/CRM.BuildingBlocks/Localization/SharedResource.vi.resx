@@ -18,4 +18,40 @@
   <data name="auth_too_many_requests_detail" xml:space="preserve">
     <value>Vui lòng thử lại sau vài phút.</value>
   </data>
+  <data name="auth_email_not_verified" xml:space="preserve">
+    <value>Email chưa xác thực</value>
+  </data>
+  <data name="auth_email_not_verified_detail" xml:space="preserve">
+    <value>Email chưa được xác thực. Vui lòng kiểm tra email để lấy mã OTP.</value>
+  </data>
+  <data name="error_duplicate_merchant_name" xml:space="preserve">
+    <value>Trùng tên Merchant</value>
+  </data>
+  <data name="error_duplicate_merchant_name_detail" xml:space="preserve">
+    <value>Dữ liệu trùng lặp: Merchant Name đã tồn tại.</value>
+  </data>
+  <data name="error_duplicate_email" xml:space="preserve">
+    <value>Trùng Email</value>
+  </data>
+  <data name="error_duplicate_email_detail" xml:space="preserve">
+    <value>Dữ liệu trùng lặp: Email đã tồn tại.</value>
+  </data>
+  <data name="error_duplicate_phone" xml:space="preserve">
+    <value>Trùng số điện thoại</value>
+  </data>
+  <data name="error_duplicate_phone_detail" xml:space="preserve">
+    <value>Dữ liệu trùng lặp: Số điện thoại đã tồn tại.</value>
+  </data>
+  <data name="error_invalid_phone" xml:space="preserve">
+    <value>Số điện thoại không hợp lệ</value>
+  </data>
+  <data name="error_invalid_phone_detail" xml:space="preserve">
+    <value>Số điện thoại phải có định dạng từ 10-11 chữ số.</value>
+  </data>
+  <data name="error_missing_contact" xml:space="preserve">
+    <value>Thiếu thông tin liên hệ</value>
+  </data>
+  <data name="error_missing_contact_detail" xml:space="preserve">
+    <value>Bạn phải cung cấp ít nhất Email hoặc Số điện thoại để đăng ký.</value>
+  </data>
 </root>

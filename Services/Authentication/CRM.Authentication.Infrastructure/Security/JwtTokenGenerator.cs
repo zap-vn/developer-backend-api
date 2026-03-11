@@ -31,7 +31,7 @@ namespace CRM.Authentication.Infrastructure.Security
                 new Claim("RolePermission_id", "657ab15d54f17333f3d89c65"), // Constant from legacy project example
                 new Claim("Language", string.IsNullOrEmpty(user.Language) ? "vi" : user.Language),
                 new Claim(JwtRegisteredClaimNames.Sub, user._key.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),

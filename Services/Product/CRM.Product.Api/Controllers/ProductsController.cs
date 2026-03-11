@@ -27,10 +27,10 @@ namespace CRM.Product.Api.Controllers
         }
 
         [HttpPost("list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List([FromBody] FilterDTOs? filter)
         {
-            var filter = await Request.GetRawBodyAsync<FilterDTOs>();
-            var result = await _mediator.Send(new GetProductListQuery { Filter = filter });
+            var finalFilter = filter ?? new FilterDTOs();
+            var result = await _mediator.Send(new GetProductListQuery { Filter = finalFilter });
             return Ok(result);
         }
 

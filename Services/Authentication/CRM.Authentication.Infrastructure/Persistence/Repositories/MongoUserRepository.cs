@@ -18,10 +18,10 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
             return await _context.Users.Find(u => u._id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<User?> GetByUsernameAsync(string username, string merchantCode)
+        public async Task<User?> GetByEmailAndMerchantAsync(string email, string merchantCode)
         {
             var filter = Builders<User>.Filter.And(
-                Builders<User>.Filter.Eq("Email", username),
+                Builders<User>.Filter.Eq("Email", email),
                 Builders<User>.Filter.Eq("MerchantName", merchantCode)
             );
             
@@ -38,11 +38,10 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
             return await _context.Users.Find(u => u.Phone == phone).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> ExistsAsync(string email, string username, string merchantName)
+        public async Task<bool> ExistsAsync(string email, string merchantName)
         {
             var filters = new System.Collections.Generic.List<FilterDefinition<User>>();
             if (!string.IsNullOrEmpty(email)) filters.Add(Builders<User>.Filter.Eq("Email", email));
-            if (!string.IsNullOrEmpty(username)) filters.Add(Builders<User>.Filter.Eq("Username", username));
             if (!string.IsNullOrEmpty(merchantName)) filters.Add(Builders<User>.Filter.Eq("MerchantName", merchantName));
 
             if (filters.Count == 0) return false;
@@ -56,9 +55,9 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
             return await _context.Users.Find(Builders<User>.Filter.Eq("Email", email)).AnyAsync();
         }
 
-        public async Task<bool> UsernameExistsAsync(string username)
+        public async Task<bool> PhoneExistsAsync(string phone)
         {
-            return await _context.Users.Find(Builders<User>.Filter.Eq("Username", username)).AnyAsync();
+            return await _context.Users.Find(Builders<User>.Filter.Eq("Phone", phone)).AnyAsync();
         }
 
         public async Task<bool> MerchantNameExistsAsync(string merchantName)

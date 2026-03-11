@@ -43,7 +43,6 @@ namespace CRM.Authentication.Infrastructure.Persistence
                         // Map properties to their respective BSON elements
                         cm.MapIdProperty(u => u._id);
                         cm.MapProperty(u => u.Email).SetElementName("Email");
-                        cm.MapProperty(u => u.Username).SetElementName("Username");
                         
                         // Map MerchantName to 'BusinessName' if it exists in your schema
                         cm.MapProperty(u => u.MerchantName).SetElementName("MerchantName");

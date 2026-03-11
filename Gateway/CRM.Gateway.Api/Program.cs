@@ -1,7 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using CRM.BuildingBlocks;
 using CRM.BuildingBlocks.Middleware;
+using CRM.Gateway.Api.Configurations;
 
 namespace CRM.Gateway.Api;
 
@@ -12,6 +17,17 @@ public class Program
         try
         {
             var builder = WebApplication.CreateBuilder(args);
+            
+            // Database registration (Required for LocalizationMiddleware)
+            builder.Services.Configure<MongoSettings>(builder.Configuration.GetSection("MongoSettings"));
+            builder.Services.AddSingleton<IMongoDatabase>(sp => 
+            {
+                var settings = sp.GetRequiredService<IOptions<MongoSettings>>().Value;
+                var client = new MongoClient(settings.ConnectionString);
+                return client.GetDatabase(settings.DatabaseName);
+            });
+
+            builder.Services.AddBuildingBlocks();
 
             // Configure console logging
             builder.Logging.ClearProviders();

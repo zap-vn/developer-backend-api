@@ -14,7 +14,6 @@ namespace CRM.Authentication.Domain.Entities
         [BsonElement("_key")]
         public long _key { get; set; }
 
-        public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
@@ -46,6 +45,15 @@ namespace CRM.Authentication.Domain.Entities
         public string FullName => $"{FirstName} {LastName}";
  
         public int Visible { get; set; }
+
+        [BsonElement("IsVerify")]
+        public bool IsVerify { get; set; } = false;
+
+        [BsonElement("EmailOtp")]
+        public string EmailOtp { get; set; } = string.Empty;
+
+        [BsonElement("OtpExpiry")]
+        public DateTime? OtpExpiry { get; set; }
 
         [BsonElement("CreateDate")]
         public string CreatedAt { get; set; } = string.Empty; // Mapped to CreateDate

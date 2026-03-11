@@ -28,7 +28,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             var sw = System.Diagnostics.Stopwatch.StartNew();
             Console.WriteLine($"[Legacy Login] START for Email: {request.Email}");
             
-            var user = await _userRepository.GetByUsernameAsync(request.Email, request.MerchantName);
+            var user = await _userRepository.GetByEmailAndMerchantAsync(request.Email, request.MerchantName);
             Console.WriteLine($"[Perf] DB Lookup took: {sw.ElapsedMilliseconds}ms");
 
             if (user == null)
@@ -50,9 +50,15 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             }
 
             // Account activation check
+            if (!user.IsVerify)
+            {
+                Console.WriteLine($"[Login] Email not verified for user: {user.Email}");
+                throw new UnauthorizedAccessException("auth_email_not_verified|auth_email_not_verified_detail");
+            }
+
             if (user.Visible != 1)
             {
-                Console.WriteLine($"[Login] Account not active for user: {user.Username}");
+                Console.WriteLine($"[Login] Account not active for user: {user.Email}");
                 throw new UnauthorizedAccessException(_localizer["auth_account_inactive"] ?? "Account is not active.");
             }
 
@@ -81,7 +87,6 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 User = new UserDto
                 {
                     _id = user._id,
-                    Username = user.Username,
                     Email = user.Email,
                     FullName = user.FullName,
                     Roles = user.Roles

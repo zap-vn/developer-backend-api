@@ -44,16 +44,32 @@ namespace CRM.BuildingBlocks.Services
                 Console.WriteLine("[Localization] Cache miss. Fetching languages from MongoDB...");
                 var collection = _database.GetCollection<SystemLanguage>("SystemLanguages");
                 
-                // Get all where Visible = 1
-                var languages = await collection.Find(l => l.Visible == 1).ToListAsync();
-                
-                cachedLanguages = languages.ToDictionary(
-                    l => l.LanguageCode, 
-                    l => l.FullCulture, 
-                    StringComparer.OrdinalIgnoreCase
-                );
+                // Add a shorter timeout to prevent absolute hang if DB is slow
+                try 
+                {
+                    // Get all where Visible = 1 with a 2s timeout
+                    var languages = await collection.Find(l => l.Visible == 1)
+                        .ToListAsync()
+                        .WaitAsync(TimeSpan.FromSeconds(2));
+                    
+                    cachedLanguages = languages.ToDictionary(
+                        l => l.LanguageCode, 
+                        l => l.FullCulture, 
+                        StringComparer.OrdinalIgnoreCase
+                    );
+                    Console.WriteLine($"[Localization] Successfully fetched {cachedLanguages.Count} languages from DB.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Localization] [WARN] Could not fetch languages from DB (timeout or error: {ex.Message}). Using local defaults.");
+                    cachedLanguages = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        { "vi", "vi-VN" },
+                        { "en", "en-US" }
+                    };
+                }
 
-                if (!cachedLanguages.Any())
+                if (cachedLanguages == null || !cachedLanguages.Any())
                 {
                     cachedLanguages = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                     {

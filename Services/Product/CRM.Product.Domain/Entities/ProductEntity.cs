@@ -5,13 +5,20 @@ using System.Collections.Generic;
 
 namespace CRM.Product.Domain.Entities
 {
+    [BsonIgnoreExtraElements]
     public class ProductEntity : BaseEntity, ILocalizable<ProductTranslation>
     {
-        [BsonElement("EmpGuid")]
+        [BsonElement("UserGuid")]
         public override string? UserGuid { get; set; }
+
+        [BsonElement("EmpGuid")]
+        public string? EmpGuid { get; set; }
 
         [BsonElement("SKU")]
         public string Code { get; set; } = string.Empty;
+
+        [BsonElement("Barcode")]
+        public string Barcode { get; set; } = string.Empty;
 
         [BsonElement("Name")]
         public string Name { get; set; } = string.Empty; 
@@ -20,12 +27,13 @@ namespace CRM.Product.Domain.Entities
         public string Description { get; set; } = string.Empty;
 
         [BsonElement("Price")]
+        [BsonRepresentation(MongoDB.Bson.BsonType.Decimal128)]
         public decimal Price { get; set; }
 
         [BsonElement("CategoryGuid")]
         public string Category { get; set; } = string.Empty;
 
-        [BsonElement("ImageUrl")]
+        [BsonElement("Image")]
         public string ImageUrl { get; set; } = string.Empty;
 
         [BsonElement("Quantity")]

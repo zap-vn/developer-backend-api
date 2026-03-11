@@ -76,7 +76,14 @@ namespace CRM.BuildingBlocks.Repositories
         protected FilterDefinition<T> ApplyTenantFilter(Expression<Func<T, bool>> expression)
         {
             var filterBuilder = Builders<T>.Filter;
-            var tenantFilter = filterBuilder.Eq(x => x.UserGuid, _currentUserService.UserGuid);
+            var userGuid = _currentUserService.UserGuid;
+            
+            if (string.IsNullOrEmpty(userGuid))
+            {
+                return filterBuilder.Where(expression);
+            }
+            
+            var tenantFilter = filterBuilder.Eq(x => x.UserGuid, userGuid);
             
             // Combine current filter with tenant filter
             return filterBuilder.And(filterBuilder.Where(expression), tenantFilter);
@@ -85,7 +92,12 @@ namespace CRM.BuildingBlocks.Repositories
         protected FilterDefinition<T> ApplyTenantFilter(FilterDefinition<T> filter)
         {
              var filterBuilder = Builders<T>.Filter;
-             var tenantFilter = filterBuilder.Eq(x => x.UserGuid, _currentUserService.UserGuid);
+             var userGuid = _currentUserService.UserGuid;
+             
+             if (string.IsNullOrEmpty(userGuid))
+                 return filter;
+                 
+             var tenantFilter = filterBuilder.Eq(x => x.UserGuid, userGuid);
              return filterBuilder.And(filter, tenantFilter);
         }
     }

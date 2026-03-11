@@ -17,19 +17,21 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var nextId = await _userRepository.GetNextSequenceAsync("Customer_id");
+            var detectedProvider = DetermineProvider(request.Email);
+            
             var user = new User
             {
-                _id = Guid.NewGuid().ToString(), // Generate string _id for new user
+                _id = Guid.NewGuid().ToString(),
                 _key = nextId,
-                Username = request.Username,
                 Email = request.Email,
-                FirstName = request.FullName, // Temporary mapping FullName from register to FirstName
+                FirstName = request.FullName, 
                 MerchantName = request.MerchantName,
                 Password = request.Password,
                 Language = string.IsNullOrEmpty(request.Language) ? request.LanguageId?.ToString() ?? "" : request.Language, 
                 LanguageId = ExtractLanguageId(request.LanguageId), 
-                Provider = request.Provider,
-                Roles = new List<string> { "User" }
+                Provider = detectedProvider,
+                Roles = new List<string> { "User" },
+                IsVerify = true // Direct creation might not require OTP activation by default, or you can set to false if needed
             };
 
             await _userRepository.CreateAsync(user);
@@ -37,7 +39,6 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
             return new UserDto
             {
                 _id = user._id,
-                Username = user.Username,
                 Email = user.Email,
                 FullName = user.FullName,
                 LanguageId = user.LanguageId.ToString(),
@@ -46,7 +47,15 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
             };
         }
 
-        private long ExtractLanguageId(object languageIdObj)
+        private string DetermineProvider(string email)
+        {
+            if (string.IsNullOrEmpty(email)) return "Email"; // Default for system creation if no identifier
+            if (System.Text.RegularExpressions.Regex.IsMatch(email, @"^\d+$")) return "Phone";
+            if (email.ToLower().Contains("appleid.com") || email.ToLower().Contains("@apple.")) return "Apple";
+            return "Email";
+        }
+
+        private long ExtractLanguageId(object? languageIdObj)
         {
             if (languageIdObj == null) return 0;
             string languageIdStr = languageIdObj.ToString() ?? "";

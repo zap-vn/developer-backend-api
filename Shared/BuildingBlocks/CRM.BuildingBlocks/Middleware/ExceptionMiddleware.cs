@@ -109,6 +109,18 @@ namespace CRM.BuildingBlocks.Middleware
                 "auth_too_many_requests" => isVi ? "Quá nhiều lượt yêu cầu" : "Too many requests",
                 "auth_too_many_requests_detail" => isVi ? "Vui lòng thử lại sau vài phút." : "Please try again later.",
                 "auth_login_success" => isVi ? "Đăng nhập thành công" : "Login successful",
+                "auth_email_not_verified" => isVi ? "Email chưa xác thực" : "Email not verified",
+                "auth_email_not_verified_detail" => isVi ? "Email chưa được xác thực. Vui lòng kiểm tra email để lấy mã OTP." : "Email not verified. Please check your email for the OTP code.",
+                "error_duplicate_merchant_name" => isVi ? "Trùng tên Merchant" : "Duplicate Merchant Name",
+                "error_duplicate_merchant_name_detail" => isVi ? "Dữ liệu trùng lặp: Merchant Name đã tồn tại." : "Duplicate data: Merchant Name already exists.",
+                "error_duplicate_email" => isVi ? "Trùng Email" : "Duplicate Email",
+                "error_duplicate_email_detail" => isVi ? "Dữ liệu trùng lặp: Email đã tồn tại." : "Duplicate data: Email already exists.",
+                "error_duplicate_phone" => isVi ? "Trùng số điện thoại" : "Duplicate Phone",
+                "error_duplicate_phone_detail" => isVi ? "Dữ liệu trùng lặp: Số điện thoại đã tồn tại." : "Duplicate data: Phone number already exists.",
+                "error_invalid_phone" => isVi ? "Số điện thoại không hợp lệ" : "Invalid Phone Number",
+                "error_invalid_phone_detail" => isVi ? "Số điện thoại phải có định dạng từ 10-11 chữ số." : "Phone number must be between 10 and 11 digits.",
+                "error_missing_contact" => isVi ? "Thiếu thông tin liên hệ" : "Missing Contact Information",
+                "error_missing_contact_detail" => isVi ? "Bạn phải cung cấp ít nhất Email hoặc Số điện thoại để đăng ký." : "You must provide at least Email or Phone number to register.",
                 _ => key
             };
         }

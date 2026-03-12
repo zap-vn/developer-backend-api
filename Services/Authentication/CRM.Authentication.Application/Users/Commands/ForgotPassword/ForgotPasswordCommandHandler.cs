@@ -11,6 +11,7 @@ using System.Text;
 using CRM.BuildingBlocks.Exceptions;
 using Microsoft.Extensions.Options;
 using CRM.Authentication.Application.Common.Models;
+using Microsoft.Extensions.Logging;
 
 namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 {
@@ -29,19 +30,22 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
         private readonly IEmailService _emailService;
         private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly MailSettings _mailSettings;
+        private readonly ILogger<ForgotPasswordCommandHandler> _logger;
  
         public ForgotPasswordCommandHandler(
             IUserRepository userRepository,
             IPasswordResetRepository resetRepository,
             IEmailService emailService,
             IStringLocalizer<SharedResource> localizer,
-            IOptions<MailSettings> mailSettings)
+            IOptions<MailSettings> mailSettings,
+            ILogger<ForgotPasswordCommandHandler> logger)
         {
             _userRepository = userRepository;
             _resetRepository = resetRepository;
             _emailService = emailService;
             _localizer = localizer;
             _mailSettings = mailSettings.Value;
+            _logger = logger;
         }
 
         public async Task<ForgotPasswordResponseDto> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
@@ -71,11 +75,12 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             string resetToken = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
  
             // 4. Construct Reset Link
+            _logger.LogInformation("[ForgotPassword] Lấy cấu hình URL từ MailSettings: {FrontendResetPasswordUrl}", _mailSettings.FrontendResetPasswordUrl);
             string resetLink = $"{_mailSettings.FrontendResetPasswordUrl}?token={resetToken}";
              
             // Gửi mail LINK cho người dùng với MerchantName để cá nhân hóa
             await _emailService.SendResetLinkEmailAsync(email, resetLink, user.MerchantName); 
-            Console.WriteLine($"[EMAIL_SENT] Reset Link for {email}: {resetLink}"); 
+            _logger.LogInformation("[EMAIL_SENT] Link Reset Password cho User {Email} là: {ResetLink}", email, resetLink); 
  
             // 5. Save Request
             var resetRequest = new PasswordResetRequest

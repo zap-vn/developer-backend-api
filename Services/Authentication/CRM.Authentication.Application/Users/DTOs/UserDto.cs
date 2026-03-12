@@ -1,9 +1,13 @@
+#nullable enable
+using System.Collections.Generic;
+
 namespace CRM.Authentication.Application.Users.DTOs
 {
     public class UserDto
     {
         public string _id { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string LanguageId { get; set; } = string.Empty;
         public string Provider { get; set; } = string.Empty;

@@ -1,3 +1,4 @@
+#nullable enable
 using MediatR;
 using CRM.Authentication.Application.Users.DTOs;
 
@@ -9,6 +10,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
         string Phone,
         string Password,
         string? Language = null,
-        object? LanguageId = null
+        object? LanguageId = null,
+        string? Provider = null
     ) : IRequest<UserDto>;
 }

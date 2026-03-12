@@ -66,7 +66,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
 
             // Generate 6-digit OTP
             var otp = new System.Random().Next(100000, 999999).ToString();
-            var detectedProvider = DetermineProvider(request.Email, request.Phone);
+            var detectedProvider = !string.IsNullOrWhiteSpace(request.Provider) ? request.Provider : DetermineProvider(request.Email, request.Phone);
             var langId = ExtractLanguageId(request.LanguageId);
             var langCode = string.IsNullOrEmpty(request.Language) ? (langId > 0 ? "" : "en") : request.Language;
 
@@ -169,6 +169,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
             {
                 _id = user._id,
                 Email = user.Email,
+                Phone = user.Phone,
                 FullName = user.MerchantName, 
                 LanguageId = user.LanguageId.ToString(),
                 Provider = user.Provider,

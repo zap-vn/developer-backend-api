@@ -40,6 +40,7 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
             {
                 _id = user._id,
                 Email = user.Email,
+                Phone = user.Phone ?? string.Empty,
                 FullName = user.FullName,
                 LanguageId = user.LanguageId.ToString(),
                 Provider = user.Provider,

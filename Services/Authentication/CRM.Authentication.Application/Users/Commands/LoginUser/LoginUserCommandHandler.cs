@@ -88,6 +88,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 {
                     _id = user._id,
                     Email = user.Email,
+                    Phone = user.Phone ?? string.Empty,
                     FullName = user.FullName,
                     Roles = user.Roles
                 }

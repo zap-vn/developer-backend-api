@@ -13,6 +13,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
         string? Password = null,
         string? Language = null,
         object? LanguageId = null,
-        string? Provider = null
+        string? Provider = null,
+        string? URL = null
     ) : IRequest<UserDto>;
 }

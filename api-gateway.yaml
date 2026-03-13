@@ -342,6 +342,9 @@ paths:
       responses:
         200:
           description: "OK"
+      responses:
+        200:
+          description: "OK"
   /api/Product:
     get:
       summary: "List Products"
@@ -350,6 +353,16 @@ paths:
         address: "https://zap-product-api-882473783707.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/Product/swagger/v1/swagger.json:
+    get:
+      summary: "Product Swagger JSON"
+      x-google-backend:
+        address: "https://zap-product-api-882473783707.asia-southeast1.run.app/swagger/v1/swagger.json"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
@@ -371,6 +384,16 @@ paths:
         address: "https://zap-product-api-882473783707.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/Products/swagger/v1/swagger.json:
+    get:
+      summary: "Products (Plural) Swagger JSON"
+      x-google-backend:
+        address: "https://zap-product-api-882473783707.asia-southeast1.run.app/swagger/v1/swagger.json"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
@@ -396,7 +419,7 @@ paths:
           type: string
       x-google-backend:
         address: "https://zap-product-api-882473783707.asia-southeast1.run.app"
-        protocol: "h2"
+        protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:

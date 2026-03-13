@@ -28,7 +28,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             var sw = System.Diagnostics.Stopwatch.StartNew();
             Console.WriteLine($"[Legacy Login] START for Email: {request.Email}");
             
-            var user = await _userRepository.GetByEmailAndMerchantAsync(request.Email, request.MerchantName);
+            var user = await _userRepository.GetByEmailAsync(request.Email);
             Console.WriteLine($"[Perf] DB Lookup took: {sw.ElapsedMilliseconds}ms");
 
             if (user == null)

@@ -61,4 +61,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Run();
+try {
+    Console.WriteLine("🚀 CRM Product API is starting...");
+    app.Run();
+} catch (Exception ex) {
+    Console.Error.WriteLine("FATAL ERROR DURING PRODUCT API STARTUP:");
+    Console.Error.WriteLine(ex.ToString());
+    throw;
+}

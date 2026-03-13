@@ -86,7 +86,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 Provider = detectedProvider,
                 Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
                 Visible = 1,
-                Avatar = request.URL ?? "",
+                Avatar = request.MerchantUrl ?? "",
                 IsVerify = !string.IsNullOrWhiteSpace(request.Email),
                 IsVerifyGoogle = detectedProvider == "Google",
                 IsVerifyApple = detectedProvider == "Apple",
@@ -161,7 +161,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                         LanguageId = langId,
                         Language = langCode, 
                         RegistrationSource = detectedProvider,
-                        Url = request.URL ?? ""
+                        Url = request.MerchantUrl ?? ""
                     };
                     
                     var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";
@@ -192,7 +192,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 IsVerifyEmail = user.IsVerifyEmail,
                 IsVerifyGoogle = user.IsVerifyGoogle,
                 IsVerifyApple = user.IsVerifyApple,
-                URL = user.Avatar
+                MerchantUrl = user.Avatar
             };
         }
 

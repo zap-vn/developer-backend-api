@@ -132,7 +132,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                     IsVerifyEmail = user.IsVerifyEmail,
                     IsVerifyGoogle = user.IsVerifyGoogle,
                     IsVerifyApple = user.IsVerifyApple,
-                    URL = user.Avatar
+                    MerchantUrl = user.Avatar
                 }
             };
         }

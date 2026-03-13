@@ -162,10 +162,12 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                     FullName = user.FullName,
                     LanguageId = user.LanguageId,
                     Roles = user.Roles,
+                    CreatedAt = user.CreatedAt,
                     IsVerifyPhone = user.IsVerifyPhone,
                     IsVerifyEmail = user.IsVerifyEmail,
                     IsVerifyGoogle = user.IsVerifyGoogle,
-                    IsVerifyApple = user.IsVerifyApple
+                    IsVerifyApple = user.IsVerifyApple,
+                    URL = user.Avatar
                 }
             };
         }

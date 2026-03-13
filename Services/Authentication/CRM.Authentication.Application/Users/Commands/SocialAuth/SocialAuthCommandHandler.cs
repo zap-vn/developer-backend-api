@@ -126,10 +126,13 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                     FullName = user.FullName,
                     LanguageId = user.LanguageId,
                     Roles = user.Roles,
+                    CreatedAt = user.CreatedAt,
+                    Phone = user.Phone,
                     IsVerifyPhone = user.IsVerifyPhone,
                     IsVerifyEmail = user.IsVerifyEmail,
                     IsVerifyGoogle = user.IsVerifyGoogle,
-                    IsVerifyApple = user.IsVerifyApple
+                    IsVerifyApple = user.IsVerifyApple,
+                    URL = user.Avatar
                 }
             };
         }

@@ -55,7 +55,8 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             // OTP is correct - Generate Confirm Token
             string confirmToken = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
             resetRequest.ConfirmToken = confirmToken;
-            resetRequest.IsUsed = true; // Mark OTP as used to get the confirm token
+            // Note: Don't set IsUsed = true here, as ResetPasswordCommandHandler checks this flag.
+            // IsUsed will be set to true only after password is successfully reset.
             await _resetRepository.UpdateAsync(resetRequest);
 
             return new VerifyOtpResponseDto

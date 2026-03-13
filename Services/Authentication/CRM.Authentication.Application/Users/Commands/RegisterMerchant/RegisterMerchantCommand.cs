@@ -5,10 +5,12 @@ using CRM.Authentication.Application.Users.DTOs;
 namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
 {
     public record RegisterMerchantCommand(
+        string FirstName,
+        string LastName,
         string MerchantName,
-        string Email,
         string Phone,
-        string Password,
+        string? Email = null,
+        string? Password = null,
         string? Language = null,
         object? LanguageId = null,
         string? Provider = null

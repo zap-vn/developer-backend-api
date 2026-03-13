@@ -49,6 +49,15 @@ namespace CRM.Authentication.Domain.Entities
         [BsonElement("IsVerify")]
         public bool IsVerify { get; set; } = false;
 
+        [BsonElement("IsVerifyPhone")]
+        public bool IsVerifyPhone { get; set; } = false;
+
+        [BsonElement("IsVerifyEmail")]
+        public bool IsVerifyEmail { get; set; } = false;
+
+        [BsonElement("IsVerifyGoogle")]
+        public bool IsVerifyGoogle { get; set; } = false;
+
         [BsonElement("CreateDate")]
         public string CreatedAt { get; set; } = string.Empty; // Mapped to CreateDate
 

@@ -85,20 +85,76 @@ namespace CRM.Authentication.Infrastructure.Security
             
             _logger.LogInformation($"[EMAIL_SERVICE] Sending OTP email for Merchant: {merchantName ?? "Default"}");
 
-            string body = $@"
-                <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;'>
-                    <h2 style='color: #007bff; text-align: center;'>{(string.IsNullOrEmpty(merchantName) ? "Xác thực tài khoản CRM" : $"Xác thực tài khoản {merchantName}")}</h2>
-                    <p>Xin chào,</p>
-                    <p>Bạn vừa yêu cầu lấy lại mật khẩu. Mã OTP của bạn là:</p>
-                    <div style='background-color: #f8f9fa; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; color: #333; letter-spacing: 5px; border-radius: 5px;'>
-                        {otp}
-                    </div>
-                    <p style='color: #666; margin-top: 20px;'>Mã này có hiệu lực trong <b>5 phút</b>. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
-                    <hr style='border: 0; border-top: 1px solid #eee; margin: 20px 0;'>
-                    <p style='font-size: 12px; color: #999; text-align: center;'>Đây là tin nhắn tự động từ {(merchantName ?? "hệ thống CRM")}, vui lòng không trả lời.</p>
-                </div>";
+            string otpPadded = otp.PadRight(6, '0');
+            string merchantText = string.IsNullOrEmpty(merchantName) ? "ZAP.vn" : merchantName;
 
-            await SendEmailAsync(to, "Mã xác thực OTP của bạn", body);
+            string body = $@"
+<div style='background-color: #f8fafc; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, ""Segoe UI"", Roboto, Helvetica, Arial, sans-serif;'>
+    <div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #edf2f7;'>
+        <div style='padding: 40px 40px 30px;'>
+            <div style='text-align: center; margin-bottom: 30px;'>
+                <h1 style='margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1px; color: #000000;'>ZAP</h1>
+            </div>
+            
+            <h2 style='color: #1a202c; text-align: center; font-size: 22px; font-weight: bold; margin: 0 0 24px;'>Xác thực tài khoản của bạn</h2>
+            
+            <p style='color: #4a5568; font-size: 15px; line-height: 1.6; margin: 0 0 32px; text-align: left;'>
+                Chào bạn, cảm ơn bạn đã đăng ký tài khoản tại <strong>{merchantText}</strong>. Vui lòng sử dụng mã xác thực gồm 6 số bên dưới để hoàn tất quá trình đăng ký của bạn.
+            </p>
+
+            <table cellpadding='0' cellspacing='0' border='0' width='100%' style='margin-bottom: 40px;'>
+                <tr>
+                    <td align='center'>
+                        <table cellpadding='0' cellspacing='8' border='0'>
+                            <tr>
+                                <td width='46' height='56' align='center' valign='middle' style='background-color: #f8fafc; border-radius: 8px; border-bottom: 3px solid #2563eb; font-size: 28px; font-weight: bold; color: #0f172a;'>{otpPadded[0]}</td>
+                                <td width='46' height='56' align='center' valign='middle' style='background-color: #f8fafc; border-radius: 8px; border-bottom: 3px solid #2563eb; font-size: 28px; font-weight: bold; color: #0f172a;'>{otpPadded[1]}</td>
+                                <td width='46' height='56' align='center' valign='middle' style='background-color: #f8fafc; border-radius: 8px; border-bottom: 3px solid #2563eb; font-size: 28px; font-weight: bold; color: #0f172a;'>{otpPadded[2]}</td>
+                                <td width='20' align='center' valign='middle' style='font-size: 24px; font-weight: bold; color: #cbd5e0;'>-</td>
+                                <td width='46' height='56' align='center' valign='middle' style='background-color: #f8fafc; border-radius: 8px; border-bottom: 3px solid #2563eb; font-size: 28px; font-weight: bold; color: #0f172a;'>{otpPadded[3]}</td>
+                                <td width='46' height='56' align='center' valign='middle' style='background-color: #f8fafc; border-radius: 8px; border-bottom: 3px solid #2563eb; font-size: 28px; font-weight: bold; color: #0f172a;'>{otpPadded[4]}</td>
+                                <td width='46' height='56' align='center' valign='middle' style='background-color: #f8fafc; border-radius: 8px; border-bottom: 3px solid #2563eb; font-size: 28px; font-weight: bold; color: #0f172a;'>{otpPadded[5]}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <table cellpadding='0' cellspacing='0' border='0' width='100%' style='background-color: #f8fafc; border-radius: 12px;'>
+                <tr>
+                    <td valign='top' style='padding: 24px 16px 24px 24px; width: 24px;'>
+                        <div style='width: 22px; height: 22px; border: 1.5px solid #3b82f6; border-radius: 50%; text-align: center; line-height: 22px; font-size: 14px; color: #3b82f6; font-weight: bold; font-family: Georgia, serif; font-style: italic;'>i</div>
+                    </td>
+                    <td valign='top' style='padding: 24px 24px 24px 0;'>
+                        <h4 style='margin: 0 0 8px 0; color: #1e293b; font-size: 15px; font-weight: 600;'>Lưu ý bảo mật</h4>
+                        <p style='margin: 0; color: #475569; font-size: 14px; line-height: 1.6;'>
+                            Mã xác thực này sẽ hết hạn sau 120 giây. Nếu bạn không yêu cầu đăng ký tài khoản này, bạn có thể an tâm bỏ qua email này. Tài khoản của bạn sẽ không được kích hoạt nếu chưa xác thực.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div style='background-color: #f8fafc; padding: 30px 40px; text-align: center; border-top: 1px solid #edf2f7;'>
+            <div style='margin-bottom: 24px; color: #94a3b8; font-size: 20px;'>
+                <span style='margin: 0 10px;'>&#127760;</span>
+                <span style='margin: 0 10px;'>&#128279;</span>
+                <span style='margin: 0 10px;'>&#9993;</span>
+            </div>
+            <div style='margin-bottom: 24px;'>
+                <a href='#' style='color: #64748b; font-size: 13px; font-weight: 600; margin: 0 10px; text-decoration: none;'>Trung tâm trợ giúp</a>
+                <a href='#' style='color: #64748b; font-size: 13px; font-weight: 600; margin: 0 10px; text-decoration: none;'>Điều khoản sử dụng</a>
+                <a href='#' style='color: #64748b; font-size: 13px; font-weight: 600; margin: 0 10px; text-decoration: none;'>Quyền riêng tư</a>
+            </div>
+            <div style='color: #94a3b8; font-size: 12px; line-height: 1.6;'>
+                © {DateTime.Now.Year} {merchantText}. Tất cả các quyền được bảo hộ.<br>
+                Đây là email tự động, vui lòng không trả lời email này.
+            </div>
+        </div>
+    </div>
+</div>";
+
+            await SendEmailAsync(to, $"Xác thực tài khoản của bạn", body);
         }
 
         public async Task SendResetLinkEmailAsync(string to, string link, string? merchantName = null)

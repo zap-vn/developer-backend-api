@@ -12,6 +12,69 @@ x-google-backend:
   protocol: "http/1.1" # Thử đổi về http/1.1 để tránh lỗi protocol với Gateway
   deadline: 120.0
 paths:
+  /api/Auth/check-account:
+    post:
+      summary: "Check Account Availability endpoint"
+      operationId: "check_account"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/check-account"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Check Account CORS support"
+      operationId: "cors_check_account"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/check-account"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/Auth/verify-registration-otp:
+    post:
+      summary: "Verify Registration OTP endpoint"
+      operationId: "verify_registration_otp"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/verify-registration-otp"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Verify Registration OTP CORS support"
+      operationId: "cors_verify_registration_otp"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/verify-registration-otp"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/Auth/social-login:
+    post:
+      summary: "Social Login endpoint"
+      operationId: "social_login"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/social-login"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Social Login CORS support"
+      operationId: "cors_social_login"
+      x-google-backend:
+        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/social-login"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/Auth/forgot-password:
     post:
       summary: "Forgot Password endpoint"
@@ -137,27 +200,6 @@ paths:
       operationId: "cors_register_merchant"
       x-google-backend:
         address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/register-merchant"
-        protocol: "http/1.1"
-        path_translation: CONSTANT_ADDRESS
-      responses:
-        200:
-          description: "OK"
-  /api/Auth/forgot-password:
-    post:
-      summary: "Forgot Password endpoint"
-      operationId: "forgot_password"
-      x-google-backend:
-        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/forgot-password"
-        protocol: "http/1.1"
-        path_translation: CONSTANT_ADDRESS
-      responses:
-        200:
-          description: "OK"
-    options:
-      summary: "Forgot Password CORS support"
-      operationId: "cors_forgot_password"
-      x-google-backend:
-        address: "https://zap-identity-api-882473783707.asia-southeast1.run.app/api/Auth/forgot-password"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:

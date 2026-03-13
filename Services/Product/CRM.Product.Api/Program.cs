@@ -13,7 +13,8 @@ builder.Logging.SetMinimumLevel(LogLevel.Trace);
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.PropertyNamingPolicy = new CRM.BuildingBlocks.Serialization.ExceptionPascalCaseNamingPolicy();
+        options.JsonSerializerOptions.DictionaryKeyPolicy = new CRM.BuildingBlocks.Serialization.ExceptionPascalCaseNamingPolicy();
     });
 
 // Authentication setup

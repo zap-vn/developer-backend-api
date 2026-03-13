@@ -35,6 +35,22 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<CustomerOtp?> GetLatestOtpByEmailAsync(string email, string purpose)
+        {
+            return await _context.CustomerOtps
+                .Find(o => (o.Email == email || o.Phone == email) && o.Purpose == purpose)
+                .SortByDescending(o => o.CreatedAt)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<CustomerOtp?> GetLatestOtpByPhoneAsync(string phone, string purpose)
+        {
+            return await _context.CustomerOtps
+                .Find(o => o.Phone == phone && o.Purpose == purpose)
+                .SortByDescending(o => o.CreatedAt)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task UpdateAsync(CustomerOtp otp)
         {
             await _context.CustomerOtps.ReplaceOneAsync(o => o._id == otp._id, otp);

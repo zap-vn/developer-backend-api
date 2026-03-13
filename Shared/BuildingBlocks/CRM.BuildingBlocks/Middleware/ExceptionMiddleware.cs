@@ -111,14 +111,14 @@ namespace CRM.BuildingBlocks.Middleware
 
             var result = JsonSerializer.Serialize(new
             {
-                statusCode = statusCode,
-                errorCode = errorCode,
-                message = title,
-                detail = detail,
-                redirectUrl = redirectUrl
+                StatusCode = statusCode,
+                ErrorCode = errorCode,
+                Message = title,
+                Detail = detail,
+                RedirectUrl = redirectUrl
             }, new JsonSerializerOptions 
             { 
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNamingPolicy = new CRM.BuildingBlocks.Serialization.ExceptionPascalCaseNamingPolicy(),
                 DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
             });
 

@@ -73,6 +73,16 @@ namespace CRM.Authentication.Application.Users.Commands.ActiveAccount
             // Mark as verified
             user.IsVerify = true;
 
+            // Set specific verification flags based on what was used
+            if (!string.IsNullOrWhiteSpace(customerOtp.Phone))
+            {
+                user.IsVerifyPhone = true;
+            }
+            if (!string.IsNullOrWhiteSpace(customerOtp.Email))
+            {
+                user.IsVerifyEmail = true;
+            }
+
             // Clear cache for both Email and Phone to be safe
             if (!string.IsNullOrWhiteSpace(user.Email)) _cache.Remove($"OTP_ID_{user.Email}");
             if (!string.IsNullOrWhiteSpace(user.Phone)) _cache.Remove($"OTP_ID_{user.Phone}");

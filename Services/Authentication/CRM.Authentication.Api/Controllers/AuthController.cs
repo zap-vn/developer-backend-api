@@ -6,6 +6,8 @@ using CRM.Authentication.Application.Users.Commands.RegisterMerchant;
 using CRM.Authentication.Application.Users.Commands.ForgotPassword;
 using CRM.Authentication.Application.Users.Commands.ActiveAccount;
 using CRM.Authentication.Application.Users.Commands.ResendOtp;
+using CRM.Authentication.Application.Users.Commands.CheckAccountAvailability;
+using CRM.Authentication.Application.Users.Commands.SocialAuth;
 using CRM.Authentication.Application.Users.DTOs;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -23,6 +25,20 @@ namespace CRM.Authentication.Api.Controllers
         public AuthController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpPost("check-account")]
+        public async Task<IActionResult> CheckAccount([FromBody] CheckAccountAvailabilityCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(new { Success = result, Message = "Mã OTP đã được gửi." });
+        }
+
+        [HttpPost("verify-registration-otp")]
+        public async Task<IActionResult> VerifyRegistrationOtp([FromBody] VerifyRegistrationOtpCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(new { Success = result, Message = "Xác thực thành công." });
         }
 
         [HttpPost("register")]
@@ -53,7 +69,6 @@ namespace CRM.Authentication.Api.Controllers
             return Ok(new { Success = result, Message = result ? "Mã OTP đã được gửi lại" : "Gửi lại thất bại" });
         }
 
-        [HttpOptions("login")]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
@@ -65,6 +80,13 @@ namespace CRM.Authentication.Api.Controllers
             }
 
             var command = new LoginUserCommand(request.MerchantName, request.Email, request.Password);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("social-login")]
+        public async Task<IActionResult> SocialLogin([FromBody] SocialAuthCommand command)
+        {
             var result = await _mediator.Send(command);
             return Ok(result);
         }

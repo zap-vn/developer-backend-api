@@ -47,7 +47,8 @@ public class Program
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = new CRM.BuildingBlocks.Serialization.ExceptionPascalCaseNamingPolicy();
+                    options.JsonSerializerOptions.DictionaryKeyPolicy = new CRM.BuildingBlocks.Serialization.ExceptionPascalCaseNamingPolicy();
                 });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>

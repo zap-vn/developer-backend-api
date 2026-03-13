@@ -66,7 +66,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
 
             // Generate 6-digit OTP
             var otp = new System.Random().Next(100000, 999999).ToString();
-            var detectedProvider = !string.IsNullOrWhiteSpace(request.Provider) ? request.Provider : DetermineProvider(request.Email, request.Phone);
+            var detectedProvider = !string.IsNullOrWhiteSpace(request.Provider) ? request.Provider : DetermineProvider(request.Email ?? "", request.Phone ?? "");
             var langId = ExtractLanguageId(request.LanguageId);
             var langCode = string.IsNullOrEmpty(request.Language) ? (langId > 0 ? "" : "en") : request.Language;
 
@@ -74,18 +74,23 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
             {
                 _id = customerIdStr,
                 _key = nextId,
-                Email = request.Email,
-                Phone = request.Phone,
+                FirstName = request.FirstName?.Trim() ?? "",
+                LastName = request.LastName?.Trim() ?? "",
+                Email = request.Email?.Trim() ?? "",
+                Phone = request.Phone?.Trim() ?? "",
                 MerchantName = request.MerchantName,
                 BusinessName = request.MerchantName,
                 Language = langCode, 
                 LanguageId = langId, 
-                Password = HashLegacyPassword(request.Password),
+                Password = string.IsNullOrWhiteSpace(request.Password) ? "" : HashLegacyPassword(request.Password),
                 Provider = detectedProvider,
                 Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
                 Visible = 1,
                 Avatar = "",
-                IsVerify = false,
+                IsVerify = !string.IsNullOrWhiteSpace(request.Email),
+                IsVerifyGoogle = detectedProvider == "Google",
+                IsVerifyPhone = false,
+                IsVerifyEmail = !string.IsNullOrWhiteSpace(request.Email),
                 CreatedAt = System.DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss")
             };
 
@@ -140,11 +145,13 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                         CustomerCode = "MERCHANT-" + nextId,
                         MerchantName = request.MerchantName,
                         BusinessName = request.MerchantName,
-                        Email = request.Email,
-                        Phone = request.Phone,
-                        Password = HashLegacyPassword(request.Password),
+                        FirstName = request.FirstName?.Trim() ?? "",
+                        LastName = request.LastName?.Trim() ?? "",
+                        Email = request.Email?.Trim() ?? "",
+                        Phone = request.Phone?.Trim() ?? "",
+                        Password = string.IsNullOrWhiteSpace(request.Password) ? "" : HashLegacyPassword(request.Password),
                         Visible = 1,
-                        IsActive = false, // Set to false initially until activated
+                        IsActive = !string.IsNullOrWhiteSpace(request.Email), // Set to active if email is verified
                         LanguageId = langId,
                         Language = langCode, 
                         RegistrationSource = detectedProvider,
@@ -170,11 +177,14 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 _id = user._id,
                 Email = user.Email,
                 Phone = user.Phone,
-                FullName = user.MerchantName, 
-                LanguageId = user.LanguageId.ToString(),
+                FullName = string.IsNullOrWhiteSpace(user.FullName) ? user.MerchantName : user.FullName.Trim(), 
+                LanguageId = user.LanguageId,
                 Provider = user.Provider,
                 Roles = user.Roles,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                IsVerifyPhone = user.IsVerifyPhone,
+                IsVerifyEmail = user.IsVerifyEmail,
+                IsVerifyGoogle = user.IsVerifyGoogle
             };
         }
 

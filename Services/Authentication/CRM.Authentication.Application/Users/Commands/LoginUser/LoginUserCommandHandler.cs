@@ -88,9 +88,13 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 {
                     _id = user._id,
                     Email = user.Email,
-                    Phone = user.Phone ?? string.Empty,
+                    Phone = user.Phone,
                     FullName = user.FullName,
-                    Roles = user.Roles
+                    LanguageId = user.LanguageId,
+                    Roles = user.Roles,
+                    IsVerifyPhone = user.IsVerifyPhone,
+                    IsVerifyEmail = user.IsVerifyEmail,
+                    IsVerifyGoogle = user.IsVerifyGoogle
                 }
             };
         }

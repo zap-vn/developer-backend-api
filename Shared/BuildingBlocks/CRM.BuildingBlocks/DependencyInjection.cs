@@ -15,17 +15,17 @@ namespace CRM.BuildingBlocks
             services.AddScoped<ISystemErrorProvider, SystemErrorProvider>();
             services.AddScoped<ICurrentUserService, MockCurrentUserService>();
 
-            // Configure JSON Response to return PascalCase for all APIs (Minimal & MVC)
+            // Configure JSON Response to return PascalCase for all APIs (Minimal & MVC), except _id
             services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
             {
-                options.SerializerOptions.PropertyNamingPolicy = null;
-                options.SerializerOptions.DictionaryKeyPolicy = null;
+                options.SerializerOptions.PropertyNamingPolicy = new Serialization.ExceptionPascalCaseNamingPolicy();
+                options.SerializerOptions.DictionaryKeyPolicy = new Serialization.ExceptionPascalCaseNamingPolicy();
             });
 
             services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
             {
-                options.JsonSerializerOptions.PropertyNamingPolicy = null;
-                options.JsonSerializerOptions.DictionaryKeyPolicy = null;
+                options.JsonSerializerOptions.PropertyNamingPolicy = new Serialization.ExceptionPascalCaseNamingPolicy();
+                options.JsonSerializerOptions.DictionaryKeyPolicy = new Serialization.ExceptionPascalCaseNamingPolicy();
             });
             
             return services;

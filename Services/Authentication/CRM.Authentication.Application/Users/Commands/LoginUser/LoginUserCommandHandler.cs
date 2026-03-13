@@ -144,7 +144,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 MerchantName = user.MerchantName,
                 AccessToken = token,
                 Acronym = string.IsNullOrEmpty(user.Acronym) ? (user.FirstName.Length > 0 ? user.FirstName.Substring(0, 1) : "") + (user.LastName.Length > 0 ? user.LastName.Substring(0, 1) : "") : user.Acronym,
-                Avatar = user.MerchantUrl,
+                MerchantUrl = user.MerchantUrl,
                 Color = "",
                 ExpiresIn = 86400, // 24 hours in seconds
                 FullName = user.FullName,

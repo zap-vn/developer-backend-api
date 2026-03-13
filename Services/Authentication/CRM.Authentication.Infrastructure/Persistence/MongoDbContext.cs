@@ -50,7 +50,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
                         
                         // Map other names if they differ
                         cm.MapProperty(u => u.CreatedAt).SetElementName("CreateDate");
-                        cm.MapProperty(u => u.Avatar).SetElementName("Url");
+                        cm.MapProperty(u => u.MerchantUrl).SetElementName("MerchantUrl");
 
                         cm.SetIgnoreExtraElements(true);
                     });

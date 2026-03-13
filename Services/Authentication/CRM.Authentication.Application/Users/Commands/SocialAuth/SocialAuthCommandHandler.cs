@@ -115,7 +115,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                 MerchantName = user.MerchantName,
                 AccessToken = token,
                 FullName = user.FullName,
-                Avatar = user.MerchantUrl,
+                MerchantUrl = user.MerchantUrl,
                 RefreshToken = Guid.NewGuid().ToString(),
                 UserGuid = $"Customer/{user._key}",
                 Role = user.Roles.FirstOrDefault() ?? "Admin",

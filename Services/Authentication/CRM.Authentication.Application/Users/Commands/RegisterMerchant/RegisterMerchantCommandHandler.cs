@@ -161,7 +161,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                         LanguageId = langId,
                         Language = langCode, 
                         RegistrationSource = detectedProvider,
-                        Url = request.MerchantUrl ?? ""
+                        MerchantUrl = request.MerchantUrl ?? ""
                     };
                     
                     var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";

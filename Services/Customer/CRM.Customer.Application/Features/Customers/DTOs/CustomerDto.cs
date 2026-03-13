@@ -13,5 +13,6 @@ namespace CRM.Customer.Application.Features.Customers.DTOs
         public bool IsVerifyPhone { get; set; }
         public bool IsVerifyGoogle { get; set; }
         public bool IsVerifyApple { get; set; }
+        public string MerchantUrl { get; set; } = string.Empty;
     }
 }

@@ -84,7 +84,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                             IsVerifyGoogle = user.IsVerifyGoogle,
                             IsVerifyApple = user.IsVerifyApple,
                             RegistrationSource = user.Provider,
-                            Url = user.Avatar
+                            MerchantUrl = user.Avatar
                         };
                         var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";
                         await _httpClient.PostAsJsonAsync(syncUrl, customerPayload);

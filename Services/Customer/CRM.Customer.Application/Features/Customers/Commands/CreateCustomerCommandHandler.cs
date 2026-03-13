@@ -32,7 +32,7 @@ namespace CRM.Customer.Application.Features.Customers.Commands
                 LanguageId = request.LanguageId,
                 Language = request.Language,
                 RegistrationSource = request.RegistrationSource,
-                Url = request.Url,
+                MerchantUrl = request.MerchantUrl,
                 
                 // Keep backward compatible fields if needed
                 Name = string.IsNullOrEmpty(request.Name) ? request.MerchantName : request.Name,

@@ -17,6 +17,6 @@ namespace CRM.Authentication.Application.Users.DTOs
         public bool IsVerifyEmail { get; set; }
         public bool IsVerifyGoogle { get; set; }
         public bool IsVerifyApple { get; set; }
-        public string URL { get; set; } = string.Empty;
+        public string MerchantUrl { get; set; } = string.Empty;
     }
 }

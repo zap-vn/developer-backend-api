@@ -44,7 +44,11 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
                 FullName = user.FullName,
                 LanguageId = user.LanguageId,
                 Provider = user.Provider,
-                Roles = user.Roles
+                Roles = user.Roles,
+                IsVerifyPhone = user.IsVerifyPhone,
+                IsVerifyEmail = user.IsVerifyEmail,
+                IsVerifyGoogle = user.IsVerifyGoogle,
+                IsVerifyApple = user.IsVerifyApple
             };
         }
 

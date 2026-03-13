@@ -89,6 +89,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 Avatar = "",
                 IsVerify = !string.IsNullOrWhiteSpace(request.Email),
                 IsVerifyGoogle = detectedProvider == "Google",
+                IsVerifyApple = detectedProvider == "Apple",
                 IsVerifyPhone = false,
                 IsVerifyEmail = !string.IsNullOrWhiteSpace(request.Email),
                 CreatedAt = System.DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss")
@@ -184,7 +185,8 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 CreatedAt = user.CreatedAt,
                 IsVerifyPhone = user.IsVerifyPhone,
                 IsVerifyEmail = user.IsVerifyEmail,
-                IsVerifyGoogle = user.IsVerifyGoogle
+                IsVerifyGoogle = user.IsVerifyGoogle,
+                IsVerifyApple = user.IsVerifyApple
             };
         }
 

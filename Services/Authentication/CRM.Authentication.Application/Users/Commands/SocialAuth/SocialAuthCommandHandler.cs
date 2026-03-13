@@ -55,6 +55,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                     Avatar = request.Avatar,
                     IsVerify = true, // Social accounts are pre-verified
                     IsVerifyGoogle = request.Provider == "Google",
+                    IsVerifyApple = request.Provider == "Apple",
                     IsVerifyEmail = true,
                     Visible = 1,
                     Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
@@ -122,7 +123,8 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                     Roles = user.Roles,
                     IsVerifyPhone = user.IsVerifyPhone,
                     IsVerifyEmail = user.IsVerifyEmail,
-                    IsVerifyGoogle = user.IsVerifyGoogle
+                    IsVerifyGoogle = user.IsVerifyGoogle,
+                    IsVerifyApple = user.IsVerifyApple
                 }
             };
         }

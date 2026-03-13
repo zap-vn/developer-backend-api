@@ -95,7 +95,7 @@ jobs:
           --memory 512Mi \
           --cpu-boost \
           --timeout 120 \
-          --set-env-vars "^|^ASPNETCORE_ENVIRONMENT=Development|MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}|MongoDB__DatabaseName=SinglePoint_en"
+          --set-env-vars "^|^ASPNETCORE_ENVIRONMENT=Development|MongoSettings__ConnectionString=${{ env.DB_CONNECTION_STRING }}|MongoSettings__DatabaseName=SinglePoint_en"
 
     - name: 'Deploy API Gateway'
       run: |

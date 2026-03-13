@@ -157,6 +157,96 @@ namespace CRM.Authentication.Infrastructure.Security
             await SendEmailAsync(to, $"Xác thực tài khoản của bạn", body);
         }
 
+        public async Task SendResetOtpEmailAsync(string to, string otp, string? merchantName = null)
+        {
+            _logger.LogInformation($"[EMAIL_SERVICE] Sending Reset OTP email for Merchant: {merchantName ?? "Default"}");
+
+            string otpPadded = otp.PadRight(6, '0');
+            string merchantText = "ZAP"; // Hardcoded as per image brand requirement or use merchantName if dynamic branding is needed
+
+            string body = $@"
+<div style='background-color: #f4f7f9; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, ""Segoe UI"", Roboto, Helvetica, Arial, sans-serif;'>
+    <div style='max-width: 520px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); border: 1px solid #eef2f6;'>
+        <div style='padding: 48px 40px;'>
+            <div style='text-align: center; margin-bottom: 32px;'>
+                <h1 style='margin: 0; font-size: 36px; font-weight: 900; letter-spacing: -1.5px; color: #000000; font-family: Arial, sans-serif;'>ZAP</h1>
+            </div>
+            
+            <h2 style='color: #111827; text-align: center; font-size: 26px; font-weight: 800; margin: 0 0 16px; letter-spacing: -0.5px;'>Xác thực yêu cầu đặt lại mật khẩu</h2>
+            
+            <p style='color: #4b5563; font-size: 16px; line-height: 1.6; margin: 0 0 32px; text-align: center;'>
+                Chào bạn, chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản <strong>{merchantText}</strong> của bạn. Vui lòng nhập mã xác thực gồm 6 số bên dưới để tiếp tục.
+            </p>
+
+            <table cellpadding='0' cellspacing='0' border='0' width='100%' style='margin-bottom: 40px;'>
+                <tr>
+                    <td align='center'>
+                        <table cellpadding='0' cellspacing='0' border='0'>
+                            <tr>
+                                <td align='center' valign='middle' style='padding: 0 4px;'>
+                                    <div style='width: 54px; height: 68px; line-height: 68px; background-color: #f8fafc; border-radius: 10px; border-bottom: 4px solid #2563eb; font-size: 32px; font-weight: 800; color: #1e293b; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>{otpPadded[0]}</div>
+                                </td>
+                                <td align='center' valign='middle' style='padding: 0 4px;'>
+                                    <div style='width: 54px; height: 68px; line-height: 68px; background-color: #f8fafc; border-radius: 10px; border-bottom: 4px solid #2563eb; font-size: 32px; font-weight: 800; color: #1e293b; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>{otpPadded[1]}</div>
+                                </td>
+                                <td align='center' valign='middle' style='padding: 0 4px;'>
+                                    <div style='width: 54px; height: 68px; line-height: 68px; background-color: #f8fafc; border-radius: 10px; border-bottom: 4px solid #2563eb; font-size: 32px; font-weight: 800; color: #1e293b; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>{otpPadded[2]}</div>
+                                </td>
+                                <td width='24' align='center' valign='middle' style='font-size: 20px; font-weight: bold; color: #cbd5e1;'>-</td>
+                                <td align='center' valign='middle' style='padding: 0 4px;'>
+                                    <div style='width: 54px; height: 68px; line-height: 68px; background-color: #f8fafc; border-radius: 10px; border-bottom: 4px solid #2563eb; font-size: 32px; font-weight: 800; color: #1e293b; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>{otpPadded[3]}</div>
+                                </td>
+                                <td align='center' valign='middle' style='padding: 0 4px;'>
+                                    <div style='width: 54px; height: 68px; line-height: 68px; background-color: #f8fafc; border-radius: 10px; border-bottom: 4px solid #2563eb; font-size: 32px; font-weight: 800; color: #1e293b; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>{otpPadded[4]}</div>
+                                </td>
+                                <td align='center' valign='middle' style='padding: 0 4px;'>
+                                    <div style='width: 54px; height: 68px; line-height: 68px; background-color: #f8fafc; border-radius: 10px; border-bottom: 4px solid #2563eb; font-size: 32px; font-weight: 800; color: #1e293b; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>{otpPadded[5]}</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <div style='background-color: #f8fafc; border-radius: 14px; padding: 24px; border: 1px solid #f1f5f9;'>
+                <table cellpadding='0' cellspacing='0' border='0' width='100%'>
+                    <tr>
+                        <td valign='top' style='width: 24px; padding-right: 16px;'>
+                            <div style='width: 22px; height: 22px; background-color: #3b82f6; border-radius: 50%; color: #ffffff; text-align: center; line-height: 22px; font-size: 14px; font-weight: bold;'>i</div>
+                        </td>
+                        <td valign='top'>
+                            <h4 style='margin: 0 0 6px 0; color: #1e293b; font-size: 16px; font-weight: 700;'>Lưu ý bảo mật</h4>
+                            <p style='margin: 0; color: #64748b; font-size: 14px; line-height: 1.6;'>
+                                Mã này sẽ hết hạn sau <strong>120 giây</strong>. Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này để đảm bảo an toàn cho tài khoản.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div style='background-color: #fcfdfe; padding: 40px; text-align: center; border-top: 1px solid #f1f5f9;'>
+            <div style='margin-bottom: 24px;'>
+                <span style='margin: 0 12px; color: #94a3b8; font-size: 20px;'>🌐</span>
+                <span style='margin: 0 12px; color: #94a3b8; font-size: 20px;'>🔗</span>
+                <span style='margin: 0 12px; color: #94a3b8; font-size: 20px;'>✉️</span>
+            </div>
+            <div style='margin-bottom: 24px;'>
+                <a href='#' style='color: #475569; font-size: 14px; font-weight: 600; margin: 0 10px; text-decoration: none;'>Trung tâm trợ giúp</a>
+                <a href='#' style='color: #475569; font-size: 14px; font-weight: 600; margin: 0 10px; text-decoration: none;'>Điều khoản sử dụng</a>
+                <a href='#' style='color: #475569; font-size: 14px; font-weight: 600; margin: 0 10px; text-decoration: none;'>Quyền riêng tư</a>
+            </div>
+            <div style='color: #94a3b8; font-size: 12px; line-height: 1.8;'>
+                © {DateTime.Now.Year} ZAP.vn. Tất cả các quyền được bảo hộ.<br>
+                Đây là email tự động, vui lòng không trả lời email này.
+            </div>
+        </div>
+    </div>
+</div>";
+
+            await SendEmailAsync(to, "Xác thực yêu cầu đặt lại mật khẩu", body);
+        }
+
         public async Task SendResetLinkEmailAsync(string to, string link, string? merchantName = null)
         {
              // TODO: Fetch template from DB by (merchantName, "ResetPassword").

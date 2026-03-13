@@ -71,16 +71,16 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
                 throw new TooManyRequestsException();
             }
 
-            // 3. Generate Reset Token
-            string resetToken = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
- 
-            // 4. Construct Reset Link
-            _logger.LogInformation("[ForgotPassword] Lấy cấu hình URL từ MailSettings: {FrontendResetPasswordUrl}", _mailSettings.FrontendResetPasswordUrl);
-            string resetLink = $"{_mailSettings.FrontendResetPasswordUrl}?token={resetToken}";
+            // 3. Generate 6-digit OTP for Forgot Password
+            var otp = new Random().Next(100000, 999999).ToString();
+            string otpHash = HashString(otp);
+
+            // 4. Generate Reset Token (acts as the ID for the session)
+            string resetToken = Guid.NewGuid().ToString("N");
              
-            // Gửi mail LINK cho người dùng với MerchantName để cá nhân hóa
-            await _emailService.SendResetLinkEmailAsync(email, resetLink, user.MerchantName); 
-            _logger.LogInformation("[EMAIL_SENT] Link Reset Password cho User {Email} là: {ResetLink}", email, resetLink); 
+            // Gửi mail OTP cho người dùng với template mới
+            await _emailService.SendResetOtpEmailAsync(email, otp, user.MerchantName); 
+            _logger.LogInformation("[EMAIL_SENT] OTP Reset Password cho User {Email} là: {Otp}", email, otp); 
  
             // 5. Save Request
             var resetRequest = new PasswordResetRequest
@@ -89,7 +89,8 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
                 Email = email,
                 Method = "email",
                 ResetToken = resetToken,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(15) // Tăng lên 15 phút cho link
+                OtpHash = otpHash,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(2) // OTP expires in 2 mins as per image
             };
 
             await _resetRepository.CreateAsync(resetRequest);
@@ -97,9 +98,9 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             return new ForgotPasswordResponseDto
             {
                 Success = true,
-                Message = "Link đặt lại mật khẩu đã được gửi qua email của bạn",
+                Message = "Mã xác thực đặt lại mật khẩu đã được gửi qua email của bạn",
                 ResetToken = resetToken,
-                ExpiresIn = 900 // 15 mins
+                ExpiresIn = 120 // 120 seconds (2 mins)
             };
         }
 

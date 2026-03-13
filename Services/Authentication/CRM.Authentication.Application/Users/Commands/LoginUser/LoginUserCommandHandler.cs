@@ -83,8 +83,21 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                     throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không chính xác.");
                 }
 
-                // Mark OTP as used if needed, or just proceed since login is success
-                Console.WriteLine($"[Login] OTP Success for {request.Email}");
+                // Mark OTP as used
+                latestOtp.VerifiedAt = DateTime.UtcNow;
+                await _otpRepository.UpdateAsync(latestOtp);
+                Console.WriteLine($"[Login] OTP Success and marked as used for {request.Email}");
+
+                // Auto-verify user if not already verified
+                if (!user.IsVerify)
+                {
+                    user.IsVerify = true;
+                    if (!string.IsNullOrEmpty(latestOtp.Email)) user.IsVerifyEmail = true;
+                    if (!string.IsNullOrEmpty(latestOtp.Phone)) user.IsVerifyPhone = true;
+                    user.UpdatedAt = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss");
+                    await _userRepository.UpdateAsync(user);
+                    Console.WriteLine($"[Login] Auto-verified user {user.Email} via OTP login.");
+                }
             }
             // --- Case 2: Login via Password ---
             else
@@ -99,13 +112,13 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                     Console.WriteLine($"[Login] Password mismatch.");
                     throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
                 }
-            }
 
-            // Account activation check
-            if (!user.IsVerify)
-            {
-                Console.WriteLine($"[Login] Account not verified for user: {user.Email} (Identifier used: {request.Email})");
-                throw new UnauthorizedAccessException("AUTH_001|AUTH_001_detail");
+                // If logging in with Password but NOT verified, we must block
+                if (!user.IsVerify)
+                {
+                    Console.WriteLine($"[Login] Account not verified for user: {user.Email}");
+                    throw new UnauthorizedAccessException("AUTH_001|AUTH_001_detail");
+                }
             }
 
             if (user.Visible != 1)

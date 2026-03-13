@@ -71,7 +71,7 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
                 Channel = request.Channel.ToLower(),
                 OtpHash = HashString(otp),
                 ResetToken = resetToken,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(5) // OTP phone thường chỉ 5 phút
+                ExpiresAt = DateTime.UtcNow.AddSeconds(120) // OTP phone hiệu lực 120 giây
             };
 
             await _resetRepository.CreateAsync(resetRequest);
@@ -81,7 +81,7 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
                 Success = true,
                 Message = "Mã xác thực đã được gửi đến điện thoại của bạn",
                 ResetToken = resetToken,
-                ExpiresIn = 300 // 5 mins
+                ExpiresIn = 120 // 120 seconds
             };
         }
 

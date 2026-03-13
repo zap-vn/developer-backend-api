@@ -12,15 +12,18 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
     {
         private readonly IUserRepository _userRepository;
         private readonly IEmailService _emailService;
+        private readonly IPhoneService _phoneService;
         private readonly IOtpRepository _otpRepository;
 
         public CheckAccountAvailabilityCommandHandler(
             IUserRepository userRepository,
             IEmailService emailService,
+            IPhoneService phoneService,
             IOtpRepository otpRepository)
         {
             _userRepository = userRepository;
             _emailService = emailService;
+            _phoneService = phoneService;
             _otpRepository = otpRepository;
         }
 
@@ -81,7 +84,7 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
                 Phone = !isEmail ? identifier : string.Empty,
                 OtpCode = otpCode,
                 Purpose = "register",
-                ExpiredAt = DateTime.UtcNow.AddMinutes(15),
+                ExpiredAt = DateTime.UtcNow.AddMinutes(2), // Cập nhật thành 2 phút (120 giây)
                 CreatedAt = DateTime.UtcNow
             };
             await _otpRepository.CreateAsync(customerOtp);
@@ -95,8 +98,7 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
                 }
                 else
                 {
-                    // Logic to send SMS if we have a service, for now just log
-                    Console.WriteLine($"[SMS OTP] Send to {identifier}: {otpCode}");
+                    await _phoneService.SendSmsOtpAsync(identifier, otpCode);
                 }
             }
             catch (Exception ex)

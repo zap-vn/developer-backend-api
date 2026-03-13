@@ -15,14 +15,16 @@ namespace CRM.Authentication.Infrastructure.Security
 
         public async Task SendSmsOtpAsync(string phone, string otp)
         {
-            _logger.LogInformation($"[SMS_OTP] Sending to {phone}: {otp}");
+            string message = $"[ZAP.vn] Ma OTP cua ban la {otp}. Ma co hieu luc trong 120 giay. Vui long khong chia se ma nay cho bat ky ai.";
+            _logger.LogInformation($"[SMS_OTP] Sending to {phone}: {message}");
             // Real SMS gateway API call would go here
             await Task.CompletedTask;
         }
 
         public async Task SendZaloOtpAsync(string phone, string otp)
         {
-            _logger.LogInformation($"[ZALO_OTP] Sending to {phone}: {otp}");
+            string message = $"[ZAP.vn] Ma OTP cua ban la {otp}. Ma co hieu luc trong 120 giay. Vui long khong chia se ma nay cho bat ky ai.";
+            _logger.LogInformation($"[ZALO_OTP] Sending to {phone}: {message}");
             // Real Zalo OA API call would go here
             await Task.CompletedTask;
         }

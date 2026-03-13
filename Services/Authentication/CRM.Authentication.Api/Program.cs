@@ -93,6 +93,7 @@ try {
     Console.WriteLine("👉 Local URL: http://localhost:5001/swagger/index.html");
     app.Run();
 } catch (Exception ex) {
-    System.IO.File.WriteAllText("d:\\PROJECTS\\2026\\3_2\\src\\api_fatal.txt", ex.ToString());
+    Console.Error.WriteLine("FATAL ERROR DURING STARTUP:");
+    Console.Error.WriteLine(ex.ToString());
     throw;
 }

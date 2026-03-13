@@ -10,7 +10,7 @@ namespace CRM.Authentication.Application.Users.DTOs
         public string MerchantName { get; set; } = string.Empty;
         public string AccessToken { get; set; } = string.Empty;
         public string Acronym { get; set; } = string.Empty;
-        public string Avatar { get; set; } = string.Empty;
+        public string MerchantUrl { get; set; } = string.Empty;
         public string Color { get; set; } = string.Empty;
         public int ExpiresIn { get; set; }
         public string FullName { get; set; } = string.Empty;

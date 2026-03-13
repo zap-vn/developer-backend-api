@@ -44,13 +44,30 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             if (!string.IsNullOrEmpty(request.Otp))
             {
                 Console.WriteLine($"[Login] Attempting OTP Validation for {request.Email}");
-                var latestOtp = await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "register") 
+                
+                // Search for latest OTP with any common verification purpose
+                var purposes = new[] { "register", "login", "forgot", "verify", "social" };
+                
+                // Try finding by Email
+                var latestOtp = await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "login")
+                                ?? await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "register")
                                 ?? await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "forgot")
-                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "register");
+                                ?? await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "verify")
+                                ?? await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "social");
+
+                // If not found by email, try by Phone (from the user record we just loaded)
+                if (latestOtp == null && !string.IsNullOrEmpty(user.Phone))
+                {
+                    latestOtp = await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "login")
+                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "register")
+                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "forgot")
+                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "verify")
+                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "social");
+                }
 
                 if (latestOtp == null)
                 {
-                    Console.WriteLine($"[Login] No OTP found for {request.Email}");
+                    Console.WriteLine($"[Login] No OTP record found in CustomerOtps for {request.Email} or {user.Phone}");
                     throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không hợp lệ hoặc đã hết hạn.");
                 }
 

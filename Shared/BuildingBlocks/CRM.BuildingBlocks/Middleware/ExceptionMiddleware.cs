@@ -172,6 +172,10 @@ namespace CRM.BuildingBlocks.Middleware
                 "error_invalid_phone_detail" => isVi ? "Số điện thoại phải có định dạng từ 10-11 chữ số." : "Phone number must be between 10 and 11 digits.",
                 "error_missing_contact" => isVi ? "Thiếu thông tin liên hệ" : "Missing Contact Information",
                 "error_missing_contact_detail" => isVi ? "Bạn phải cung cấp ít nhất Email hoặc Số điện thoại để đăng ký." : "You must provide at least Email or Phone number to register.",
+                
+                "error_invalid_otp" => isVi ? "Mã OTP không hợp lệ" : "Invalid OTP",
+                "error_otp_expired" => isVi ? "Mã OTP hết hạn" : "OTP expired",
+                
                 _ => key
             };
         }

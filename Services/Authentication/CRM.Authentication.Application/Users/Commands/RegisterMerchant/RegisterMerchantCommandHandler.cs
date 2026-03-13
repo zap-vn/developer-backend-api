@@ -86,7 +86,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 Provider = detectedProvider,
                 Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
                 Visible = 1,
-                Avatar = request.MerchantUrl ?? "",
+                MerchantUrl = request.MerchantUrl ?? "",
                 IsVerify = !string.IsNullOrWhiteSpace(request.Email),
                 IsVerifyGoogle = detectedProvider == "Google",
                 IsVerifyApple = detectedProvider == "Apple",
@@ -192,7 +192,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 IsVerifyEmail = user.IsVerifyEmail,
                 IsVerifyGoogle = user.IsVerifyGoogle,
                 IsVerifyApple = user.IsVerifyApple,
-                MerchantUrl = user.Avatar
+                MerchantUrl = user.MerchantUrl
             };
         }
 

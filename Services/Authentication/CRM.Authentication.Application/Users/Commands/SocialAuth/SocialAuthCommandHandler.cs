@@ -52,7 +52,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                     MerchantName = $"{request.FirstName} {request.LastName}".Trim(),
                     BusinessName = $"{request.FirstName} {request.LastName}".Trim(),
                     Provider = request.Provider,
-                    Avatar = request.Avatar,
+                    MerchantUrl = request.Avatar,
                     IsVerify = true, // Social accounts are pre-verified
                     IsVerifyGoogle = request.Provider == "Google",
                     IsVerifyApple = request.Provider == "Apple",
@@ -84,7 +84,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                             IsVerifyGoogle = user.IsVerifyGoogle,
                             IsVerifyApple = user.IsVerifyApple,
                             RegistrationSource = user.Provider,
-                            MerchantUrl = user.Avatar
+                            MerchantUrl = user.MerchantUrl
                         };
                         var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";
                         await _httpClient.PostAsJsonAsync(syncUrl, customerPayload);
@@ -99,7 +99,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
             {
                 // Update existing user info if needed
                 bool changed = false;
-                if (string.IsNullOrEmpty(user.Avatar) && !string.IsNullOrEmpty(request.Avatar)) { user.Avatar = request.Avatar; changed = true; }
+                if (string.IsNullOrEmpty(user.MerchantUrl) && !string.IsNullOrEmpty(request.Avatar)) { user.MerchantUrl = request.Avatar; changed = true; }
                 if (user.Provider == "Email" && !string.IsNullOrEmpty(request.Provider)) { user.Provider = request.Provider; changed = true; }
                 
                 if (changed) await _userRepository.UpdateAsync(user);
@@ -115,7 +115,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                 MerchantName = user.MerchantName,
                 AccessToken = token,
                 FullName = user.FullName,
-                Avatar = user.Avatar,
+                Avatar = user.MerchantUrl,
                 RefreshToken = Guid.NewGuid().ToString(),
                 UserGuid = $"Customer/{user._key}",
                 Role = user.Roles.FirstOrDefault() ?? "Admin",
@@ -132,7 +132,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                     IsVerifyEmail = user.IsVerifyEmail,
                     IsVerifyGoogle = user.IsVerifyGoogle,
                     IsVerifyApple = user.IsVerifyApple,
-                    MerchantUrl = user.Avatar
+                    MerchantUrl = user.MerchantUrl
                 }
             };
         }

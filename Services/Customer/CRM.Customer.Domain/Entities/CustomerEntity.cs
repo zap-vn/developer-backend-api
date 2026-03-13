@@ -51,7 +51,7 @@ namespace CRM.Customer.Domain.Entities
         public string TimeZoneId { get; set; } = string.Empty;
         public int Visible { get; set; }
         public string Websites { get; set; } = string.Empty;
-        public string Url { get; set; } = string.Empty;
+        public string MerchantUrl { get; set; } = string.Empty;
         public int Currency_key { get; set; }
         public string Plural { get; set; } = string.Empty;
         public string Singular { get; set; } = string.Empty;

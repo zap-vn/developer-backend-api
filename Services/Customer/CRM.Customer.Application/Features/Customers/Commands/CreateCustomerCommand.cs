@@ -16,7 +16,7 @@ namespace CRM.Customer.Application.Features.Customers.Commands
         public long LanguageId { get; set; }
         public string Language { get; set; } = string.Empty;
         public string RegistrationSource { get; set; } = "Email";
-        public string Url { get; set; } = string.Empty;
+        public string MerchantUrl { get; set; } = string.Empty;
 
         // Legacy compat (only if strictly necessary for existing handlers, otherwise can be removed if moved to features)
         public string? Name { get; set; }

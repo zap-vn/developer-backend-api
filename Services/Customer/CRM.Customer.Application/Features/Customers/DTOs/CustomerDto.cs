@@ -9,5 +9,9 @@ namespace CRM.Customer.Application.Features.Customers.DTOs
         public string PhoneNumber { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+        public bool IsVerifyEmail { get; set; }
+        public bool IsVerifyPhone { get; set; }
+        public bool IsVerifyGoogle { get; set; }
+        public bool IsVerifyApple { get; set; }
     }
 }

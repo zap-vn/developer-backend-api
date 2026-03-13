@@ -23,5 +23,10 @@ namespace CRM.Customer.Application.Features.Customers.Commands
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public bool IsActive { get; set; } = true;
+        public bool IsVerify { get; set; }
+        public bool IsVerifyEmail { get; set; }
+        public bool IsVerifyPhone { get; set; }
+        public bool IsVerifyGoogle { get; set; }
+        public bool IsVerifyApple { get; set; }
     }
 }

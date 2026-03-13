@@ -78,6 +78,11 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                             BusinessName = user.BusinessName,
                             Email = user.Email,
                             IsActive = true,
+                            IsVerify = user.IsVerify,
+                            IsVerifyEmail = user.IsVerifyEmail,
+                            IsVerifyPhone = user.IsVerifyPhone,
+                            IsVerifyGoogle = user.IsVerifyGoogle,
+                            IsVerifyApple = user.IsVerifyApple,
                             RegistrationSource = user.Provider,
                             Url = user.Avatar
                         };

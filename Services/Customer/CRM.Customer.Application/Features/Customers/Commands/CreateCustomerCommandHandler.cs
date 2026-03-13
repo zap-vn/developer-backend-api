@@ -38,7 +38,12 @@ namespace CRM.Customer.Application.Features.Customers.Commands
                 Name = string.IsNullOrEmpty(request.Name) ? request.MerchantName : request.Name,
                 PhoneNumber = request.PhoneNumber ?? string.Empty,
                 Address = request.Address ?? string.Empty,
-                IsActive = request.IsActive
+                IsActive = request.IsActive,
+                IsVerify = request.IsVerify,
+                IsVerifyEmail = request.IsVerifyEmail,
+                IsVerifyPhone = request.IsVerifyPhone,
+                IsVerifyGoogle = request.IsVerifyGoogle,
+                IsVerifyApple = request.IsVerifyApple
             };
 
             await _repository.CreateAsync(entity);

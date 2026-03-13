@@ -65,12 +65,7 @@ jobs:
           --memory 512Mi \
           --cpu-boost \
           --timeout 120 \
-          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
-          --set-env-vars "JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890" \
-          --set-env-vars "DatabaseSettings__DBProvider=mongodb" \
-          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en" \
-          --set-env-vars "CUSTOMER_API_URL=https://zap-customer-api-882473783707.asia-southeast1.run.app"
+          --set-env-vars "^|^ASPNETCORE_ENVIRONMENT=Development|JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890|DatabaseSettings__DBProvider=mongodb|MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}|MongoDB__DatabaseName=SinglePoint_en|CUSTOMER_API_URL=https://zap-customer-api-882473783707.asia-southeast1.run.app"
 
     - name: 'Deploy Customer to Cloud Run'
       run: |
@@ -85,9 +80,7 @@ jobs:
           --memory 512Mi \
           --cpu-boost \
           --timeout 120 \
-          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
-          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en" 
+          --set-env-vars "^|^ASPNETCORE_ENVIRONMENT=Development|MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}|MongoDB__DatabaseName=SinglePoint_en"
 
     - name: 'Deploy Product to Cloud Run'
       run: |
@@ -102,9 +95,7 @@ jobs:
           --memory 512Mi \
           --cpu-boost \
           --timeout 120 \
-          --set-env-vars "ASPNETCORE_ENVIRONMENT=Development" \
-          --set-env-vars "MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}" \
-          --set-env-vars "MongoDB__DatabaseName=SinglePoint_en" 
+          --set-env-vars "^|^ASPNETCORE_ENVIRONMENT=Development|MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}|MongoDB__DatabaseName=SinglePoint_en"
 
     - name: 'Deploy API Gateway'
       run: |

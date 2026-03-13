@@ -34,15 +34,30 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
             string identifier = request.Email.Trim();
             bool isEmail = identifier.Contains("@");
 
-            // 1. Check if exists as Email or Phone
-            if (await _userRepository.EmailExistsAsync(identifier))
-            {
-                throw new Exception("error_duplicate_account|Email này đã được sử dụng. Vui lòng chọn email khác.");
-            }
+            bool emailExists = await _userRepository.EmailExistsAsync(identifier);
+            bool phoneExists = await _userRepository.PhoneExistsAsync(identifier);
+            bool accountExists = emailExists || phoneExists;
 
-            if (await _userRepository.PhoneExistsAsync(identifier))
+            if (request.IsLogin)
             {
-                throw new Exception("error_duplicate_account|Số điện thoại này đã được sử dụng. Vui lòng chọn số khác.");
+                // Login case: must exist
+                if (!accountExists)
+                {
+                    throw new Exception("error_account_not_found|Email hoặc số điện thoại chưa được đăng ký.");
+                }
+            }
+            else
+            {
+                // Registration case: must NOT exist
+                if (emailExists)
+                {
+                    throw new Exception("error_duplicate_account|Email này đã được sử dụng. Vui lòng chọn email khác.");
+                }
+
+                if (phoneExists)
+                {
+                    throw new Exception("error_duplicate_account|Số điện thoại này đã được sử dụng. Vui lòng chọn số khác.");
+                }
             }
 
             // 2. Handle Logic based on Provider

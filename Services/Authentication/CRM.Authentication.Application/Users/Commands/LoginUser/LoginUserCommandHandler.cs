@@ -11,15 +11,18 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
     {
         private readonly IUserRepository _userRepository;
         private readonly ITokenGenerator _tokenGenerator;
+        private readonly IOtpRepository _otpRepository;
         private readonly IStringLocalizer<SharedResource> _localizer;
 
         public LoginUserCommandHandler(
             IUserRepository userRepository,
             ITokenGenerator tokenGenerator,
+            IOtpRepository otpRepository,
             IStringLocalizer<SharedResource> localizer)
         {
             _userRepository = userRepository;
             _tokenGenerator = tokenGenerator;
+            _otpRepository = otpRepository;
             _localizer = localizer;
         }
 
@@ -37,16 +40,48 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
             }
 
-            // Legacy Hashing Logic
-            var hashingSw = System.Diagnostics.Stopwatch.StartNew();
-            var hashedInput = HashLegacyPassword(request.Password);
-            bool isPasswordValid = user.Password == hashedInput || user.Password == request.Password;
-            Console.WriteLine($"[Perf] Hashing & Validation took: {hashingSw.ElapsedMilliseconds}ms");
-
-            if (!isPasswordValid)
+            // --- Case 1: Login via OTP ---
+            if (!string.IsNullOrEmpty(request.Otp))
             {
-                Console.WriteLine($"[Login] Password mismatch. Input hashed: {hashedInput}");
-                throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
+                Console.WriteLine($"[Login] Attempting OTP Validation for {request.Email}");
+                var latestOtp = await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "register") 
+                                ?? await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "forgot")
+                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "register");
+
+                if (latestOtp == null)
+                {
+                    Console.WriteLine($"[Login] No OTP found for {request.Email}");
+                    throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không hợp lệ hoặc đã hết hạn.");
+                }
+
+                if (latestOtp.ExpiredAt < DateTime.UtcNow)
+                {
+                    Console.WriteLine($"[Login] OTP Expired for {request.Email}");
+                    throw new UnauthorizedAccessException("error_otp_expired|Mã xác thực đã hết hạn.");
+                }
+
+                if (latestOtp.OtpCode != request.Otp)
+                {
+                    Console.WriteLine($"[Login] OTP Mismatch for {request.Email}. Expected: {latestOtp.OtpCode}, Input: {request.Otp}");
+                    throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không chính xác.");
+                }
+
+                // Mark OTP as used if needed, or just proceed since login is success
+                Console.WriteLine($"[Login] OTP Success for {request.Email}");
+            }
+            // --- Case 2: Login via Password ---
+            else
+            {
+                var hashingSw = System.Diagnostics.Stopwatch.StartNew();
+                var hashedInput = HashLegacyPassword(request.Password ?? "");
+                bool isPasswordValid = user.Password == hashedInput || user.Password == request.Password;
+                Console.WriteLine($"[Perf] Hashing & Validation took: {hashingSw.ElapsedMilliseconds}ms");
+
+                if (!isPasswordValid)
+                {
+                    Console.WriteLine($"[Login] Password mismatch.");
+                    throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
+                }
             }
 
             // Account activation check

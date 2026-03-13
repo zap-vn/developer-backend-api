@@ -5,6 +5,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
 {
     public record LoginUserCommand(
         string Email,
-        string Password
+        string? Password = null,
+        string? Otp = null
     ) : IRequest<LoginResponseDto>;
 }

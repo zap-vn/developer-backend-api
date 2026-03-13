@@ -28,7 +28,8 @@ namespace CRM.Authentication.Application.Users.DTOs
     public class LoginRequestDto
     {
         public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public string? Password { get; set; }
+        public string? Otp { get; set; }
         public bool IsRemember { get; set; }
     }
 }

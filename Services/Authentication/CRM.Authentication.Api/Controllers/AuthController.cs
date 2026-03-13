@@ -31,7 +31,8 @@ namespace CRM.Authentication.Api.Controllers
         public async Task<IActionResult> CheckAccount([FromBody] CheckAccountAvailabilityCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(new { Success = result, Message = "Mã OTP đã được gửi." });
+            string message = command.IsLogin ? "Tài khoản hợp lệ." : "Mã OTP đã được gửi.";
+            return Ok(new { Success = result, Message = message });
         }
 
         [HttpPost("verify-registration-otp")]

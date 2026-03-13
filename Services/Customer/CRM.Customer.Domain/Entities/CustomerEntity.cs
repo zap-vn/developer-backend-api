@@ -66,6 +66,12 @@ namespace CRM.Customer.Domain.Entities
         public string MerchantName { get; set; } = string.Empty;
         public string RegistrationSource { get; set; } = "Email";
         
+        public bool IsVerify { get; set; } = false;
+        public bool IsVerifyPhone { get; set; } = false;
+        public bool IsVerifyEmail { get; set; } = false;
+        public bool IsVerifyGoogle { get; set; } = false;
+        public bool IsVerifyApple { get; set; } = false;
+        
         // Legacy fields for compilation if needed
         public string Name { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;

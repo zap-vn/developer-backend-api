@@ -153,6 +153,11 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                         Password = string.IsNullOrWhiteSpace(request.Password) ? "" : HashLegacyPassword(request.Password),
                         Visible = 1,
                         IsActive = !string.IsNullOrWhiteSpace(request.Email), // Set to active if email is verified
+                        IsVerify = user.IsVerify,
+                        IsVerifyEmail = user.IsVerifyEmail,
+                        IsVerifyPhone = user.IsVerifyPhone,
+                        IsVerifyGoogle = user.IsVerifyGoogle,
+                        IsVerifyApple = user.IsVerifyApple,
                         LanguageId = langId,
                         Language = langCode, 
                         RegistrationSource = detectedProvider,

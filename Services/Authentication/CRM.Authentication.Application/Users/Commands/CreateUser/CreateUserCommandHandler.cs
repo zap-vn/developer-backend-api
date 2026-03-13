@@ -50,7 +50,7 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
                 IsVerifyEmail = user.IsVerifyEmail,
                 IsVerifyGoogle = user.IsVerifyGoogle,
                 IsVerifyApple = user.IsVerifyApple,
-                MerchantUrl = user.Avatar
+                MerchantUrl = user.MerchantUrl
             };
         }
 

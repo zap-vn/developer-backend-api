@@ -144,7 +144,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 MerchantName = user.MerchantName,
                 AccessToken = token,
                 Acronym = string.IsNullOrEmpty(user.Acronym) ? (user.FirstName.Length > 0 ? user.FirstName.Substring(0, 1) : "") + (user.LastName.Length > 0 ? user.LastName.Substring(0, 1) : "") : user.Acronym,
-                Avatar = user.Avatar,
+                Avatar = user.MerchantUrl,
                 Color = "",
                 ExpiresIn = 86400, // 24 hours in seconds
                 FullName = user.FullName,
@@ -167,7 +167,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                     IsVerifyEmail = user.IsVerifyEmail,
                     IsVerifyGoogle = user.IsVerifyGoogle,
                     IsVerifyApple = user.IsVerifyApple,
-                    MerchantUrl = user.Avatar
+                    MerchantUrl = user.MerchantUrl
                 }
             };
         }

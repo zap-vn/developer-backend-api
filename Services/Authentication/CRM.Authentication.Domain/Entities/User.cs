@@ -32,8 +32,8 @@ namespace CRM.Authentication.Domain.Entities
         [BsonElement("LanguageId")]
         public long LanguageId { get; set; }
 
-        [BsonElement("Url")]
-        public string Avatar { get; set; } = string.Empty; // Mapped to Url
+        [BsonElement("MerchantUrl")]
+        public string MerchantUrl { get; set; } = string.Empty;
 
         [BsonElement("Provider")]
         public string Provider { get; set; } = "Email";

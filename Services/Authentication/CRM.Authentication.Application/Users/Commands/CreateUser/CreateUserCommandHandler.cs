@@ -45,10 +45,12 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
                 LanguageId = user.LanguageId,
                 Provider = user.Provider,
                 Roles = user.Roles,
+                CreatedAt = user.CreatedAt,
                 IsVerifyPhone = user.IsVerifyPhone,
                 IsVerifyEmail = user.IsVerifyEmail,
                 IsVerifyGoogle = user.IsVerifyGoogle,
-                IsVerifyApple = user.IsVerifyApple
+                IsVerifyApple = user.IsVerifyApple,
+                URL = user.Avatar
             };
         }
 

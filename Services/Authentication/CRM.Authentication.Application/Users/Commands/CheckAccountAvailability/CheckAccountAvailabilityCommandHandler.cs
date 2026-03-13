@@ -64,14 +64,14 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
             string provider = string.IsNullOrWhiteSpace(request.Provider) ? "Email" : request.Provider;
             bool isSocial = provider == "Google" || provider == "Facebook" || provider == "Apple";
 
-            if (isSocial)
+            if (isSocial || request.IsLogin)
             {
-                // For Social: Just confirm account is available, no OTP needed here
-                // Registration usually happens immediately or after profile confirmation in frontend
+                // For Social or Login check: Just confirm account exists/available
+                // No OTP needed at this stage
                 return true;
             }
 
-            // 3. If standard Email/Phone -> Generate 6-digit OTP
+            // 3. If standard Registration (IsLogin = false) -> Generate 6-digit OTP
             var otpCode = new Random().Next(100000, 999999).ToString();
 
             // 4. Save OTP to database (CustomerOtps)

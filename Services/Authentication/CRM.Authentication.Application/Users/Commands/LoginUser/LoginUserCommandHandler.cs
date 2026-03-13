@@ -4,6 +4,13 @@ using CRM.Authentication.Application.Users.DTOs;
 using CRM.Authentication.Domain.Interfaces;
 using Microsoft.Extensions.Localization;
 using CRM.BuildingBlocks.Localization;
+using Microsoft.Extensions.Logging;
+using CRM.Authentication.Domain.Entities;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using System;
+using System.Linq;
 
 namespace CRM.Authentication.Application.Users.Commands.LoginUser
 {
@@ -13,45 +20,56 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IOtpRepository _otpRepository;
         private readonly IStringLocalizer<SharedResource> _localizer;
+        private readonly Microsoft.Extensions.Logging.ILogger<LoginUserCommandHandler> _logger;
 
         public LoginUserCommandHandler(
             IUserRepository userRepository,
             ITokenGenerator tokenGenerator,
             IOtpRepository otpRepository,
-            IStringLocalizer<SharedResource> localizer)
+            IStringLocalizer<SharedResource> localizer,
+            Microsoft.Extensions.Logging.ILogger<LoginUserCommandHandler> _logger)
         {
             _userRepository = userRepository;
             _tokenGenerator = tokenGenerator;
             _otpRepository = otpRepository;
             _localizer = localizer;
+            this._logger = _logger;
         }
 
         public async Task<LoginResponseDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
-            Console.WriteLine($"[Legacy Login] START for Email: {request.Email}");
+            var email = (request.Email ?? "").Trim();
+            _logger.LogInformation("[Login] START for Identifier: {Identifier}", email);
             
-            var user = await _userRepository.GetByEmailAsync(request.Email);
-            Console.WriteLine($"[Perf] DB Lookup took: {sw.ElapsedMilliseconds}ms");
+            // Parallelize User and OTP lookup if possible
+            var purposes = new[] { "login", "register", "forgot", "verify", "social", "resend-otp" };
+            
+            var userTask = _userRepository.GetByEmailAsync(email);
+            var otpTask = !string.IsNullOrEmpty(request.Otp) 
+                ? _otpRepository.GetLatestOtpByEmailForPurposesAsync(email, purposes)
+                : Task.FromResult<CustomerOtp?>(null);
+
+            await Task.WhenAll(userTask, otpTask);
+            
+            var user = userTask.Result;
+            var latestOtp = otpTask.Result;
 
             if (user == null)
             {
-                Console.WriteLine($"[Login] User not found: {request.Email}");
-                throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
+                // Fallback to phone lookup if the identifier might be a phone number not found by the combined GetByEmailAsync
+                user = await _userRepository.GetByPhoneAsync(email);
+                if (user == null)
+                {
+                    _logger.LogWarning("[Login] User not found: {Identifier}", email);
+                    throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
+                }
             }
 
             // --- Case 1: Login via OTP ---
             if (!string.IsNullOrEmpty(request.Otp))
             {
-                Console.WriteLine($"[Login] Attempting OTP Validation for {request.Email}");
-                
-                // Search for latest OTP with any common verification purpose
-                var purposes = new[] { "login", "register", "forgot", "verify", "social", "resend-otp" };
-                
-                // Try finding by Email
-                var latestOtp = await _otpRepository.GetLatestOtpByEmailForPurposesAsync(request.Email, purposes);
-
-                // If not found by email, try by Phone (from the user record we just loaded)
+                // If not found by email/identifier, try by User's verified phone
                 if (latestOtp == null && !string.IsNullOrEmpty(user.Phone))
                 {
                     latestOtp = await _otpRepository.GetLatestOtpByPhoneForPurposesAsync(user.Phone, purposes);
@@ -59,56 +77,51 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
 
                 if (latestOtp == null)
                 {
-                    Console.WriteLine($"[Login] No OTP record found in CustomerOtps for {request.Email} or {user.Phone}");
+                    _logger.LogWarning("[Login] No OTP found for {Identifier}", email);
                     throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không hợp lệ hoặc đã hết hạn.");
                 }
 
                 if (latestOtp.ExpiredAt < DateTime.UtcNow)
                 {
-                    Console.WriteLine($"[Login] OTP Expired for {request.Email}");
                     throw new UnauthorizedAccessException("error_otp_expired|Mã xác thực đã hết hạn.");
                 }
 
                 if (latestOtp.OtpCode != request.Otp)
                 {
-                    Console.WriteLine($"[Login] OTP Mismatch for {request.Email}. Expected: {latestOtp.OtpCode}, Input: {request.Otp}");
                     throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không chính xác.");
                 }
 
-                // Mark OTP as used
+                // Parallelize persistence updates
+                var updateTasks = new List<Task>();
+                
                 latestOtp.VerifiedAt = DateTime.UtcNow;
-                await _otpRepository.UpdateAsync(latestOtp);
-                Console.WriteLine($"[Login] OTP Success and marked as used for {request.Email}");
+                updateTasks.Add(_otpRepository.UpdateAsync(latestOtp));
 
-                // Auto-verify user if not already verified
                 if (!user.IsVerify)
                 {
                     user.IsVerify = true;
                     if (!string.IsNullOrEmpty(latestOtp.Email)) user.IsVerifyEmail = true;
                     if (!string.IsNullOrEmpty(latestOtp.Phone)) user.IsVerifyPhone = true;
                     user.UpdatedAt = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss");
-                    await _userRepository.UpdateAsync(user);
-                    Console.WriteLine($"[Login] Auto-verified user {user.Email} via OTP login.");
+                    updateTasks.Add(_userRepository.UpdateAsync(user));
+                    _logger.LogInformation("[Login] Auto-verified user {Email} via OTP", user.Email);
                 }
+                
+                await Task.WhenAll(updateTasks);
             }
             // --- Case 2: Login via Password ---
             else
             {
-                var hashingSw = System.Diagnostics.Stopwatch.StartNew();
                 var hashedInput = HashLegacyPassword(request.Password ?? "");
                 bool isPasswordValid = user.Password == hashedInput || user.Password == request.Password;
-                Console.WriteLine($"[Perf] Hashing & Validation took: {hashingSw.ElapsedMilliseconds}ms");
 
                 if (!isPasswordValid)
                 {
-                    Console.WriteLine($"[Login] Password mismatch.");
                     throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
                 }
 
-                // If logging in with Password but NOT verified, we must block
                 if (!user.IsVerify)
                 {
-                    Console.WriteLine($"[Login] Account not verified for user: {user.Email}");
                     throw new UnauthorizedAccessException("AUTH_001|AUTH_001_detail");
                 }
             }

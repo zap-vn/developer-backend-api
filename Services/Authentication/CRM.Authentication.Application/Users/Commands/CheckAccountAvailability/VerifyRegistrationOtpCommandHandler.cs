@@ -23,7 +23,7 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
             }
 
             // Get latest OTP for the given identifier (Email or Phone)
-            var customerOtp = await _otpRepository.GetLatestOtpByEmailAsync(request.Email.Trim(), "register");
+            var customerOtp = await _otpRepository.GetLatestOtpByEmailForPurposesAsync(request.Email.Trim(), new[] { "register", "resend-otp" });
 
             if (customerOtp == null)
             {

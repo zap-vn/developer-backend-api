@@ -46,23 +46,15 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 Console.WriteLine($"[Login] Attempting OTP Validation for {request.Email}");
                 
                 // Search for latest OTP with any common verification purpose
-                var purposes = new[] { "register", "login", "forgot", "verify", "social" };
+                var purposes = new[] { "login", "register", "forgot", "verify", "social", "resend-otp" };
                 
                 // Try finding by Email
-                var latestOtp = await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "login")
-                                ?? await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "register")
-                                ?? await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "forgot")
-                                ?? await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "verify")
-                                ?? await _otpRepository.GetLatestOtpByEmailAsync(request.Email, "social");
+                var latestOtp = await _otpRepository.GetLatestOtpByEmailForPurposesAsync(request.Email, purposes);
 
                 // If not found by email, try by Phone (from the user record we just loaded)
                 if (latestOtp == null && !string.IsNullOrEmpty(user.Phone))
                 {
-                    latestOtp = await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "login")
-                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "register")
-                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "forgot")
-                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "verify")
-                                ?? await _otpRepository.GetLatestOtpByPhoneAsync(user.Phone, "social");
+                    latestOtp = await _otpRepository.GetLatestOtpByPhoneForPurposesAsync(user.Phone, purposes);
                 }
 
                 if (latestOtp == null)

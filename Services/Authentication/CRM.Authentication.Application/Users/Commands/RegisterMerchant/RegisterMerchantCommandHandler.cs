@@ -7,6 +7,8 @@ using CRM.Authentication.Application.Users.DTOs;
 using CRM.Authentication.Domain.Entities;
 using CRM.Authentication.Domain.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
 
 namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
 {
@@ -15,17 +17,25 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
         private readonly IUserRepository _userRepository;
         private readonly IOtpRepository _otpRepository;
         private readonly IMemoryCache _cache;
+        private readonly CRM.BuildingBlocks.Interfaces.IBackgroundTaskQueue _backgroundTaskQueue;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private static readonly string _customerApiUrl = System.Environment.GetEnvironmentVariable("CUSTOMER_API_URL") ?? "http://localhost:5003";
-        private static readonly HttpClient _httpClient = new HttpClient { Timeout = System.TimeSpan.FromSeconds(10) };
 
         public RegisterMerchantCommandHandler(
             IUserRepository userRepository,
             IOtpRepository otpRepository,
-            IMemoryCache cache)
+            IMemoryCache cache,
+            CRM.BuildingBlocks.Interfaces.IBackgroundTaskQueue backgroundTaskQueue,
+            IHttpClientFactory httpClientFactory,
+            IServiceScopeFactory serviceScopeFactory)
         {
             _userRepository = userRepository;
             _otpRepository = otpRepository;
             _cache = cache;
+            _backgroundTaskQueue = backgroundTaskQueue;
+            _httpClientFactory = httpClientFactory;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public async Task<UserDto> Handle(RegisterMerchantCommand request, CancellationToken cancellationToken)
@@ -117,9 +127,13 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
             
             await _userRepository.CreateAsync(user);
 
-            // Run Sync operations in background to speed up API response
-            _ = Task.Run(async () =>
+            // Managed Background Queue for Sync operations
+            _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
             {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var httpClient = _httpClientFactory.CreateClient();
+                httpClient.Timeout = System.TimeSpan.FromSeconds(15);
+
                 // Connect to Customer service via HTTP API call
                 try
                 {
@@ -149,16 +163,16 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                     };
                     
                     var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";
-                    var response = await _httpClient.PostAsJsonAsync(syncUrl, customerPayload);
+                    var response = await httpClient.PostAsJsonAsync(syncUrl, customerPayload, token);
                     if (!response.IsSuccessStatusCode)
                     {
-                        var errorDetails = await response.Content.ReadAsStringAsync();
+                        var errorDetails = await response.Content.ReadAsStringAsync(token);
                         System.Console.WriteLine($"[Warning] Customer API failed: {response.StatusCode} - {errorDetails} (URL: {syncUrl})");
                     }
                 }
                 catch (System.Exception ex)
                 {
-                    System.Console.WriteLine($"[Error] Failed to connect to Customer API: {ex.Message}");
+                    System.Console.WriteLine($"[Error] Failed to connect to Customer API during background sync: {ex.Message}");
                 }
             });
 

@@ -19,6 +19,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLocalization();
 builder.Services.AddMemoryCache();
+builder.Services.AddBackgroundQueue(100);
+builder.Services.AddHttpClient();
 builder.Services.AddResponseCompression(options =>
 {
     options.EnableForHttps = true;

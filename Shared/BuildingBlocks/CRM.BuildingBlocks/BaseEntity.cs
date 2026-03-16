@@ -1,4 +1,5 @@
 using System;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace CRM.BuildingBlocks
@@ -6,6 +7,9 @@ namespace CRM.BuildingBlocks
     [BsonIgnoreExtraElements(Inherited = true)]
     public abstract class BaseEntity
     {
+        [BsonId]
+        [BsonElement("_id")]
+        [BsonRepresentation(BsonType.String)]
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public virtual string? UserGuid { get; set; } // MerchantId / TenantId (Example: "Customer/1")
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

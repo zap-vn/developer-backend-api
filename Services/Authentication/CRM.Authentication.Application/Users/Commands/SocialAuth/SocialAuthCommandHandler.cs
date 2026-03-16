@@ -59,7 +59,7 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                     IsVerifyEmail = true,
                     Visible = 1,
                     Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
-                    CreatedAt = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss")
+                    CreatedAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
                 };
 
                 await _userRepository.CreateAsync(user);

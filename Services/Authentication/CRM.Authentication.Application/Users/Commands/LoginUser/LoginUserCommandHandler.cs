@@ -102,7 +102,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                     user.IsVerify = true;
                     if (!string.IsNullOrEmpty(latestOtp.Email)) user.IsVerifyEmail = true;
                     if (!string.IsNullOrEmpty(latestOtp.Phone)) user.IsVerifyPhone = true;
-                    user.UpdatedAt = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss");
+                    user.UpdatedAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
                     updateTasks.Add(_userRepository.UpdateAsync(user));
                     _logger.LogInformation("[Login] Auto-verified user {Email} via OTP", user.Email);
                 }

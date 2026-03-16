@@ -13,7 +13,6 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
     public class RegisterMerchantCommandHandler : IRequestHandler<RegisterMerchantCommand, UserDto>
     {
         private readonly IUserRepository _userRepository;
-        private readonly CRM.Authentication.Application.Common.Interfaces.IEmailService _emailService;
         private readonly IOtpRepository _otpRepository;
         private readonly IMemoryCache _cache;
         private static readonly string _customerApiUrl = System.Environment.GetEnvironmentVariable("CUSTOMER_API_URL") ?? "http://localhost:5003";
@@ -21,12 +20,10 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
 
         public RegisterMerchantCommandHandler(
             IUserRepository userRepository,
-            CRM.Authentication.Application.Common.Interfaces.IEmailService emailService,
             IOtpRepository otpRepository,
             IMemoryCache cache)
         {
             _userRepository = userRepository;
-            _emailService = emailService;
             _otpRepository = otpRepository;
             _cache = cache;
         }
@@ -92,7 +89,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 IsVerifyApple = detectedProvider == "Apple",
                 IsVerifyPhone = false,
                 IsVerifyEmail = !string.IsNullOrWhiteSpace(request.Email),
-                CreatedAt = System.DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss")
+                CreatedAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
             };
 
             // Store OTP in database (CustomerOtps)
@@ -120,22 +117,9 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
             
             await _userRepository.CreateAsync(user);
 
-            // Run Email and Sync operations in background to speed up API response
+            // Run Sync operations in background to speed up API response
             _ = Task.Run(async () =>
             {
-                // Send Email OTP
-                try
-                {
-                    if (!string.IsNullOrEmpty(user.Email) && detectedProvider == "Email")
-                    {
-                        await _emailService.SendOtpEmailAsync(user.Email, otp, user.MerchantName);
-                    }
-                }
-                catch (System.Exception ex)
-                {
-                    System.Console.WriteLine($"[Error] Failed to send OTP email: {ex.Message}");
-                }
-
                 // Connect to Customer service via HTTP API call
                 try
                 {

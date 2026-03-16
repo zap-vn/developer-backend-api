@@ -28,7 +28,7 @@ namespace CRM.Customer.Application.Features.Customers.Commands
                 Password = request.Password,
                 CustomerCode = request.CustomerCode,
                 Visible = request.Visible,
-                CreateDate = DateTime.UtcNow.ToString("yyyy/MM/dd HH:mm:ss"),
+                CreateDate = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
                 LanguageId = request.LanguageId,
                 Language = request.Language,
                 RegistrationSource = request.RegistrationSource,

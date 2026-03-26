@@ -1,21 +1,20 @@
-# Deploy Report API to Google Cloud Run
-# Project: openclaw-zap
+# Project: tom6573637618
 
 Write-Host "🚀 Starting Deployment of Report API to Google Cloud Run..." -ForegroundColor Green
-Write-Host "Project ID: openclaw-zap" -ForegroundColor Cyan
+Write-Host "Project ID: tom6573637618" -ForegroundColor Cyan
 
 # 1. Ensure you are logged in to gcloud
 # gcloud auth login
 
 # 2. Set the correct project
-# gcloud config set project openclaw-zap
+# gcloud config set project tom6573637618
 
 # 3. Enable required services (if not already enabled)
 Write-Host "Enabling Google Cloud Services..." -ForegroundColor Yellow
 gcloud services enable run.googleapis.com containerregistry.googleapis.com cloudbuild.googleapis.com
 
 # 4. Build and Push the Docker image using Google Cloud Build
-$imageName = "asia-southeast1-docker.pkg.dev/openclaw-zap/CRM-repo/zap-report-api:latest"
+$imageName = "asia-southeast1-docker.pkg.dev/tom6573637618/CRM-repo/zap-report-api:latest"
 Write-Host "Building Docker image $imageName using Cloud Build..." -ForegroundColor Cyan
 gcloud builds submit d:\PROJECTS\2026\3_2\src --config=d:\PROJECTS\2026\3_2\src\cloudbuild.report.yaml
 

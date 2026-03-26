@@ -9,9 +9,9 @@ namespace CRM.BuildingBlocks.Serialization
             if (string.IsNullOrEmpty(name))
                 return name;
 
-            // Preserve _id as is
-            if (name == "_id")
-                return name;
+            // Force Id or _id to be _id in JSON
+            if (name == "Id" || name == "_id")
+                return "_id";
 
             // Capitalize the first letter
             return char.ToUpperInvariant(name[0]) + name.Substring(1);

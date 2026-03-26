@@ -68,6 +68,11 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
             return await _context.Users.Find(Builders<User>.Filter.Eq("MerchantName", merchantName)).AnyAsync();
         }
 
+        public async Task<bool> MerchantUrlExistsAsync(string merchantUrl)
+        {
+            return await _context.Users.Find(Builders<User>.Filter.Eq("MerchantUrl", merchantUrl)).AnyAsync();
+        }
+
         public async Task<long> GetNextSequenceAsync(string sequenceName)
         {
             var filter = Builders<ManagementIndex>.Filter.Eq(x => x._id, sequenceName);

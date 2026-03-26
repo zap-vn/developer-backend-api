@@ -4,7 +4,8 @@ namespace CRM.Authentication.Application.Common.Interfaces
 {
     public interface IPhoneService
     {
-        Task SendSmsOtpAsync(string phone, string otp);
+        Task SendSmsOtpAsync(string phone, string otp, string? customerGuid = null);
         Task SendZaloOtpAsync(string phone, string otp);
+        Task<bool> VerifyOtpAsync(string phone, string otp);
     }
 }

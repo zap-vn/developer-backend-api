@@ -39,15 +39,23 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
         public async Task<LoginResponseDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
-            var email = (request.Email ?? "").Trim();
-            _logger.LogInformation("[Login] START for Identifier: {Identifier}", email);
+            var account = (request.Account ?? "").Trim();
+            
+            // Normalize phone number if dialing_code is present
+            if (!string.IsNullOrEmpty(request.DialingCode) && !account.Contains("@") && account.All(char.IsDigit))
+            {
+                if (account.StartsWith("0")) account = account.Substring(1);
+                account = request.DialingCode + account;
+            }
+
+            _logger.LogInformation("[Login] START for Identifier: {Identifier}", account);
             
             // Parallelize User and OTP lookup if possible
             var purposes = new[] { "login", "register", "forgot", "verify", "social", "resend-otp" };
             
-            var userTask = _userRepository.GetByEmailAsync(email);
+            var userTask = _userRepository.GetByEmailAsync(account);
             var otpTask = !string.IsNullOrEmpty(request.Otp) 
-                ? _otpRepository.GetLatestOtpByEmailForPurposesAsync(email, purposes)
+                ? _otpRepository.GetLatestOtpByEmailForPurposesAsync(account, purposes)
                 : Task.FromResult<CustomerOtp?>(null);
 
             await Task.WhenAll(userTask, otpTask);
@@ -58,10 +66,10 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             if (user == null)
             {
                 // Fallback to phone lookup if the identifier might be a phone number not found by the combined GetByEmailAsync
-                user = await _userRepository.GetByPhoneAsync(email);
+                user = await _userRepository.GetByPhoneAsync(account);
                 if (user == null)
                 {
-                    _logger.LogWarning("[Login] User not found: {Identifier}", email);
+                    _logger.LogWarning("[Login] User not found: {Identifier}", account);
                     throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
                 }
             }
@@ -77,7 +85,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
 
                 if (latestOtp == null)
                 {
-                    _logger.LogWarning("[Login] No OTP found for {Identifier}", email);
+                    _logger.LogWarning("[Login] No OTP found for {Identifier}", account);
                     throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không hợp lệ hoặc đã hết hạn.");
                 }
 
@@ -133,41 +141,21 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             }
 
             var tokenSw = System.Diagnostics.Stopwatch.StartNew();
-            var token = _tokenGenerator.GenerateToken(user);
+            var token = await _tokenGenerator.GenerateTokenAsync(user);
             Console.WriteLine($"[Perf] Token generation took: {tokenSw.ElapsedMilliseconds}ms");
 
             Console.WriteLine($"[Legacy Login] TOTAL SUCCESS in {sw.ElapsedMilliseconds}ms");
             return new LoginResponseDto
             {
                 Success = true,
-                Message = _localizer["auth_login_success"] ?? "Login successful",
-                MerchantName = user.MerchantName,
-                AccessToken = token,
-                Acronym = string.IsNullOrEmpty(user.Acronym) ? (user.FirstName.Length > 0 ? user.FirstName.Substring(0, 1) : "") + (user.LastName.Length > 0 ? user.LastName.Substring(0, 1) : "") : user.Acronym,
-                MerchantUrl = user.MerchantUrl,
-                Color = "",
-                ExpiresIn = 86400, // 24 hours in seconds
-                FullName = user.FullName,
-                RefreshToken = Guid.NewGuid().ToString(),
-                Role = user.Roles.FirstOrDefault() ?? "Admin",
-                UpdateDate = user.UpdatedAt,
-                UserGuid = $"Customer/{user._key}",
-                Permissions = new List<string>(),
-                Screens = new List<string>(),
-                User = new UserDto
+                Message = _localizer["auth_login_success"] ?? "Đăng nhập thành công",
+                Data = new LoginDataDto
                 {
-                    _id = user._id,
+                    Token = token,
+                    MerchantId = $"merchant_{user._key}",
                     Email = user.Email,
-                    Phone = user.Phone,
-                    FullName = user.FullName,
-                    LanguageId = user.LanguageId,
-                    Roles = user.Roles,
-                    CreatedAt = user.CreatedAt,
-                    IsVerifyPhone = user.IsVerifyPhone,
-                    IsVerifyEmail = user.IsVerifyEmail,
-                    IsVerifyGoogle = user.IsVerifyGoogle,
-                    IsVerifyApple = user.IsVerifyApple,
-                    MerchantUrl = user.MerchantUrl
+                    Name = !string.IsNullOrEmpty(user.MerchantName) ? user.MerchantName : user.FullName,
+                    LogoUrl = string.IsNullOrEmpty(user.MerchantUrl) ? "https://api.zap.vn/logo.png" : user.MerchantUrl
                 }
             };
         }

@@ -1,11 +1,18 @@
 using MediatR;
+using System.Text.Json.Serialization;
+using CRM.Authentication.Application.Users.DTOs;
 
 namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
 {
-    public class CheckAccountAvailabilityCommand : IRequest<bool>
+    public class CheckAccountAvailabilityCommand : IRequest<CheckAccountResponseDto>
     {
-        public string Email { get; set; } = string.Empty;
-        public string Provider { get; set; } = "Email"; // Email, Google, Facebook, Apple
+        [JsonPropertyName("account")]
+        public string Account { get; set; } = string.Empty;
+
+        [JsonPropertyName("dialing_code")]
+        public string? DialingCode { get; set; } = "+84";
+
+        public string Provider { get; set; } = "Email"; 
         public bool IsLogin { get; set; }
     }
 }

@@ -26,14 +26,13 @@ namespace CRM.Product.Application.Features.Products.Queries
             { 
 #pragma warning disable CS8602
                 Id = entity.Id,
-                Code = entity.Code,
                 Name = entity.Name,
                 Description = entity.Description,
                 Price = entity.Price,
-                Stock = entity.Stock,
-                Category = entity.Category,
                 ImageUrl = entity.ImageUrl,
-                IsActive = entity.IsActive
+                Status = entity.Visible,
+                CateName = entity.Category,
+                MerchantId = entity.UserGuid
             };
         }
     }

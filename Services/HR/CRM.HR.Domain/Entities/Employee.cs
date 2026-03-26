@@ -15,6 +15,7 @@ namespace CRM.HR.Domain.Entities
         public string FirstName { get; set; } = string.Empty; // Fallback
         public string LastName { get; set; } = string.Empty; // Fallback
         public string Email { get; set; } = string.Empty;
+        public string Department { get; set; } = string.Empty;
         public Guid? UserId { get; set; } 
         
         public ICollection<EmployeeTranslation> Translations { get; set; } = new List<EmployeeTranslation>();

@@ -12,6 +12,7 @@ namespace CRM.Authentication.Domain.Interfaces
         Task<bool> EmailExistsAsync(string email);
         Task<bool> PhoneExistsAsync(string phone);
         Task<bool> MerchantNameExistsAsync(string merchantName);
+        Task<bool> MerchantUrlExistsAsync(string merchantUrl);
         Task<long> GetNextSequenceAsync(string sequenceName);
         Task CreateAsync(User user);
         Task UpdateAsync(User user);

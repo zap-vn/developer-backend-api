@@ -40,6 +40,7 @@ builder.Services.AddCors(options =>
 // TTL Application Services
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddSingleton<CRM.Authentication.Infrastructure.Security.OtpService>();
 
 // Authentication setup
 builder.Services.AddAuthentication(options =>

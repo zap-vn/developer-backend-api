@@ -57,12 +57,19 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
 
             if (!string.IsNullOrWhiteSpace(request.Phone))
             {
-                if (await _userRepository.PhoneExistsAsync(request.Phone))
+                string phone = request.Phone.Trim();
+                if (!string.IsNullOrEmpty(request.DialingCode))
+                {
+                    if (phone.StartsWith("0")) phone = phone.Substring(1);
+                    phone = request.DialingCode + phone;
+                }
+
+                if (await _userRepository.PhoneExistsAsync(phone))
                 {
                     throw new System.Exception("error_duplicate_phone|error_duplicate_phone_detail");
                 }
 
-                if (!IsValidPhoneNumber(request.Phone))
+                if (!IsValidPhoneNumber(phone))
                 {
                     throw new System.Exception("error_invalid_phone|error_invalid_phone_detail");
                 }
@@ -77,6 +84,13 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
             var langId = ExtractLanguageId(request.LanguageId);
             var langCode = string.IsNullOrEmpty(request.Language) ? (langId > 0 ? "" : "en") : request.Language;
 
+            string finalPhone = request.Phone?.Trim() ?? "";
+            if (!string.IsNullOrEmpty(finalPhone) && !string.IsNullOrEmpty(request.DialingCode))
+            {
+                if (finalPhone.StartsWith("0")) finalPhone = finalPhone.Substring(1);
+                finalPhone = request.DialingCode + finalPhone;
+            }
+
             var user = new User
             {
                 _id = customerIdStr,
@@ -84,7 +98,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 FirstName = request.FirstName?.Trim() ?? "",
                 LastName = request.LastName?.Trim() ?? "",
                 Email = request.Email?.Trim() ?? "",
-                Phone = request.Phone?.Trim() ?? "",
+                Phone = finalPhone,
                 MerchantName = request.MerchantName,
                 BusinessName = request.MerchantName,
                 Language = langCode, 

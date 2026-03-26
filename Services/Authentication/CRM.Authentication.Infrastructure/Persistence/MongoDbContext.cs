@@ -10,6 +10,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
     {
         private static IMongoClient? _client;
         public readonly IMongoDatabase Database;
+        public readonly IMongoDatabase SystemDatabase;
 
         public MongoDbContext(IOptions<MongoSettings> settings)
         {
@@ -31,6 +32,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
                 }
             }
             Database = _client.GetDatabase(mongoSettings.DatabaseName);
+            SystemDatabase = _client.GetDatabase("SystemDB");
 
             // Attributes in User.cs handle property mapping to BSON elements.
             
@@ -81,5 +83,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
         public IMongoCollection<PasswordResetRequest> PasswordResetRequests => Database.GetCollection<PasswordResetRequest>("PasswordResetRequests");
         public IMongoCollection<CustomerOtp> CustomerOtps => Database.GetCollection<CustomerOtp>("CustomerOtps");
         public IMongoCollection<SystemError> SystemErrors => Database.GetCollection<SystemError>("SystemErrors");
+        public IMongoCollection<EmailSetting> EmailSettings => Database.GetCollection<EmailSetting>("email_setting");
+        public IMongoCollection<SystemConfig> SystemConfigs => SystemDatabase.GetCollection<SystemConfig>("system_configs");
     }
 }

@@ -16,7 +16,7 @@ using System;
 namespace CRM.Authentication.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/auth")]
     [Microsoft.AspNetCore.Authorization.AllowAnonymous]
     public class AuthController : ControllerBase
     {
@@ -27,12 +27,37 @@ namespace CRM.Authentication.Api.Controllers
             _mediator = mediator;
         }
 
+        private record ApiResponse(
+            [property: System.Text.Json.Serialization.JsonPropertyName("success")] bool Success,
+            [property: System.Text.Json.Serialization.JsonPropertyName("code")] int Code,
+            [property: System.Text.Json.Serialization.JsonPropertyName("message")] string Message,
+            [property: System.Text.Json.Serialization.JsonPropertyName("data")] object? Data = null
+        );
+
         [HttpPost("check-account")]
         public async Task<IActionResult> CheckAccount([FromBody] CheckAccountAvailabilityCommand command)
         {
             var result = await _mediator.Send(command);
-            string message = command.IsLogin ? "Tài khoản hợp lệ." : "Mã OTP đã được gửi.";
-            return Ok(new { Success = result, Message = message });
+            return Ok(new 
+            {
+                success = result.Success,
+                code = result.Success ? 200 : 400,
+                message = result.Message,
+                data = result.Data
+            });
+        }
+
+        [HttpPost("send-otp")]
+        public async Task<IActionResult> SendOtp([FromBody] SendOtpCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(new 
+            {
+                success = result,
+                code = result ? 200 : 400,
+                message = result ? "OTP sent successfully" : "Failed to send OTP",
+                data = (object?)null
+            });
         }
 
         [HttpPost("verify-registration-otp")]
@@ -73,9 +98,11 @@ namespace CRM.Authentication.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            if (string.IsNullOrEmpty(request.Email))
+            var identifier = !string.IsNullOrEmpty(request.Account) ? request.Account : request.Email;
+            
+            if (string.IsNullOrEmpty(identifier))
             {
-                return BadRequest(new { Message = "Email is required." });
+                return BadRequest(new { Message = "Account (Email/Phone) is required." });
             }
 
             if (string.IsNullOrEmpty(request.Password) && string.IsNullOrEmpty(request.Otp))
@@ -83,7 +110,7 @@ namespace CRM.Authentication.Api.Controllers
                 return BadRequest(new { Message = "Either Password or OTP is required." });
             }
             
-            var command = new LoginUserCommand(request.Email, request.Password, request.Otp);
+            var command = new LoginUserCommand(identifier, request.Password, request.Otp);
             var result = await _mediator.Send(command);
             return Ok(result);
         }
@@ -114,7 +141,13 @@ namespace CRM.Authentication.Api.Controllers
         public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(result);
+            return Ok(new 
+            {
+                success = result.Success,
+                code = result.Success ? 200 : 400,
+                message = result.Success ? "OTP verified" : result.Message,
+                data = result.ConfirmToken != null ? new { confirm_token = result.ConfirmToken } : null
+            });
         }
 
         [HttpPost("reset-password")]

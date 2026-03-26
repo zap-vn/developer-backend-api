@@ -33,6 +33,14 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<PasswordResetRequest?> GetLatestByIdentifierAsync(string identifier)
+        {
+            return await _context.PasswordResetRequests
+                .Find(x => (x.Email == identifier || x.Phone == identifier) && !x.IsUsed)
+                .SortByDescending(x => x.CreatedAt)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task UpdateAsync(PasswordResetRequest request)
         {
             await _context.PasswordResetRequests.ReplaceOneAsync(x => x.Id == request.Id, request);
@@ -41,7 +49,7 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
         public async Task<int> GetRecentRequestCountAsync(string identifier, DateTime since)
         {
             return (int)await _context.PasswordResetRequests
-                .CountDocumentsAsync(x => x.Email == identifier && x.CreatedAt >= since);
+                .CountDocumentsAsync(x => (x.Email == identifier || x.Phone == identifier) && x.CreatedAt >= since);
         }
     }
 }

@@ -1,19 +1,21 @@
 #nullable enable
 using MediatR;
+using System.Text.Json.Serialization;
 using CRM.Authentication.Application.Users.DTOs;
 
 namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
 {
     public record RegisterMerchantCommand(
-        string FirstName,
-        string LastName,
-        string MerchantName,
-        string Phone,
-        string? Email = null,
-        string? Password = null,
-        string? Language = null,
-        object? LanguageId = null,
-        string? Provider = null,
-        string? MerchantUrl = null
+        [property: JsonPropertyName("first_name")] string FirstName,
+        [property: JsonPropertyName("last_name")] string LastName,
+        [property: JsonPropertyName("merchant_name")] string MerchantName,
+        [property: JsonPropertyName("phone")] string Phone,
+        [property: JsonPropertyName("dialing_code")] string? DialingCode = "+84",
+        [property: JsonPropertyName("email")] string? Email = null,
+        [property: JsonPropertyName("password")] string? Password = null,
+        [property: JsonPropertyName("language")] string? Language = null,
+        [property: JsonPropertyName("language_id")] object? LanguageId = null,
+        [property: JsonPropertyName("provider")] string? Provider = null,
+        [property: JsonPropertyName("merchant_url")] string? MerchantUrl = null
     ) : IRequest<UserDto>;
 }

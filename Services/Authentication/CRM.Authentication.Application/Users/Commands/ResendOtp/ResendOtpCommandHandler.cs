@@ -82,14 +82,15 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
             if (user.Provider == "Phone" || !string.IsNullOrEmpty(request.Phone))
             {
                 string targetPhone = !string.IsNullOrEmpty(request.Phone) ? request.Phone : user.Phone;
-                
+                string customerGuid = $"Customer/{user._key}";
+
                 if (request.Channel?.ToLower() == "zalo")
                 {
                     await _phoneService.SendZaloOtpAsync(targetPhone, otp);
                 }
                 else
                 {
-                    await _phoneService.SendSmsOtpAsync(targetPhone, otp);
+                    await _phoneService.SendSmsOtpAsync(targetPhone, otp, customerGuid);
                 }
             }
             // Case: Default to Email

@@ -91,8 +91,22 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 finalPhone = request.DialingCode + finalPhone;
             }
 
+            // Generate a New Guid for PostgreSQL
+            var userId = System.Guid.NewGuid();
+            // Using null for TenantId to avoid Foreign Key constraint issues if the default tenant node is missing.
+            // Guidance: Ensure the tenant exists in the platform.tenant_node table before enabling this.
+            System.Guid? tenantId = null; 
+
             var user = new User
             {
+                id = userId,
+                TenantId = tenantId,
+                Username = request.Email?.Trim() ?? "", 
+                FullName = $"{request.FirstName} {request.LastName}".Trim(),
+                PasswordHash = string.IsNullOrWhiteSpace(request.Password) ? "" : HashLegacyPassword(request.Password),
+                StatusId = null, // Let DB handle default or allow null
+                
+                // Legacy fields for backward compatibility
                 _id = customerIdStr,
                 _key = nextId,
                 FirstName = request.FirstName?.Trim() ?? "",
@@ -113,21 +127,30 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 IsVerifyApple = detectedProvider == "Apple",
                 IsVerifyPhone = false,
                 IsVerifyEmail = !string.IsNullOrWhiteSpace(request.Email),
-                CreatedAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+                CreatedAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
+                CreatedAtDate = System.DateTime.UtcNow,
+                UpdatedAtDate = System.DateTime.UtcNow
             };
 
-            // Store OTP in database (CustomerOtps)
-            var customerOtp = new CustomerOtp
+            // Store OTP in database (CustomerOtps) - MongoDB is currently being used, wrapping in try-catch to avoid crash if flaky.
+            try 
             {
-                CustomerId = user._id,
-                Email = user.Email,
-                Phone = user.Phone,
-                OtpCode = otp,
-                Purpose = "register",
-                ExpiredAt = DateTime.UtcNow.AddMinutes(15),
-                CreatedAt = DateTime.UtcNow
-            };
-            await _otpRepository.CreateAsync(customerOtp);
+                var customerOtp = new CustomerOtp
+                {
+                    CustomerId = user._id,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    OtpCode = otp,
+                    Purpose = "register",
+                    ExpiredAt = DateTime.UtcNow.AddMinutes(15),
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _otpRepository.CreateAsync(customerOtp);
+            }
+            catch (System.Exception ex)
+            {
+                System.Console.WriteLine($"[Warning] Failed to store OTP in MongoDB: {ex.Message}. Registration will continue using MemoryCache fallback.");
+            }
 
             // Keep cache for backward compatibility during transition if needed, or remove
             if (!string.IsNullOrWhiteSpace(request.Email))
@@ -139,7 +162,15 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 _cache.Set($"OTP_ID_{request.Phone}", otp, System.TimeSpan.FromMinutes(15));
             }
             
-            await _userRepository.CreateAsync(user);
+            try 
+            {
+                await _userRepository.CreateAsync(user);
+            }
+            catch (System.Exception ex)
+            {
+                // Detailed database errors are handled by global middleware
+                throw new System.Exception($"DATABASE_ERROR: {ex.Message}");
+            }
 
             // Managed Background Queue for Sync operations
             _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
@@ -224,8 +255,9 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
         private bool IsValidPhoneNumber(string phone)
         {
             if (string.IsNullOrEmpty(phone)) return false;
-            // Basic regex for 10-11 digits
-            return System.Text.RegularExpressions.Regex.IsMatch(phone, @"^\d{10,11}$");
+            // Remove non-digit characters and check length (supporting 9-15 digits for international)
+            var cleaned = System.Text.RegularExpressions.Regex.Replace(phone, @"\D", "");
+            return cleaned.Length >= 9 && cleaned.Length <= 15;
         }
 
         private long ExtractLanguageId(object? languageIdObj)

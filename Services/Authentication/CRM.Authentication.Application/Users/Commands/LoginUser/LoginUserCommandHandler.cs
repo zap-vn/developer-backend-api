@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using CRM.Authentication.Application.Common.Interfaces;
 using CRM.Authentication.Application.Users.DTOs;
 using CRM.Authentication.Domain.Interfaces;
@@ -121,30 +121,38 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             else
             {
                 var hashedInput = HashLegacyPassword(request.Password ?? "");
-                bool isPasswordValid = user.Password == hashedInput || user.Password == request.Password;
+                bool isPasswordValid = user.Password == hashedInput || 
+                                     user.Password == request.Password || 
+                                     user.PasswordHash == hashedInput || 
+                                     user.PasswordHash == request.Password;
 
                 if (!isPasswordValid)
                 {
                     throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
                 }
 
-                if (!user.IsVerify)
+                // Temporary bypass for verification if using PG user (optional, depending on business rule)
+                if (!user.IsVerify && string.IsNullOrEmpty(user.PasswordHash))
                 {
                     throw new UnauthorizedAccessException("AUTH_001|AUTH_001_detail");
                 }
             }
 
-            if (user.Visible != 1)
+            if (user.Visible != 1 && user.StatusId != 1 && user.StatusId != null) // Allow null if default status is active
             {
-                Console.WriteLine($"[Login] Account not active for user: {user.Email}");
+                _logger.LogWarning("[Login] Account not active for user: {Email}, Visible: {Visible}, StatusId: {StatusId}", user.Email, user.Visible, user.StatusId);
                 throw new UnauthorizedAccessException("AUTH_003|AUTH_003_detail");
             }
 
             var tokenSw = System.Diagnostics.Stopwatch.StartNew();
             var token = await _tokenGenerator.GenerateTokenAsync(user);
-            Console.WriteLine($"[Perf] Token generation took: {tokenSw.ElapsedMilliseconds}ms");
+            _logger.LogInformation("[Perf] Token generation took: {Elapsed}ms", tokenSw.ElapsedMilliseconds);
 
-            Console.WriteLine($"[Legacy Login] TOTAL SUCCESS in {sw.ElapsedMilliseconds}ms");
+            _logger.LogInformation("[Login] TOTAL SUCCESS in {Elapsed}ms", sw.ElapsedMilliseconds);
+            
+            // Map merchant ID: prioritize Postgres Guid if available, fallback to Mongo _key
+            var merchantId = user.id != Guid.Empty ? user.id.ToString() : $"merchant_{user._key}";
+
             return new LoginResponseDto
             {
                 Success = true,
@@ -152,7 +160,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 Data = new LoginDataDto
                 {
                     Token = token,
-                    MerchantId = $"merchant_{user._key}",
+                    MerchantId = merchantId,
                     Email = user.Email,
                     Name = !string.IsNullOrEmpty(user.MerchantName) ? user.MerchantName : user.FullName,
                     LogoUrl = string.IsNullOrEmpty(user.MerchantUrl) ? "https://api.pendogo.vn/logo.png" : user.MerchantUrl

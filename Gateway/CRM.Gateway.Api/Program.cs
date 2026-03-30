@@ -88,7 +88,7 @@ public class Program
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CRM CONNECT GATEWAY - REALTIME");
-                c.SwaggerEndpoint("/api/Auth/swagger/v1/swagger.json", "Authentication Service");
+                c.SwaggerEndpoint("/api/login/swagger/v1/swagger.json", "Login Service");
                 c.SwaggerEndpoint("/api/Employees/swagger/v1/swagger.json", "HR Service");
                 c.SwaggerEndpoint("/api/Customer/swagger/v1/swagger.json", "Customer Service");
                 c.SwaggerEndpoint("/api/Sales/swagger/v1/swagger.json", "Sales Service");

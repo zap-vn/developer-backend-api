@@ -4,10 +4,18 @@ using CRM.Authentication.Application.Users.DTOs;
 
 namespace CRM.Authentication.Application.Users.Commands.LoginUser
 {
-    public record LoginUserCommand(
-        [property: JsonPropertyName("account")] string Account,
-        [property: JsonPropertyName("password")] string? Password = null,
-        [property: JsonPropertyName("otp")] string? Otp = null,
-        [property: JsonPropertyName("dialing_code")] string? DialingCode = "+84"
-    ) : IRequest<LoginResponseDto>;
+    public class LoginUserCommand : IRequest<LoginResponseDto>
+    {
+        [JsonPropertyName("account")]
+        public string Account { get; set; } = string.Empty;
+
+        [JsonPropertyName("password")]
+        public string? Password { get; set; }
+
+        [JsonPropertyName("otp")]
+        public string? Otp { get; set; }
+
+        [JsonPropertyName("dialing_code")]
+        public string? DialingCode { get; set; } = "+84";
+    }
 }

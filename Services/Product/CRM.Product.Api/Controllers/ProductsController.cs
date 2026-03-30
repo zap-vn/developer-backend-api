@@ -10,7 +10,7 @@ using CRM.BuildingBlocks.Extensions;
 namespace CRM.Product.Api.Controllers
 {
     [ApiController]
-    [Route("api/product")]
+    [Route("api/Products")]
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;

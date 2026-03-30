@@ -8,7 +8,12 @@ using CRM.BuildingBlocks.Exceptions;
 
 namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 {
-    public record ResetPasswordCommand(string ConfirmToken, string NewPassword, string ConfirmPassword) : IRequest<bool>;
+    public class ResetPasswordCommand : IRequest<bool>
+    {
+        public string ConfirmToken { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
 
     public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, bool>
     {

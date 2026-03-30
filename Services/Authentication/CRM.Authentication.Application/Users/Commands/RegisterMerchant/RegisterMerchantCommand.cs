@@ -5,17 +5,39 @@ using CRM.Authentication.Application.Users.DTOs;
 
 namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
 {
-    public record RegisterMerchantCommand(
-        [property: JsonPropertyName("first_name")] string FirstName,
-        [property: JsonPropertyName("last_name")] string LastName,
-        [property: JsonPropertyName("merchant_name")] string MerchantName,
-        [property: JsonPropertyName("phone")] string Phone,
-        [property: JsonIgnore] string? DialingCode = "+84",
-        [property: JsonPropertyName("email")] string? Email = null,
-        [property: JsonPropertyName("password")] string? Password = null,
-        [property: JsonIgnore] string? Language = null,
-        [property: JsonIgnore] object? LanguageId = null,
-        [property: JsonIgnore] string? Provider = null,
-        [property: JsonPropertyName("merchant_url")] string? MerchantUrl = null
-    ) : IRequest<UserDto>;
+    public class RegisterMerchantCommand : IRequest<UserDto>
+    {
+        [JsonPropertyName("first_name")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [JsonPropertyName("last_name")]
+        public string LastName { get; set; } = string.Empty;
+
+        [JsonPropertyName("merchant_name")]
+        public string MerchantName { get; set; } = string.Empty;
+
+        [JsonPropertyName("phone")]
+        public string Phone { get; set; } = string.Empty;
+
+        [JsonIgnore]
+        public string? DialingCode { get; set; } = "+84";
+
+        [JsonPropertyName("email")]
+        public string? Email { get; set; }
+
+        [JsonPropertyName("password")]
+        public string? Password { get; set; }
+
+        [JsonIgnore]
+        public string? Language { get; set; }
+
+        [JsonIgnore]
+        public object? LanguageId { get; set; }
+
+        [JsonIgnore]
+        public string? Provider { get; set; }
+
+        [JsonPropertyName("merchant_url")]
+        public string? MerchantUrl { get; set; }
+    }
 }

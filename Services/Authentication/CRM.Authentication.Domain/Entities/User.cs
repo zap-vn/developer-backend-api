@@ -42,9 +42,19 @@ namespace CRM.Authentication.Domain.Entities
 
         public List<string> Roles { get; set; } = new() { "Admin" };
         
-        public string FullName => $"{FirstName} {LastName}";
+        public string FullName { get; set; } = string.Empty;
  
         public int Visible { get; set; }
+
+        // Postgres mappings
+        public Guid id { get; set; }
+        public Guid? TenantId { get; set; }
+        public string? LegacyId { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
+        public int? StatusId { get; set; }
+        public DateTime? CreatedAtDate { get; set; }
+        public DateTime? UpdatedAtDate { get; set; }
 
         [BsonElement("IsVerify")]
         public bool IsVerify { get; set; } = false;

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -36,9 +37,15 @@ namespace CRM.Authentication.Infrastructure
             services.Configure<VietGuySettings>(configuration.GetSection("VietGuySettings"));
 
             services.AddHttpClient();
+            
+            // PostgreSQL
+            services.AddDbContext<PostgresDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("PostgreSql")));
+            
             services.AddSingleton<MongoDbContext>();
             services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
-            services.AddScoped<IUserRepository, MongoUserRepository>();
+            
+            services.AddScoped<IUserRepository, PostgresUserRepository>();
             services.AddScoped<IPasswordResetRepository, MongoPasswordResetRepository>();
             services.AddScoped<IOtpRepository, MongoOtpRepository>();
             services.AddScoped<ISystemConfigRepository, MongoSystemConfigRepository>();

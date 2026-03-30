@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CRM.Authentication.Api.Controllers
 {
     [ApiController]
-    [Route("api/v1/register")]
+    [Route("api/register")]
     public class RegisterController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -39,8 +39,17 @@ namespace CRM.Authentication.Api.Controllers
             [property: System.Text.Json.Serialization.JsonPropertyName("data")] object? Data = null
         );
 
-        public record CheckEmailRequest([property: System.Text.Json.Serialization.JsonPropertyName("email")] string Email);
-        public record CheckPhoneRequest([property: System.Text.Json.Serialization.JsonPropertyName("phone")] string Phone);
+        public class CheckEmailRequest
+        {
+            [System.Text.Json.Serialization.JsonPropertyName("email")]
+            public string Email { get; set; } = string.Empty;
+        }
+
+        public class CheckPhoneRequest
+        {
+            [System.Text.Json.Serialization.JsonPropertyName("phone")]
+            public string Phone { get; set; } = string.Empty;
+        }
 
         [HttpPost("check-account")]
         public async Task<IActionResult> CheckAccount([FromBody] CheckAccountAvailabilityCommand command)

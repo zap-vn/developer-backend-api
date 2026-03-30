@@ -11,10 +11,14 @@ using CRM.BuildingBlocks.Exceptions;
 
 namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 {
-    public record VerifyOtpCommand(
-        [property: JsonPropertyName("account")] string Account, 
-        [property: JsonPropertyName("otp")] string Otp
-    ) : IRequest<VerifyOtpResponseDto>;
+    public class VerifyOtpCommand : IRequest<VerifyOtpResponseDto>
+    {
+        [JsonPropertyName("account")]
+        public string Account { get; set; } = string.Empty;
+
+        [JsonPropertyName("otp")]
+        public string Otp { get; set; } = string.Empty;
+    }
 
     public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, VerifyOtpResponseDto>
     {

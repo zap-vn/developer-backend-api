@@ -3,12 +3,13 @@ using CRM.Authentication.Application.Users.DTOs;
 
 namespace CRM.Authentication.Application.Users.Commands.CreateUser
 {
-    public record CreateUserCommand(
-        string Password,
-        string Email,
-        string FullName,
-        string MerchantName,
-        object? LanguageId = null, // Supports string ["136 - ..."] or numeric 136
-        string? Language = null
-    ) : IRequest<UserDto>;
+    public class CreateUserCommand : IRequest<UserDto>
+    {
+        public string Password { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string MerchantName { get; set; } = string.Empty;
+        public object? LanguageId { get; set; } = null;
+        public string? Language { get; set; } = null;
+    }
 }

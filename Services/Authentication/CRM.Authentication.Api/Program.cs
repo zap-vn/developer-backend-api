@@ -76,7 +76,7 @@ try {
     app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Auth API v1");
+            c.SwaggerEndpoint("v1/swagger.json", "Login API v1");
             c.RoutePrefix = "swagger"; // Explicitly set or keep empty, but let's see why it failed.
         });
 
@@ -92,7 +92,7 @@ try {
     app.MapHealthChecks("/healthz");
     app.MapControllers();
 
-    Console.WriteLine("✅ Authentication API is running.");
+    Console.WriteLine("✅ Login API is running.");
     Console.WriteLine("👉 Local URL: http://localhost:5001/swagger/index.html");
     app.Run();
 } catch (Exception ex) {

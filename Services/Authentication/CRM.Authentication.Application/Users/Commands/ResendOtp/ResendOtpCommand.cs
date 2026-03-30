@@ -8,7 +8,7 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
 
-        [JsonPropertyName("Identifier")]
+        [JsonPropertyName("identifier")]
         public string Identifier 
         { 
             get => !string.IsNullOrEmpty(Email) ? Email : Phone; 

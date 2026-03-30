@@ -31,14 +31,21 @@ namespace CRM.Authentication.Infrastructure
 
             services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+            services.Configure<ZaloSettings>(configuration.GetSection("ZaloSettings"));
+            services.Configure<TwilioSettings>(configuration.GetSection("Twilio"));
+            services.Configure<VietGuySettings>(configuration.GetSection("VietGuySettings"));
 
+            services.AddHttpClient();
             services.AddSingleton<MongoDbContext>();
             services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
             services.AddScoped<IUserRepository, MongoUserRepository>();
             services.AddScoped<IPasswordResetRepository, MongoPasswordResetRepository>();
             services.AddScoped<IOtpRepository, MongoOtpRepository>();
+            services.AddScoped<ISystemConfigRepository, MongoSystemConfigRepository>();
+            services.AddScoped<IEmailSettingRepository, MongoEmailSettingRepository>();
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IVietGuyService, VietGuyService>();
             services.AddScoped<IPhoneService, PhoneService>();
 
             return services;

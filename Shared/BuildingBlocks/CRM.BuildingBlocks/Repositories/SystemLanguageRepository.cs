@@ -8,7 +8,7 @@ namespace CRM.BuildingBlocks.Repositories
     public class SystemLanguageRepository : BaseMongoRepository<SystemLanguage>
     {
         public SystemLanguageRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
-            : base(database, "SystemLanguages", currentUserService)
+            : base(database, "identity.SystemLanguages", currentUserService)
         {
         }
         

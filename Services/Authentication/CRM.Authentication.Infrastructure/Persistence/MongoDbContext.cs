@@ -10,6 +10,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
     {
         private static IMongoClient? _client;
         public readonly IMongoDatabase Database;
+        public readonly IMongoDatabase SystemDatabase;
 
         public MongoDbContext(IOptions<MongoSettings> settings)
         {
@@ -31,6 +32,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
                 }
             }
             Database = _client.GetDatabase(mongoSettings.DatabaseName);
+            SystemDatabase = _client.GetDatabase("SystemDB");
 
             // Attributes in User.cs handle property mapping to BSON elements.
             
@@ -76,10 +78,12 @@ namespace CRM.Authentication.Infrastructure.Persistence
             }
         }
 
-        public IMongoCollection<User> Users => Database.GetCollection<User>("Customer");
-        public IMongoCollection<ManagementIndex> ManagementIndexes => Database.GetCollection<ManagementIndex>("ManagementIndex");
-        public IMongoCollection<PasswordResetRequest> PasswordResetRequests => Database.GetCollection<PasswordResetRequest>("PasswordResetRequests");
-        public IMongoCollection<CustomerOtp> CustomerOtps => Database.GetCollection<CustomerOtp>("CustomerOtps");
-        public IMongoCollection<SystemError> SystemErrors => Database.GetCollection<SystemError>("SystemErrors");
+        public IMongoCollection<User> Users => Database.GetCollection<User>("merchant.Customers");
+        public IMongoCollection<ManagementIndex> ManagementIndexes => Database.GetCollection<ManagementIndex>("merchant.ManagementIndex");
+        public IMongoCollection<PasswordResetRequest> PasswordResetRequests => Database.GetCollection<PasswordResetRequest>("merchant.PasswordResetRequests");
+        public IMongoCollection<CustomerOtp> CustomerOtps => Database.GetCollection<CustomerOtp>("merchant.CustomerOtps");
+        public IMongoCollection<SystemError> SystemErrors => Database.GetCollection<SystemError>("merchant.SystemErrors");
+        public IMongoCollection<EmailSetting> EmailSettings => Database.GetCollection<EmailSetting>("merchant.email_setting");
+        public IMongoCollection<SystemConfig> SystemConfigs => SystemDatabase.GetCollection<SystemConfig>("merchant.system_configs");
     }
 }

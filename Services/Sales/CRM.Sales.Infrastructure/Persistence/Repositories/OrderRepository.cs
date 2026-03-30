@@ -11,7 +11,7 @@ namespace CRM.Sales.Infrastructure.Persistence.Repositories
     public class OrderRepository : BaseMongoRepository<OrderEntity>, IOrderRepository
     {
         public OrderRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
-            : base(database, "Orders", currentUserService)
+            : base(database, "ordering.Orders", currentUserService)
         {
         }
 

@@ -17,13 +17,22 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
 
         public async Task<bool> Handle(VerifyRegistrationOtpCommand request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Otp))
+            if (string.IsNullOrWhiteSpace(request.Account) || string.IsNullOrWhiteSpace(request.Otp))
             {
                 throw new Exception("error_missing_data|Vui lòng nhập đầy đủ thông tin xác thực.");
             }
 
-            // Get latest OTP for the given identifier (Email or Phone)
-            var customerOtp = await _otpRepository.GetLatestOtpByEmailForPurposesAsync(request.Email.Trim(), new[] { "register", "resend-otp" });
+            var account = request.Account.Trim();
+            var purposes = new[] { "register", "resend-otp" };
+            
+            // Try Email first
+            var customerOtp = await _otpRepository.GetLatestOtpByEmailForPurposesAsync(account, purposes);
+            
+            // Try Phone if not found
+            if (customerOtp == null)
+            {
+                customerOtp = await _otpRepository.GetLatestOtpByPhoneForPurposesAsync(account, purposes);
+            }
 
             if (customerOtp == null)
             {

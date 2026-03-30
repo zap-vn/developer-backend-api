@@ -9,7 +9,7 @@ namespace CRM.Payment.Infrastructure.Persistence.Repositories
     public class PaymentTypeRepository : BaseMongoRepository<PaymentType>, IPaymentTypeRepository
     {
         public PaymentTypeRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
-            : base(database, "PaymentTypes", currentUserService)
+            : base(database, "payment.PaymentTypes", currentUserService)
         {
         }
     }

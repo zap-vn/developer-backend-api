@@ -118,7 +118,7 @@ namespace CRM.BuildingBlocks.Middleware
                 RedirectUrl = redirectUrl
             }, new JsonSerializerOptions 
             { 
-                PropertyNamingPolicy = new CRM.BuildingBlocks.Serialization.ExceptionPascalCaseNamingPolicy(),
+                PropertyNamingPolicy = new CRM.BuildingBlocks.Serialization.CrmSnakeCaseNamingPolicy(),
                 DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
             });
 

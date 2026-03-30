@@ -12,7 +12,7 @@ namespace CRM.HR.Infrastructure.Persistence.Repositories
     public class MongoEmployeeRepository : BaseMongoRepository<Employee>, IEmployeeRepository
     {
         public MongoEmployeeRepository(MongoDbContext context, ICurrentUserService currentUserService) 
-            : base(context.Database, "Employees", currentUserService)
+            : base(context.Database, "merchant.Employees", currentUserService)
         {
         }
 

@@ -6,6 +6,6 @@ namespace CRM.Product.Application.Features.Products.Queries
 {
     public class GetProductListQuery : IRequest<PagedResult<ProductDto>>
     {
-        public FilterDTOs Filter { get; set; } = new();
+        public ProductListRequestDto Request { get; set; } = new();
     }
 }

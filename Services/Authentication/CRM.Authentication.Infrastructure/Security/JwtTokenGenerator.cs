@@ -11,13 +11,15 @@ namespace CRM.Authentication.Infrastructure.Security
     public class JwtTokenGenerator : ITokenGenerator
     {
         private readonly IConfiguration _configuration;
+        private readonly CRM.Authentication.Domain.Interfaces.ISystemConfigRepository _configRepository;
 
-        public JwtTokenGenerator(IConfiguration configuration)
+        public JwtTokenGenerator(IConfiguration configuration, CRM.Authentication.Domain.Interfaces.ISystemConfigRepository configRepository)
         {
             _configuration = configuration;
+            _configRepository = configRepository;
         }
 
-        public string GenerateToken(User user)
+        public async Task<string> GenerateTokenAsync(User user)
         {
             var keyStr = _configuration["Jwt:Secret"] ?? "a_very_secret_default_key_at_least_32_chars_long";
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyStr));
@@ -43,11 +45,15 @@ namespace CRM.Authentication.Infrastructure.Security
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
+            var expiryConfig = await _configRepository.GetByKeyAsync("token_expiry_minutes_crm");
+            double expiryMinutes = 120;
+            if (expiryConfig != null && double.TryParse(expiryConfig.Value, out var parsed)) expiryMinutes = parsed;
+
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddHours(2),
+                expires: DateTime.Now.AddMinutes(expiryMinutes),
                 signingCredentials: creds
             );
 

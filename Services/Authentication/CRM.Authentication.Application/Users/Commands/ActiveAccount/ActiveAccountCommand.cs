@@ -8,7 +8,7 @@ namespace CRM.Authentication.Application.Users.Commands.ActiveAccount
         public string Email { get; set; } = string.Empty;
         public string Otp { get; set; } = string.Empty;
 
-        [JsonPropertyName("Identifier")]
+        [JsonPropertyName("identifier")]
         public string Identifier 
         { 
             get => Email; 

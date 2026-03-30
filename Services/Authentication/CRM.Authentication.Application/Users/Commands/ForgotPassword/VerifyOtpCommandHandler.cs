@@ -3,6 +3,7 @@ using CRM.Authentication.Application.Users.DTOs;
 using CRM.Authentication.Domain.Interfaces;
 using Microsoft.Extensions.Localization;
 using CRM.BuildingBlocks.Localization;
+using System.Text.Json.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,7 +11,10 @@ using CRM.BuildingBlocks.Exceptions;
 
 namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 {
-    public record VerifyOtpCommand(string ResetToken, string Otp) : IRequest<VerifyOtpResponseDto>;
+    public record VerifyOtpCommand(
+        [property: JsonPropertyName("account")] string Account, 
+        [property: JsonPropertyName("otp")] string Otp
+    ) : IRequest<VerifyOtpResponseDto>;
 
     public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, VerifyOtpResponseDto>
     {
@@ -27,7 +31,7 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
 
         public async Task<VerifyOtpResponseDto> Handle(VerifyOtpCommand request, CancellationToken cancellationToken)
         {
-            var resetRequest = await _resetRepository.GetByResetTokenAsync(request.ResetToken);
+            var resetRequest = await _resetRepository.GetLatestByIdentifierAsync(request.Account);
 
             if (resetRequest == null || resetRequest.IsUsed)
             {

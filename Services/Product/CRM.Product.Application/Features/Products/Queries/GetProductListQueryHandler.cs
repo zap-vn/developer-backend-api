@@ -24,29 +24,27 @@ namespace CRM.Product.Application.Features.Products.Queries
 
         public async Task<PagedResult<ProductDto>> Handle(GetProductListQuery request, CancellationToken cancellationToken)
         {
-            var filter = request.Filter;
+            var req = request.Request;
             var currentUserGuid = _currentUserService.UserGuid;
             
             Expression<Func<ProductEntity, bool>> predicate = x => 
                 (string.IsNullOrEmpty(currentUserGuid) || x.UserGuid == currentUserGuid || x.EmpGuid == currentUserGuid) &&
-                (string.IsNullOrEmpty(filter.Keyword) || (x.Name != null && x.Name.Contains(filter.Keyword)) || (x.Code != null && x.Code.Contains(filter.Keyword)) || (x.Barcode != null && x.Barcode.Contains(filter.Keyword))) &&
-                (string.IsNullOrEmpty(filter.Category) || x.Category == filter.Category) &&
-                (!filter.IsActive.HasValue || (filter.IsActive.Value ? x.Visible == 1 : x.Visible == 0));
+                (string.IsNullOrEmpty(req.Search) || (x.Name != null && x.Name.Contains(req.Search)) || (x.Code != null && x.Code.Contains(req.Search)) || (x.Barcode != null && x.Barcode.Contains(req.Search))) &&
+                (req.Filters == null || req.Filters.CateId == null || !req.Filters.CateId.Any() || req.Filters.CateId.Contains(x.Category)) &&
+                (req.Filters == null || req.Filters.Status == null || !req.Filters.Status.Any() || req.Filters.Status.Contains(x.Visible));
 
-            var pagedResult = await _repository.GetPagedAsync(filter.PageIndex, filter.PageSize, predicate);
+            var pagedResult = await _repository.GetPagedAsync(req.Page, req.PageSize, predicate);
 
             var dtos = pagedResult.Items.Select(x => new ProductDto 
             { 
                 Id = x.Id,
-                Code = x.Code,
-                Barcode = x.Barcode,
-                Name = x.Name,
-                Description = x.Description,
+                CateName = x.Category ?? string.Empty,
+                MerchantId = x.UserGuid ?? string.Empty,
+                Name = x.Name ?? string.Empty,
+                Description = x.Description ?? string.Empty,
                 Price = x.Price,
-                Stock = x.Stock,
-                Category = x.Category,
-                ImageUrl = x.ImageUrl,
-                IsActive = x.IsActive
+                ImageUrl = x.ImageUrl ?? string.Empty,
+                Status = x.Visible
             }).ToList();
 
             return new PagedResult<ProductDto>(dtos, pagedResult.TotalCount, pagedResult.CurrentPage, pagedResult.PageSize);

@@ -6,9 +6,13 @@ using CRM.Authentication.Domain.Entities;
 using CRM.Authentication.Domain.Interfaces;
 using CRM.Authentication.Application.Common.Interfaces;
 
+using CRM.Authentication.Application.Users.DTOs;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
 {
-    public class CheckAccountAvailabilityCommandHandler : IRequestHandler<CheckAccountAvailabilityCommand, bool>
+    public class CheckAccountAvailabilityCommandHandler : IRequestHandler<CheckAccountAvailabilityCommand, CheckAccountResponseDto>
     {
         private readonly IUserRepository _userRepository;
         private readonly IEmailService _emailService;
@@ -27,87 +31,71 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
             _otpRepository = otpRepository;
         }
 
-        public async Task<bool> Handle(CheckAccountAvailabilityCommand request, CancellationToken cancellationToken)
+        public async Task<CheckAccountResponseDto> Handle(CheckAccountAvailabilityCommand request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrWhiteSpace(request.Email))
+            if (string.IsNullOrWhiteSpace(request.Account))
             {
-                throw new Exception("error_missing_email|Vui lòng nhập Email hoặc Số điện thoại.");
+                return new CheckAccountResponseDto { Success = false, Message = "Vui lòng nhập Email hoặc Số điện thoại." };
             }
 
-            string identifier = request.Email.Trim();
+            string identifier = request.Account.Trim();
             bool isEmail = identifier.Contains("@");
 
-            bool emailExists = await _userRepository.EmailExistsAsync(identifier);
-            bool phoneExists = await _userRepository.PhoneExistsAsync(identifier);
-            bool accountExists = emailExists || phoneExists;
-
-            if (request.IsLogin)
+            // Normalize phone number if dialing_code is present
+            if (!isEmail && !string.IsNullOrEmpty(request.DialingCode))
             {
-                // Login case: must exist
-                if (!accountExists)
-                {
-                    throw new Exception("error_account_not_found|Email hoặc số điện thoại chưa được đăng ký.");
-                }
-            }
-            else
-            {
-                // Registration case: must NOT exist
-                if (emailExists)
-                {
-                    throw new Exception("error_duplicate_account|Email này đã được sử dụng. Vui lòng chọn email khác.");
-                }
-
-                if (phoneExists)
-                {
-                    throw new Exception("error_duplicate_account|Số điện thoại này đã được sử dụng. Vui lòng chọn số khác.");
-                }
+                if (identifier.StartsWith("0")) identifier = identifier.Substring(1);
+                identifier = request.DialingCode + identifier;
             }
 
-            // 2. Handle Logic based on Provider
-            string provider = string.IsNullOrWhiteSpace(request.Provider) ? "Email" : request.Provider;
-            bool isSocial = provider == "Google" || provider == "Facebook" || provider == "Apple";
-
-            if (isSocial || request.IsLogin)
+            var user = await _userRepository.GetByEmailAsync(identifier);
+            if (user == null && !isEmail)
             {
-                // For Social or Login check: Just confirm account exists/available
-                // No OTP needed at this stage
-                return true;
+                user = await _userRepository.GetByPhoneAsync(identifier);
             }
 
-            // 3. If standard Registration (IsLogin = false) -> Generate 6-digit OTP
-            var otpCode = new Random().Next(100000, 999999).ToString();
+            bool accountExists = user != null;
 
-            // 4. Save OTP to database (CustomerOtps)
-            var customerOtp = new CustomerOtp
+            if (!accountExists)
             {
-                Email = isEmail ? identifier : string.Empty,
-                Phone = !isEmail ? identifier : string.Empty,
-                OtpCode = otpCode,
-                Purpose = "register",
-                ExpiredAt = DateTime.UtcNow.AddMinutes(2), // Cập nhật thành 2 phút (120 giây)
-                CreatedAt = DateTime.UtcNow
-            };
-            await _otpRepository.CreateAsync(customerOtp);
-
-            // 5. Send OTP
-            try
-            {
-                if (isEmail)
+                if (request.IsLogin)
                 {
-                    await _emailService.SendOtpEmailAsync(identifier, otpCode, "Guest");
+                    return new CheckAccountResponseDto 
+                    { 
+                        Success = false, 
+                        Message = "Email hoặc số điện thoại chưa được đăng ký.",
+                        Data = new CheckAccountDataDto { Exists = false, Methods = new List<string>() }
+                    };
                 }
                 else
                 {
-                    await _phoneService.SendSmsOtpAsync(identifier, otpCode);
+                    // Registration case: available
+                    return new CheckAccountResponseDto 
+                    { 
+                        Success = true, 
+                        Message = "Tài khoản khả dụng.",
+                        Data = new CheckAccountDataDto { Exists = false, Methods = new List<string> { "otp" } }
+                    };
                 }
             }
-            catch (Exception ex)
+
+            // If account exists
+            var methods = new List<string> { "otp" };
+            if (user != null && !string.IsNullOrEmpty(user.Password))
             {
-                Console.WriteLine($"[Error] Failed to send OTP: {ex.Message}");
-                throw new Exception("error_sending_otp|Không thể gửi mã xác thực. Vui lòng thử lại sau.");
+                methods.Add("password");
             }
 
-            return true;
+            return new CheckAccountResponseDto
+            {
+                Success = true,
+                Message = "Kiểm tra tài khoản thành công.",
+                Data = new CheckAccountDataDto
+                {
+                    Exists = true,
+                    Methods = methods
+                }
+            };
         }
     }
 }

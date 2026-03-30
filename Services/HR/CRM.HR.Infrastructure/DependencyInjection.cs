@@ -30,6 +30,7 @@ namespace CRM.HR.Infrastructure
             services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
 
             services.AddSingleton<MongoDbContext>();
+            services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
 
             services.AddScoped<IEmployeeRepository, MongoEmployeeRepository>();
             services.AddScoped<ICurrentUserService, MockCurrentUserService>();

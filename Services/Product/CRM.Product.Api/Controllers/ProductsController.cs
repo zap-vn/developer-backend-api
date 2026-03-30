@@ -10,7 +10,7 @@ using CRM.BuildingBlocks.Extensions;
 namespace CRM.Product.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/product")]
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -27,11 +27,19 @@ namespace CRM.Product.Api.Controllers
         }
 
         [HttpPost("list")]
-        public async Task<IActionResult> List([FromBody] FilterDTOs? filter)
+        public async Task<IActionResult> List([FromBody] ProductListRequestDto requestBody)
         {
-            var finalFilter = filter ?? new FilterDTOs();
-            var result = await _mediator.Send(new GetProductListQuery { Filter = finalFilter });
-            return Ok(result);
+            var result = await _mediator.Send(new GetProductListQuery { Request = requestBody });
+            
+            return Ok(new 
+            {
+                success = true,
+                data = new 
+                {
+                    items = result.Items,
+                    total = result.TotalCount
+                }
+            });
         }
 
         [HttpGet("{id}")]

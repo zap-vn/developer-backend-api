@@ -18,14 +18,14 @@ namespace CRM.BuildingBlocks
             // Configure JSON Response to return PascalCase for all APIs (Minimal & MVC), except _id
             services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
             {
-                options.SerializerOptions.PropertyNamingPolicy = new Serialization.ExceptionPascalCaseNamingPolicy();
-                options.SerializerOptions.DictionaryKeyPolicy = new Serialization.ExceptionPascalCaseNamingPolicy();
+                options.SerializerOptions.PropertyNamingPolicy = new Serialization.CrmSnakeCaseNamingPolicy();
+                options.SerializerOptions.DictionaryKeyPolicy = new Serialization.CrmSnakeCaseNamingPolicy();
             });
 
             services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
             {
-                options.JsonSerializerOptions.PropertyNamingPolicy = new Serialization.ExceptionPascalCaseNamingPolicy();
-                options.JsonSerializerOptions.DictionaryKeyPolicy = new Serialization.ExceptionPascalCaseNamingPolicy();
+                options.JsonSerializerOptions.PropertyNamingPolicy = new Serialization.CrmSnakeCaseNamingPolicy();
+                options.JsonSerializerOptions.DictionaryKeyPolicy = new Serialization.CrmSnakeCaseNamingPolicy();
             });
             
             return services;

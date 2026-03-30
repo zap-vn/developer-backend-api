@@ -9,11 +9,11 @@ Date: 2026-03-12
   2. Authenticated `gcloud` with `linh.nguyen@zap.vn`.
   3. Created a new API config pointing to the correct Gateway API (`zap-api`):
      ```powershell
-     gcloud api-gateway api-configs create identity-v12 --api=zap-api --openapi-spec=api-gateway.yaml --project=openclaw-zap
+     gcloud api-gateway api-configs create identity-v12 --api=zap-api --openapi-spec=api-gateway.yaml --project=tom6573637618
      ```
   4. Updated the gateway `zap-gateway` in region `us-central1` to use this new configuration:
      ```powershell
-     gcloud api-gateway gateways update zap-gateway --api=zap-api --api-config=identity-v12 --location=us-central1 --project=openclaw-zap
+     gcloud api-gateway gateways update zap-gateway --api=zap-api --api-config=identity-v12 --location=us-central1 --project=tom6573637618
      ```
 - **Result**: The 404 error from the Gateway has been fixed. The Gateway now successfully forwards these routes to the backend `zap-identity-api` Cloud Run service.
 
@@ -32,10 +32,10 @@ To finalize the deployment of the new Authentication code, please take ONE of th
 1. Copy the updated code from this workspace (`d:\PROJECTS\2026\3_2\src\Services\Authentication`) to your actual local Git repository directory for this project.
 2. Commit the changes (`git commit -m "feat: Add unified account check and social login API"`).
 3. Push to the `main` branch (`git push`).
-4. GitHub Actions will automatically handle the build and deployment using the service account `github-deployer@openclaw-zap.iam.gserviceaccount.com` (which has the correct permissions).
+4. GitHub Actions will automatically handle the build and deployment using the service account `github-deployer@tom6573637618.iam.gserviceaccount.com` (which has the correct permissions).
 
 ### Option B: Fix IAM Permissions for Manual GCloud Deployment
-Have your Organization Admin grant the `linh.nguyen@zap.vn` account the following IAM Roles in the GCP Console for project `openclaw-zap`:
+Have your Organization Admin grant the `tom6573637618@gmail.com` account the following IAM Roles in the GCP Console for project `tom6573637618`:
 - **Artifact Registry Writer**
 - **Cloud Run Admin**
 Once granted, you can manually build and deploy the container again from your terminal.

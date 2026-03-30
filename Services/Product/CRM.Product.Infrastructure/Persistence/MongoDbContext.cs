@@ -15,6 +15,6 @@ namespace CRM.Product.Infrastructure.Persistence
             Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<ProductEntity> Products => Database.GetCollection<ProductEntity>("Product");
+        public IMongoCollection<ProductEntity> Products => Database.GetCollection<ProductEntity>("catalog.Products");
     }
 }

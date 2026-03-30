@@ -15,6 +15,6 @@ namespace CRM.Organization.Infrastructure.Persistence
             Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<OrganizationUnit> OrganizationUnits => Database.GetCollection<OrganizationUnit>("OrganizationUnits");
+        public IMongoCollection<OrganizationUnit> OrganizationUnits => Database.GetCollection<OrganizationUnit>("merchant.OrganizationUnits");
     }
 }

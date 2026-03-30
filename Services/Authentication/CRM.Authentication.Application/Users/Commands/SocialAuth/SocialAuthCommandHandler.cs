@@ -106,33 +106,19 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
             }
 
             // 4. Generate Token and return login response
-            var token = _tokenGenerator.GenerateToken(user);
+            var token = await _tokenGenerator.GenerateTokenAsync(user);
 
             return new LoginResponseDto
             {
                 Success = true,
-                Message = _localizer["auth_login_success"] ?? "Login successful",
-                MerchantName = user.MerchantName,
-                AccessToken = token,
-                FullName = user.FullName,
-                MerchantUrl = user.MerchantUrl,
-                RefreshToken = Guid.NewGuid().ToString(),
-                UserGuid = $"Customer/{user._key}",
-                Role = user.Roles.FirstOrDefault() ?? "Admin",
-                User = new UserDto
+                Message = _localizer["auth_login_success"] ?? "Đăng nhập thành công",
+                Data = new LoginDataDto
                 {
-                    _id = user._id,
+                    Token = token,
+                    MerchantId = $"merchant_{user._key}",
                     Email = user.Email,
-                    FullName = user.FullName,
-                    LanguageId = user.LanguageId,
-                    Roles = user.Roles,
-                    CreatedAt = user.CreatedAt,
-                    Phone = user.Phone,
-                    IsVerifyPhone = user.IsVerifyPhone,
-                    IsVerifyEmail = user.IsVerifyEmail,
-                    IsVerifyGoogle = user.IsVerifyGoogle,
-                    IsVerifyApple = user.IsVerifyApple,
-                    MerchantUrl = user.MerchantUrl
+                    Name = !string.IsNullOrEmpty(user.MerchantName) ? user.MerchantName : user.FullName,
+                    LogoUrl = string.IsNullOrEmpty(user.MerchantUrl) ? "https://api.zap.vn/logo.png" : user.MerchantUrl
                 }
             };
         }

@@ -53,13 +53,14 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             string resetToken = Guid.NewGuid().ToString("N");
 
             // 4. Send OTP via selected channel
+            string customerGuid = $"Customer/{user._key}";
             if (request.Channel.ToLower() == "zalo")
             {
                 await _phoneService.SendZaloOtpAsync(phone, otp);
             }
             else
             {
-                await _phoneService.SendSmsOtpAsync(phone, otp);
+                await _phoneService.SendSmsOtpAsync(phone, otp, customerGuid);
             }
 
             // 5. Save Request with OtpHash

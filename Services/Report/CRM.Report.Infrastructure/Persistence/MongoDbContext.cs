@@ -15,6 +15,6 @@ namespace CRM.Report.Infrastructure.Persistence
             Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<ReportTemplate> Reports => Database.GetCollection<ReportTemplate>("Reports");
+        public IMongoCollection<ReportTemplate> Reports => Database.GetCollection<ReportTemplate>("report.ReportTemplates");
     }
 }

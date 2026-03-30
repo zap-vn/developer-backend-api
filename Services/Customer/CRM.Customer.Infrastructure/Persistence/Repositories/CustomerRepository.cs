@@ -9,7 +9,7 @@ namespace CRM.Customer.Infrastructure.Persistence.Repositories
     public class CustomerRepository : BaseMongoRepository<CustomerEntity>, ICustomerRepository
     {
         public CustomerRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
-            : base(database, "Customers", currentUserService)
+            : base(database, "merchant.Customers", currentUserService)
         {
         }
     }

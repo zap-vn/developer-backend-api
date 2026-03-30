@@ -104,7 +104,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 Username = request.Email?.Trim() ?? "", 
                 FullName = $"{request.FirstName} {request.LastName}".Trim(),
                 PasswordHash = string.IsNullOrWhiteSpace(request.Password) ? "" : HashLegacyPassword(request.Password),
-                StatusId = null, // Let DB handle default or allow null
+                StatusId = 1, // Set active status as requested
                 
                 // Legacy fields for backward compatibility
                 _id = customerIdStr,

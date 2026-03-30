@@ -138,7 +138,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 }
             }
 
-            if (user.Visible != 1 && user.StatusId != 1 && user.StatusId != null) // Allow null if default status is active
+            if (user.Visible != 1 && user.StatusId != 1) // StatusId 1 is Active
             {
                 _logger.LogWarning("[Login] Account not active for user: {Email}, Visible: {Visible}, StatusId: {StatusId}", user.Email, user.Visible, user.StatusId);
                 throw new UnauthorizedAccessException("AUTH_003|AUTH_003_detail");

@@ -1,5 +1,5 @@
-$authPath = "d:\PROJECTS\2026\3_2\src\Services\Authentication\ZAP.Authentication.Api\ZAP.Authentication.Api.csproj"
-$custPath = "d:\PROJECTS\2026\3_2\src\Services\Customer\ZAP.Customer.Api\ZAP.Customer.Api.csproj"
+﻿$authPath = "d:\PROJECTS\2026\3_2\src\Services\Authentication\pendogo.Authentication.Api\pendogo.Authentication.Api.csproj"
+$custPath = "d:\PROJECTS\2026\3_2\src\Services\Customer\pendogo.Customer.Api\pendogo.Customer.Api.csproj"
 
 $authProcess = Start-Process -FilePath "dotnet" -ArgumentList "run --project $authPath" -PassThru -NoNewWindow
 $custProcess = Start-Process -FilePath "dotnet" -ArgumentList "run --project $custPath" -PassThru -NoNewWindow
@@ -32,3 +32,4 @@ try {
 Write-Host "Stopping API servers..."
 Stop-Process -Id $authProcess.Id -Force
 Stop-Process -Id $custProcess.Id -Force
+

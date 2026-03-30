@@ -1,4 +1,4 @@
-Starting Mongo test...
+﻿Starting Mongo test...
 
 Found 1252 product(s) in SinglePoint_en.Product:
 
@@ -127883,7 +127883,7 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "IsRequireKYC" : false,
   "CategoryGuid" : "Category/262",
   "Name" : "IMiss Beauty & Spa - Mesotherapy Căng Bóng Da/ Trị Thâm Mắt",
-  "Description" : "IMiss Beauty & Spa - Trị Nám/ Căng Bóng Trắng Sáng Da - Hiệu Quả. Voucher 1,000,000 VNĐ, Còn 169,000 VNĐ, Giảm 83%. Chỉ Có Tại zap.vn!",
+  "Description" : "IMiss Beauty & Spa - Trị Nám/ Căng Bóng Trắng Sáng Da - Hiệu Quả. Voucher 1,000,000 VNĐ, Còn 169,000 VNĐ, Giảm 83%. Chỉ Có Tại pendogo.vn!",
   "Name2" : "",
   "Description2" : "",
   "Name3" : "",
@@ -128701,7 +128701,7 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "IsRequireKYC" : false,
   "CategoryGuid" : "Category/264",
   "Name" : "Khách Sạn Mường Thanh Đà Lạt 4* - Phòng Superior 2N1Đ + Ăn Sáng",
-  "Description" : "Khách Sạn Mường Thanh Đà Lạt 4* - Phòng Superior 2N1Đ + Ăn Sáng. Voucher 2,800,000 VNĐ, Còn 1,399,000 VNĐ, Giảm 50%. Chỉ Có Tại zap.vn!",
+  "Description" : "Khách Sạn Mường Thanh Đà Lạt 4* - Phòng Superior 2N1Đ + Ăn Sáng. Voucher 2,800,000 VNĐ, Còn 1,399,000 VNĐ, Giảm 50%. Chỉ Có Tại pendogo.vn!",
   "Name2" : "",
   "Description2" : "",
   "Name3" : "",
@@ -133696,7 +133696,7 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "IsRequireKYC" : false,
   "CategoryGuid" : "Category/265",
   "Name" : "Tour Phú Quốc 3N2Đ - Grand World - Tour Cano 4 Đảo",
-  "Description" : "Tour Phú Quốc 3N2Đ - Grand World - Tour Cano 4 Đảo. Voucher 5,900,000 VNĐ, Còn 4,990,000 VNĐ, Giảm 15%. Chỉ Có Tại zap.vn!",
+  "Description" : "Tour Phú Quốc 3N2Đ - Grand World - Tour Cano 4 Đảo. Voucher 5,900,000 VNĐ, Còn 4,990,000 VNĐ, Giảm 15%. Chỉ Có Tại pendogo.vn!",
   "Name2" : "",
   "Description2" : "",
   "Name3" : "",
@@ -174814,7 +174814,7 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "IsRequireKYC" : false,
   "CategoryGuid" : "",
   "Name" : "Cháo Ếch",
-  "Description" : "Cháo Ếch chỉ bán ở ZAP không bán ở quán khác\nVui lòng chỉ order tại ZAP",
+  "Description" : "Cháo Ếch chỉ bán ở pendogo không bán ở quán khác\nVui lòng chỉ order tại pendogo",
   "Name2" : "",
   "Description2" : "",
   "Name3" : "",
@@ -210973,10 +210973,10 @@ Found 1252 product(s) in SinglePoint_en.Product:
         "Name" : "Sarimi"
       }, {
         "_id" : "Location/728",
-        "Name" : "ZAP Q11"
+        "Name" : "pendogo Q11"
       }, {
         "_id" : "Location/727",
-        "Name" : "ZAP Q10"
+        "Name" : "pendogo Q10"
       }, {
         "_id" : "Location/723",
         "Name" : "C10"
@@ -215764,10 +215764,10 @@ Found 1252 product(s) in SinglePoint_en.Product:
         "Name" : "Sarimi"
       }, {
         "_id" : "Location/728",
-        "Name" : "ZAP Q11"
+        "Name" : "pendogo Q11"
       }, {
         "_id" : "Location/727",
-        "Name" : "ZAP Q10"
+        "Name" : "pendogo Q10"
       }, {
         "_id" : "Location/723",
         "Name" : "C10"
@@ -215810,11 +215810,11 @@ Found 1252 product(s) in SinglePoint_en.Product:
         "Quantity" : 81
       }, {
         "_id" : "Location/728",
-        "Name" : "ZAP Q11",
+        "Name" : "pendogo Q11",
         "Quantity" : 81
       }, {
         "_id" : "Location/727",
-        "Name" : "ZAP Q10",
+        "Name" : "pendogo Q10",
         "Quantity" : 81
       }]
   },
@@ -216116,7 +216116,7 @@ Found 1252 product(s) in SinglePoint_en.Product:
         "Quantity" : 5
       }, {
         "_id" : "Location/728",
-        "Name" : "ZAP Q11",
+        "Name" : "pendogo Q11",
         "Quantity" : 7
       }]
   },
@@ -216581,11 +216581,11 @@ Found 1252 product(s) in SinglePoint_en.Product:
         "Quantity" : 50
       }, {
         "_id" : "Location/728",
-        "Name" : "ZAP Q11",
+        "Name" : "pendogo Q11",
         "Quantity" : 10
       }, {
         "_id" : "Location/727",
-        "Name" : "ZAP Q10",
+        "Name" : "pendogo Q10",
         "Quantity" : 25
       }, {
         "_id" : "Location/723",
@@ -219517,11 +219517,11 @@ Found 1252 product(s) in SinglePoint_en.Product:
         "Quantity" : 0
       }, {
         "_id" : "Location/728",
-        "Name" : "ZAP Q11",
+        "Name" : "pendogo Q11",
         "Quantity" : 0
       }, {
         "_id" : "Location/727",
-        "Name" : "ZAP Q10",
+        "Name" : "pendogo Q10",
         "Quantity" : 0
       }]
   },
@@ -227696,10 +227696,10 @@ Found 1252 product(s) in SinglePoint_en.Product:
     "isAllLocation" : false,
     "LocationList" : [{
         "_id" : "Location/728",
-        "Name" : "ZAP Q11"
+        "Name" : "pendogo Q11"
       }, {
         "_id" : "Location/727",
-        "Name" : "ZAP Q10"
+        "Name" : "pendogo Q10"
       }, {
         "_id" : "Location/729",
         "Name" : "Sarimi"
@@ -239887,7 +239887,7 @@ Found 1252 product(s) in SinglePoint_en.Product:
         "Name" : "Sarimi"
       }, {
         "_id" : "Location/728",
-        "Name" : "ZAP Q11"
+        "Name" : "pendogo Q11"
       }]
   },
   "MaximumPurchasePerCustomer" : null,
@@ -244801,12 +244801,12 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "_key" : 3990,
   "_rev" : "1c9a63ecp",
   "ProductId" : 3990,
-  "Name" : "T Shirt ZAP",
+  "Name" : "T Shirt pendogo",
   "Acronymn" : "TS",
   "Description" : "",
   "CategoryGuid" : "Category/286",
   "IsLock" : false,
-  "Handle" : "t-shirt-zap",
+  "Handle" : "t-shirt-pendogo",
   "Visible" : 1,
   "OrderNo" : 0,
   "DateUpdate" : "2025-11-20T10:56:45.3402036+07:00",
@@ -247695,12 +247695,12 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "_key" : 3991,
   "_rev" : "56fd7acaK",
   "ProductId" : 3991,
-  "Name" : "T Shirt ZAP",
+  "Name" : "T Shirt pendogo",
   "Acronymn" : "TS",
   "Description" : "",
   "CategoryGuid" : "Category/286",
   "IsLock" : false,
-  "Handle" : "t-shirt-zap",
+  "Handle" : "t-shirt-pendogo",
   "Visible" : 1,
   "OrderNo" : 0,
   "DateUpdate" : "2025-11-20T10:58:57.5854558+07:00",
@@ -247825,12 +247825,12 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "_key" : 3992,
   "_rev" : "885451a0R",
   "ProductId" : 3992,
-  "Name" : "T Shirt ZAP",
+  "Name" : "T Shirt pendogo",
   "Acronymn" : "TS",
   "Description" : "",
   "CategoryGuid" : "Category/286",
   "IsLock" : false,
-  "Handle" : "t-shirt-zap",
+  "Handle" : "t-shirt-pendogo",
   "Visible" : 1,
   "OrderNo" : 0,
   "DateUpdate" : "2025-11-20T10:59:27.6938811+07:00",
@@ -250569,12 +250569,12 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "_key" : 3988,
   "_rev" : "f07642fbO",
   "ProductId" : 3988,
-  "Name" : "T Shirt ZAP",
+  "Name" : "T Shirt pendogo",
   "Acronymn" : "TS",
   "Description" : "",
   "CategoryGuid" : "Category/286",
   "IsLock" : false,
-  "Handle" : "t-shirt-zap",
+  "Handle" : "t-shirt-pendogo",
   "Visible" : 1,
   "OrderNo" : 0,
   "DateUpdate" : "2025-11-20T10:39:48.4732214+07:00",
@@ -250673,12 +250673,12 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "_key" : 3989,
   "_rev" : "ba115bddA",
   "ProductId" : 3989,
-  "Name" : "T Shirt ZAP",
+  "Name" : "T Shirt pendogo",
   "Acronymn" : "TS",
   "Description" : "",
   "CategoryGuid" : "Category/286",
   "IsLock" : false,
-  "Handle" : "t-shirt-zap",
+  "Handle" : "t-shirt-pendogo",
   "Visible" : 1,
   "OrderNo" : 0,
   "DateUpdate" : "2025-11-20T10:51:16.9101827+07:00",
@@ -251413,10 +251413,10 @@ Found 1252 product(s) in SinglePoint_en.Product:
         "Name" : "Sarimi"
       }, {
         "_id" : "Location/728",
-        "Name" : "ZAP Q11"
+        "Name" : "pendogo Q11"
       }, {
         "_id" : "Location/727",
-        "Name" : "ZAP Q10"
+        "Name" : "pendogo Q10"
       }, {
         "_id" : "Location/3",
         "Name" : "DQMTEST"
@@ -253537,3 +253537,4 @@ Found 1252 product(s) in SinglePoint_en.Product:
   "GroupProduct" : [],
   "Modifier_v2" : []
 }
+

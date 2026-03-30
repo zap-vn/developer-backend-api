@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using CRM.Authentication.Application.Common.Interfaces;
 using CRM.Authentication.Application.Common.Models;
@@ -86,14 +86,14 @@ namespace CRM.Authentication.Infrastructure.Security
             _logger.LogInformation($"[EMAIL_SERVICE] Sending OTP email for Merchant: {merchantName ?? "Default"}");
 
             string otpPadded = otp.PadRight(6, '0');
-            string merchantText = string.IsNullOrEmpty(merchantName) ? "ZAP.vn" : merchantName;
+            string merchantText = string.IsNullOrEmpty(merchantName) ? "pendogo.vn" : merchantName;
 
             string body = $@"
 <div style='background-color: #f8fafc; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, ""Segoe UI"", Roboto, Helvetica, Arial, sans-serif;'>
     <div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #edf2f7;'>
         <div style='padding: 40px 40px 30px;'>
             <div style='text-align: center; margin-bottom: 30px;'>
-                <h1 style='margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1px; color: #000000;'>ZAP</h1>
+                <h1 style='margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1px; color: #000000;'>pendogo</h1>
             </div>
             
             <h2 style='color: #1a202c; text-align: center; font-size: 22px; font-weight: bold; margin: 0 0 24px;'>Xác thực tài khoản của bạn</h2>
@@ -162,14 +162,14 @@ namespace CRM.Authentication.Infrastructure.Security
             _logger.LogInformation($"[EMAIL_SERVICE] Sending Reset OTP email for Merchant: {merchantName ?? "Default"}");
 
             string otpPadded = otp.PadRight(6, '0');
-            string merchantText = "ZAP"; // Hardcoded as per image brand requirement or use merchantName if dynamic branding is needed
+            string merchantText = "pendogo"; // Hardcoded as per image brand requirement or use merchantName if dynamic branding is needed
 
             string body = $@"
 <div style='background-color: #f4f7f9; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, ""Segoe UI"", Roboto, Helvetica, Arial, sans-serif;'>
     <div style='max-width: 520px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); border: 1px solid #eef2f6;'>
         <div style='padding: 48px 40px;'>
             <div style='text-align: center; margin-bottom: 32px;'>
-                <h1 style='margin: 0; font-size: 36px; font-weight: 900; letter-spacing: -1.5px; color: #000000; font-family: Arial, sans-serif;'>ZAP</h1>
+                <h1 style='margin: 0; font-size: 36px; font-weight: 900; letter-spacing: -1.5px; color: #000000; font-family: Arial, sans-serif;'>pendogo</h1>
             </div>
             
             <h2 style='color: #111827; text-align: center; font-size: 26px; font-weight: 800; margin: 0 0 16px; letter-spacing: -0.5px;'>Xác thực yêu cầu đặt lại mật khẩu</h2>
@@ -237,7 +237,7 @@ namespace CRM.Authentication.Infrastructure.Security
                 <a href='#' style='color: #475569; font-size: 14px; font-weight: 600; margin: 0 10px; text-decoration: none;'>Quyền riêng tư</a>
             </div>
             <div style='color: #94a3b8; font-size: 12px; line-height: 1.8;'>
-                © {DateTime.Now.Year} ZAP.vn. Tất cả các quyền được bảo hộ.<br>
+                © {DateTime.Now.Year} pendogo.vn. Tất cả các quyền được bảo hộ.<br>
                 Đây là email tự động, vui lòng không trả lời email này.
             </div>
         </div>
@@ -271,3 +271,4 @@ namespace CRM.Authentication.Infrastructure.Security
         }
     }
 }
+

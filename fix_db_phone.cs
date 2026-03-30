@@ -1,4 +1,4 @@
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using MongoDB.Bson;
 using System;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ public class DbFix
         var collection = database.GetCollection<BsonDocument>("Customer");
 
         // Try to find a user and update their phone number
-        var filterEmail = Builders<BsonDocument>.Filter.Eq("Email", "tommy@zap.vn");
+        var filterEmail = Builders<BsonDocument>.Filter.Eq("Email", "tommy@pendogo.vn");
         var user = await collection.Find(filterEmail).FirstOrDefaultAsync();
 
         if (user != null)
@@ -36,3 +36,4 @@ public class DbFix
         }
     }
 }
+

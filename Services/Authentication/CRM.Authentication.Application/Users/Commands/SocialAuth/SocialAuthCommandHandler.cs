@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -118,9 +118,10 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                     MerchantId = $"merchant_{user._key}",
                     Email = user.Email,
                     Name = !string.IsNullOrEmpty(user.MerchantName) ? user.MerchantName : user.FullName,
-                    LogoUrl = string.IsNullOrEmpty(user.MerchantUrl) ? "https://api.zap.vn/logo.png" : user.MerchantUrl
+                    LogoUrl = string.IsNullOrEmpty(user.MerchantUrl) ? "https://api.pendogo.vn/logo.png" : user.MerchantUrl
                 }
             };
         }
     }
 }
+

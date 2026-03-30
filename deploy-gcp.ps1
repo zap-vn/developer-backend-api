@@ -1,16 +1,16 @@
-# Deploy Identity API to Google Cloud Run
-# Project: tom6573637618
+﻿# Deploy Identity API to Google Cloud Run
+# Project: pendogo-v1-6317
 
 Write-Host "🚀 Starting Deployment to Google Cloud Run..." -ForegroundColor Green
-Write-Host "Project ID: tom6573637618" -ForegroundColor Cyan
+Write-Host "Project ID: pendogo-v1-6317" -ForegroundColor Cyan
 
 # 1. Login if needed
 Write-Host "Checking authentication..."
 # gcloud auth login
 
 # 2. Set Project
-Write-Host "Setting project to tom6573637618..."
-# gcloud config set project tom6573637618
+Write-Host "Setting project to pendogo-v1-6317..."
+# gcloud config set project pendogo-v1-6317
 
 # 3. Enable Required Services
 Write-Host "Enabling Google Cloud Services..."
@@ -18,8 +18,8 @@ gcloud services enable run.googleapis.com containerregistry.googleapis.com cloud
 
 # 4. Deploy using the existing image but inject the correct ConnectionString
 Write-Host "Deploying Identity API with correct connection string..."
-gcloud run deploy zap-identity-api `
-    --image gcr.io/tom6573637618/zap-identity-api:latest `
+gcloud run deploy pendogo-identity-api `
+    --image gcr.io/pendogo-v1-6317/pendogo-identity-api:latest `
     --platform managed `
     --region asia-southeast1 `
     --allow-unauthenticated `
@@ -28,3 +28,4 @@ gcloud run deploy zap-identity-api `
     --quiet
 
 Write-Host "✅ Deployment Complete!" -ForegroundColor Green
+

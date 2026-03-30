@@ -1,4 +1,4 @@
-# AUTHENTICATION REFACTORING & SOCIAL LOGIN IMPLEMENTATION LOG
+﻿# AUTHENTICATION REFACTORING & SOCIAL LOGIN IMPLEMENTATION LOG
 Date: 2026-03-12
 
 ## 1. Objective
@@ -37,7 +37,7 @@ Refactor the authentication flow to support a unified account check (Email/Phone
     - `/api/Auth/check-account`
     - `/api/Auth/verify-registration-otp`
     - `/api/Auth/social-login`
-- Target backend: `zap-identity-api` on Cloud Run.
+- Target backend: `pendogo-identity-api` on Cloud Run.
 
 ### 3.2. Automated Deployment (`.github/workflows/cloudbuild.yaml`)
 - Configured Cloud Build to build the container from the root level and deploy to Cloud Run with necessary environment variables (MongoDB connection, JWT Secret).
@@ -53,3 +53,4 @@ Refactor the authentication flow to support a unified account check (Email/Phone
 ## 5. Skill Documentation
 Created a new skill definition at:
 `d:\PROJECTS\2026\3_2\.agent\skills\crm-pre-registration-check\SKILL.md`
+

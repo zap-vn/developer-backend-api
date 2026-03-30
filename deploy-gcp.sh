@@ -1,9 +1,9 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 # GCP Configuration
 PROJECT_ID="your-gcp-project-id"  # Thay bằng GCP Project ID của bạn
 REGION="asia-southeast1"          # Singapore region (gần VN nhất)
-SERVICE_NAME="zap-identity-api"
+SERVICE_NAME="pendogo-identity-api"
 IMAGE_NAME="gcr.io/${PROJECT_ID}/${SERVICE_NAME}"
 
 echo "=== Deploying CRM Identity API to GCP Cloud Run ==="
@@ -61,3 +61,4 @@ echo "✅ Deployment successful!"
 echo ""
 echo "Your API is now running at:"
 gcloud run services describe ${SERVICE_NAME} --region ${REGION} --format 'value(status.url)' --project ${PROJECT_ID}
+

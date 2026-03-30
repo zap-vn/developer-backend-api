@@ -1,4 +1,4 @@
-# Triggering run to verify permissions - v2
+﻿# Triggering run to verify permissions - v2
 name: Deploy Identity API
 
 on:
@@ -18,7 +18,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: dev
-      url: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html
+      url: https://pendogo-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html
     permissions:
       contents: read
       id-token: write
@@ -31,7 +31,7 @@ jobs:
       uses: 'google-github-actions/auth@v2'
       with:
         workload_identity_provider: 'projects/882473783707/locations/global/workloadIdentityPools/github-pool/providers/github-provider-final'
-        service_account: 'github-deployer@openclaw-zap.iam.gserviceaccount.com'
+        service_account: 'github-deployer@openclaw-pendogo.iam.gserviceaccount.com'
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
@@ -41,21 +41,21 @@ jobs:
 
     - name: 'Build and Push API Images'
       run: |
-        docker build -t gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-identity-api:latest -f Services/Authentication/CRM.Authentication.Api/Dockerfile .
-        docker build -t gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-customer-api:latest -f Services/Customer/CRM.Customer.Api/Dockerfile .
-        docker build -t gcr.io/openclaw-zap/zap-product-api:${{ github.sha }} -t gcr.io/openclaw-zap/zap-product-api:latest -f Services/Product/CRM.Product.Api/Dockerfile .
+        docker build -t gcr.io/openclaw-pendogo/pendogo-identity-api:${{ github.sha }} -t gcr.io/openclaw-pendogo/pendogo-identity-api:latest -f Services/Authentication/CRM.Authentication.Api/Dockerfile .
+        docker build -t gcr.io/openclaw-pendogo/pendogo-customer-api:${{ github.sha }} -t gcr.io/openclaw-pendogo/pendogo-customer-api:latest -f Services/Customer/CRM.Customer.Api/Dockerfile .
+        docker build -t gcr.io/openclaw-pendogo/pendogo-product-api:${{ github.sha }} -t gcr.io/openclaw-pendogo/pendogo-product-api:latest -f Services/Product/CRM.Product.Api/Dockerfile .
         
-        docker push gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }}
-        docker push gcr.io/openclaw-zap/zap-identity-api:latest
-        docker push gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }}
-        docker push gcr.io/openclaw-zap/zap-customer-api:latest
-        docker push gcr.io/openclaw-zap/zap-product-api:${{ github.sha }}
-        docker push gcr.io/openclaw-zap/zap-product-api:latest
+        docker push gcr.io/openclaw-pendogo/pendogo-identity-api:${{ github.sha }}
+        docker push gcr.io/openclaw-pendogo/pendogo-identity-api:latest
+        docker push gcr.io/openclaw-pendogo/pendogo-customer-api:${{ github.sha }}
+        docker push gcr.io/openclaw-pendogo/pendogo-customer-api:latest
+        docker push gcr.io/openclaw-pendogo/pendogo-product-api:${{ github.sha }}
+        docker push gcr.io/openclaw-pendogo/pendogo-product-api:latest
 
     - name: 'Deploy Identity to Cloud Run'
       run: |
-        gcloud run deploy zap-identity-api \
-          --image gcr.io/openclaw-zap/zap-identity-api:${{ github.sha }} \
+        gcloud run deploy pendogo-identity-api \
+          --image gcr.io/openclaw-pendogo/pendogo-identity-api:${{ github.sha }} \
           --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \
@@ -65,12 +65,12 @@ jobs:
           --memory 512Mi \
           --cpu-boost \
           --timeout 120 \
-          --set-env-vars "^|^ASPNETCORE_ENVIRONMENT=Development|JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890|DatabaseSettings__DBProvider=mongodb|MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}|MongoDB__DatabaseName=SinglePoint_en|CUSTOMER_API_URL=https://zap-customer-api-882473783707.asia-southeast1.run.app"
+          --set-env-vars "^|^ASPNETCORE_ENVIRONMENT=Development|JwtSettings__Secret=ThisVerifySecretMustBeLongEnoughForIdentityApiAndNotSharedInPublicRepo1234567890|DatabaseSettings__DBProvider=mongodb|MongoDB__ConnectionString=${{ env.DB_CONNECTION_STRING }}|MongoDB__DatabaseName=SinglePoint_en|CUSTOMER_API_URL=https://pendogo-customer-api-882473783707.asia-southeast1.run.app"
 
     - name: 'Deploy Customer to Cloud Run'
       run: |
-        gcloud run deploy zap-customer-api \
-          --image gcr.io/openclaw-zap/zap-customer-api:${{ github.sha }} \
+        gcloud run deploy pendogo-customer-api \
+          --image gcr.io/openclaw-pendogo/pendogo-customer-api:${{ github.sha }} \
           --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \
@@ -84,8 +84,8 @@ jobs:
 
     - name: 'Deploy Product to Cloud Run'
       run: |
-        gcloud run deploy zap-product-api \
-          --image gcr.io/openclaw-zap/zap-product-api:${{ github.sha }} \
+        gcloud run deploy pendogo-product-api \
+          --image gcr.io/openclaw-pendogo/pendogo-product-api:${{ github.sha }} \
           --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \
@@ -99,22 +99,22 @@ jobs:
 
     - name: 'Deploy API Gateway'
       run: |
-        CONFIG_ID="zap-config-${{ github.sha }}"
+        CONFIG_ID="pendogo-config-${{ github.sha }}"
         gcloud api-gateway api-configs create $CONFIG_ID \
-          --api=zap-api \
+          --api=pendogo-crm-api \
           --openapi-spec=api-gateway.yaml \
-          --project=openclaw-zap
+          --project=openclaw-pendogo
         
-        gcloud api-gateway gateways update zap-gateway \
-          --api=zap-api \
+        gcloud api-gateway gateways update pendogo-crm-gateway \
+          --api=pendogo-crm-api \
           --api-config=$CONFIG_ID \
           --location=us-central1 \
-          --project=openclaw-zap
+          --project=openclaw-pendogo
 
     - name: Notify deployment
       run: |
         echo "🚀 Deployed to GCP Dev"
-        echo "URL: https://zap-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html"
+        echo "URL: https://pendogo-identity-api-882473783707.asia-southeast1.run.app/swagger/index.html"
 
   deploy-production:
     name: Deploy to Production
@@ -182,3 +182,5 @@ jobs:
           - Identity API: `${{ env.REGISTRY }}/${{ github.repository }}/identity-api:${{ steps.version.outputs.VERSION }}`
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+

@@ -9,7 +9,7 @@ namespace CRM.Promotion.Infrastructure.Persistence.Repositories
     public class PromotionRepository : BaseMongoRepository<PromotionEntity>, IPromotionRepository
     {
         public PromotionRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
-            : base(database, "Promotions", currentUserService)
+            : base(database, "promotion.Promotions", currentUserService)
         {
         }
     }

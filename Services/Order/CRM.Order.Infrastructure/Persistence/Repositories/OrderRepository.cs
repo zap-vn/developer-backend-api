@@ -13,7 +13,7 @@ namespace CRM.Order.Infrastructure.Persistence.Repositories
         private readonly IMongoDatabase _database;
 
         public OrderRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
-            : base(database, "Order", currentUserService)
+            : base(database, "ordering.Orders", currentUserService)
         {
             _database = database;
         }
@@ -81,14 +81,14 @@ namespace CRM.Order.Infrastructure.Persistence.Repositories
 
         public async Task<IReadOnlyList<OrderDetailEntity>> GetRelatedOrderDetailsAsync(IEnumerable<string> orderIds)
         {
-            var collection = _database.GetCollection<OrderDetailEntity>("OrderDetail");
+            var collection = _database.GetCollection<OrderDetailEntity>("ordering.OrderDetail");
             var filter = Builders<OrderDetailEntity>.Filter.In(x => x.OrderId, orderIds);
             return await collection.Find(filter).ToListAsync();
         }
 
         public async Task<IReadOnlyList<LocationEntity>> GetLocationsAsync(IEnumerable<string> locationGuids)
         {
-            var collection = _database.GetCollection<LocationEntity>("Location");
+            var collection = _database.GetCollection<LocationEntity>("ordering.Location");
             var filter = Builders<LocationEntity>.Filter.In(x => x.Id, locationGuids);
             return await collection.Find(filter).ToListAsync();
         }

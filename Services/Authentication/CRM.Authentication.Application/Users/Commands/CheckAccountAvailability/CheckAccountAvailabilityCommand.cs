@@ -9,10 +9,11 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
         [JsonPropertyName("account")]
         public string Account { get; set; } = string.Empty;
 
-        [JsonPropertyName("dialing_code")]
+        [JsonIgnore]
         public string? DialingCode { get; set; } = "+84";
-
+        [JsonIgnore]
         public string Provider { get; set; } = "Email"; 
-        public bool IsLogin { get; set; }
+        [JsonIgnore]
+        public bool IsLogin { get; set; } = true;
     }
 }

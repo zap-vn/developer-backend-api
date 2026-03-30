@@ -25,6 +25,7 @@ namespace CRM.Authentication.Application.Users.DTOs
         [System.Text.Json.Serialization.JsonPropertyName("email")]
         public string Email { get; set; } = string.Empty;
 
+
         [System.Text.Json.Serialization.JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
@@ -32,21 +33,15 @@ namespace CRM.Authentication.Application.Users.DTOs
         public string LogoUrl { get; set; } = string.Empty;
     }
 
-    public class LoginRequestDto
+    public class LoginV1RequestDto
     {
         [System.Text.Json.Serialization.JsonPropertyName("account")]
         public string Account { get; set; } = string.Empty;
         
-        [System.Text.Json.Serialization.JsonPropertyName("email")]
-        public string Email { get; set; } = string.Empty; // Legacy
-        
         [System.Text.Json.Serialization.JsonPropertyName("password")]
         public string? Password { get; set; }
         
-        [System.Text.Json.Serialization.JsonPropertyName("otp")]
-        public string? Otp { get; set; }
-        
-        [System.Text.Json.Serialization.JsonPropertyName("is_remember")]
-        public bool IsRemember { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("dialing_code")]
+        public string DialingCode { get; set; } = "+84";
     }
 }

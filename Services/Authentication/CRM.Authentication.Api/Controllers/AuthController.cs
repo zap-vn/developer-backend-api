@@ -96,21 +96,21 @@ namespace CRM.Authentication.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        public async Task<IActionResult> Login([FromBody] LoginV1RequestDto request)
         {
-            var identifier = !string.IsNullOrEmpty(request.Account) ? request.Account : request.Email;
+            var identifier = request.Account;
             
             if (string.IsNullOrEmpty(identifier))
             {
                 return BadRequest(new { Message = "Account (Email/Phone) is required." });
             }
 
-            if (string.IsNullOrEmpty(request.Password) && string.IsNullOrEmpty(request.Otp))
+            if (string.IsNullOrEmpty(request.Password))
             {
-                return BadRequest(new { Message = "Either Password or OTP is required." });
+                return BadRequest(new { Message = "Password is required." });
             }
             
-            var command = new LoginUserCommand(identifier, request.Password, request.Otp);
+            var command = new LoginUserCommand(identifier, request.Password, null, request.DialingCode);
             var result = await _mediator.Send(command);
             return Ok(result);
         }

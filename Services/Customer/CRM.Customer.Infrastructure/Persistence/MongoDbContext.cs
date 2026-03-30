@@ -24,7 +24,7 @@ namespace CRM.Customer.Infrastructure.Persistence
             Database = _client.GetDatabase(mongoSettings.DatabaseName);
         }
 
-        public IMongoCollection<CustomerGroup> CustomerGroups => Database.GetCollection<CustomerGroup>("CustomerGroups");
-        public IMongoCollection<CustomerEntity> Customers => Database.GetCollection<CustomerEntity>("Customer");
+        public IMongoCollection<CustomerGroup> CustomerGroups => Database.GetCollection<CustomerGroup>("merchant.CustomerGroups");
+        public IMongoCollection<CustomerEntity> Customers => Database.GetCollection<CustomerEntity>("merchant.Customers");
     }
 }

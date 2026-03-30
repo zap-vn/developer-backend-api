@@ -15,6 +15,6 @@ namespace CRM.Promotion.Infrastructure.Persistence
             Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<PromotionEntity> Promotions => Database.GetCollection<PromotionEntity>("Promotions");
+        public IMongoCollection<PromotionEntity> Promotions => Database.GetCollection<PromotionEntity>("promotion.Promotions");
     }
 }

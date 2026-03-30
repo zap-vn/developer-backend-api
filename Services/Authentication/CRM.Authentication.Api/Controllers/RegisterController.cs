@@ -39,6 +39,9 @@ namespace CRM.Authentication.Api.Controllers
             [property: System.Text.Json.Serialization.JsonPropertyName("data")] object? Data = null
         );
 
+        public record CheckEmailRequest([property: System.Text.Json.Serialization.JsonPropertyName("email")] string Email);
+        public record CheckPhoneRequest([property: System.Text.Json.Serialization.JsonPropertyName("phone")] string Phone);
+
         [HttpPost("check-account")]
         public async Task<IActionResult> CheckAccount([FromBody] CheckAccountAvailabilityCommand command)
         {
@@ -49,20 +52,28 @@ namespace CRM.Authentication.Api.Controllers
         }
 
         [HttpPost("check-email")]
-        public async Task<IActionResult> CheckEmail([FromBody] CheckAccountAvailabilityCommand command)
+        public async Task<IActionResult> CheckEmail([FromBody] CheckEmailRequest request)
         {
-            command.IsLogin = false;
-            command.Provider = "Email";
+            var command = new CheckAccountAvailabilityCommand 
+            { 
+                Account = request.Email, 
+                IsLogin = false, 
+                Provider = "Email" 
+            };
             var result = await _mediator.Send(command);
             
             return Ok(new ApiResponse(result.Success, result.Success ? 200 : 400, result.Success ? "Email is available" : result.Message));
         }
 
         [HttpPost("check-phone")]
-        public async Task<IActionResult> CheckPhone([FromBody] CheckAccountAvailabilityCommand command)
+        public async Task<IActionResult> CheckPhone([FromBody] CheckPhoneRequest request)
         {
-            command.IsLogin = false;
-            command.Provider = "Phone";
+            var command = new CheckAccountAvailabilityCommand 
+            { 
+                Account = request.Phone, 
+                IsLogin = false, 
+                Provider = "Phone" 
+            };
             var result = await _mediator.Send(command);
             
             return Ok(new ApiResponse(result.Success, result.Success ? 200 : 400, result.Success ? "Phone number is available" : result.Message));

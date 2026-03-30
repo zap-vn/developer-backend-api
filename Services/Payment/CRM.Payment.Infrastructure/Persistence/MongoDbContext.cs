@@ -15,7 +15,7 @@ namespace CRM.Payment.Infrastructure.Persistence
             Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<PaymentType> PaymentTypes => Database.GetCollection<PaymentType>("PaymentTypes");
-        public IMongoCollection<PaymentTerms> PaymentTerms => Database.GetCollection<PaymentTerms>("PaymentTerms");
+        public IMongoCollection<PaymentType> PaymentTypes => Database.GetCollection<PaymentType>("payment.PaymentTypes");
+        public IMongoCollection<PaymentTerms> PaymentTerms => Database.GetCollection<PaymentTerms>("payment.PaymentTerms");
     }
 }

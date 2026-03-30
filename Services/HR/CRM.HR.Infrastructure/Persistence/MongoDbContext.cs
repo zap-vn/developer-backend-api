@@ -15,7 +15,7 @@ namespace CRM.HR.Infrastructure.Persistence
             Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<Employee> Employees => Database.GetCollection<Employee>("Employees");
-        public IMongoCollection<EmployeeTranslation> EmployeeTranslations => Database.GetCollection<EmployeeTranslation>("Employee_translate");
+        public IMongoCollection<Employee> Employees => Database.GetCollection<Employee>("merchant.Employees");
+        public IMongoCollection<EmployeeTranslation> EmployeeTranslations => Database.GetCollection<EmployeeTranslation>("merchant.Employee_translate");
     }
 }

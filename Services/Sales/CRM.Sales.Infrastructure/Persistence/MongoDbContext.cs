@@ -20,11 +20,11 @@ namespace CRM.Sales.Infrastructure.Persistence
             Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<Promotion> Promotions => Database.GetCollection<Promotion>("Promotions");
-        public IMongoCollection<OrderEntity> Orders => Database.GetCollection<OrderEntity>("Orders");
-        public IMongoCollection<ProductEntity> Products => Database.GetCollection<ProductEntity>("Products");
-        public IMongoCollection<PaymentMethod> Payments => Database.GetCollection<PaymentMethod>("Payments");
-        public IMongoCollection<OrganizationUnit> OrganizationUnits => Database.GetCollection<OrganizationUnit>("OrganizationUnits");
-        public IMongoCollection<ReportTemplate> Reports => Database.GetCollection<ReportTemplate>("Reports");
+        public IMongoCollection<Promotion> Promotions => Database.GetCollection<Promotion>("promotion.Promotions");
+        public IMongoCollection<OrderEntity> Orders => Database.GetCollection<OrderEntity>("ordering.Orders");
+        public IMongoCollection<ProductEntity> Products => Database.GetCollection<ProductEntity>("catalog.Products");
+        public IMongoCollection<PaymentMethod> Payments => Database.GetCollection<PaymentMethod>("payment.PaymentMethods");
+        public IMongoCollection<OrganizationUnit> OrganizationUnits => Database.GetCollection<OrganizationUnit>("merchant.OrganizationUnits");
+        public IMongoCollection<ReportTemplate> Reports => Database.GetCollection<ReportTemplate>("report.ReportTemplates");
     }
 }

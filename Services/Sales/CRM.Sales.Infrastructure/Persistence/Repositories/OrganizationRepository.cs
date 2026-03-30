@@ -9,7 +9,7 @@ namespace CRM.Sales.Infrastructure.Persistence.Repositories
     public class OrganizationRepository : BaseMongoRepository<OrganizationUnit>, IOrganizationRepository
     {
         public OrganizationRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
-            : base(database, "OrganizationUnits", currentUserService)
+            : base(database, "merchant.OrganizationUnits", currentUserService)
         {
         }
     }

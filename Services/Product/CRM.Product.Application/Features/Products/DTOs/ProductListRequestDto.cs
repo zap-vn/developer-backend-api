@@ -5,10 +5,10 @@ namespace CRM.Product.Application.Features.Products.DTOs
 {
     public class ProductListRequestDto
     {
-        [JsonPropertyName("page")]
+        [JsonPropertyName("page_index")]
         public int Page { get; set; } = 1;
 
-        [JsonPropertyName("pageSize")]
+        [JsonPropertyName("page_size")]
         public int PageSize { get; set; } = 10;
 
         [JsonPropertyName("search")]

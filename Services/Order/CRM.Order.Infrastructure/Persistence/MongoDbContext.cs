@@ -15,6 +15,6 @@ namespace CRM.Order.Infrastructure.Persistence
             Database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<OrderEntity> Orders => Database.GetCollection<OrderEntity>("Orders");
+        public IMongoCollection<OrderEntity> Orders => Database.GetCollection<OrderEntity>("ordering.Orders");
     }
 }

@@ -11,7 +11,7 @@ namespace CRM.Report.Infrastructure.Persistence.Repositories
     public class ReportRepository : BaseMongoRepository<ReportTemplate>, IReportRepository
     {
         public ReportRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
-            : base(database, "ReportTemplates", currentUserService)
+            : base(database, "report.ReportTemplates", currentUserService)
         {
         }
     }

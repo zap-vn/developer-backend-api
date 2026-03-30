@@ -2,19 +2,19 @@ using System.Text.Json;
 
 namespace CRM.BuildingBlocks.Serialization
 {
-    public class ExceptionPascalCaseNamingPolicy : JsonNamingPolicy
+    public class CrmSnakeCaseNamingPolicy : JsonNamingPolicy
     {
         public override string ConvertName(string name)
         {
             if (string.IsNullOrEmpty(name))
                 return name;
 
-            // Force Id or _id to be _id in JSON
+            // Handle Id or _id to be _id for MongoDB/Frontend consistency
             if (name == "Id" || name == "_id")
                 return "_id";
 
-            // Capitalize the first letter
-            return char.ToUpperInvariant(name[0]) + name.Substring(1);
+            // Use the built-in SnakeCaseLower for all other fields (e.g., FirstName -> first_name)
+            return JsonNamingPolicy.SnakeCaseLower.ConvertName(name);
         }
     }
 }

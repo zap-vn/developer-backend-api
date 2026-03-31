@@ -1,14 +1,14 @@
-using MongoDB.Driver;
+using LegacyDB.Driver;
 using CRM.Authentication.Domain.Entities;
 using CRM.Authentication.Domain.Interfaces;
 
 namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 {
-    public class MongoUserRepository : IUserRepository
+    public class LegacyUserRepository : IUserRepository
     {
-        private readonly MongoDbContext _context;
+        private readonly LegacyDbContext _context;
 
-        public MongoUserRepository(MongoDbContext context)
+        public LegacyUserRepository(LegacyDbContext context)
         {
             _context = context;
         }
@@ -90,7 +90,7 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
         public async Task<TenantNode?> GetTenantBySlugAsync(string slug)
         {
             // Note: TenantNode is primarily managed in PostgreSQL for Unified Omni-Tier
-            // This is a placeholder for MongoDB if ever needed
+            // This is a placeholder for LegacyDB if ever needed
             return await Task.FromResult<TenantNode?>(null);
         }
 

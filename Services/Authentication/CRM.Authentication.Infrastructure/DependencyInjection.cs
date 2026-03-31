@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Driver;
+using LegacyDB.Bson;
+using LegacyDB.Bson.Serialization;
+using LegacyDB.Bson.Serialization.Serializers;
+using LegacyDB.Driver;
 using CRM.Authentication.Domain.Interfaces;
 using CRM.Authentication.Application.Common.Interfaces;
 using CRM.Authentication.Infrastructure.Persistence;
@@ -30,7 +30,7 @@ namespace CRM.Authentication.Infrastructure
                 // Serializer might already be registered
             }
 
-            services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
+            services.Configure<LegacySettings>(configuration.GetSection("LegacyDB"));
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
             services.Configure<ZaloSettings>(configuration.GetSection("ZaloSettings"));
             services.Configure<TwilioSettings>(configuration.GetSection("Twilio"));
@@ -42,14 +42,14 @@ namespace CRM.Authentication.Infrastructure
             services.AddDbContext<PostgresDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("PostgreSql")));
             
-            services.AddSingleton<MongoDbContext>();
-            services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
+            services.AddSingleton<LegacyDbContext>();
+            services.AddSingleton<ILegacyDatabase>(sp => sp.GetRequiredService<LegacyDbContext>().Database);
             
             services.AddScoped<IUserRepository, PostgresUserRepository>();
-            services.AddScoped<IPasswordResetRepository, MongoPasswordResetRepository>();
-            services.AddScoped<IOtpRepository, MongoOtpRepository>();
-            services.AddScoped<ISystemConfigRepository, MongoSystemConfigRepository>();
-            services.AddScoped<IEmailSettingRepository, MongoEmailSettingRepository>();
+            services.AddScoped<IPasswordResetRepository, LegacyPasswordResetRepository>();
+            services.AddScoped<IOtpRepository, LegacyOtpRepository>();
+            services.AddScoped<ISystemConfigRepository, LegacySystemConfigRepository>();
+            services.AddScoped<IEmailSettingRepository, LegacyEmailSettingRepository>();
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IVietGuyService, VietGuyService>();

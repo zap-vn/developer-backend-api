@@ -1,15 +1,15 @@
 using CRM.Authentication.Domain.Entities;
 using CRM.Authentication.Domain.Interfaces;
-using MongoDB.Driver;
+using LegacyDB.Driver;
 using System.Threading.Tasks;
 
 namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 {
-    public class MongoEmailSettingRepository : IEmailSettingRepository
+    public class LegacyEmailSettingRepository : IEmailSettingRepository
     {
-        private readonly MongoDbContext _context;
+        private readonly LegacyDbContext _context;
 
-        public MongoEmailSettingRepository(MongoDbContext context)
+        public LegacyEmailSettingRepository(LegacyDbContext context)
         {
             _context = context;
         }

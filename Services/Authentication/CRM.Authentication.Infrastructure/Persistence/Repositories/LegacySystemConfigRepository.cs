@@ -1,15 +1,15 @@
-using MongoDB.Driver;
+using LegacyDB.Driver;
 using CRM.Authentication.Domain.Entities;
 using CRM.Authentication.Domain.Interfaces;
 using System.Threading.Tasks;
 
 namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 {
-    public class MongoSystemConfigRepository : ISystemConfigRepository
+    public class LegacySystemConfigRepository : ISystemConfigRepository
     {
-        private readonly MongoDbContext _context;
+        private readonly LegacyDbContext _context;
 
-        public MongoSystemConfigRepository(MongoDbContext context)
+        public LegacySystemConfigRepository(LegacyDbContext context)
         {
             _context = context;
         }

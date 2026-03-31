@@ -1,37 +1,37 @@
 using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+using LegacyDB.Driver;
 using CRM.Authentication.Domain.Entities;
 using CRM.BuildingBlocks;
 using CRM.Authentication.Infrastructure.Persistence.Configurations;
 
 namespace CRM.Authentication.Infrastructure.Persistence
 {
-    public class MongoDbContext
+    public class LegacyDbContext
     {
-        private static IMongoClient? _client;
-        public readonly IMongoDatabase Database;
-        public readonly IMongoDatabase SystemDatabase;
+        private static ILegacyClient? _client;
+        public readonly ILegacyDatabase Database;
+        public readonly ILegacyDatabase SystemDatabase;
 
-        public MongoDbContext(IOptions<MongoSettings> settings)
+        public LegacyDbContext(IOptions<LegacySettings> settings)
         {
-            var mongoSettings = settings.Value;
+            var LegacySettings = settings.Value;
 
             if (_client == null)
             {
                 try 
                 {
-                    var clientSettings = MongoClientSettings.FromConnectionString(mongoSettings.ConnectionString);
+                    var clientSettings = LegacyClientSettings.FromConnectionString(LegacySettings.ConnectionString);
                     clientSettings.ConnectTimeout = TimeSpan.FromSeconds(10);
                     clientSettings.ServerSelectionTimeout = TimeSpan.FromSeconds(10);
                     clientSettings.MaxConnectionPoolSize = 100;
-                    _client = new MongoClient(clientSettings);
+                    _client = new LegacyClient(clientSettings);
                 }
                 catch (Exception)
                 {
                     throw;
                 }
             }
-            Database = _client.GetDatabase(mongoSettings.DatabaseName);
+            Database = _client.GetDatabase(LegacySettings.DatabaseName);
             SystemDatabase = _client.GetDatabase("SystemDB");
 
             // Attributes in User.cs handle property mapping to BSON elements.
@@ -67,23 +67,23 @@ namespace CRM.Authentication.Infrastructure.Persistence
                 }
                 catch (Exception idxEx)
                 {
-                    Console.WriteLine($"[MongoDB] User index creation skip (already exists or error): {idxEx.Message}");
+                    Console.WriteLine($"[LegacyDB] User index creation skip (already exists or error): {idxEx.Message}");
                 }
 
-                Console.WriteLine("[MongoDB] Database indexes ensured.");
+                Console.WriteLine("[LegacyDB] Database indexes ensured.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[MongoDB] Index creation error: {ex.Message}");
+                Console.WriteLine($"[LegacyDB] Index creation error: {ex.Message}");
             }
         }
 
-        public IMongoCollection<User> Users => Database.GetCollection<User>("merchant.Customers");
-        public IMongoCollection<ManagementIndex> ManagementIndexes => Database.GetCollection<ManagementIndex>("merchant.ManagementIndex");
-        public IMongoCollection<PasswordResetRequest> PasswordResetRequests => Database.GetCollection<PasswordResetRequest>("merchant.PasswordResetRequests");
-        public IMongoCollection<CustomerOtp> CustomerOtps => Database.GetCollection<CustomerOtp>("merchant.CustomerOtps");
-        public IMongoCollection<SystemError> SystemErrors => Database.GetCollection<SystemError>("merchant.SystemErrors");
-        public IMongoCollection<EmailSetting> EmailSettings => Database.GetCollection<EmailSetting>("merchant.email_setting");
-        public IMongoCollection<SystemConfig> SystemConfigs => SystemDatabase.GetCollection<SystemConfig>("merchant.system_configs");
+        public ILegacyCollection<User> Users => Database.GetCollection<User>("merchant.Customers");
+        public ILegacyCollection<ManagementIndex> ManagementIndexes => Database.GetCollection<ManagementIndex>("merchant.ManagementIndex");
+        public ILegacyCollection<PasswordResetRequest> PasswordResetRequests => Database.GetCollection<PasswordResetRequest>("merchant.PasswordResetRequests");
+        public ILegacyCollection<CustomerOtp> CustomerOtps => Database.GetCollection<CustomerOtp>("merchant.CustomerOtps");
+        public ILegacyCollection<SystemError> SystemErrors => Database.GetCollection<SystemError>("merchant.SystemErrors");
+        public ILegacyCollection<EmailSetting> EmailSettings => Database.GetCollection<EmailSetting>("merchant.email_setting");
+        public ILegacyCollection<SystemConfig> SystemConfigs => SystemDatabase.GetCollection<SystemConfig>("merchant.system_configs");
     }
 }

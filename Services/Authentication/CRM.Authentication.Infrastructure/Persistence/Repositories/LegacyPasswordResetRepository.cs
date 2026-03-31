@@ -1,15 +1,15 @@
-using MongoDB.Driver;
+using LegacyDB.Driver;
 using CRM.Authentication.Domain.Entities;
 using CRM.Authentication.Domain.Interfaces;
 using System.Threading.Tasks;
 
 namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 {
-    public class MongoPasswordResetRepository : IPasswordResetRepository
+    public class LegacyPasswordResetRepository : IPasswordResetRepository
     {
-        private readonly MongoDbContext _context;
+        private readonly LegacyDbContext _context;
 
-        public MongoPasswordResetRepository(MongoDbContext context)
+        public LegacyPasswordResetRepository(LegacyDbContext context)
         {
             _context = context;
         }

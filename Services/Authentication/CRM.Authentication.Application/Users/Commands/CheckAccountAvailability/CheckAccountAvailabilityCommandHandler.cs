@@ -81,7 +81,7 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
 
             // If account exists
             var methods = new List<string> { "otp" };
-            if (user != null && !string.IsNullOrEmpty(user.Password))
+            if (user != null && !string.IsNullOrEmpty(user.password_hash))
             {
                 methods.Add("password");
             }

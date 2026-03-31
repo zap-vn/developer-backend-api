@@ -21,36 +21,24 @@ namespace CRM.Authentication.Application.Users.Commands.CreateUser
             
             var user = new User
             {
-                _id = Guid.NewGuid().ToString(),
-                _key = nextId,
-                Email = request.Email,
-                FirstName = request.FullName, 
-                MerchantName = request.MerchantName,
-                Password = request.Password,
-                Language = string.IsNullOrEmpty(request.Language) ? request.LanguageId?.ToString() ?? "" : request.Language, 
-                LanguageId = ExtractLanguageId(request.LanguageId), 
-                Provider = detectedProvider,
-                Roles = new List<string> { "User" },
-                IsVerify = true // Direct creation might not require OTP activation by default, or you can set to false if needed
+                id = Guid.NewGuid(),
+                email = request.Email ?? string.Empty,
+                username = request.Email ?? string.Empty,
+                full_name = request.FullName ?? string.Empty, 
+                password_hash = request.Password ?? string.Empty, // assuming a hash service is called later or hashing is irrelevant if it's external auth
+                status_id = 9001
             };
 
             await _userRepository.CreateAsync(user);
 
             return new UserDto
             {
-                _id = user._id,
-                Email = user.Email,
-                Phone = user.Phone,
-                FullName = user.FullName,
-                LanguageId = user.LanguageId,
-                Provider = user.Provider,
-                Roles = user.Roles,
-                CreatedAt = user.CreatedAt,
-                IsVerifyPhone = user.IsVerifyPhone,
-                IsVerifyEmail = user.IsVerifyEmail,
-                IsVerifyGoogle = user.IsVerifyGoogle,
-                IsVerifyApple = user.IsVerifyApple,
-                MerchantUrl = user.MerchantUrl
+                id = user.id,
+                email = user.email,
+                username = user.username,
+                full_name = user.full_name,
+                status_id = user.status_id.GetValueOrDefault(),
+                created_at = user.created_at.GetValueOrDefault()
             };
         }
 

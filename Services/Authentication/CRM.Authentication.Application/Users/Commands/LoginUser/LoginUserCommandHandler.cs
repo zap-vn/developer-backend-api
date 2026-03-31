@@ -77,70 +77,59 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
             // --- Case 1: Login via OTP ---
             if (!string.IsNullOrEmpty(request.Otp))
             {
-                // If not found by email/identifier, try by User's verified phone
-                if (latestOtp == null && !string.IsNullOrEmpty(user.Phone))
-                {
-                    latestOtp = await _otpRepository.GetLatestOtpByPhoneForPurposesAsync(user.Phone, purposes);
-                }
-
                 if (latestOtp == null)
                 {
                     _logger.LogWarning("[Login] No OTP found for {Identifier}", account);
                     throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không hợp lệ hoặc đã hết hạn.");
                 }
 
-                if (latestOtp.ExpiredAt < DateTime.UtcNow)
+                if (latestOtp.expired_at < DateTime.UtcNow)
                 {
                     throw new UnauthorizedAccessException("error_otp_expired|Mã xác thực đã hết hạn.");
                 }
 
-                if (latestOtp.OtpCode != request.Otp)
+                if (latestOtp.otp_code != request.Otp)
                 {
                     throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không chính xác.");
                 }
 
-                // Parallelize persistence updates
-                var updateTasks = new List<Task>();
-                
-                latestOtp.VerifiedAt = DateTime.UtcNow;
-                updateTasks.Add(_otpRepository.UpdateAsync(latestOtp));
-
-                if (!user.IsVerify)
-                {
-                    user.IsVerify = true;
-                    if (!string.IsNullOrEmpty(latestOtp.Email)) user.IsVerifyEmail = true;
-                    if (!string.IsNullOrEmpty(latestOtp.Phone)) user.IsVerifyPhone = true;
-                    user.UpdatedAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
-                    updateTasks.Add(_userRepository.UpdateAsync(user));
-                    _logger.LogInformation("[Login] Auto-verified user {Email} via OTP", user.Email);
-                }
-                
-                await Task.WhenAll(updateTasks);
+                latestOtp.verified_at = DateTime.UtcNow;
+                await _otpRepository.UpdateAsync(latestOtp);
             }
             // --- Case 2: Login via Password ---
             else
             {
                 var hashedInput = HashLegacyPassword(request.Password ?? "");
-                bool isPasswordValid = user.Password == hashedInput || 
-                                     user.Password == request.Password || 
-                                     user.PasswordHash == hashedInput || 
-                                     user.PasswordHash == request.Password;
+                bool isPasswordValid = user.password_hash == hashedInput || 
+                                     user.password_hash == request.Password;
 
                 if (!isPasswordValid)
                 {
                     throw new UnauthorizedAccessException("AUTH_002|AUTH_002_detail");
                 }
-
-                // Temporary bypass for verification if using PG user (optional, depending on business rule)
-                if (!user.IsVerify && string.IsNullOrEmpty(user.PasswordHash))
-                {
-                    throw new UnauthorizedAccessException("AUTH_001|AUTH_001_detail");
-                }
             }
 
-            if (user.Visible != 1 && user.StatusId != 1) // StatusId 1 is Active
+            // ZAP-2026 Status Rules (Domain 9xxx for Identity, 0-99 for Tenancy):
+            // 9001 (ACTIVE_USER): Normal operation
+            // 1 (PENDING): For Tenant/User initialization
+            // 50 (ACTIVE): For TenantNode status
+            // 9002 (LOCKED): Forbidden
+            
+            if (user.status_id == 9002)
             {
-                _logger.LogWarning("[Login] Account not active for user: {Email}, Visible: {Visible}, StatusId: {StatusId}", user.Email, user.Visible, user.StatusId);
+                _logger.LogWarning("[Login] Account locked for user: {Email}", user.email);
+                throw new UnauthorizedAccessException("AUTH_003|Tài khoản bị khóa");
+            }
+
+            // Allowed: 9001 (Active User) or 50 (Active Tenant/Node)
+            if (user.status_id != 9001 && user.status_id != 50)
+            {
+                _logger.LogWarning("[Login] Account not active/authorized for user: {Email}, StatusId: {StatusId}", user.email, user.status_id);
+                // If it's 1, it's PENDING
+                if (user.status_id == 1)
+                {
+                    throw new UnauthorizedAccessException("AUTH_001|Tài khoản đang chờ duyệt");
+                }
                 throw new UnauthorizedAccessException("AUTH_003|AUTH_003_detail");
             }
 
@@ -150,8 +139,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
 
             _logger.LogInformation("[Login] TOTAL SUCCESS in {Elapsed}ms", sw.ElapsedMilliseconds);
             
-            // Map merchant ID: prioritize Postgres Guid if available, fallback to Mongo _key
-            var merchantId = user.id != Guid.Empty ? user.id.ToString() : $"merchant_{user._key}";
+            var merchantId = user.id.ToString();
 
             return new LoginResponseDto
             {
@@ -161,9 +149,9 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 {
                     Token = token,
                     MerchantId = merchantId,
-                    Email = user.Email,
-                    Name = !string.IsNullOrEmpty(user.MerchantName) ? user.MerchantName : user.FullName,
-                    LogoUrl = string.IsNullOrEmpty(user.MerchantUrl) ? "https://api.pendogo.vn/logo.png" : user.MerchantUrl
+                    Email = user.email,
+                    Name = user.full_name,
+                    LogoUrl = "https://api.pendogo.vn/logo.png"
                 }
             };
         }

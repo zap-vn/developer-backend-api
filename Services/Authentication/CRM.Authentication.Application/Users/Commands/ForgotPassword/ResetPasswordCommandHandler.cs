@@ -48,19 +48,19 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             
             // Nếu là ResetToken (từ link), đảm bảo chưa bị dùng để verify OTP (nếu còn dùng OTP)
             // Hoặc đơn giản là chưa bị đánh dấu IsUsed.
-            if (resetRequest.IsUsed)
+            if (resetRequest.is_used)
             {
                 throw new ValidationException("TOKEN_ALREADY_USED");
             }
 
             // Confirm token should expire shortly (e.g., 15 mins after creation)
-            if (resetRequest.CreatedAt.AddMinutes(15) < DateTime.UtcNow)
+            if (resetRequest.created_at.AddMinutes(15) < DateTime.UtcNow)
             {
                 throw new ValidationException("TOKEN_EXPIRED");
             }
 
             // Get user by its Guid (Customer/Id)
-            var user = await _userRepository.GetByIdAsync(resetRequest.UserGuid);
+            var user = await _userRepository.GetByIdAsync(resetRequest.user_guid);
 
             if (user == null)
             {
@@ -68,13 +68,13 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             }
 
             // Hash new password using LEGACY logic to match existing system
-            user.Password = HashLegacyPassword(request.NewPassword);
-            user.UpdatedAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+            user.password_hash = HashLegacyPassword(request.NewPassword);
+            user.updated_at = DateTime.UtcNow;
 
             await _userRepository.UpdateAsync(user);
             
             // Mark token as used
-            resetRequest.IsUsed = true;
+            resetRequest.is_used = true;
             await _resetRepository.UpdateAsync(resetRequest);
 
             return true;

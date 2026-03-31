@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using CRM.Authentication.Application.Common.Interfaces;
 using CRM.Authentication.Application.Common.Models;

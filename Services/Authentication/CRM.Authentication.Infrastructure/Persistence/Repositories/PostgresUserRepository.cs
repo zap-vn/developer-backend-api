@@ -23,32 +23,27 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 
         public async Task<User?> GetByEmailAndMerchantAsync(string email, string merchantCode)
         {
-            // Assuming for now that 'email' or 'phone' can be used as identifier
-            // And since merchant relation isn't clear in PG yet, we fallback to email/username
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email || u.Username == email);
+            return await _context.Users.FirstOrDefaultAsync(u => u.email == email || u.username == email);
         }
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email || u.Username == email);
+            return await _context.Users.FirstOrDefaultAsync(u => u.email == email || u.username == email);
         }
 
         public async Task<User?> GetByPhoneAsync(string phone)
         {
-            // The PG schema screenshot didn't show a phone column.
-            // But if it exists in another table or schema, we might need a join.
-            // For now, returning null to avoid crash if it's missing.
             return null;
         }
 
         public async Task<bool> ExistsAsync(string email, string merchantName)
         {
-            return await _context.Users.AnyAsync(u => u.Email == email || u.Username == email);
+            return await _context.Users.AnyAsync(u => u.email == email || u.username == email);
         }
 
         public async Task<bool> EmailExistsAsync(string email)
         {
-            return await _context.Users.AnyAsync(u => u.Email == email);
+            return await _context.Users.AnyAsync(u => u.email == email);
         }
 
         public async Task<bool> PhoneExistsAsync(string phone)

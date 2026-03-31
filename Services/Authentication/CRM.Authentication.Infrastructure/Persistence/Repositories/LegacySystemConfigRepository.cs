@@ -1,4 +1,4 @@
-using LegacyDB.Driver;
+using Microsoft.EntityFrameworkCore;
 using CRM.Authentication.Domain.Entities;
 using CRM.Authentication.Domain.Interfaces;
 using System.Threading.Tasks;
@@ -7,9 +7,9 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 {
     public class LegacySystemConfigRepository : ISystemConfigRepository
     {
-        private readonly LegacyDbContext _context;
+        private readonly PostgresDbContext _context;
 
-        public LegacySystemConfigRepository(LegacyDbContext context)
+        public LegacySystemConfigRepository(PostgresDbContext context)
         {
             _context = context;
         }
@@ -17,17 +17,27 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
         public async Task<SystemConfig?> GetByKeyAsync(string key)
         {
             return await _context.SystemConfigs
-                .Find(x => x.Key == key)
+                .Where(x => x.key == key)
                 .FirstOrDefaultAsync();
         }
 
         public async Task UpsertAsync(SystemConfig config)
         {
-            var options = new FindOneAndReplaceOptions<SystemConfig> { IsUpsert = true };
-            await _context.SystemConfigs.FindOneAndReplaceAsync<SystemConfig>(
-                x => x.Key == config.Key, 
-                config, 
-                options);
+            var existing = await _context.SystemConfigs
+                .Where(x => x.key == config.key)
+                .FirstOrDefaultAsync();
+
+            if (existing == null)
+            {
+                await _context.SystemConfigs.AddAsync(config);
+            }
+            else
+            {
+                existing.value = config.value;
+                _context.SystemConfigs.Update(existing);
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

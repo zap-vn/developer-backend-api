@@ -1,4 +1,4 @@
-﻿# Deploy Identity API to Google Cloud Run
+# Deploy Identity API to Google Cloud Run
 # Project: pendogo-v1-6317
 
 Write-Host "🚀 Starting Deployment to Google Cloud Run..." -ForegroundColor Green

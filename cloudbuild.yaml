@@ -1,5 +1,33 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/pendogo-v1-6317/pendogo-user-service', '-f', 'Services/Authentication/CRM.Authentication.Api/Dockerfile', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia.gcr.io/pendogo-v1-6317/pendogo-identity-api:latest'
+      - '-f'
+      - 'Services/Authentication/CRM.Authentication.Api/Dockerfile'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia.gcr.io/pendogo-v1-6317/pendogo-identity-api:latest'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'pendogo-identity-api'
+      - '--image'
+      - 'asia.gcr.io/pendogo-v1-6317/pendogo-identity-api:latest'
+      - '--region'
+      - 'asia-southeast1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+      - '--set-env-vars'
+      - 'ConnectionStrings__PostgreSql=Host=136.118.121.105;Port=5432;Username=postgres;Password=Pg@Secret2026!;Database=zap_ecosystem,ASPNETCORE_ENVIRONMENT=Production,Jwt__Secret=a_very_secret_default_key_at_least_32_chars_long_1234567890,Jwt__Issuer=CRM.Authentication.Api,Jwt__Audience=CRM.GateWay.Api'
+
 images:
-- 'gcr.io/pendogo-v1-6317/pendogo-user-service'
+  - 'asia.gcr.io/pendogo-v1-6317/pendogo-identity-api:latest'

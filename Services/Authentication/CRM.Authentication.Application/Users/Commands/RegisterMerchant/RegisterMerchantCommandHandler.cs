@@ -74,7 +74,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 }
             }
 
-            var nextId = await _userRepository.GetNextSequenceAsync("Customer_id");
+            var nextId = await _userRepository.GetNextSequenceAsync("identity.customer_id");
             var customerIdStr = $"Customer/{nextId}";
 
             var detectedProvider = !string.IsNullOrWhiteSpace(request.Provider) ? request.Provider : DetermineProvider(request.Email ?? "", request.Phone ?? "");
@@ -105,6 +105,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                             id = System.Guid.NewGuid(),
                             name = request.MerchantName ?? "New Merchant",
                             slug = merchantSlug,
+                            legacy_id = customerIdStr, // Unified legacy_id
                             node_code = ("BR-" + merchantSlug.Replace("-", "_")).ToUpper(),
                             tier_level = 2, // 2: Brand
                             status_id = 50, // 50: ACTIVE
@@ -121,36 +122,15 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 var user = new User
                 {
                     id = userId,
-                    TenantId = tenantNode?.id, 
-                    LegacyId = customerIdStr, 
-                    Username = (request.Email?.Trim() ?? "").ToLower(), 
-                    FullName = string.IsNullOrWhiteSpace($"{request.FirstName} {request.LastName}") ? "SYSTEM_USER" : $"{request.FirstName} {request.LastName}".Trim(),
-                    PasswordHash = HashLegacyPassword(request.Password),
-                    StatusId = 9001, 
-                    
-                    _id = customerIdStr,
-                    _key = nextId,
-                    FirstName = request.FirstName?.Trim() ?? "",
-                    LastName = request.LastName?.Trim() ?? "",
-                    Email = (request.Email?.Trim() ?? "").ToLower(),
-                    Phone = finalPhone,
-                    MerchantName = request.MerchantName,
-                    BusinessName = request.MerchantName,
-                    Language = langCode, 
-                    LanguageId = langId, 
-                    Password = HashLegacyPassword(request.Password),
-                    Provider = detectedProvider,
-                    Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
-                    Visible = 1,
-                    MerchantUrl = request.MerchantUrl ?? "",
-                    IsVerify = !string.IsNullOrWhiteSpace(request.Email),
-                    IsVerifyGoogle = detectedProvider == "Google",
-                    IsVerifyApple = detectedProvider == "Apple",
-                    IsVerifyPhone = false,
-                    IsVerifyEmail = !string.IsNullOrWhiteSpace(request.Email),
-                    CreatedAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
-                    CreatedAtDate = System.DateTime.UtcNow,
-                    UpdatedAtDate = System.DateTime.UtcNow
+                    tenant_id = tenantNode?.id, 
+                    legacy_id = customerIdStr, 
+                    username = (request.Email?.Trim() ?? "").ToLower(), 
+                    email = (request.Email?.Trim() ?? "").ToLower(),
+                    full_name = string.IsNullOrWhiteSpace($"{request.FirstName} {request.LastName}") ? "SYSTEM_USER" : $"{request.FirstName} {request.LastName}".Trim(),
+                    password_hash = HashLegacyPassword(request.Password),
+                    status_id = 9001, // 9001: ACTIVE_USER
+                    created_at = System.DateTime.UtcNow,
+                    updated_at = System.DateTime.UtcNow
                 };
 
                 await _userRepository.CreateAsync(user);
@@ -169,27 +149,14 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                     {
                         var customerPayload = new 
                         {
-                            _id = customerIdStr, 
-                            _key = nextId,
-                            CustomerCode = "MERCHANT-" + nextId,
-                            MerchantName = request.MerchantName,
-                            BusinessName = request.MerchantName,
-                            FirstName = request.FirstName?.Trim() ?? "",
-                            LastName = request.LastName?.Trim() ?? "",
-                            Email = request.Email?.Trim() ?? "",
-                            Phone = finalPhone,
-                            Password = user.Password,
-                            Visible = 1,
-                            IsActive = !string.IsNullOrWhiteSpace(request.Email),
-                            IsVerify = user.IsVerify,
-                            IsVerifyEmail = user.IsVerifyEmail,
-                            IsVerifyPhone = user.IsVerifyPhone,
-                            IsVerifyGoogle = user.IsVerifyGoogle,
-                            IsVerifyApple = user.IsVerifyApple,
-                            LanguageId = langId,
-                            Language = langCode, 
-                            RegistrationSource = detectedProvider,
-                            MerchantUrl = request.MerchantUrl ?? ""
+                            id = user.id,
+                            tenant_id = user.tenant_id,
+                            legacy_id = user.legacy_id,
+                            username = user.username,
+                            email = user.email,
+                            full_name = user.full_name,
+                            status_id = user.status_id,
+                            created_at = user.created_at.GetValueOrDefault()
                         };
                         
                         var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";
@@ -203,26 +170,27 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
 
                 return new UserDto
                 {
-                    _id = user._id,
-                    Email = user.Email,
-                    Phone = user.Phone,
-                    FullName = user.FullName, 
-                    LanguageId = user.LanguageId,
-                    Provider = user.Provider,
-                    Roles = user.Roles,
-                    CreatedAt = user.CreatedAt,
-                    IsVerifyPhone = user.IsVerifyPhone,
-                    IsVerifyEmail = user.IsVerifyEmail,
-                    IsVerifyGoogle = user.IsVerifyGoogle,
-                    IsVerifyApple = user.IsVerifyApple,
-                    MerchantUrl = user.MerchantUrl
+                    id = user.id,
+                    tenant_id = user.tenant_id,
+                    legacy_id = user.legacy_id,
+                    username = user.username,
+                    email = user.email,
+                    full_name = user.full_name,
+                    status_id = user.status_id.GetValueOrDefault(),
+                    created_at = user.created_at.GetValueOrDefault(),
+                    updated_at = user.updated_at.GetValueOrDefault()
                 };
             }
             catch (System.Exception ex)
             {
                 await _userRepository.RollbackTransactionAsync();
-                var innerMsg = ex.InnerException != null ? ($" | INNER: {ex.InnerException.Message}") : "";
-                throw new System.Exception($"DATABASE_ERROR: {ex.Message}{innerMsg}");
+                var innerMsg = ex.InnerException != null ? ex.InnerException.Message : "N/A";
+                System.Console.WriteLine($"[CRITICAL] DATABASE_ERROR during Merchant Registration:");
+                System.Console.WriteLine($"Message: {ex.Message}");
+                System.Console.WriteLine($"Inner Message: {innerMsg}");
+                System.Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                
+                throw new System.Exception($"DATABASE_ERROR: {ex.Message} | INNER: {innerMsg}");
             }
         }
 

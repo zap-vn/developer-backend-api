@@ -50,12 +50,12 @@ namespace CRM.Authentication.Application.Users.Commands.CheckAccountAvailability
             // Save OTP to database
             var customerOtp = new CustomerOtp
             {
-                Email = isEmail ? identifier : string.Empty,
-                Phone = !isEmail ? identifier : string.Empty,
-                OtpCode = otpCode,
-                Purpose = "login",
-                ExpiredAt = DateTime.UtcNow.AddMinutes(2),
-                CreatedAt = DateTime.UtcNow
+                email = isEmail ? identifier : string.Empty,
+                phone = !isEmail ? identifier : string.Empty,
+                otp_code = otpCode,
+                purpose = "login",
+                expired_at = DateTime.UtcNow.AddMinutes(2),
+                created_at = DateTime.UtcNow
             };
             await _otpRepository.CreateAsync(customerOtp);
 

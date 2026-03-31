@@ -1,39 +1,17 @@
-using MongoDB.Bson.Serialization.Attributes;
 using System;
 
 namespace CRM.Authentication.Domain.Entities
 {
-    [BsonIgnoreExtraElements]
     public class CustomerOtp
     {
-        [BsonId]
-        public string _id { get; set; } = Guid.NewGuid().ToString();
-
-        [BsonElement("Customer_id")]
-        public string CustomerId { get; set; } = string.Empty;
-
-        [BsonElement("Email")]
-        public string Email { get; set; } = string.Empty;
-
-        [BsonElement("Phone")]
-        public string Phone { get; set; } = string.Empty;
-
-        [BsonElement("OtpCode")]
-        public string OtpCode { get; set; } = string.Empty;
-
-        [BsonElement("Purpose")]
-        public string Purpose { get; set; } = string.Empty; // login, register, reset_password
-
-        [BsonElement("ExpiredAt")]
-        public DateTime ExpiredAt { get; set; }
-
-        [BsonElement("VerifiedAt")]
-        public DateTime? VerifiedAt { get; set; }
-
-        [BsonElement("AttemptCount")]
-        public int AttemptCount { get; set; } = 0;
-
-        [BsonElement("CreatedAt")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public Guid id { get; set; } = Guid.NewGuid();
+        public string customer_id { get; set; } = string.Empty;
+        public string email { get; set; } = string.Empty;
+        public string phone { get; set; } = string.Empty;
+        public string otp_code { get; set; } = string.Empty;
+        public string purpose { get; set; } = string.Empty; 
+        public DateTime expired_at { get; set; }
+        public DateTime? verified_at { get; set; }
+        public DateTime created_at { get; set; } = DateTime.UtcNow;
     }
 }

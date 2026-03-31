@@ -5,58 +5,58 @@ namespace CRM.Authentication.Infrastructure.Persistence
 {
     public class PostgresDbContext : DbContext
     {
-        public PostgresDbContext(DbContextOptions<PostgresDbContext> options) : base(options)
+        public PostgresDbContext(DbContextOptions<PostgresDbContext> options)
+            : base(options)
         {
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<TenantNode> TenantNodes { get; set; }
+        public DbSet<CustomerOtp> Otps { get; set; }
+        public DbSet<PasswordResetRequest> PasswordResets { get; set; }
+        public DbSet<StatusItem> StatusItems { get; set; }
+        public DbSet<Locale> Locales { get; set; }
+        public DbSet<EmailSetting> EmailSettings { get; set; }
+        public DbSet<SystemConfig> SystemConfigs { get; set; }
+        public DbSet<SystemError> SystemErrors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("identity");
+            modelBuilder.Entity<StatusItem>(entity =>
+            {
+                entity.ToTable("status", "identity");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.name).HasColumnName("name");
+                entity.Property(e => e.code).HasColumnName("code");
+                entity.Property(e => e.domain).HasColumnName("domain");
+            });
+
+            modelBuilder.Entity<Locale>(entity =>
+            {
+                entity.ToTable("locale", "identity");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.name).HasColumnName("name");
+                entity.Property(e => e.code).HasColumnName("code");
+            });
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("user");
-
+                entity.ToTable("user", "identity");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 
-                entity.Property(e => e.TenantId).HasColumnName("tenant_id");
-                entity.Property(e => e.LegacyId).HasColumnName("legacy_id").HasMaxLength(128);
-                entity.Property(e => e.Username).HasColumnName("username").HasMaxLength(128).IsRequired();
-                entity.Property(e => e.Email).HasColumnName("email").HasMaxLength(128).IsRequired();
-                entity.Property(e => e.PasswordHash).HasColumnName("password_hash").IsRequired();
-                entity.Property(e => e.FullName).HasColumnName("full_name").HasMaxLength(255).IsRequired();
-                entity.Property(e => e.StatusId).HasColumnName("status_id").HasDefaultValue(1);
+                entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
+                entity.Property(e => e.legacy_id).HasColumnName("legacy_id").HasMaxLength(128);
+                entity.Property(e => e.username).HasColumnName("username").HasMaxLength(128).IsRequired();
+                entity.Property(e => e.email).HasColumnName("email").HasMaxLength(128).IsRequired();
+                entity.Property(e => e.password_hash).HasColumnName("password_hash").IsRequired();
+                entity.Property(e => e.full_name).HasColumnName("full_name").HasMaxLength(255).IsRequired();
+                entity.Property(e => e.status_id).HasColumnName("status_id").HasDefaultValue(9001);
                 
-                entity.Property(e => e.CreatedAtDate).HasColumnName("created_at").HasDefaultValueSql("now()");
-                entity.Property(e => e.UpdatedAtDate).HasColumnName("updated_at").HasDefaultValueSql("now()");
-
-                // Ignore Mongo-specific fields if they are in the entity but not in the DB
-                entity.Ignore(e => e._id);
-                entity.Ignore(e => e._key);
-                entity.Ignore(e => e.Password);
-                entity.Ignore(e => e.Phone);
-                entity.Ignore(e => e.FirstName);
-                entity.Ignore(e => e.LastName);
-                entity.Ignore(e => e.BusinessName);
-                entity.Ignore(e => e.MerchantName);
-                entity.Ignore(e => e.Language);
-                entity.Ignore(e => e.LanguageId);
-                entity.Ignore(e => e.MerchantUrl);
-                entity.Ignore(e => e.Provider);
-                entity.Ignore(e => e.Acronym);
-                entity.Ignore(e => e.Roles);
-                entity.Ignore(e => e.Visible);
-                entity.Ignore(e => e.IsVerify);
-                entity.Ignore(e => e.IsVerifyPhone);
-                entity.Ignore(e => e.IsVerifyEmail);
-                entity.Ignore(e => e.IsVerifyGoogle);
-                entity.Ignore(e => e.IsVerifyApple);
-                entity.Ignore(e => e.CreatedAt);
-                entity.Ignore(e => e.UpdatedAt);
+                entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("now()");
+                entity.Property(e => e.updated_at).HasColumnName("updated_at").HasDefaultValueSql("now()");
             });
 
             modelBuilder.Entity<TenantNode>(entity =>
@@ -77,6 +77,78 @@ namespace CRM.Authentication.Infrastructure.Persistence
                 entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("now()");
                 entity.Property(e => e.updated_at).HasColumnName("updated_at").HasDefaultValueSql("now()");
             });
+
+            modelBuilder.Entity<CustomerOtp>(entity =>
+            {
+                entity.ToTable("otp", "identity");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.email).HasColumnName("email");
+                entity.Property(e => e.phone).HasColumnName("phone");
+                entity.Property(e => e.otp_code).HasColumnName("otp_code").IsRequired();
+                entity.Property(e => e.purpose).HasColumnName("purpose");
+                entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("now()");
+                entity.Property(e => e.expired_at).HasColumnName("expired_at");
+                entity.Property(e => e.verified_at).HasColumnName("verified_at");
+                entity.Property(e => e.customer_id).HasColumnName("customer_id");
+            });
+
+            modelBuilder.Entity<PasswordResetRequest>(entity =>
+            {
+                entity.ToTable("password_reset", "identity");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.user_guid).HasColumnName("user_guid");
+                entity.Property(e => e.email).HasColumnName("email").IsRequired();
+                entity.Property(e => e.phone).HasColumnName("phone");
+                entity.Property(e => e.method).HasColumnName("method");
+                entity.Property(e => e.channel).HasColumnName("channel");
+                entity.Property(e => e.otp_hash).HasColumnName("otp_hash");
+                entity.Property(e => e.token).HasColumnName("token").IsRequired();
+                entity.Property(e => e.confirm_token).HasColumnName("confirm_token");
+                entity.Property(e => e.attempts).HasColumnName("attempts").HasDefaultValue(0);
+                entity.Property(e => e.is_used).HasColumnName("is_used").HasDefaultValue(false);
+                entity.Property(e => e.expired_at).HasColumnName("expired_at");
+                entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("now()");
+            });
+
+            modelBuilder.Entity<EmailSetting>(entity =>
+            {
+                entity.ToTable("email_setting", "identity");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.customer_guid).HasColumnName("customer_guid");
+                entity.Property(e => e.smtp_host).HasColumnName("smtp_host");
+                entity.Property(e => e.smtp_port).HasColumnName("smtp_port");
+                entity.Property(e => e.smtp_user).HasColumnName("smtp_user");
+                entity.Property(e => e.smtp_pass).HasColumnName("smtp_pass");
+                entity.Property(e => e.from_email).HasColumnName("from_email");
+                entity.Property(e => e.from_name).HasColumnName("from_name");
+                entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("now()");
+            });
+
+            modelBuilder.Entity<SystemConfig>(entity =>
+            {
+                entity.ToTable("system_config", "identity");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.key).HasColumnName("key");
+                entity.Property(e => e.value).HasColumnName("value");
+            });
+
+            modelBuilder.Entity<SystemError>(entity =>
+            {
+                entity.ToTable("system_error", "identity");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.message).HasColumnName("message");
+                entity.Property(e => e.detail).HasColumnName("detail");
+                entity.Property(e => e.source).HasColumnName("source");
+                entity.Property(e => e.user_id).HasColumnName("user_id");
+                entity.Property(e => e.merchant_name).HasColumnName("merchant_name");
+                entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("now()");
+            });
         }
     }
 }
+

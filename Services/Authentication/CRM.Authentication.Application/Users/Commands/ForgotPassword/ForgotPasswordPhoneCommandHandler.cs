@@ -57,7 +57,7 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             string resetToken = Guid.NewGuid().ToString("N");
 
             // 4. Send OTP via selected channel
-            string customerGuid = $"Customer/{user._key}";
+            string customerGuid = $"Customer/{user.id}";
             if (request.Channel.ToLower() == "zalo")
             {
                 await _phoneService.SendZaloOtpAsync(phone, otp);
@@ -70,13 +70,13 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             // 5. Save Request with OtpHash
             var resetRequest = new PasswordResetRequest
             {
-                UserGuid = $"Customer/{user._key}",
-                Phone = phone,
-                Method = "phone",
-                Channel = request.Channel.ToLower(),
-                OtpHash = HashString(otp),
-                ResetToken = resetToken,
-                ExpiresAt = DateTime.UtcNow.AddSeconds(120) // OTP phone hiệu lực 120 giây
+                user_guid = $"Customer/{user.id}",
+                phone = phone,
+                method = "phone",
+                channel = request.Channel.ToLower(),
+                otp_hash = HashString(otp),
+                token = resetToken,
+                expired_at = DateTime.UtcNow.AddSeconds(120) // OTP phone hiệu lực 120 giây
             };
 
             await _resetRepository.CreateAsync(resetRequest);

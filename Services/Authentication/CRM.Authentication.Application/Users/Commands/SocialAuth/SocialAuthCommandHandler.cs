@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,22 +44,13 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
 
                 user = new User
                 {
-                    _id = customerIdStr,
-                    _key = nextId,
-                    Email = request.Email,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    MerchantName = $"{request.FirstName} {request.LastName}".Trim(),
-                    BusinessName = $"{request.FirstName} {request.LastName}".Trim(),
-                    Provider = request.Provider,
-                    MerchantUrl = request.Avatar,
-                    IsVerify = true, // Social accounts are pre-verified
-                    IsVerifyGoogle = request.Provider == "Google",
-                    IsVerifyApple = request.Provider == "Apple",
-                    IsVerifyEmail = true,
-                    Visible = 1,
-                    Roles = new System.Collections.Generic.List<string> { "MerchantAdmin" },
-                    CreatedAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+                    id = Guid.NewGuid(),
+                    email = request.Email,
+                    full_name = $"{request.FirstName} {request.LastName}".Trim(),
+                    password_hash = "", 
+                    status_id = 9001, // 9001: ACTIVE_USER
+                    created_at = DateTime.UtcNow,
+                    updated_at = DateTime.UtcNow
                 };
 
                 await _userRepository.CreateAsync(user);
@@ -71,20 +62,11 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                     {
                         var customerPayload = new
                         {
-                            _id = user._id,
-                            _key = user._key,
-                            CustomerCode = "SOCIAL-" + user._key,
-                            MerchantName = user.MerchantName,
-                            BusinessName = user.BusinessName,
-                            Email = user.Email,
-                            IsActive = true,
-                            IsVerify = user.IsVerify,
-                            IsVerifyEmail = user.IsVerifyEmail,
-                            IsVerifyPhone = user.IsVerifyPhone,
-                            IsVerifyGoogle = user.IsVerifyGoogle,
-                            IsVerifyApple = user.IsVerifyApple,
-                            RegistrationSource = user.Provider,
-                            MerchantUrl = user.MerchantUrl
+                            id = user.id,
+                            full_name = user.full_name,
+                            email = user.email,
+                            status_id = user.status_id,
+                            created_at = user.created_at.GetValueOrDefault()
                         };
                         var syncUrl = $"{_customerApiUrl.TrimEnd('/')}/api/customers";
                         await _httpClient.PostAsJsonAsync(syncUrl, customerPayload);
@@ -94,15 +76,6 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                         Console.WriteLine($"[Error] Social Sync failed: {ex.Message}");
                     }
                 });
-            }
-            else
-            {
-                // Update existing user info if needed
-                bool changed = false;
-                if (string.IsNullOrEmpty(user.MerchantUrl) && !string.IsNullOrEmpty(request.Avatar)) { user.MerchantUrl = request.Avatar; changed = true; }
-                if (user.Provider == "Email" && !string.IsNullOrEmpty(request.Provider)) { user.Provider = request.Provider; changed = true; }
-                
-                if (changed) await _userRepository.UpdateAsync(user);
             }
 
             // 4. Generate Token and return login response
@@ -115,10 +88,10 @@ namespace CRM.Authentication.Application.Users.Commands.SocialAuth
                 Data = new LoginDataDto
                 {
                     Token = token,
-                    MerchantId = $"merchant_{user._key}",
-                    Email = user.Email,
-                    Name = !string.IsNullOrEmpty(user.MerchantName) ? user.MerchantName : user.FullName,
-                    LogoUrl = string.IsNullOrEmpty(user.MerchantUrl) ? "https://api.pendogo.vn/logo.png" : user.MerchantUrl
+                    MerchantId = user.id.ToString(),
+                    Email = user.email,
+                    Name = user.full_name,
+                    LogoUrl = "https://api.pendogo.vn/logo.png"
                 }
             };
         }

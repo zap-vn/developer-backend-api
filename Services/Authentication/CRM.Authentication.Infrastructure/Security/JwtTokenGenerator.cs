@@ -27,23 +27,20 @@ namespace CRM.Authentication.Infrastructure.Security
 
             var claims = new List<Claim>
             {
-                new Claim("UserGuid", $"Customer/{user._key}"),
-                new Claim("EmployeeGuid", $"Customer/{user._key}"),
-                new Claim("RoleName", user.Roles.FirstOrDefault() ?? "Admin"),
-                new Claim("RolePermission_id", "657ab15d54f17333f3d89c65"), // Constant from legacy project example
-                new Claim("Language", string.IsNullOrEmpty(user.Language) ? "vi" : user.Language),
-                new Claim(JwtRegisteredClaimNames.Sub, user._key.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("UserGuid", user.id.ToString()),
+                new Claim("EmployeeGuid", user.id.ToString()),
+                new Claim("RoleName", "MerchantAdmin"),
+                new Claim("RolePermission_id", "657ab15d54f17333f3d89c65"), 
+                new Claim("Language", "vi"),
+                new Claim(JwtRegisteredClaimNames.Sub, user.id.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.email),
+                new Claim(JwtRegisteredClaimNames.Email, user.email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-                new Claim("fullname", user.FullName)
+                new Claim("fullname", user.full_name)
             };
 
-            foreach (var role in user.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            claims.Add(new Claim(ClaimTypes.Role, "MerchantAdmin"));
 
             var expiryConfig = await _configRepository.GetByKeyAsync("token_expiry_minutes_crm");
             double expiryMinutes = 120;

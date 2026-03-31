@@ -79,18 +79,18 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
             string resetToken = Guid.NewGuid().ToString("N");
              
             // Gửi mail OTP cho người dùng với template mới
-            await _emailService.SendResetOtpEmailAsync(email, otp, user.MerchantName); 
+            await _emailService.SendResetOtpEmailAsync(email, otp, user.full_name); 
             _logger.LogInformation("[EMAIL_SENT] OTP Reset Password cho User {Email} là: {Otp}", email, otp); 
  
             // 5. Save Request
             var resetRequest = new PasswordResetRequest
             {
-                UserGuid = $"Customer/{user._key}",
-                Email = email,
-                Method = "email",
-                ResetToken = resetToken,
-                OtpHash = otpHash,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(2) // OTP expires in 2 mins as per image
+                user_guid = $"Customer/{user.id}",
+                email = email,
+                method = "email",
+                token = resetToken,
+                otp_hash = otpHash,
+                expired_at = DateTime.UtcNow.AddMinutes(2) // OTP expires in 2 mins as per image
             };
 
             await _resetRepository.CreateAsync(resetRequest);

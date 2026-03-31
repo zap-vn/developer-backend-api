@@ -35,57 +35,56 @@ namespace CRM.Authentication.Application.Users.Commands.ActiveAccount
                 throw new Exception("Account not found.");
             }
 
-            if (user.IsVerify)
+            if (user.status_id == 9001)
             {
                 return true; // Already verified
             }
 
             // Verify OTP from database (CustomerOtps)
             // Look for both 'register' and 'resend-otp' purposes
-            var customerOtp = await _otpRepository.GetLatestOtpForPurposesAsync(user._id, new[] { "register", "resend-otp" });
+            var customerOtp = await _otpRepository.GetLatestOtpForPurposesAsync(user.id.ToString(), new[] { "register", "resend-otp" });
             
             if (customerOtp == null)
             {
                 throw new Exception("OTP not found.");
             }
 
-            if (customerOtp.VerifiedAt != null)
+            if (customerOtp.verified_at != null)
             {
                 throw new Exception("OTP already verified.");
             }
 
-            if (customerOtp.ExpiredAt < DateTime.UtcNow)
+            if (customerOtp.expired_at < DateTime.UtcNow)
             {
                 throw new Exception("AUTH_005|AUTH_005_detail");
             }
 
-            if (customerOtp.OtpCode != request.Otp)
+            if (customerOtp.otp_code != request.Otp)
             {
-                customerOtp.AttemptCount++;
                 await _otpRepository.UpdateAsync(customerOtp);
                 throw new Exception("AUTH_004|AUTH_004_detail");
             }
 
             // Mark OTP as verified
-            customerOtp.VerifiedAt = DateTime.UtcNow;
+            customerOtp.verified_at = DateTime.UtcNow;
             await _otpRepository.UpdateAsync(customerOtp);
 
             // Mark as verified
-            user.IsVerify = true;
+            user.status_id = 9001; // active
 
             // Set specific verification flags based on what was used
-            if (!string.IsNullOrWhiteSpace(customerOtp.Phone))
+            if (!string.IsNullOrWhiteSpace(customerOtp.phone))
             {
-                user.IsVerifyPhone = true;
+                // user.IsVerifyPhone = true; (not dynamically handled without DB support right now)
             }
-            if (!string.IsNullOrWhiteSpace(customerOtp.Email))
+            if (!string.IsNullOrWhiteSpace(customerOtp.email))
             {
-                user.IsVerifyEmail = true;
+                // user.IsVerifyEmail = true;
             }
 
             // Clear cache for both Email and Phone to be safe
-            if (!string.IsNullOrWhiteSpace(user.Email)) _cache.Remove($"OTP_ID_{user.Email}");
-            if (!string.IsNullOrWhiteSpace(user.Phone)) _cache.Remove($"OTP_ID_{user.Phone}");
+            if (!string.IsNullOrWhiteSpace(user.email)) _cache.Remove($"OTP_ID_{user.email}");
+            if (!string.IsNullOrWhiteSpace(user.username)) _cache.Remove($"OTP_ID_{user.username}");
 
             await _userRepository.UpdateAsync(user);
 

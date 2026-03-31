@@ -52,7 +52,7 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
             }
 
             // If purpose is register and already verified, no need to resend
-            if (request.Purpose == "register" && user.IsVerify)
+            if (request.Purpose == "register" && user.status_id == 9001)
             {
                 throw new Exception("Account already verified.");
             }
@@ -63,13 +63,13 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
             // 3. Store in database (CustomerOtps)
             var customerOtp = new CustomerOtp
             {
-                CustomerId = user._id,
-                Email = user.Email,
-                Phone = user.Phone,
-                OtpCode = otp,
-                Purpose = request.Purpose,
-                ExpiredAt = DateTime.UtcNow.AddMinutes(15),
-                CreatedAt = DateTime.UtcNow
+                customer_id = user.id.ToString(),
+                email = user.email,
+                phone = user.username,
+                otp_code = otp,
+                purpose = request.Purpose,
+                expired_at = DateTime.UtcNow.AddMinutes(15),
+                created_at = DateTime.UtcNow
             };
             await _otpRepository.CreateAsync(customerOtp);
 
@@ -79,10 +79,10 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
 
             // 4. Send OTP based on Provider or availability
             // Case: User specifically requested Phone or provider is Phone
-            if (user.Provider == "Phone" || !string.IsNullOrEmpty(request.Phone))
+            if (!string.IsNullOrEmpty(request.Phone))
             {
-                string targetPhone = !string.IsNullOrEmpty(request.Phone) ? request.Phone : user.Phone;
-                string customerGuid = $"Customer/{user._key}";
+                string targetPhone = !string.IsNullOrEmpty(request.Phone) ? request.Phone : user.username;
+                string customerGuid = $"Customer/{user.id}";
 
                 if (request.Channel?.ToLower() == "zalo")
                 {
@@ -94,9 +94,9 @@ namespace CRM.Authentication.Application.Users.Commands.ResendOtp
                 }
             }
             // Case: Default to Email
-            else if (!string.IsNullOrEmpty(user.Email))
+            else if (!string.IsNullOrEmpty(user.email))
             {
-                await _emailService.SendOtpEmailAsync(user.Email, otp, user.MerchantName);
+                await _emailService.SendOtpEmailAsync(user.email, otp, user.full_name);
             }
             else
             {

@@ -37,34 +37,34 @@ namespace CRM.Authentication.Application.Users.Commands.ForgotPassword
         {
             var resetRequest = await _resetRepository.GetLatestByIdentifierAsync(request.Account);
 
-            if (resetRequest == null || resetRequest.IsUsed)
+            if (resetRequest == null || resetRequest.is_used)
             {
                 throw new ValidationException("TOKEN_INVALID");
             }
 
-            if (resetRequest.ExpiresAt < DateTime.UtcNow)
+            if (resetRequest.expired_at < DateTime.UtcNow)
             {
                 throw new ValidationException("OTP_EXPIRED");
             }
 
-            if (resetRequest.Attempts >= 3)
+            if (resetRequest.attempts >= 3)
             {
                 throw new ValidationException("OTP_MAX_ATTEMPTS");
             }
 
             string inputOtpHash = HashString(request.Otp?.Trim() ?? string.Empty);
-            if (resetRequest.OtpHash != inputOtpHash)
+            if (resetRequest.otp_hash != inputOtpHash)
             {
-                resetRequest.Attempts++;
+                resetRequest.attempts++;
                 await _resetRepository.UpdateAsync(resetRequest);
                 throw new ValidationException("INVALID_OTP");
             }
 
             // OTP is correct - Generate Confirm Token
             string confirmToken = Guid.NewGuid().ToString("N") + Guid.NewGuid().ToString("N");
-            resetRequest.ConfirmToken = confirmToken;
-            // Note: Don't set IsUsed = true here, as ResetPasswordCommandHandler checks this flag.
-            // IsUsed will be set to true only after password is successfully reset.
+            resetRequest.confirm_token = confirmToken;
+            // Note: Don't set is_used = true here, as ResetPasswordCommandHandler checks this flag.
+            // is_used will be set to true only after password is successfully reset.
             await _resetRepository.UpdateAsync(resetRequest);
 
             return new VerifyOtpResponseDto

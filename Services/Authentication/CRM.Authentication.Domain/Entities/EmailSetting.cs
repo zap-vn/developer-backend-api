@@ -1,43 +1,17 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using System;
 
 namespace CRM.Authentication.Domain.Entities
 {
-    [BsonIgnoreExtraElements]
     public class EmailSetting
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
-
-        [BsonElement("_key")]
-        public string? Key { get; set; }
-
-        [BsonElement("AccountName")]
-        public string? AccountName { get; set; }
-
-        [BsonElement("Passcode")]
-        public string? Passcode { get; set; }
-
-        [BsonElement("SendId")]
-        public string? SendId { get; set; }
-
-        [BsonElement("BaseUrlSMS")]
-        public string? BaseUrlSMS { get; set; }
-
-        [BsonElement("SendUrlSMS")]
-        public string? SendUrlSMS { get; set; }
-
-        [BsonElement("APIEndpoint")]
-        public string? APIEndpoint { get; set; }
-
-        [BsonElement("CustomerGuid")]
-        public string? CustomerGuid { get; set; }
-
-        [BsonElement("BodySMS")]
-        public string? BodySMS { get; set; }
-        
-        [BsonElement("ProviderId")]
-        public int? ProviderId { get; set; }
+        public Guid id { get; set; } = Guid.NewGuid();
+        public string? customer_guid { get; set; }
+        public string? smtp_host { get; set; }
+        public int? smtp_port { get; set; }
+        public string? smtp_user { get; set; }
+        public string? smtp_pass { get; set; }
+        public string? from_email { get; set; }
+        public string? from_name { get; set; }
+        public DateTime created_at { get; set; } = DateTime.UtcNow;
     }
 }

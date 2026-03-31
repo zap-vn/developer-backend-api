@@ -19,7 +19,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
         [JsonPropertyName("phone")]
         public string Phone { get; set; } = string.Empty;
 
-        [JsonIgnore]
+        [JsonPropertyName("dialing_code")]
         public string? DialingCode { get; set; } = "+84";
 
         [JsonPropertyName("email")]
@@ -31,7 +31,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
         [JsonIgnore]
         public string? Language { get; set; }
 
-        [JsonIgnore]
+        [JsonPropertyName("language_id")]
         public object? LanguageId { get; set; }
 
         [JsonIgnore]

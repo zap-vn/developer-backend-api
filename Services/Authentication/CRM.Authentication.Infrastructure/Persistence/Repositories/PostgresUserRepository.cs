@@ -1,6 +1,8 @@
 using CRM.Authentication.Domain.Entities;
 using CRM.Authentication.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 {
@@ -57,18 +59,38 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 
         public async Task<bool> MerchantNameExistsAsync(string merchantName)
         {
-            return false;
+            return await Task.FromResult(false);
         }
 
         public async Task<bool> MerchantUrlExistsAsync(string merchantUrl)
         {
-            return false;
+            return await _context.TenantNodes.AnyAsync(t => t.slug == merchantUrl);
+        }
+
+        public async Task<TenantNode?> GetTenantBySlugAsync(string slug)
+        {
+            return await _context.TenantNodes.FirstOrDefaultAsync(t => t.slug == slug);
+        }
+
+        public async Task CreateTenantNodeAsync(TenantNode node)
+        {
+            _context.TenantNodes.Add(node);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<long> GetNextSequenceAsync(string sequenceName)
         {
-            // Fallback for long-based keys if still used somewhere
-            return 0;
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = $"SELECT nextval('{sequenceName.ToLower()}')";
+                if (command.Connection?.State != System.Data.ConnectionState.Open)
+                {
+                    await _context.Database.OpenConnectionAsync();
+                }
+
+                var result = await command.ExecuteScalarAsync();
+                return result != null ? Convert.ToInt64(result) : 0;
+            }
         }
 
         public async Task CreateAsync(User user)
@@ -81,6 +103,34 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
         {
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+        }
+
+
+        private Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction? _transaction;
+
+        public async Task BeginTransactionAsync()
+        {
+            _transaction = await _context.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransactionAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.CommitAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
+        }
+
+        public async Task RollbackTransactionAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.RollbackAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
         }
 
         public async Task DeleteAsync(string id)

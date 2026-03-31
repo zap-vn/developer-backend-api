@@ -10,6 +10,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<TenantNode> TenantNodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,7 +29,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
                 entity.Property(e => e.Email).HasColumnName("email").HasMaxLength(128).IsRequired();
                 entity.Property(e => e.PasswordHash).HasColumnName("password_hash").IsRequired();
                 entity.Property(e => e.FullName).HasColumnName("full_name").HasMaxLength(255).IsRequired();
-                entity.Property(e => e.StatusId).HasColumnName("status_id").IsRequired(false);
+                entity.Property(e => e.StatusId).HasColumnName("status_id").HasDefaultValue(1);
                 
                 entity.Property(e => e.CreatedAtDate).HasColumnName("created_at").HasDefaultValueSql("now()");
                 entity.Property(e => e.UpdatedAtDate).HasColumnName("updated_at").HasDefaultValueSql("now()");
@@ -56,6 +57,25 @@ namespace CRM.Authentication.Infrastructure.Persistence
                 entity.Ignore(e => e.IsVerifyApple);
                 entity.Ignore(e => e.CreatedAt);
                 entity.Ignore(e => e.UpdatedAt);
+            });
+
+            modelBuilder.Entity<TenantNode>(entity =>
+            {
+                entity.ToTable("tenant_node", "identity");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.parent_id).HasColumnName("parent_id");
+                entity.Property(e => e.node_code).HasColumnName("node_code").IsRequired();
+                entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
+                entity.Property(e => e.tier_level).HasColumnName("tier_level").IsRequired();
+                entity.Property(e => e.name).HasColumnName("name").IsRequired();
+                entity.Property(e => e.slug).HasColumnName("slug").IsRequired();
+                entity.Property(e => e.locale_id).HasColumnName("locale_id");
+                entity.Property(e => e.status_id).HasColumnName("status_id");
+                entity.Property(e => e.address_line_1).HasColumnName("address_line_1");
+                entity.Property(e => e.timezone).HasColumnName("timezone");
+                entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("now()");
+                entity.Property(e => e.updated_at).HasColumnName("updated_at").HasDefaultValueSql("now()");
             });
         }
     }

@@ -1,4 +1,6 @@
 using CRM.Authentication.Domain.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace CRM.Authentication.Domain.Interfaces
 {
@@ -14,8 +16,15 @@ namespace CRM.Authentication.Domain.Interfaces
         Task<bool> MerchantNameExistsAsync(string merchantName);
         Task<bool> MerchantUrlExistsAsync(string merchantUrl);
         Task<long> GetNextSequenceAsync(string sequenceName);
+        Task<TenantNode?> GetTenantBySlugAsync(string slug);
+        Task CreateTenantNodeAsync(TenantNode node);
         Task CreateAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(string id);
+        
+        // Transaction Support
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
     }
 }

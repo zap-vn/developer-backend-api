@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/pendogo-v1-6317/pendogo-user-service', '-f', 'Services/Authentication/CRM.Authentication.Api/Dockerfile', '.']
+images:
+- 'gcr.io/pendogo-v1-6317/pendogo-user-service'

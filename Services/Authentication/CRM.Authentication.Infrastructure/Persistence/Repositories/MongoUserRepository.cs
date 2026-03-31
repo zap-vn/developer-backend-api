@@ -87,6 +87,18 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
             return result.Value;
         }
 
+        public async Task<TenantNode?> GetTenantBySlugAsync(string slug)
+        {
+            // Note: TenantNode is primarily managed in PostgreSQL for Unified Omni-Tier
+            // This is a placeholder for MongoDB if ever needed
+            return await Task.FromResult<TenantNode?>(null);
+        }
+
+        public async Task CreateTenantNodeAsync(TenantNode node)
+        {
+            // Note: TenantNode creation is handled in PostgreSQL repository
+            await Task.CompletedTask;
+        }
 
         public async Task CreateAsync(User user)
         {
@@ -102,5 +114,9 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
         {
             await _context.Users.DeleteOneAsync(u => u._id == id);
         }
+
+        public Task BeginTransactionAsync() => Task.CompletedTask;
+        public Task CommitTransactionAsync() => Task.CompletedTask;
+        public Task RollbackTransactionAsync() => Task.CompletedTask;
     }
 }

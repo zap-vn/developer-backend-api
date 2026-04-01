@@ -8,7 +8,7 @@ using CRM.Product.Domain.Interfaces;
 
 namespace CRM.Product.Infrastructure.Persistence.Repositories
 {
-    public class ProductRepository : BaseMongoRepository<ProductEntity>, IProductRepository
+    public class ProductRepository : BaseMongoRepository<ProductEntity>
     {
         public ProductRepository(IMongoDatabase database, ICurrentUserService currentUserService) 
             : base(database, "catalog.Products", currentUserService)

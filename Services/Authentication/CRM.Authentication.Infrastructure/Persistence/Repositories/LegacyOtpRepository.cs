@@ -17,45 +17,45 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 
         public async Task CreateAsync(CustomerOtp otp)
         {
-            await _context.CustomerOtps.AddAsync(otp);
+            await _context.Otps.AddAsync(otp);
             await _context.SaveChangesAsync();
         }
 
         public async Task<CustomerOtp?> GetLatestOtpAsync(string customerId, string purpose)
         {
-            return await _context.CustomerOtps
-                .Where(o => o.CustomerId == customerId && o.Purpose == purpose)
-                .OrderByDescending(o => o.CreatedAt)
+            return await _context.Otps
+                .Where(o => o.customer_id == customerId && o.purpose == purpose)
+                .OrderByDescending(o => o.created_at)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<CustomerOtp?> GetLatestOtpForPurposesAsync(string customerId, string[] purposes)
         {
-            return await _context.CustomerOtps
-                .Where(o => o.CustomerId == customerId && purposes.Contains(o.Purpose))
-                .OrderByDescending(o => o.CreatedAt)
+            return await _context.Otps
+                .Where(o => o.customer_id == customerId && purposes.Contains(o.purpose))
+                .OrderByDescending(o => o.created_at)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<CustomerOtp?> GetLatestOtpByEmailForPurposesAsync(string email, string[] purposes)
         {
-            return await _context.CustomerOtps
-                .Where(o => (o.Email == email || o.Phone == email) && purposes.Contains(o.Purpose))
-                .OrderByDescending(o => o.CreatedAt)
+            return await _context.Otps
+                .Where(o => (o.email == email || o.phone == email) && purposes.Contains(o.purpose))
+                .OrderByDescending(o => o.created_at)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<CustomerOtp?> GetLatestOtpByPhoneForPurposesAsync(string phone, string[] purposes)
         {
-            return await _context.CustomerOtps
-                .Where(o => o.Phone == phone && purposes.Contains(o.Purpose))
-                .OrderByDescending(o => o.CreatedAt)
+            return await _context.Otps
+                .Where(o => o.phone == phone && purposes.Contains(o.purpose))
+                .OrderByDescending(o => o.created_at)
                 .FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(CustomerOtp otp)
         {
-            _context.CustomerOtps.Update(otp);
+            _context.Otps.Update(otp);
             await _context.SaveChangesAsync();
         }
     }

@@ -44,7 +44,7 @@ namespace CRM.Authentication.Infrastructure.Security
 
             var expiryConfig = await _configRepository.GetByKeyAsync("token_expiry_minutes_crm");
             double expiryMinutes = 120;
-            if (expiryConfig != null && double.TryParse(expiryConfig.Value, out var parsed)) expiryMinutes = parsed;
+            if (expiryConfig != null && double.TryParse(expiryConfig.value, out var parsed)) expiryMinutes = parsed;
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],

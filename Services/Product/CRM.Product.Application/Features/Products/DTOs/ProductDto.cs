@@ -1,31 +1,34 @@
 using System;
+using System.Collections.Generic;
 
 namespace CRM.Product.Application.Features.Products.DTOs
 {
+    public class ProductVariantDto
+    {
+        public Guid id { get; set; }
+        public string? sku_code { get; set; }
+        public string? barcode { get; set; }
+        public string? variant_name { get; set; }
+        public decimal? base_price { get; set; }
+        public decimal? sale_price { get; set; }
+        public decimal? cost_price { get; set; }
+        public bool is_active { get; set; }
+        public string? unit_of_measure { get; set; }
+        public decimal? weight_grams { get; set; }
+    }
+
     public class ProductDto
     {
-        [System.Text.Json.Serialization.JsonPropertyName("id")]
-        public string Id { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("cate_name")]
-        public string CateName { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("merchant_id")]
-        public string MerchantId { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("description")]
-        public string Description { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("price")]
-        public decimal Price { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("image_url")]
-        public string ImageUrl { get; set; } = string.Empty;
-
-        [System.Text.Json.Serialization.JsonPropertyName("status")]
-        public int Status { get; set; }
+        public Guid id { get; set; }
+        public Guid? tenant_id { get; set; }
+        public Guid? brand_id { get; set; }
+        public string? legacy_id { get; set; }
+        public string product_type { get; set; } = string.Empty;
+        public string name { get; set; } = string.Empty;
+        public string? short_description { get; set; }
+        public string? long_description_html { get; set; }
+        public int? status_id { get; set; }
+        public bool is_featured { get; set; }
+        public List<ProductVariantDto> variants { get; set; } = new List<ProductVariantDto>();
     }
 }

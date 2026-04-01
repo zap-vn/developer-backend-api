@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CRM.Product.Application.Features.Products.Commands;
 using CRM.Product.Application.Features.Products.Queries;
@@ -10,7 +12,8 @@ using CRM.BuildingBlocks.Extensions;
 namespace CRM.Product.Api.Controllers
 {
     [ApiController]
-    [Route("api/Products")]
+    [Route("api/product")]
+    [Route("api/products")]
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -27,17 +30,33 @@ namespace CRM.Product.Api.Controllers
         }
 
         [HttpPost("list")]
+        [Consumes("application/json")]
         public async Task<IActionResult> List([FromBody] ProductListRequestDto requestBody)
         {
+            Console.WriteLine(">>> LOG: ProductsController.List reached <<<");
+            Console.WriteLine($">>> LOG: Page={requestBody.Page}, PageSize={requestBody.PageSize} <<<");
+
             var result = await _mediator.Send(new GetProductListQuery { Request = requestBody });
             
             return Ok(new 
             {
                 success = true,
+                code = 200,
+                message = "OK",
                 data = new 
                 {
-                    items = result.Items,
-                    total = result.TotalCount
+                    total_page = (int)Math.Ceiling((double)result.TotalCount / result.PageSize),
+                    total_record = result.TotalCount,
+                    page_index = result.CurrentPage,
+                    page_size = result.PageSize,
+                    items = result.Items.Select(x => new 
+                    {
+                        id = x.id,
+                        cate_name = "TBD", 
+                        name = x.name,
+                        price = x.variants.FirstOrDefault()?.sale_price ?? 0,
+                        status = x.status_id ?? 0
+                    }).ToList()
                 }
             });
         }

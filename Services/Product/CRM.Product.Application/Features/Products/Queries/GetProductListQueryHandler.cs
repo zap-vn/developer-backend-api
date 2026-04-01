@@ -4,9 +4,9 @@ using CRM.BuildingBlocks.Models;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Linq.Expressions;
+using System;
+using System.Collections.Generic;
 using CRM.Product.Domain.Interfaces;
-using CRM.Product.Domain.Entities;
 using CRM.BuildingBlocks.Interfaces;
 
 namespace CRM.Product.Application.Features.Products.Queries
@@ -25,29 +25,45 @@ namespace CRM.Product.Application.Features.Products.Queries
         public async Task<PagedResult<ProductDto>> Handle(GetProductListQuery request, CancellationToken cancellationToken)
         {
             var req = request.Request;
-            var currentUserGuid = _currentUserService.UserGuid;
-            
-            Expression<Func<ProductEntity, bool>> predicate = x => 
-                (string.IsNullOrEmpty(currentUserGuid) || x.UserGuid == currentUserGuid || x.EmpGuid == currentUserGuid) &&
-                (string.IsNullOrEmpty(req.Search) || (x.Name != null && x.Name.Contains(req.Search)) || (x.Code != null && x.Code.Contains(req.Search)) || (x.Barcode != null && x.Barcode.Contains(req.Search))) &&
-                (req.Filters == null || req.Filters.CateId == null || !req.Filters.CateId.Any() || req.Filters.CateId.Contains(x.Category)) &&
-                (req.Filters == null || req.Filters.Status == null || !req.Filters.Status.Any() || req.Filters.Status.Contains(x.Visible));
+            var tenantIdString = _currentUserService.UserGuid;
+            Guid? tenantId = null;
+            if (Guid.TryParse(tenantIdString, out var guid)) tenantId = guid;
 
-            var pagedResult = await _repository.GetPagedAsync(req.Page, req.PageSize, predicate);
+            var (items, total) = await _repository.GetPagedAsync(
+                req.Page, 
+                req.PageSize, 
+                tenantId, 
+                req.Search, 
+                req.Filters?.Status);
 
-            var dtos = pagedResult.Items.Select(x => new ProductDto 
+            var dtos = items.Select(x => new ProductDto 
             { 
-                Id = x.Id,
-                CateName = x.Category ?? string.Empty,
-                MerchantId = x.UserGuid ?? string.Empty,
-                Name = x.Name ?? string.Empty,
-                Description = x.Description ?? string.Empty,
-                Price = x.Price,
-                ImageUrl = x.ImageUrl ?? string.Empty,
-                Status = x.Visible
+                id = x.id,
+                tenant_id = x.tenant_id,
+                brand_id = x.brand_id,
+                legacy_id = x.legacy_id,
+                product_type = x.product_type,
+                name = x.name,
+                short_description = x.short_description,
+                long_description_html = x.long_description_html,
+                status_id = x.status_id,
+                is_featured = x.is_featured,
+                variants = x.variants.Select(v => new ProductVariantDto
+                {
+                    id = v.id,
+                    sku_code = v.sku_code,
+                    barcode = v.barcode,
+                    variant_name = v.variant_name,
+                    base_price = v.base_price,
+                    sale_price = v.sale_price,
+                    cost_price = v.cost_price,
+                    is_active = v.is_active,
+                    unit_of_measure = v.unit_of_measure,
+                    weight_grams = v.weight_grams
+                }).ToList()
             }).ToList();
 
-            return new PagedResult<ProductDto>(dtos, pagedResult.TotalCount, pagedResult.CurrentPage, pagedResult.PageSize);
+            return new PagedResult<ProductDto>(dtos, total, req.Page, req.PageSize);
         }
     }
 }

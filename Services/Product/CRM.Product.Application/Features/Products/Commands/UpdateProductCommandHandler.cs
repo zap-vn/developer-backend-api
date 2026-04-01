@@ -1,8 +1,11 @@
 using MediatR;
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CRM.Product.Domain.Entities;
 using CRM.Product.Domain.Interfaces;
-using System;
+using System.Collections.Generic;
 
 namespace CRM.Product.Application.Features.Products.Commands
 {
@@ -17,18 +20,32 @@ namespace CRM.Product.Application.Features.Products.Commands
 
         public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(request.Id)) return false;
-            var entity = await _repository.GetByIdAsync(request.Id);
-            if (entity == null) return false;
+            var product = await _repository.GetByIdAsync(request.Id);
+            if (product == null) return false;
 
-            entity.Name = request.Name;
-            entity.Description = request.Description;
-            entity.Price = request.Price;
-            entity.Stock = request.Stock;
-            entity.Category = request.Category;
-            entity.ImageUrl = request.ImageUrl;
+            product.name = request.Name ?? product.name;
+            product.short_description = request.ShortDescription;
+            product.long_description_html = request.LongDescriptionHtml;
+            product.status_id = request.StatusId;
+            product.is_featured = request.IsFeatured;
+            product.product_type = request.ProductType;
 
-            await _repository.UpdateAsync(entity);
+            product.variants = request.Variants.Select(v => new ProductVariant
+            {
+                id = v.Id ?? Guid.NewGuid(),
+                product_id = product.id,
+                tenant_id = product.tenant_id,
+                variant_name = v.VariantName ?? string.Empty,
+                sku_code = v.SkuCode ?? string.Empty,
+                barcode = v.Barcode,
+                sale_price = v.Price,
+                base_price = v.OriginalPrice,
+                stock_quantity = v.StockQuantity,
+                unit_of_measure = v.Uom,
+                is_active = v.IsActive
+            }).ToList();
+
+            await _repository.UpdateAsync(product);
             return true;
         }
     }

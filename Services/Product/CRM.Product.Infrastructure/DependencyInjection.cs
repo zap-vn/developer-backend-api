@@ -1,9 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
 using CRM.Product.Domain.Interfaces;
 using CRM.Product.Infrastructure.Persistence;
-using CRM.Product.Infrastructure.Persistence.Configurations;
 using CRM.Product.Infrastructure.Persistence.Repositories;
 
 namespace CRM.Product.Infrastructure
@@ -12,14 +11,22 @@ namespace CRM.Product.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<MongoSettings>(configuration.GetSection("MongoSettings"));
+            var connectionString = configuration.GetConnectionString("PostgreSql") ?? 
+                                  configuration["ConnectionStrings:PostgreSql"];
+                                  
+            services.AddDbContext<PostgresDbContext>(options =>
+                options.UseNpgsql(connectionString)
+                       .EnableSensitiveDataLogging()
+                       .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
-            services.AddSingleton<MongoDbContext>();
-            services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
-
-            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductRepository, PostgresProductRepository>();
+            services.AddScoped<ICategoryRepository, PostgresCategoryRepository>();
+            services.AddScoped<IBrandRepository, PostgresBrandRepository>();
+            services.AddScoped<IModifierGroupRepository, PostgresModifierGroupRepository>();
+            services.AddScoped<IUnitRepository, PostgresUnitRepository>();
 
             return services;
         }
     }
 }
+

@@ -36,10 +36,10 @@ namespace CRM.Authentication.Infrastructure.Security
 
         public async Task<string> GetAccessTokenAsync(EmailSetting setting)
         {
-            var accountName = setting.AccountName ?? "default";
+            var accountName = setting.account_name ?? "default";
             var expiredAtConfig = await _configRepository.GetByKeyAsync(GetExpiredAtKey(accountName));
             long expiredAt = 0;
-            if (expiredAtConfig != null && long.TryParse(expiredAtConfig.Value, out long val))
+            if (expiredAtConfig != null && long.TryParse(expiredAtConfig.value, out long val))
             {
                 expiredAt = val;
             }
@@ -53,18 +53,18 @@ namespace CRM.Authentication.Infrastructure.Security
             }
 
             var accessTokenConfig = await _configRepository.GetByKeyAsync(GetAccessTokenKey(accountName));
-            return accessTokenConfig?.Value ?? string.Empty;
+            return accessTokenConfig?.value ?? string.Empty;
         }
 
         public async Task RefreshAccessTokenAsync(EmailSetting setting)
         {
-            var accountName = setting.AccountName ?? string.Empty;
+            var accountName = setting.account_name ?? string.Empty;
             _logger.LogInformation($"[VIETGUY] Refreshing access token for {accountName}...");
 
             var refreshTokenConfig = await _configRepository.GetByKeyAsync(GetRefreshTokenKey(accountName));
             // In a real multi-account scenario, initial refresh token would be somewhere. 
             // In the DB image, it wasn't shown. We'll use the one from config as fallback if we had it, but user wants ONLY DB.
-            var refreshToken = refreshTokenConfig?.Value ?? string.Empty;
+            var refreshToken = refreshTokenConfig?.value ?? string.Empty;
 
             if (string.IsNullOrEmpty(refreshToken))
             {
@@ -96,9 +96,9 @@ namespace CRM.Authentication.Infrastructure.Security
                     var result = JsonSerializer.Deserialize<VietGuyAuthResponse>(content);
                     if (result != null && result.error == 0 && result.data != null)
                     {
-                        await _configRepository.UpsertAsync(new SystemConfig { Key = GetAccessTokenKey(accountName), Value = result.data.access_token });
-                        await _configRepository.UpsertAsync(new SystemConfig { Key = GetRefreshTokenKey(accountName), Value = result.data.refresh_token });
-                        await _configRepository.UpsertAsync(new SystemConfig { Key = GetExpiredAtKey(accountName), Value = result.data.expired_at.ToString() });
+                        await _configRepository.UpsertAsync(new SystemConfig { key = GetAccessTokenKey(accountName), value = result.data.access_token });
+                        await _configRepository.UpsertAsync(new SystemConfig { key = GetRefreshTokenKey(accountName), value = result.data.refresh_token });
+                        await _configRepository.UpsertAsync(new SystemConfig { key = GetExpiredAtKey(accountName), value = result.data.expired_at.ToString() });
                         
                         _logger.LogInformation($"[VIETGUY] Token refreshed for {accountName} successfully.");
                     }
@@ -125,10 +125,7 @@ namespace CRM.Authentication.Infrastructure.Security
             var accessToken = await GetAccessTokenAsync(setting);
             if (string.IsNullOrEmpty(accessToken))
             {
-                 // Fallback: If no token in DB, use Passcode directly as Vietguy sometimes uses static keys too, 
-                 // but based on what I saw earlier, they use OAuth. 
-                 // If the system was using static passcode, then:
-                 accessToken = setting.Passcode;
+                 accessToken = setting.passcode ?? string.Empty;
             }
 
             // Normalize phone
@@ -140,21 +137,21 @@ namespace CRM.Authentication.Infrastructure.Security
             try
             {
                 var query = HttpUtility.ParseQueryString(string.Empty);
-                query["u"] = setting.AccountName;
+                query["u"] = setting.account_name;
                 query["pwd"] = accessToken;
-                query["from"] = setting.SendId;
+                query["from"] = setting.send_id;
                 query["phone"] = normalizedPhone;
                 query["sms"] = message;
                 query["bid"] = Guid.NewGuid().ToString("N");
 
-                var url = $"{setting.BaseUrlSMS ?? "https://cloudsms.vietguys.biz:4438"}{setting.APIEndpoint ?? "/api/index.php"}?{query}";
+                var url = $"{setting.base_url_sms ?? "https://cloudsms.vietguys.biz:4438"}{setting.api_endpoint ?? "/api/index.php"}?{query}";
                 
                 var response = await _httpClient.GetAsync(url);
                 var content = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation($"[VIETGUY] SMS sent to {normalizedPhone}. Account: {setting.AccountName}. Response: {content}");
+                    _logger.LogInformation($"[VIETGUY] SMS sent to {normalizedPhone}. Account: {setting.account_name}. Response: {content}");
                 }
                 else
                 {

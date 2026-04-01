@@ -32,12 +32,12 @@ namespace CRM.Authentication.Infrastructure.Security
             var guidToUse = customerGuid ?? "Customer/1"; // Default as per image if none given
             var setting = await _emailSettingRepository.GetByCustomerGuidAsync(guidToUse);
 
-            if (setting != null && !string.IsNullOrEmpty(setting.AccountName))
+            if (setting != null && !string.IsNullOrEmpty(setting.account_name))
             {
-                _logger.LogInformation($"[PHONE] Using Vietguy Account: {setting.AccountName} from Database.");
+                _logger.LogInformation($"[PHONE] Using Vietguy Account: {setting.account_name} from Database.");
                 
                 // Use BodySMS template if available
-                string messageTemplate = setting.BodySMS ?? "Ma OTP cua ban la: {otp}";
+                string messageTemplate = setting.body_sms ?? "Ma OTP cua ban la: {otp}";
                 string message = messageTemplate.Replace("{otp}", otp).Replace("{otp.code}", otp);
                 
                 await _vietGuyService.SendSmsAsync(phone, message, setting);

@@ -501,6 +501,16 @@ paths:
       responses:
         200:
           description: "OK"
+    options:
+      summary: "Categories list CORS"
+      operationId: "cors_categories_list"
+      x-google-backend:
+        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/api/categories/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/categories/all:
     get:
       summary: "Categories all"
@@ -523,6 +533,16 @@ paths:
       responses:
         200:
           description: "OK"
+    options:
+      summary: "Brands list CORS"
+      operationId: "cors_brands_list"
+      x-google-backend:
+        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/api/brands/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/units/list:
     post:
       summary: "Units list"
@@ -534,6 +554,16 @@ paths:
       responses:
         200:
           description: "OK"
+    options:
+      summary: "Units list CORS"
+      operationId: "cors_units_list"
+      x-google-backend:
+        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/api/units/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/modifiergroups/list:
     post:
       summary: "Modifier groups list"
@@ -542,6 +572,16 @@ paths:
         address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Modifier groups list CORS"
+      operationId: "cors_modifier_list"
+      x-google-backend:
+        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/api/modifiergroups/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"

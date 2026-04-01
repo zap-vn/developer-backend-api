@@ -490,13 +490,57 @@ paths:
       responses:
         200:
           description: "OK"
-  /api/Categories:
-    get:
-      summary: "Categories API"
-      operationId: "categories_list"
+  /api/categories/list:
+    post:
+      summary: "Categories list"
+      operationId: "categories_list_post"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
-        protocol: "h2"
+        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/categories/all:
+    get:
+      summary: "Categories all"
+      operationId: "categories_all_get"
+      x-google-backend:
+        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/brands/list:
+    post:
+      summary: "Brands list"
+      operationId: "brands_list_post"
+      x-google-backend:
+        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/units/list:
+    post:
+      summary: "Units list"
+      operationId: "units_list_post"
+      x-google-backend:
+        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/modifiergroups/list:
+    post:
+      summary: "Modifier groups list"
+      operationId: "modifier_list_post"
+      x-google-backend:
+        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:

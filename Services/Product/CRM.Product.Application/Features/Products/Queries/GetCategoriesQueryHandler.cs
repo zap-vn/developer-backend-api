@@ -31,8 +31,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 IsActive = true,
                 IconUrl = x.icon_url,
                 MaterializedPath = x.materialized_path,
-                SeoTitle = x.seo_title,
-                SeoDescription = x.seo_description
+                SeoTitle = x.seo_title
             }).ToList();
 
             // Build hierarchy

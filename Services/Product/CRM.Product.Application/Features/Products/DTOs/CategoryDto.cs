@@ -28,9 +28,6 @@ namespace CRM.Product.Application.Features.Products.DTOs
         [JsonPropertyName("seo_title")]
         public string? SeoTitle { get; set; }
 
-        [JsonPropertyName("seo_description")]
-        public string? SeoDescription { get; set; }
-
         [JsonPropertyName("channels")]
         public string[]? Channels { get; set; }
 

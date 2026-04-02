@@ -52,9 +52,6 @@ namespace CRM.Product.Domain.Entities
         [Column("seo_title")]
         public string? seo_title { get; set; }
 
-        [Column("seo_description")]
-        public string? seo_description { get; set; }
-
         // Navigation properties (Renamed to avoid EF conventions)
         [ForeignKey("parent_id")]
         public Category? parent_category { get; set; }

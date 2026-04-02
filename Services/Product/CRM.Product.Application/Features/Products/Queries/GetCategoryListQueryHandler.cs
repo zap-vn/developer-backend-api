@@ -39,12 +39,11 @@ namespace CRM.Product.Application.Features.Products.Queries
                 Id = x.id,
                 ParentId = x.parent_id,
                 Name = x.name,
-                IsActive = x.is_active,
+                IsActive = true,
                 IconUrl = x.icon_url,
                 MaterializedPath = x.materialized_path,
                 SeoTitle = x.seo_title,
-                SeoDescription = x.seo_description,
-                Channels = x.channels
+                SeoDescription = x.seo_description
             }).ToList();
 
             return new PagedResult<CategoryDto>(dtos, total, request.Request.PageIndex, request.Request.PageSize);

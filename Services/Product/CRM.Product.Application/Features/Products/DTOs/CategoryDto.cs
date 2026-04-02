@@ -12,6 +12,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         [JsonPropertyName("parent_id")]
         public Guid? ParentId { get; set; }
 
+
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 

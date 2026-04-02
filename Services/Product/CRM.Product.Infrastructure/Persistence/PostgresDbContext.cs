@@ -4,7 +4,14 @@ using VariantEntity = CRM.Product.Domain.Entities.ProductVariant;
 using CategoryEntity = CRM.Product.Domain.Entities.Category;
 using BrandEntity = CRM.Product.Domain.Entities.Brand;
 using ModifierGroupEntity = CRM.Product.Domain.Entities.ModifierGroup;
-// UomItem removed — platform.uom_item table does not exist in current DB
+using ProductMediaEntity = CRM.Product.Domain.Entities.ProductMedia;
+using CategoryMappingEntity = CRM.Product.Domain.Entities.ProductCategoryMap;
+using LocationPriceEntity = CRM.Product.Domain.Entities.ProductLocationPricing;
+using StatusItemEntity = CRM.Product.Domain.Entities.StatusItem;
+using StatusTranslationEntity = CRM.Product.Domain.Entities.StatusItemTranslation;
+using WarehouseEntity = CRM.Product.Domain.Entities.Warehouse;
+using UomItemEntity = CRM.Product.Domain.Entities.UomItem;
+using InventoryItemEntity = CRM.Product.Domain.Entities.InventoryItem;
 
 namespace CRM.Product.Infrastructure.Persistence
 {
@@ -20,7 +27,13 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<BrandEntity> Brands { get; set; }
         public DbSet<ModifierGroupEntity> ModifierGroups { get; set; }
-        // UomItems DbSet removed — platform.uom_item table does not exist
+        public DbSet<ProductMediaEntity> ProductMedia { get; set; }
+        public DbSet<CategoryMappingEntity> ProductCategoryMappings { get; set; }
+        public DbSet<LocationPriceEntity> ProductLocationPricing { get; set; }
+        public DbSet<StatusItemEntity> StatusItems { get; set; }
+        public DbSet<WarehouseEntity> Warehouses { get; set; }
+        public DbSet<UomItemEntity> UomItems { get; set; }
+        public DbSet<InventoryItemEntity> InventoryItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,17 +44,29 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
                 entity.Property(e => e.brand_id).HasColumnName("brand_id");
+                entity.Property(e => e.product_type).HasColumnName("product_type");
+                entity.Property(e => e.name).HasColumnName("name");
                 entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
-                entity.Property(e => e.product_type).HasColumnName("product_type").HasMaxLength(16);
-                entity.Property(e => e.name).HasColumnName("name").HasMaxLength(255).IsRequired();
                 entity.Property(e => e.short_description).HasColumnName("short_description");
                 entity.Property(e => e.long_description_html).HasColumnName("long_description_html");
+                entity.Property(e => e.search_vector).HasColumnName("search_vector");
+                entity.Property(e => e.priority_score).HasColumnName("priority_score");
                 entity.Property(e => e.status_id).HasColumnName("status_id");
-                entity.Property(e => e.is_featured).HasColumnName("is_featured").HasDefaultValue(false);
-
+                entity.Property(e => e.is_featured).HasColumnName("is_featured");
+                entity.Property(e => e.created_at).HasColumnName("created_at");
+                entity.Property(e => e.updated_at).HasColumnName("updated_at");
+                
                 entity.HasMany(e => e.variants)
                     .WithOne(v => v.product)
                     .HasForeignKey(v => v.product_id);
+
+                entity.HasMany(e => e.category_mappings)
+                    .WithOne(cm => cm.product)
+                    .HasForeignKey(cm => cm.product_id);
+
+                entity.HasOne(e => e.status)
+                    .WithMany()
+                    .HasForeignKey(e => e.status_id);
             });
 
             modelBuilder.Entity<VariantEntity>(entity =>
@@ -49,61 +74,140 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.ToTable("product_variant", "catalog");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
-                entity.Property(e => e.product_id).HasColumnName("product_id").IsRequired();
-                entity.Property(e => e.sku_code).HasColumnName("sku_code").HasMaxLength(64);
-                entity.HasIndex(e => e.sku_code).IsUnique();
-                entity.Property(e => e.barcode).HasColumnName("barcode").HasMaxLength(64);
+                entity.Property(e => e.product_id).HasColumnName("product_id");
+                entity.Property(e => e.sku_code).HasColumnName("sku_code");
+                entity.Property(e => e.barcode).HasColumnName("barcode");
                 entity.Property(e => e.variant_name).HasColumnName("variant_name");
-                entity.Property(e => e.base_price).HasColumnName("base_price").HasColumnType("numeric(19,4)");
-                entity.Property(e => e.sale_price).HasColumnName("sale_price").HasColumnType("numeric(19,4)");
-                entity.Property(e => e.cost_price).HasColumnName("cost_price").HasColumnType("numeric(19,4)");
-                // Columns that do NOT exist in catalog.product_variant
-                entity.Ignore(e => e.tenant_id);
-                entity.Ignore(e => e.is_active);
-                entity.Ignore(e => e.stock_quantity);
-                entity.Ignore(e => e.unit_of_measure);
-                entity.Ignore(e => e.weight_grams);
-                entity.Ignore(e => e.length_mm);
-                entity.Ignore(e => e.width_mm);
-                entity.Ignore(e => e.height_mm);
-                entity.Ignore(e => e.attributes);
+                entity.Property(e => e.base_price).HasColumnName("base_price");
+                entity.Property(e => e.sale_price).HasColumnName("sale_price");
+                entity.Property(e => e.cost_price).HasColumnName("cost_price");
+                entity.Property(e => e.is_default).HasColumnName("is_default");
+                entity.Property(e => e.attributes).HasColumnName("attributes");
+                entity.Property(e => e.weight_grams).HasColumnName("weight_grams");
+                entity.Property(e => e.length_mm).HasColumnName("length_mm");
+                entity.Property(e => e.width_mm).HasColumnName("width_mm");
+                entity.Property(e => e.height_mm).HasColumnName("height_mm");
+
+                entity.HasMany(e => e.media)
+                    .WithOne(m => m.variant)
+                    .HasForeignKey(m => m.product_variant_id);
+
+                entity.HasMany(e => e.location_pricing)
+                    .WithOne(lp => lp.variant)
+                    .HasForeignKey(lp => lp.product_variant_id);
+
+                entity.HasMany(e => e.inventory_items)
+                    .WithOne(i => i.Variant)
+                    .HasForeignKey(i => i.product_variant_id);
             });
-            modelBuilder.Entity<CategoryEntity>(entity =>
+
+            modelBuilder.Entity<ProductMediaEntity>(entity =>
             {
-                entity.ToTable("category", "catalog");
+                entity.ToTable("product_media", "catalog");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
-                entity.Property(e => e.parent_id).HasColumnName("parent_id");
-                entity.Property(e => e.name).HasColumnName("name").HasMaxLength(255).IsRequired();
-                entity.Ignore(e => e.is_active);
-                entity.Property(e => e.icon_url).HasColumnName("icon_url");
-                entity.Property(e => e.materialized_path).HasColumnName("materialized_path");
-                entity.Property(e => e.seo_title).HasColumnName("seo_title");
-                entity.Property(e => e.seo_description).HasColumnName("seo_description");
-                entity.Ignore(e => e.channels);
+                entity.Property(e => e.product_variant_id).HasColumnName("product_variant_id");
+                entity.Property(e => e.media_url).HasColumnName("media_url");
+                entity.Property(e => e.is_primary).HasColumnName("is_primary");
+                entity.Property(e => e.sort_order).HasColumnName("sort_order");
+            });
 
-                entity.HasOne(e => e.Parent)
-                    .WithMany(p => p.Children)
+            modelBuilder.Entity<CategoryMappingEntity>(entity =>
+            {
+                entity.ToTable("product_category_map", "catalog");
+                entity.HasKey(e => new { e.product_id, e.category_id });
+                entity.Property(e => e.product_id).HasColumnName("product_id");
+                entity.Property(e => e.category_id).HasColumnName("category_id");
+                entity.Property(e => e.is_primary).HasColumnName("is_primary");
+
+                entity.HasOne(e => e.category)
+                    .WithMany(e => e.product_mappings)
+                    .HasForeignKey(e => e.category_id);
+            });
+
+            modelBuilder.Entity<LocationPriceEntity>(entity =>
+            {
+                entity.ToTable("product_location_pricing", "catalog");
+                entity.HasKey(e => new { e.product_variant_id, e.warehouse_id });
+                entity.Property(e => e.product_variant_id).HasColumnName("product_variant_id");
+                entity.Property(e => e.warehouse_id).HasColumnName("warehouse_id");
+                entity.Property(e => e.sale_price_override).HasColumnName("sale_price_override");
+                entity.Property(e => e.is_active).HasColumnName("is_active");
+            });
+
+            modelBuilder.Entity<StatusItemEntity>(entity =>
+            {
+                entity.ToTable("status_item", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.status_code).HasColumnName("status_code");
+                
+                entity.HasMany(e => e.translations)
+                    .WithOne(t => t.status_item)
+                    .HasForeignKey(t => t.status_item_id);
+            });
+
+            modelBuilder.Entity<StatusTranslationEntity>(entity =>
+            {
+                entity.ToTable("status_item_translation", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.status_item_id).HasColumnName("status_item_id");
+                entity.Property(e => e.locale_id).HasColumnName("locale_id");
+                entity.Property(e => e.name).HasColumnName("name");
+            });
+
+            modelBuilder.Entity<WarehouseEntity>(entity =>
+            {
+                entity.ToTable("warehouse", "logistics");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
+                entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
+                entity.Property(e => e.name).HasColumnName("name");
+                entity.Property(e => e.warehouse_type).HasColumnName("warehouse_type");
+                entity.Property(e => e.status_id).HasColumnName("status_id");
+                entity.Property(e => e.address_json).HasColumnName("address_json");
+                entity.Property(e => e.manager_id).HasColumnName("manager_id");
+                entity.Property(e => e.created_at).HasColumnName("created_at");
+                entity.Property(e => e.updated_at).HasColumnName("updated_at");
+            });
+
+            modelBuilder.Entity<UomItemEntity>(entity =>
+            {
+                entity.ToTable("uom_item", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.name).HasColumnName("name");
+                entity.Property(e => e.code).HasColumnName("code");
+            });
+
+            modelBuilder.Entity<InventoryItemEntity>(entity =>
+            {
+                entity.ToTable("inventory_item", "logistics");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.product_variant_id).HasColumnName("product_variant_id");
+                entity.Property(e => e.warehouse_id).HasColumnName("warehouse_id");
+                entity.Property(e => e.qty_on_hand).HasColumnName("qty_on_hand");
+
+                entity.HasOne(e => e.Warehouse)
+                    .WithMany()
+                    .HasForeignKey(e => e.warehouse_id);
+            });
+
+            modelBuilder.Entity<CategoryEntity>(entity => 
+            { 
+                entity.ToTable("category", "catalog"); 
+                entity.HasKey(e => e.id); 
+
+                // Explicitly link parent_id to avoid shadow properties like Parentid
+                entity.HasOne(e => e.parent_category)
+                    .WithMany(e => e.sub_categories)
                     .HasForeignKey(e => e.parent_id);
             });
-
-            modelBuilder.Entity<BrandEntity>(entity =>
-            {
-                entity.ToTable("brand", "catalog");
-                entity.HasKey(e => e.id);
-                entity.Property(e => e.id).HasDefaultValueSql("gen_random_uuid()");
-                entity.HasIndex(e => e.slug).IsUnique();
-            });
-
-            modelBuilder.Entity<ModifierGroupEntity>(entity =>
-            {
-                entity.ToTable("modifier_group", "catalog");
-                entity.HasKey(e => e.id);
-                entity.Property(e => e.id).HasDefaultValueSql("gen_random_uuid()");
-            });
-
-            // UomItem mapping removed — platform.uom_item does not exist in current DB
+            modelBuilder.Entity<BrandEntity>(entity => { entity.ToTable("brand", "catalog"); entity.HasKey(e => e.id); });
+            modelBuilder.Entity<ModifierGroupEntity>(entity => { entity.ToTable("modifier_group", "catalog"); entity.HasKey(e => e.id); });
         }
     }
 }
-

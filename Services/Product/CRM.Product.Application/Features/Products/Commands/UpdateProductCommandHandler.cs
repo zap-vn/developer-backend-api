@@ -34,15 +34,11 @@ namespace CRM.Product.Application.Features.Products.Commands
             {
                 id = v.Id ?? Guid.NewGuid(),
                 product_id = product.id,
-                tenant_id = product.tenant_id,
                 variant_name = v.VariantName ?? string.Empty,
                 sku_code = v.SkuCode ?? string.Empty,
                 barcode = v.Barcode,
                 sale_price = v.Price,
-                base_price = v.OriginalPrice,
-                stock_quantity = v.StockQuantity,
-                unit_of_measure = v.Uom,
-                is_active = v.IsActive
+                base_price = v.OriginalPrice
             }).ToList();
 
             await _repository.UpdateAsync(product);

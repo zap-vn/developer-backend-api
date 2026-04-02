@@ -12,7 +12,6 @@ using CRM.BuildingBlocks.Extensions;
 namespace CRM.Product.Api.Controllers
 {
     [ApiController]
-    [Route("api/product")]
     [Route("api/products")]
     public class ProductsController : ControllerBase
     {
@@ -49,13 +48,22 @@ namespace CRM.Product.Api.Controllers
                     total_record = result.TotalCount,
                     page_index = result.CurrentPage,
                     page_size = result.PageSize,
-                    items = result.Items.Select(x => new 
+                    items = result.Items.Select(x => new
                     {
                         id = x.id,
-                        cate_name = "TBD", 
-                        name = x.name,
-                        price = x.variants.FirstOrDefault()?.sale_price ?? 0,
-                        status = x.status_id ?? 0
+                        image = x.image_url,
+                        item_name = x.item_name,
+                        sku = x.sku,
+                        barcode = x.barcode,
+                        product_type = x.product_type,
+                        category_name = x.category_name,
+                        price = x.price,
+                        warehouse_id = x.warehouse_id,
+                        location_name = x.location_name,
+                        stock = x.stock_qty ?? 0,
+                        unit_name = x.unit_name,
+                        status_id = x.status_id ?? 0,
+                        status_text = x.status_text
                     }).ToList()
                 }
             });

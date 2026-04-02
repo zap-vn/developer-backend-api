@@ -41,7 +41,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 code = x.code,
                 name = x.name,
                 uom_type = x.uom_type,
-                is_active = x.is_active
+                is_active = true
             });
 
             return new PagedResult<UnitDto>(dtos.ToList(), total, request.Request.PageIndex, request.Request.PageSize);

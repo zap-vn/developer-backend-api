@@ -13,7 +13,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public decimal? sale_price { get; set; }
         public decimal? cost_price { get; set; }
         public bool is_active { get; set; }
-        public string? unit_of_measure { get; set; }
+        public string? unit_name { get; set; }
         public decimal? weight_grams { get; set; }
     }
 
@@ -30,5 +30,20 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public int? status_id { get; set; }
         public bool is_featured { get; set; }
         public List<ProductVariantDto> variants { get; set; } = new List<ProductVariantDto>();
+
+        // Extra fields for List
+        public string? image_url { get; set; }
+        public string? item_name { get; set; }
+        public string? category_name { get; set; }
+        public string? sku { get; set; }
+        public string? barcode { get; set; }
+        public decimal? price { get; set; }
+        public decimal? stock_qty { get; set; }
+        public string? unit_name { get; set; }
+        public string? location_name { get; set; }
+        public Guid? warehouse_id { get; set; }
+        public string? status_text { get; set; }
+        public DateTime created_at { get; set; }
+        public DateTime? updated_at { get; set; }
     }
 }

@@ -13,6 +13,5 @@ namespace CRM.Product.Domain.Entities
         public string code { get; set; } = string.Empty;
         public string name { get; set; } = string.Empty;
         public string uom_type { get; set; } = "STOCK"; // STOCK, SELL
-        public bool is_active { get; set; } = true;
     }
 }

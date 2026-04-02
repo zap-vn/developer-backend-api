@@ -13,17 +13,17 @@ securityDefinitions:
     name: "key"
     in: "query"
 x-google-backend:
-  address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+  address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
   protocol: "http/1.1"
   deadline: 120.0
 paths:
-  /api/Auth/check-account:
+  /api/auth/check-account:
     post:
       security: []
       summary: "Check Account Availability endpoint"
       operationId: "check_account"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/check-account"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/check-account"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -33,18 +33,18 @@ paths:
       summary: "Check Account CORS support"
       operationId: "cors_check_account"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/check-account"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/check-account"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Auth/verify-registration-otp:
+  /api/auth/verify-registration-otp:
     post:
       summary: "Verify Registration OTP endpoint"
       operationId: "verify_registration_otp"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/verify-registration-otp"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/verify-registration-otp"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -54,18 +54,18 @@ paths:
       summary: "Verify Registration OTP CORS support"
       operationId: "cors_verify_registration_otp"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/verify-registration-otp"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/verify-registration-otp"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Auth/social-login:
+  /api/auth/social-login:
     post:
       summary: "Social Login endpoint"
       operationId: "social_login"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/social-login"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/social-login"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -75,29 +75,29 @@ paths:
       summary: "Social Login CORS support"
       operationId: "cors_social_login"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/social-login"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/social-login"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Auth/forgot-password:
+  /api/auth/forgot-password:
     post:
       summary: "Forgot Password endpoint"
       operationId: "forgot_password"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/forgot-password"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/forgot-password"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Auth/active-account:
+  /api/auth/active-account:
     post:
       summary: "Active Account endpoint"
       operationId: "active_account"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/active-account"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/active-account"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -107,18 +107,18 @@ paths:
       summary: "Active Account CORS support"
       operationId: "cors_active_account"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/active-account"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/active-account"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Auth/resend-otp:
+  /api/auth/resend-otp:
     post:
       summary: "Resend OTP endpoint"
       operationId: "resend_otp"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/resend-otp"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/resend-otp"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -128,41 +128,41 @@ paths:
       summary: "Resend OTP CORS support"
       operationId: "cors_resend_otp"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/resend-otp"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/resend-otp"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Auth/verify-otp:
+  /api/auth/verify-otp:
     post:
       summary: "Verify OTP endpoint"
       operationId: "verify_otp"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/verify-otp"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/verify-otp"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Auth/reset-password:
+  /api/auth/reset-password:
     post:
       summary: "Reset Password endpoint"
       operationId: "reset_password"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/reset-password"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/reset-password"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Authentication/login:
+  /api/authentication/login:
     post:
       security: []
       summary: "Login endpoint"
       operationId: "login"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/login"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/login"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -176,7 +176,7 @@ paths:
       summary: "Standard Login endpoint (lowercase)"
       operationId: "login_standard"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/auth/login"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/login"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -186,28 +186,7 @@ paths:
       summary: "Standard Login CORS"
       operationId: "cors_login_standard"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/auth/login"
-        protocol: "http/1.1"
-        path_translation: CONSTANT_ADDRESS
-      responses:
-        200:
-          description: "OK"
-  /api/Auth/login:
-    post:
-      summary: "Legacy Login endpoint"
-      operationId: "login_legacy"
-      x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/login"
-        protocol: "http/1.1"
-        path_translation: CONSTANT_ADDRESS
-      responses:
-        200:
-          description: "OK"
-    options:
-      summary: "Legacy CORS support"
-      operationId: "cors_login_legacy"
-      x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/login"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/login"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -219,7 +198,7 @@ paths:
       summary: "Standard Register Merchant (lowercase)"
       operationId: "register_merchant_standard"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/register/insert-merchant"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/register/insert-merchant"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -229,18 +208,18 @@ paths:
       summary: "Register Merchant CORS"
       operationId: "cors_register_merchant_standard"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/register/insert-merchant"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/register/insert-merchant"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Auth/register-merchant:
+  /api/auth/register-merchant:
     post:
       summary: "Register Merchant endpoint"
       operationId: "register_merchant"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/register-merchant"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/register-merchant"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -250,13 +229,13 @@ paths:
       summary: "Register Merchant CORS support"
       operationId: "cors_register_merchant"
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app/api/Auth/register-merchant"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app/api/auth/register-merchant"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Data/{collectionName}/{id}:
+  /api/data/{collectionName}/{id}:
     get:
       summary: "Get document by ID"
       operationId: "data_get_by_id"
@@ -270,7 +249,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -289,7 +268,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -308,13 +287,13 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Data/{collectionName}:
+  /api/data/{collectionName}:
     get:
       summary: "List documents in collection"
       operationId: "data_list"
@@ -324,7 +303,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -339,13 +318,13 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Data/find/{collectionName}:
+  /api/data/find/{collectionName}:
     post:
       summary: "Find documents with filter"
       operationId: "data_find"
@@ -355,18 +334,18 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Customers:
+  /api/customers:
     get:
       summary: "Customers API"
       operationId: "customers_list"
       x-google-backend:
-        address: "https://pendogo-customer-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-customer-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -376,40 +355,40 @@ paths:
       summary: "Create Customer"
       operationId: "customers_create"
       x-google-backend:
-        address: "https://pendogo-customer-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-customer-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         201:
           description: "Created"
-  /api/Customers/list:
+  /api/customers/list:
     post:
       summary: "Search Customers"
       operationId: "customers_search"
       x-google-backend:
-        address: "https://pendogo-customer-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-customer-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Product:
+  /api/product:
     get:
       summary: "List Products"
       operationId: "products_list"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Product/swagger/v1/swagger.json:
+  /api/product/swagger/v1/swagger.json:
     get:
       summary: "Product Swagger JSON"
       operationId: "get_product_swagger"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/swagger/v1/swagger.json"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/swagger/v1/swagger.json"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -419,46 +398,46 @@ paths:
       summary: "Create Product"
       operationId: "products_create"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         201:
           description: "Created"
-  /api/Products:
+  /api/products:
     get:
       summary: "List Products (Plural)"
       operationId: "products_list_plural"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Products/swagger/v1/swagger.json:
+  /api/products/swagger/v1/swagger.json:
     get:
       summary: "Products (Plural) Swagger JSON"
       operationId: "get_products_plural_swagger"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/swagger/v1/swagger.json"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/swagger/v1/swagger.json"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Products/list:
+  /api/products/list:
     post:
       summary: "Product List POST"
       operationId: "products_list_post"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Products/{id}:
+  /api/products/{id}:
     get:
       summary: "Get Product by ID (Plural)"
       operationId: "products_get_plural"
@@ -468,13 +447,13 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/Product/{id}:
+  /api/product/{id}:
     get:
       summary: "Get Product by ID"
       operationId: "products_get"
@@ -484,7 +463,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -495,7 +474,7 @@ paths:
       summary: "Categories list"
       operationId: "categories_list_post"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -505,7 +484,7 @@ paths:
       summary: "Categories list CORS"
       operationId: "cors_categories_list"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/api/categories/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/categories/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -516,7 +495,7 @@ paths:
       summary: "Categories all"
       operationId: "categories_all_get"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -527,7 +506,7 @@ paths:
       summary: "Brands list"
       operationId: "brands_list_post"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -537,7 +516,7 @@ paths:
       summary: "Brands list CORS"
       operationId: "cors_brands_list"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/api/brands/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/brands/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -548,7 +527,7 @@ paths:
       summary: "Units list"
       operationId: "units_list_post"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -558,7 +537,7 @@ paths:
       summary: "Units list CORS"
       operationId: "cors_units_list"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/api/units/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/units/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -569,7 +548,7 @@ paths:
       summary: "Modifier groups list"
       operationId: "modifier_list_post"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -579,7 +558,7 @@ paths:
       summary: "Modifier groups list CORS"
       operationId: "cors_modifier_list"
       x-google-backend:
-        address: "https://pendogo-product-api-882473783707.asia-southeast1.run.app/api/modifiergroups/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/modifiergroups/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -595,7 +574,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -610,7 +589,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -626,7 +605,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -641,7 +620,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -657,7 +636,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -672,7 +651,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -688,7 +667,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://pendogo-identity-api-957587570857.asia-southeast1.run.app"
+        address: "https://zapcrm-identity-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -699,7 +678,7 @@ paths:
       summary: "Get report overview list location"
       operationId: "get_report_overview"
       x-google-backend:
-        address: "https://pendogo-report-api-882473783707.asia-southeast1.run.app"
+        address: "https://zapcrm-report-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:

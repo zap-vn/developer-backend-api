@@ -33,15 +33,11 @@ namespace CRM.Product.Application.Features.Products.Commands
                 variants = request.Variants.Select(v => new ProductVariant
                 {
                     id = Guid.NewGuid(),
-                    tenant_id = request.TenantId,
                     variant_name = v.VariantName ?? string.Empty,
                     sku_code = v.SkuCode ?? string.Empty,
                     barcode = v.Barcode,
                     sale_price = v.Price,
-                    base_price = v.OriginalPrice,
-                    stock_quantity = v.StockQuantity,
-                    unit_of_measure = v.Uom,
-                    is_active = v.IsActive
+                    base_price = v.OriginalPrice
                 }).ToList()
             };
 

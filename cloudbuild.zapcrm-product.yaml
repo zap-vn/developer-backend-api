@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-product-api:latest'
+      - '-f'
+      - 'Services/Product/CRM.Product.Api/Dockerfile'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-product-api:latest'
+
+images:
+  - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-product-api:latest'

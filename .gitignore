@@ -31,3 +31,27 @@ inspect_db.cs
 test_hash.cs
 implementation_plan.md.resolved
 tmp_mongo_test/
+
+# CRM Specific Logs/Tmp
+*_err.txt
+*_out.txt
+api_fatal.txt
+api_log.txt
+api_run.log
+auth_err.txt
+auth_out.txt
+build_errors*.txt
+build_log.txt
+build_output*.txt
+gateway_run.log
+ls_files_services.txt
+Product_err.txt
+Product_out.txt
+check_cols_out.txt
+psql_out.txt
+check_bom.cs
+check_cols.cs
+check_db.cs
+dump_product.csx
+CheckDb/
+dbinfo/

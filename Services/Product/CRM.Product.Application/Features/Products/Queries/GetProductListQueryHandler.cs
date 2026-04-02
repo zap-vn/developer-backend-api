@@ -29,38 +29,65 @@ namespace CRM.Product.Application.Features.Products.Queries
             Guid? tenantId = null;
             if (Guid.TryParse(tenantIdString, out var guid)) tenantId = guid;
 
-            var (items, total) = await _repository.GetPagedAsync(
-                req.Page, 
-                req.PageSize, 
-                tenantId, 
-                req.Search, 
-                req.Filters?.Status);
+            Guid? categoryId = null;
+            if (Guid.TryParse(req.Filters?.CategoryId, out var catGuid)) categoryId = catGuid;
 
-            var dtos = items.Select(x => new ProductDto 
-            { 
-                id = x.id,
-                tenant_id = x.tenant_id,
-                brand_id = x.brand_id,
-                legacy_id = x.legacy_id,
-                product_type = x.product_type,
-                name = x.name,
-                short_description = x.short_description,
-                long_description_html = x.long_description_html,
-                status_id = x.status_id,
-                is_featured = x.is_featured,
-                variants = x.variants.Select(v => new ProductVariantDto
+            Guid? warehouseId = null;
+            if (Guid.TryParse(req.Filters?.WarehouseId, out var whGuid)) warehouseId = whGuid;
+
+            int localeId = req.Filters?.LocaleId ?? 2;
+
+            var (items, total) = await _repository.GetPagedAsync(
+                req.Page,
+                req.PageSize,
+                tenantId,
+                req.Search,
+                req.Filters?.StatusId,
+                categoryId,
+                warehouseId,
+                localeId);
+
+            var dtos = items.Select(v =>
+            {
+                var p = v.product;
+                var primaryMedia = v.media.FirstOrDefault(m => m.is_primary) ?? v.media.FirstOrDefault();
+                var primaryCategory = p?.category_mappings.FirstOrDefault(cm => cm.is_primary) ?? p?.category_mappings.FirstOrDefault();
+                
+                var statusItem = p?.status;
+                var translation = statusItem?.translations.FirstOrDefault(t => t.locale_id == localeId);
+                var statusText = translation?.name ?? statusItem?.status_code;
+
+                // Inventory summing for the specific variant
+                var inventoryItems = v.inventory_items;
+                if (warehouseId.HasValue)
+                    inventoryItems = inventoryItems.Where(i => i.warehouse_id == warehouseId).ToList();
+                
+                var stockQty = inventoryItems.Sum(i => i.qty_on_hand);
+                var firstInv = inventoryItems.FirstOrDefault();
+
+                // Pricing: Check for override first
+                var locationPrice = v.location_pricing.FirstOrDefault(lp => !warehouseId.HasValue || lp.warehouse_id == warehouseId);
+                var price = locationPrice?.sale_price_override ?? v.sale_price ?? v.base_price;
+
+                return new ProductDto
                 {
                     id = v.id,
-                    sku_code = v.sku_code,
+                    tenant_id = p?.tenant_id,
+                    product_type = p?.product_type ?? "PHYSICAL",
+                    status_id = p?.status_id,
+                    status_text = statusText,
+                    image_url = primaryMedia?.media_url,
+                    item_name = v.variant_name ?? p?.name ?? "",
+                    sku = v.sku_code,
                     barcode = v.barcode,
-                    variant_name = v.variant_name,
-                    base_price = v.base_price,
-                    sale_price = v.sale_price,
-                    cost_price = v.cost_price,
-                    is_active = v.is_active,
-                    unit_of_measure = v.unit_of_measure,
-                    weight_grams = v.weight_grams
-                }).ToList()
+                    price = price,
+                    stock_qty = stockQty,
+                    category_name = primaryCategory?.category?.name,
+                    warehouse_id = firstInv?.warehouse_id,
+                    location_name = firstInv?.Warehouse?.name,
+                    created_at = p?.created_at ?? DateTime.UtcNow,
+                    updated_at = p?.updated_at
+                };
             }).ToList();
 
             return new PagedResult<ProductDto>(dtos, total, req.Page, req.PageSize);

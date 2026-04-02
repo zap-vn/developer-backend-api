@@ -31,8 +31,7 @@ namespace CRM.Product.Application.Features.Products.Commands
                 tenant_id = tenantId,
                 name = request.Name,
                 code = request.Code,
-                uom_type = request.UomType ?? "UNIT",
-                is_active = request.IsActive
+                uom_type = request.UomType ?? "UNIT"
             };
 
             await _repository.CreateAsync(entity);

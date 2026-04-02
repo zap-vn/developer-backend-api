@@ -42,10 +42,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                     variant_name = v.variant_name,
                     base_price = v.base_price,
                     sale_price = v.sale_price,
-                    cost_price = v.cost_price,
-                    is_active = v.is_active,
-                    unit_of_measure = v.unit_of_measure,
-                    weight_grams = v.weight_grams
+                    cost_price = v.cost_price
                 }).ToList()
             };
         }

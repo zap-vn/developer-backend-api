@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-payment-api:latest'
+      - '-f'
+      - 'Services/Payment/CRM.Payment.Api/Dockerfile'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-payment-api:latest'
+
+images:
+  - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-payment-api:latest'

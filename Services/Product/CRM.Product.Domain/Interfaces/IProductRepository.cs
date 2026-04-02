@@ -11,12 +11,15 @@ namespace CRM.Product.Domain.Interfaces
         Task CreateAsync(CRM.Product.Domain.Entities.Product product);
         Task UpdateAsync(CRM.Product.Domain.Entities.Product product);
         Task DeleteAsync(string id);
-        Task<(IEnumerable<CRM.Product.Domain.Entities.Product> Items, int TotalCount)> GetPagedAsync(
+        Task<(IEnumerable<CRM.Product.Domain.Entities.ProductVariant> Items, int TotalCount)> GetPagedAsync(
             int page, 
             int pageSize, 
             Guid? tenantId = null,
             string? searchTerm = null,
-            List<int>? statusIds = null);
+            int? statusId = null,
+            Guid? categoryId = null,
+            Guid? warehouseId = null,
+            int localeId = 2);
     }
 }
 

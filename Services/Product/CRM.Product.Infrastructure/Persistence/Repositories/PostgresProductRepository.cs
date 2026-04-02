@@ -22,7 +22,10 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<CRM.Product.Domain.Entities.Product>> GetAllAsync()
         {
             return await _context.Products
-                .Include(p => p.variants)
+                .Include(p => p.variants).ThenInclude(v => v.media)
+                .Include(p => p.variants).ThenInclude(v => v.location_pricing)
+                .Include(p => p.category_mappings).ThenInclude(cm => cm.category)
+                .Include(p => p.status).ThenInclude(s => s != null ? s.translations : null)
                 .ToListAsync();
         }
 
@@ -30,7 +33,10 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         {
             if (!Guid.TryParse(id, out var guid)) return null;
             return await _context.Products
-                .Include(p => p.variants)
+                .Include(p => p.variants).ThenInclude(v => v.media)
+                .Include(p => p.variants).ThenInclude(v => v.location_pricing)
+                .Include(p => p.category_mappings).ThenInclude(cm => cm.category)
+                .Include(p => p.status).ThenInclude(s => s != null ? s.translations : null)
                 .FirstOrDefaultAsync(p => p.id == guid);
         }
 
@@ -57,30 +63,55 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             }
         }
 
-        public async Task<(IEnumerable<CRM.Product.Domain.Entities.Product> Items, int TotalCount)> GetPagedAsync(
+        public async Task<(IEnumerable<CRM.Product.Domain.Entities.ProductVariant> Items, int TotalCount)> GetPagedAsync(
             int page, 
             int pageSize, 
             Guid? tenantId = null,
             string? searchTerm = null,
-            List<int>? statusIds = null)
+            int? statusId = null,
+            Guid? categoryId = null,
+            Guid? warehouseId = null,
+            int localeId = 2)
         {
-            var query = _context.Products
-                .Include(p => p.variants)
+            var query = _context.ProductVariants
+                .Include(v => v.product)
                 .AsQueryable();
 
             if (tenantId.HasValue)
-                query = query.Where(x => x.tenant_id == tenantId);
+                query = query.Where(v => v.product != null && v.product.tenant_id == tenantId);
+
+            if (statusId.HasValue)
+                query = query.Where(v => v.product != null && v.product.status_id == statusId);
+
+            if (categoryId.HasValue)
+                query = query.Where(v => v.product != null && v.product.category_mappings.Any(cm => cm.category_id == categoryId));
+
+            if (warehouseId.HasValue)
+                query = query.Where(v => v.inventory_items.Any(ii => ii.warehouse_id == warehouseId));
 
             if (!string.IsNullOrEmpty(searchTerm))
-                query = query.Where(x => x.name.Contains(searchTerm) || (x.legacy_id != null && x.legacy_id.Contains(searchTerm)));
-
-            if (statusIds != null && statusIds.Any())
-                query = query.Where(x => x.status_id.HasValue && statusIds.Contains(x.status_id.Value));
+                query = query.Where(v => 
+                    (v.variant_name != null && v.variant_name.Contains(searchTerm)) || 
+                    (v.sku_code != null && v.sku_code.Contains(searchTerm)) ||
+                    (v.barcode != null && v.barcode.Contains(searchTerm)) ||
+                    (v.product != null && v.product.name.Contains(searchTerm)));
 
             int total = await query.CountAsync();
-            var items = await query.Skip((page - 1) * pageSize)
-                                   .Take(pageSize)
-                                   .ToListAsync();
+            var items = await query
+                .Include(v => v.media.Where(m => m.is_primary))
+                .Include(v => v.location_pricing.Where(lp => lp.is_active && (!warehouseId.HasValue || lp.warehouse_id == warehouseId)))
+                .Include(v => v.inventory_items.Where(ii => !warehouseId.HasValue || ii.warehouse_id == warehouseId))
+                    .ThenInclude(i => i.Warehouse)
+                .Include(v => v.product)
+                    .ThenInclude(p => p!.category_mappings.Where(cm => cm.is_primary))
+                        .ThenInclude(cm => cm.category)
+                .Include(v => v.product)
+                    .ThenInclude(p => p!.status)
+                        .ThenInclude(s => s!.translations.Where(t => t.locale_id == localeId))
+                .OrderByDescending(v => v.id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             return (items, total);
         }

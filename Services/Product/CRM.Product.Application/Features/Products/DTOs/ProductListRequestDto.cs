@@ -21,9 +21,15 @@ namespace CRM.Product.Application.Features.Products.DTOs
     public class ProductListFilterDto
     {
         [JsonPropertyName("cate_id")]
-        public List<string> CateId { get; set; } = new();
+        public string? CategoryId { get; set; }
 
         [JsonPropertyName("status")]
-        public List<int> Status { get; set; } = new();
+        public int? StatusId { get; set; }
+
+        [JsonPropertyName("warehouse_id")]
+        public string? WarehouseId { get; set; }
+
+        [JsonPropertyName("locale_id")]
+        public int? LocaleId { get; set; }
     }
 }

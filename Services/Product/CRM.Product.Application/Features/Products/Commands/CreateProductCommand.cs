@@ -12,7 +12,7 @@ namespace CRM.Product.Application.Features.Products.Commands
         public string? ShortDescription { get; set; }
         public string? LongDescriptionHtml { get; set; }
         public int StatusId { get; set; } = 2201; // Active
-        public string ProductType { get; set; } = "PHYSICAL";
+        public int ProductType { get; set; } = 1; // 1: PHYSICAL
         public bool IsFeatured { get; set; }
 
         public List<CreateProductVariantCommand> Variants { get; set; } = new List<CreateProductVariantCommand>();

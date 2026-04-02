@@ -23,7 +23,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public Guid? tenant_id { get; set; }
         public Guid? brand_id { get; set; }
         public string? legacy_id { get; set; }
-        public string product_type { get; set; } = string.Empty;
+        public int product_type { get; set; }
         public string name { get; set; } = string.Empty;
         public string? short_description { get; set; }
         public string? long_description_html { get; set; }

@@ -73,7 +73,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 {
                     id = v.id,
                     tenant_id = p?.tenant_id,
-                    product_type = p?.product_type ?? "PHYSICAL",
+                    product_type = p?.product_type ?? 1,
                     status_id = p?.status_id,
                     status_text = statusText,
                     image_url = primaryMedia?.media_url,

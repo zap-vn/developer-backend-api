@@ -501,6 +501,27 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/warehouses/list:
+    post:
+      summary: "Warehouses list"
+      operationId: "warehouses_list_post"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/warehouses/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Warehouses list CORS"
+      operationId: "cors_warehouses_list"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/warehouses/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/brands/list:
     post:
       summary: "Brands list"

@@ -51,12 +51,17 @@ namespace CRM.Product.Api.Controllers
                     items = result.Items.Select(x => new
                     {
                         id = x.id,
-                        cate_name = x.category_name ?? "TBD",
-                        name = x.variant_name ?? x.name,
-                        price = x.sale_price ?? 0,
-                        status = x.status_code ?? (x.status_id?.ToString() ?? "129"),
+                        media_url = x.media_url,
+                        variant_name = x.variant_name,
+                        sku_code = x.sku_code,
+                        category_id = x.category_id,
+                        sale_price = x.sale_price ?? 0,
                         warehouse_id = x.warehouse_id,
-                        warehouse_name = x.location_name
+                        qty_on_hand = x.qty_on_hand ?? 0,
+                        uom_id = x.uom_id,
+                        barcode = x.barcode,
+                        product_type = x.product_type,
+                        status_id = x.status_id
                     }).ToList()
                 }
             });

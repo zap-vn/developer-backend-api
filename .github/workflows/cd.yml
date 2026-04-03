@@ -37,18 +37,23 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v2'
 
     - name: 'Configure Docker'
-      run: gcloud auth configure-docker --quiet
+      run: gcloud auth configure-docker gcr.io --quiet
 
-    - name: 'Build and Push API Images'
+    - name: 'Build Identity API'
       run: |
         docker build -t gcr.io/openclaw-pendogo/pendogo-identity-api:${{ github.sha }} -t gcr.io/openclaw-pendogo/pendogo-identity-api:latest -f Services/Authentication/CRM.Authentication.Api/Dockerfile .
-        docker build -t gcr.io/openclaw-pendogo/pendogo-customer-api:${{ github.sha }} -t gcr.io/openclaw-pendogo/pendogo-customer-api:latest -f Services/Customer/CRM.Customer.Api/Dockerfile .
-        docker build -t gcr.io/openclaw-pendogo/pendogo-product-api:${{ github.sha }} -t gcr.io/openclaw-pendogo/pendogo-product-api:latest -f Services/Product/CRM.Product.Api/Dockerfile .
-        
         docker push gcr.io/openclaw-pendogo/pendogo-identity-api:${{ github.sha }}
         docker push gcr.io/openclaw-pendogo/pendogo-identity-api:latest
+
+    - name: 'Build Customer API'
+      run: |
+        docker build -t gcr.io/openclaw-pendogo/pendogo-customer-api:${{ github.sha }} -t gcr.io/openclaw-pendogo/pendogo-customer-api:latest -f Services/Customer/CRM.Customer.Api/Dockerfile .
         docker push gcr.io/openclaw-pendogo/pendogo-customer-api:${{ github.sha }}
         docker push gcr.io/openclaw-pendogo/pendogo-customer-api:latest
+
+    - name: 'Build Product API'
+      run: |
+        docker build -t gcr.io/openclaw-pendogo/pendogo-product-api:${{ github.sha }} -t gcr.io/openclaw-pendogo/pendogo-product-api:latest -f Services/Product/CRM.Product.Api/Dockerfile .
         docker push gcr.io/openclaw-pendogo/pendogo-product-api:${{ github.sha }}
         docker push gcr.io/openclaw-pendogo/pendogo-product-api:latest
 

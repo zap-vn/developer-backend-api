@@ -31,7 +31,20 @@ namespace CRM.Promotion.Api.Controllers
         {
             var filter = await Request.GetRawBodyAsync<FilterDTOs>();
             var result = await _mediator.Send(new GetPromotionListQuery { Filter = filter });
-            return Ok(result);
+            return Ok(new 
+            {
+                success = true,
+                code = 200,
+                message = "OK",
+                data = new 
+                {
+                    total_page = result.PageSize > 0 ? (int)System.Math.Ceiling((double)result.TotalCount / result.PageSize) : 1,
+                    total_record = result.TotalCount,
+                    page_index = result.CurrentPage,
+                    page_size = result.PageSize,
+                    items = result.Items
+                }
+            });
         }
 
         [HttpGet("{id}")]

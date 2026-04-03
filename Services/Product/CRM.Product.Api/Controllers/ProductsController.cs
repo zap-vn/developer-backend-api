@@ -44,7 +44,7 @@ namespace CRM.Product.Api.Controllers
                 message = "OK",
                 data = new 
                 {
-                    total_page = (int)Math.Ceiling((double)result.TotalCount / result.PageSize),
+                    total_page = result.PageSize > 0 ? (int)Math.Ceiling((double)result.TotalCount / result.PageSize) : 1,
                     total_record = result.TotalCount,
                     page_index = result.CurrentPage,
                     page_size = result.PageSize,

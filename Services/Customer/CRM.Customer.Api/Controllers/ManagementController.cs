@@ -35,9 +35,20 @@ namespace CRM.Customer.Api.Controllers
         public async Task<IActionResult> GetMemberships([FromQuery] GetMembershipListQuery query)
         {
             var result = await _mediator.Send(query);
-            return Ok(ApiResponse<IReadOnlyList<MembershipListDto>>.SuccessResult(
-                result.Items, 
-                new PaginationMetadata(result.CurrentPage, result.PageSize, result.TotalCount)));
+            return Ok(new 
+            {
+                success = true,
+                code = 200,
+                message = "OK",
+                data = new 
+                {
+                    total_page = result.PageSize > 0 ? (int)System.Math.Ceiling((double)result.TotalCount / result.PageSize) : 1,
+                    total_record = result.TotalCount,
+                    page_index = result.CurrentPage,
+                    page_size = result.PageSize,
+                    items = result.Items
+                }
+            });
         }
     }
 }

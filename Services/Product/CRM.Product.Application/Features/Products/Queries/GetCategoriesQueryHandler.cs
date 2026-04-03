@@ -25,23 +25,23 @@ namespace CRM.Product.Application.Features.Products.Queries
             
             var allDtos = categories.Select(x => new CategoryDto
             {
-                Id = x.id,
-                ParentId = x.parent_id,
-                Name = x.name,
-                IsActive = true,
-                IconUrl = x.icon_url,
-                MaterializedPath = x.materialized_path,
-                SeoTitle = x.seo_title
+                id = x.id,
+                parent_id = x.parent_id,
+                name = x.name,
+                is_active = x.is_active,
+                icon_url = x.icon_url,
+                materialized_path = x.materialized_path,
+                seo_title = x.seo_title
             }).ToList();
 
             // Build hierarchy
-            var lookup = allDtos.ToLookup(x => x.ParentId);
+            var lookup = allDtos.ToLookup(x => x.parent_id);
             foreach (var dto in allDtos)
             {
-                dto.Children = lookup[dto.Id].ToList();
+                dto.children = lookup[dto.id].ToList();
             }
 
-            return allDtos.Where(x => x.ParentId == null);
+            return allDtos.Where(x => x.parent_id == null).ToList();
         }
     }
 }

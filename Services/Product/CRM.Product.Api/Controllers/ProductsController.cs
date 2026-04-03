@@ -51,13 +51,13 @@ namespace CRM.Product.Api.Controllers
                     items = result.Items.Select(x => new
                     {
                         id = x.id,
-                        media_url = x.image_url,
-                        variant_name = x.item_name,
-                        sku_code = x.sku,
+                        media_url = x.media_url,
+                        variant_name = x.variant_name,
+                        sku_code = x.sku_code,
                         category_id = x.category_id,
-                        sale_price = x.price ?? 0,
+                        sale_price = x.sale_price ?? 0,
                         warehouse_id = x.warehouse_id,
-                        qty_on_hand = x.stock_qty ?? 0,
+                        qty_on_hand = x.qty_on_hand ?? 0,
                         uom_id = x.uom_id,
                         barcode = x.barcode,
                         product_type = x.product_type

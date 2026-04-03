@@ -32,14 +32,14 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public List<ProductVariantDto> variants { get; set; } = new List<ProductVariantDto>();
 
         // Extra fields for List
-        public string? image_url { get; set; }
-        public string? item_name { get; set; }
+        public string? media_url { get; set; }
+        public string? variant_name { get; set; }
         public Guid? category_id { get; set; }
         public string? category_name { get; set; }
-        public string? sku { get; set; }
+        public string? sku_code { get; set; }
         public string? barcode { get; set; }
-        public decimal? price { get; set; }
-        public decimal? stock_qty { get; set; }
+        public decimal? sale_price { get; set; }
+        public decimal? qty_on_hand { get; set; }
         public string? unit_name { get; set; }
         public string? location_name { get; set; }
         public Guid? warehouse_id { get; set; }

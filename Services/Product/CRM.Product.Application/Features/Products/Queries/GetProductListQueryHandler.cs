@@ -55,7 +55,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 
                 var statusItem = p?.status;
                 var translation = statusItem?.translations.FirstOrDefault(t => t.locale_id == localeId);
-                var statusText = translation?.name ?? statusItem?.status_code;
+                var statusText = translation?.name ?? statusItem?.code;
 
                 // Inventory summing for the specific variant
                 var inventoryItems = v.inventory_items;
@@ -76,7 +76,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                     product_type = p?.product_type ?? 1,
                     status_id = p?.status_id,
                     status_text = statusText,
-                    status_code = statusItem?.status_code,
+                    status_code = statusItem?.code,
                     media_url = primaryMedia?.media_url,
                     variant_name = v.variant_name ?? p?.name ?? "",
                     category_id = primaryCategory?.category_id,

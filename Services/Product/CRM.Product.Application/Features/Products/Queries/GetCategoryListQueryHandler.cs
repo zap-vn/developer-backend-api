@@ -48,6 +48,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 meta_title = x.meta_title,
                 meta_description = x.meta_description,
                 status_id = x.status_id,
+                status_text = x.status?.code,
                 is_active = x.is_active,
                 seo_title = x.seo_title,
                 seo_description = x.seo_description

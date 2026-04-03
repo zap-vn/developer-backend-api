@@ -31,7 +31,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
 
         public async Task<(IEnumerable<Category> Items, int Total)> GetPagedAsync(int page, int pageSize, Guid? tenantId = null, string? search = null)
         {
-            var query = _context.Categories.AsNoTracking().AsQueryable();
+            var query = _context.Categories.AsNoTracking().Include(x => x.status).AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
             {

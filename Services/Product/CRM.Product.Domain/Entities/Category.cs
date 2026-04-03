@@ -58,6 +58,9 @@ namespace CRM.Product.Domain.Entities
         // Navigation properties (Renamed to avoid EF conventions)
         [ForeignKey("parent_id")]
         public Category? parent_category { get; set; }
+
+        [ForeignKey("status_id")]
+        public StatusItem? status { get; set; }
         
         public ICollection<Category> sub_categories { get; set; } = new List<Category>();
         

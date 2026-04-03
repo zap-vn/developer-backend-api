@@ -67,7 +67,7 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
                 entity.Property(e => e.brand_id).HasColumnName("brand_id");
-                entity.Property(e => e.product_type).HasColumnName("product_type");
+                entity.Property(e => e.product_type).HasColumnName("product_type_id");
                 entity.Property(e => e.name).HasColumnName("name");
                 entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
                 entity.Property(e => e.short_description).HasColumnName("short_description");
@@ -167,7 +167,7 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.ToTable("status_item", "platform");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
-                entity.Property(e => e.status_code).HasColumnName("code");
+                entity.Property(e => e.code).HasColumnName("code");
                 
                 entity.HasMany(e => e.translations)
                     .WithOne(t => t.status_item)
@@ -223,15 +223,19 @@ namespace CRM.Product.Infrastructure.Persistence
                     .HasForeignKey(e => e.warehouse_id);
             });
 
-            modelBuilder.Entity<CategoryEntity>(entity => 
-            { 
-                entity.ToTable("category", "catalog"); 
-                entity.HasKey(e => e.id); 
+            modelBuilder.Entity<CategoryEntity>(entity =>
+            {
+                entity.ToTable("category", "catalog");
+                entity.HasKey(e => e.id);
 
                 // Explicitly link parent_id to avoid shadow properties like Parentid
                 entity.HasOne(e => e.parent_category)
                     .WithMany(e => e.sub_categories)
                     .HasForeignKey(e => e.parent_id);
+
+                entity.HasOne(e => e.status)
+                    .WithMany()
+                    .HasForeignKey(e => e.status_id);
             });
             modelBuilder.Entity<BomHeaderEntity>(entity =>
             {

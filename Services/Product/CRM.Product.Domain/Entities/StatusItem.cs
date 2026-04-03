@@ -14,7 +14,7 @@ namespace CRM.Product.Domain.Entities
 
         
         [Column("code")]
-        public string? status_code { get; set; }
+        public string? code { get; set; }
 
         public ICollection<StatusItemTranslation> translations { get; set; } = new List<StatusItemTranslation>();
     }

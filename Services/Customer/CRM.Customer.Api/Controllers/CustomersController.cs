@@ -27,11 +27,23 @@ namespace CRM.Customer.Api.Controllers
         }
 
         [HttpPost("list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List([FromBody] FilterDTOs filter)
         {
-            var filter = await Request.GetRawBodyAsync<FilterDTOs>();
             var result = await _mediator.Send(new GetCustomerListQuery { Filter = filter });
-            return Ok(result);
+            return Ok(new 
+            {
+                success = true,
+                code = 200,
+                message = "OK",
+                data = new 
+                {
+                    total_page = (int)System.Math.Ceiling((double)result.TotalCount / result.PageSize),
+                    total_record = result.TotalCount,
+                    page_index = result.CurrentPage,
+                    page_size = result.PageSize,
+                    items = result.Items
+                }
+            });
         }
 
         [HttpGet("{id}")]

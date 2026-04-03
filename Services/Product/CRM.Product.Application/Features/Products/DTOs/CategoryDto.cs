@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -6,35 +7,23 @@ namespace CRM.Product.Application.Features.Products.DTOs
 {
     public class CategoryDto
     {
-        [JsonPropertyName("id")]
-        public Guid Id { get; set; }
-
-        [JsonPropertyName("parent_id")]
-        public Guid? ParentId { get; set; }
-
-
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
-
-        [JsonPropertyName("is_active")]
-        public bool IsActive { get; set; }
-
-        [JsonPropertyName("icon_url")]
-        public string? IconUrl { get; set; }
-
-        [JsonPropertyName("materialized_path")]
-        public string? MaterializedPath { get; set; }
-
-        [JsonPropertyName("seo_title")]
-        public string? SeoTitle { get; set; }
-
-        [JsonPropertyName("channels")]
-        public string[]? Channels { get; set; }
-
-        [JsonPropertyName("item_count")]
-        public int ItemCount { get; set; }
-
-        [JsonPropertyName("children")]
-        public List<CategoryDto> Children { get; set; } = new();
+        public Guid id { get; set; }
+        public Guid? parent_id { get; set; }
+        public string? legacy_id { get; set; }
+        public string? materialized_path { get; set; }
+        public string name { get; set; } = string.Empty;
+        public string? slug { get; set; }
+        public string? icon_url { get; set; }
+        public string? banner_url { get; set; }
+        public int sort_order { get; set; }
+        public string? meta_title { get; set; }
+        public string? meta_description { get; set; }
+        public int? status_id { get; set; }
+        public bool is_active { get; set; }
+        public string? seo_title { get; set; }
+        public string? seo_description { get; set; }
+        public string[]? channels { get; set; }
+        public int item_count { get; set; }
+        public List<CategoryDto> children { get; set; } = new();
     }
 }

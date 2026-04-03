@@ -36,13 +36,21 @@ namespace CRM.Product.Application.Features.Products.Queries
 
             var dtos = items.Select(x => new CategoryDto
             {
-                Id = x.id,
-                ParentId = x.parent_id,
-                Name = x.name,
-                IsActive = true,
-                IconUrl = x.icon_url,
-                MaterializedPath = x.materialized_path,
-                SeoTitle = x.seo_title
+                id = x.id,
+                parent_id = x.parent_id,
+                legacy_id = x.legacy_id,
+                materialized_path = x.materialized_path,
+                name = x.name,
+                slug = x.slug,
+                icon_url = x.icon_url,
+                banner_url = x.banner_url,
+                sort_order = x.sort_order ?? 0,
+                meta_title = x.meta_title,
+                meta_description = x.meta_description,
+                status_id = x.status_id,
+                is_active = x.is_active,
+                seo_title = x.seo_title,
+                seo_description = x.seo_description
             }).ToList();
 
             return new PagedResult<CategoryDto>(dtos, total, request.Request.PageIndex, request.Request.PageSize);

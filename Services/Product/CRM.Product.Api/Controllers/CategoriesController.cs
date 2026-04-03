@@ -30,7 +30,11 @@ namespace CRM.Product.Api.Controllers
                 data = new 
                 {
                     items = result.Items,
-                    total = result.TotalCount
+                    total = result.TotalCount,
+                    total_page = result.PageSize > 0 ? (int)System.Math.Ceiling(result.TotalCount / (double)result.PageSize) : 1,
+                    total_record = result.TotalCount,
+                    page_index = result.CurrentPage,
+                    page_size = result.PageSize
                 }
             });
         }

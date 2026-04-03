@@ -103,7 +103,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 .Include(v => v.inventory_items.Where(ii => !warehouseId.HasValue || ii.warehouse_id == warehouseId))
                     .ThenInclude(i => i.Warehouse)
                 .Include(v => v.product)
-                    .ThenInclude(p => p!.category_mappings.Where(cm => cm.is_primary))
+                    .ThenInclude(p => p!.category_mappings)
                         .ThenInclude(cm => cm.category)
                 .Include(v => v.product)
                     .ThenInclude(p => p!.status)

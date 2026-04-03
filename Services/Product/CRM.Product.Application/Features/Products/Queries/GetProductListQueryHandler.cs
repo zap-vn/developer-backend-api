@@ -76,6 +76,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                     product_type = p?.product_type ?? 1,
                     status_id = p?.status_id,
                     status_text = statusText,
+                    status_code = statusItem?.status_code,
                     media_url = primaryMedia?.media_url,
                     variant_name = v.variant_name ?? p?.name ?? "",
                     category_id = primaryCategory?.category_id,

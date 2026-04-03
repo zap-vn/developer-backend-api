@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CRM.Customer.Application\CRM.Customer.Application.csproj" />
     <ProjectReference Include="..\CRM.Customer.Infrastructure\CRM.Customer.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Shared\BuildingBlocks\CRM.BuildingBlocks\CRM.BuildingBlocks.csproj" />
   </ItemGroup>
 
 </Project>

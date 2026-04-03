@@ -11,6 +11,7 @@ using StatusItemEntity = CRM.Product.Domain.Entities.StatusItem;
 using StatusTranslationEntity = CRM.Product.Domain.Entities.StatusItemTranslation;
 using WarehouseEntity = CRM.Product.Domain.Entities.Warehouse;
 using UomItemEntity = CRM.Product.Domain.Entities.UomItem;
+using CRM.Product.Domain.Entities;
 using InventoryItemEntity = CRM.Product.Domain.Entities.InventoryItem;
 
 namespace CRM.Product.Infrastructure.Persistence
@@ -34,9 +35,29 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<WarehouseEntity> Warehouses { get; set; }
         public DbSet<UomItemEntity> UomItems { get; set; }
         public DbSet<InventoryItemEntity> InventoryItems { get; set; }
+        
+        // --- Catalog Menu System ---
+        public DbSet<MenuHeader> MenuHeaders { get; set; }
+        public DbSet<MenuSection> MenuSections { get; set; }
+        public DbSet<MenuAvailabilitySchedule> MenuSchedules { get; set; }
+        public DbSet<MenuItemHd> MenuItems { get; set; }
+        public DbSet<MenuPriceOverride> MenuPriceOverrides { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<MenuItemHd>(entity =>
+            {
+                entity.ToTable("menu_item_hd", "catalog");
+                entity.HasKey(e => e.id);
+                entity.HasOne(e => e.variant).WithMany().HasForeignKey(e => e.product_variant_id);
+            });
+
+            modelBuilder.Entity<MenuPriceOverride>(entity =>
+            {
+                entity.ToTable("menu_price_override", "catalog");
+                entity.HasKey(e => e.id);
+                entity.HasOne(e => e.variant).WithMany().HasForeignKey(e => e.product_variant_id);
+            });
             modelBuilder.Entity<ProductEntity>(entity =>
             {
                 entity.ToTable("product", "catalog");

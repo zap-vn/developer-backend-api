@@ -96,38 +96,35 @@ try {
         var dbContext = scope.ServiceProvider.GetRequiredService<CRM.Authentication.Infrastructure.Persistence.PostgresDbContext>();
         try
         {
+            // Block 1: Schema & Sequences
             await dbContext.Database.ExecuteSqlRawAsync(@"
                 CREATE SCHEMA IF NOT EXISTS identity;
+                CREATE SEQUENCE IF NOT EXISTS identity.customer_id START 1;
+            ");
 
+            // Block 2: Fundamental Tables
+            await dbContext.Database.ExecuteSqlRawAsync(@"
                 CREATE TABLE IF NOT EXISTS identity.locale (
                     id   INT PRIMARY KEY,
                     name VARCHAR(128) NOT NULL
                 );
-
                 INSERT INTO identity.locale (id, name) VALUES (0, 'Unknown'), (1, 'vi-VN'), (2, 'en-US'), (3, 'th-TH'), (4, 'id-ID'), (5, 'ms-MY'), (6, 'zh-CN'), (7, 'zh-TW'), (8, 'ja-JP'), (9, 'ko-KR'), (10, 'lo-LA') ON CONFLICT (id) DO NOTHING;
 
                 CREATE TABLE IF NOT EXISTS identity.language (
                     id   INT PRIMARY KEY,
                     name VARCHAR(128) NOT NULL
                 );
-
                 INSERT INTO identity.language (id, name) VALUES (0, 'Unknown'), (1, 'Vietnamese'), (2, 'English'), (3, 'Thai'), (4, 'Indonesian'), (5, 'Malay'), (6, 'Chinese'), (7, 'Taiwanese'), (8, 'Japanese'), (9, 'Korean'), (10, 'Lao') ON CONFLICT (id) DO NOTHING;
 
                 CREATE TABLE IF NOT EXISTS identity.status (
                     id   INT PRIMARY KEY,
                     name VARCHAR(128) NOT NULL
                 );
+                INSERT INTO identity.status (id, name) VALUES (1, 'PENDING'), (50, 'ACTIVE'), (99, 'SUSPENDED'), (9001, 'ACTIVE_USER'), (9002, 'LOCKED'), (9003, 'PENDING_MFA'), (9101, 'ACTIVE_KEY') ON CONFLICT (id) DO NOTHING;
+            ");
 
-                INSERT INTO identity.status (id, name) VALUES 
-                    (1, 'PENDING'), 
-                    (50, 'ACTIVE'), 
-                    (99, 'SUSPENDED'), 
-                    (9001, 'ACTIVE_USER'), 
-                    (9002, 'LOCKED'), 
-                    (9003, 'PENDING_MFA'), 
-                    (9101, 'ACTIVE_KEY') 
-                ON CONFLICT (id) DO NOTHING;
-
+            // Block 3: Tenant & User Tables (with constraint fixes)
+            await dbContext.Database.ExecuteSqlRawAsync(@"
                 CREATE TABLE IF NOT EXISTS identity.tenant_node (
                     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                     parent_id       UUID,
@@ -147,37 +144,17 @@ try {
                     CONSTRAINT fk_tenant_node_parent FOREIGN KEY (parent_id) REFERENCES identity.tenant_node(id)
                 );
                 
-                -- Aggressively fix the Foreign Key
                 DO $$ BEGIN
-                    -- First drop if exists
                     IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenant_node_locale_id_fkey') THEN
                         ALTER TABLE identity.tenant_node DROP CONSTRAINT tenant_node_locale_id_fkey;
                     END IF;
-                    
-                    -- Re-add pointing to our table
                     ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_locale_id_fkey FOREIGN KEY (locale_id) REFERENCES identity.locale(id);
                     
-                    -- Handle status_id constraint if it exists
                     IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenant_node_status_id_fkey') THEN
                         ALTER TABLE identity.tenant_node DROP CONSTRAINT tenant_node_status_id_fkey;
                     END IF;
                     ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_status_id_fkey FOREIGN KEY (status_id) REFERENCES identity.status(id);
                 END $$;
-
-                -- Seed hierarchical sample data (Unified Node Architecture)
-                INSERT INTO identity.tenant_node (node_code, tier_level, name, slug, status_id)
-                VALUES ('L1_ZAP_FASHION', 1, 'ZAP Fashion Holding', 'zap-fashion', 50)
-                ON CONFLICT (node_code) DO NOTHING;
-
-                INSERT INTO identity.tenant_node (node_code, parent_id, tier_level, name, slug, status_id)
-                SELECT 'L2_ZAP_PREMIUM', id, 2, 'ZAP Premium Brand', 'zap-premium', 50
-                FROM identity.tenant_node WHERE node_code = 'L1_ZAP_FASHION'
-                ON CONFLICT (node_code) DO NOTHING;
-
-                INSERT INTO identity.tenant_node (node_code, parent_id, tier_level, name, slug, status_id)
-                SELECT 'L6_PREM_Q1', id, 6, 'Showroom Quận 1', 'showroom-q1', 50
-                FROM identity.tenant_node WHERE node_code = 'L2_ZAP_PREMIUM'
-                ON CONFLICT (node_code) DO NOTHING;
 
                 CREATE TABLE IF NOT EXISTS identity.user (
                     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -192,14 +169,16 @@ try {
                     updated_at      TIMESTAMPTZ DEFAULT now()
                 );
 
-                -- Aggressively fix the Foreign Key for user status
                 DO $$ BEGIN
                     IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_status_id_fkey') THEN
                         ALTER TABLE identity.user DROP CONSTRAINT user_status_id_fkey;
                     END IF;
                     ALTER TABLE identity.user ADD CONSTRAINT user_status_id_fkey FOREIGN KEY (status_id) REFERENCES identity.status(id);
                 END $$;
+            ");
 
+            // Block 4: Other tables
+            await dbContext.Database.ExecuteSqlRawAsync(@"
                 CREATE TABLE IF NOT EXISTS identity.user_role_scope (
                     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                     user_id     UUID REFERENCES identity.user(id),
@@ -265,14 +244,30 @@ try {
                     merchant_name VARCHAR(255),
                     created_at    TIMESTAMPTZ DEFAULT now()
                 );
-
-                CREATE SEQUENCE IF NOT EXISTS identity.customer_id START 1;
             ");
-            Console.WriteLine("✅ Database schema initialized.");
+
+            // Block 5: Seed hierarchical data (Optional/Independent)
+            try {
+                await dbContext.Database.ExecuteSqlRawAsync(@"
+                    INSERT INTO identity.tenant_node (node_code, tier_level, name, slug, status_id)
+                    VALUES ('L1_ZAP_FASHION', 1, 'ZAP Fashion Holding', 'zap-fashion', 50) ON CONFLICT (node_code) DO NOTHING;
+
+                    INSERT INTO identity.tenant_node (node_code, parent_id, tier_level, name, slug, status_id)
+                    SELECT 'L2_ZAP_PREMIUM', id, 2, 'ZAP Premium Brand', 'zap-premium', 50
+                    FROM identity.tenant_node WHERE node_code = 'L1_ZAP_FASHION' ON CONFLICT (node_code) DO NOTHING;
+
+                    INSERT INTO identity.tenant_node (node_code, parent_id, tier_level, name, slug, status_id)
+                    SELECT 'L6_PREM_Q1', id, 6, 'Showroom Quận 1', 'showroom-q1', 50
+                    FROM identity.tenant_node WHERE node_code = 'L2_ZAP_PREMIUM' ON CONFLICT (node_code) DO NOTHING;
+                ");
+                Console.WriteLine("✅ Database schema initialized.");
+            } catch (Exception ex) {
+                Console.Error.WriteLine($"⚠️ Seed Data Warning: {ex.Message}");
+            }
         }
         catch (Exception dbEx)
         {
-            Console.Error.WriteLine($"⚠️ DB Init Warning: {dbEx.Message}");
+            Console.Error.WriteLine($"⚠️ DB Init Error: {dbEx.Message}");
         }
         
         // --- Added Diagnostic Check ---

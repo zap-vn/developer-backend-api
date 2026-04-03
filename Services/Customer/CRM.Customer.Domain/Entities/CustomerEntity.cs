@@ -74,6 +74,21 @@ namespace CRM.Customer.Domain.Entities
         public bool IsVerifyGoogle { get; set; } = false;
         public bool IsVerifyApple { get; set; } = false;
         
+        // --- Postgres Specific Fields ---
+        public Guid id { get; set; }
+        public Guid? tenant_id { get; set; }
+        public string? legacy_id { get; set; }
+        public string? phone_number { get; set; }
+        public string? full_name { get; set; }
+        public int? status_id { get; set; }
+        public int? tier_id { get; set; }
+        public Guid? group_id { get; set; }
+        public decimal? current_points_balance { get; set; }
+        public decimal? total_spent_amount { get; set; }
+
+        public virtual LoyaltyTier? loyalty_tier { get; set; }
+        // -------------------------------
+
         // Legacy fields for compilation if needed
         public string Name { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -22,6 +23,11 @@ namespace CRM.Customer.Infrastructure
             catch (BsonSerializationException) { }
 
             services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
+            
+            // PostgreSQL Context
+            services.AddDbContext<PostgresDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("PostgreSql")));
+
             services.AddScoped<ICustomerGroupRepository, CustomerGroupRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<MongoDbContext>();

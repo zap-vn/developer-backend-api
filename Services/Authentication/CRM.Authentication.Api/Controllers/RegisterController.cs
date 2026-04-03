@@ -117,7 +117,7 @@ namespace CRM.Authentication.Api.Controllers
         {
             var result = await _mediator.Send(command);
             
-            return Ok(new ApiResponse(true, 200, "Registration successful"));
+            return Ok(new ApiResponse(true, 200, "Registration successful", result));
         }
     }
 }

@@ -109,7 +109,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                             node_code = ("BR-" + merchantSlug.Replace("-", "_")).ToUpper(),
                             tier_level = 2, // 2: Brand
                             status_id = 50, // 50: ACTIVE
-                            locale_id = (int)langId, 
+                            locale_id = langId > 0 ? (int?)langId : null,
                             timezone = "Asia/Ho_Chi_Minh",
                             created_at = System.DateTime.UtcNow,
                             updated_at = System.DateTime.UtcNow
@@ -124,7 +124,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                     id = userId,
                     tenant_id = tenantNode?.id, 
                     legacy_id = customerIdStr, 
-                    username = (request.Email?.Trim() ?? "").ToLower(), 
+                    username = !string.IsNullOrEmpty(request.Email) ? request.Email.Trim().ToLower() : finalPhone, 
                     email = (request.Email?.Trim() ?? "").ToLower(),
                     full_name = string.IsNullOrWhiteSpace($"{request.FirstName} {request.LastName}") ? "SYSTEM_USER" : $"{request.FirstName} {request.LastName}".Trim(),
                     password_hash = HashLegacyPassword(request.Password),
@@ -139,7 +139,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                 await _userRepository.CommitTransactionAsync();
                 
                 // Managed Background Queue for Sync operations
-                _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
+                await _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
                 {
                     using var scope = _serviceScopeFactory.CreateScope();
                     var httpClient = _httpClientFactory.CreateClient();

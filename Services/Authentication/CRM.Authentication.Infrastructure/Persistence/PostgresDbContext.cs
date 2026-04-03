@@ -72,7 +72,14 @@ namespace CRM.Authentication.Infrastructure.Persistence
                 entity.Property(e => e.slug).HasColumnName("slug").IsRequired();
                 entity.Property(e => e.locale_id).HasColumnName("locale_id");
                 entity.Property(e => e.status_id).HasColumnName("status_id");
+                entity.Property(e => e.avatar_id).HasColumnName("avatar_id");
+                entity.Property(e => e.banner_id).HasColumnName("banner_id");
                 entity.Property(e => e.address_line_1).HasColumnName("address_line_1");
+                entity.Property(e => e.country_id).HasColumnName("country_id");
+                entity.Property(e => e.province_id).HasColumnName("province_id");
+                entity.Property(e => e.district_id).HasColumnName("district_id");
+                entity.Property(e => e.ward_id).HasColumnName("ward_id");
+                entity.Property(e => e.zipcode).HasColumnName("zipcode");
                 entity.Property(e => e.timezone).HasColumnName("timezone");
                 entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("now()");
                 entity.Property(e => e.updated_at).HasColumnName("updated_at").HasDefaultValueSql("now()");

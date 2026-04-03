@@ -54,7 +54,7 @@ namespace CRM.Authentication.Infrastructure.Persistence.Repositories
 
         public async Task<bool> MerchantNameExistsAsync(string merchantName)
         {
-            return await Task.FromResult(false);
+            return await _context.TenantNodes.AnyAsync(t => t.name == merchantName);
         }
 
         public async Task<bool> MerchantUrlExistsAsync(string merchantUrl)

@@ -139,7 +139,7 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
 
             _logger.LogInformation("[Login] TOTAL SUCCESS in {Elapsed}ms", sw.ElapsedMilliseconds);
             
-            var merchantId = user.id.ToString();
+            var merchantId = user.tenant_id?.ToString() ?? user.id.ToString();
 
             return new LoginResponseDto
             {

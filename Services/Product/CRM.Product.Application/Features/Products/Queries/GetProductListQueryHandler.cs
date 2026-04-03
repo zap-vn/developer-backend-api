@@ -85,7 +85,8 @@ namespace CRM.Product.Application.Features.Products.Queries
                     barcode = v.barcode,
                     sale_price = price,
                     qty_on_hand = stockQty,
-                    uom_id = v.bom_headers.FirstOrDefault()?.uom_id,
+                    uom_id = v.bom_headers.FirstOrDefault()?.uom_id ?? 
+                               (Guid.TryParse(System.Text.Json.JsonDocument.Parse(v.attributes ?? "{}").RootElement.TryGetProperty("uom_id", out var u) ? u.GetString() : null, out var ug) ? ug : (Guid?)null),
                     warehouse_id = firstInv?.warehouse_id,
                     location_name = firstInv?.Warehouse?.name,
                     created_at = p?.created_at ?? DateTime.UtcNow,

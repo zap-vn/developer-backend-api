@@ -141,7 +141,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<CategoryMappingEntity>(entity =>
             {
-                entity.ToTable("product_category_map", "catalog");
+                entity.ToTable("product_category_assignment", "catalog");
                 entity.HasKey(e => new { e.product_id, e.category_id });
                 entity.Property(e => e.product_id).HasColumnName("product_id");
                 entity.Property(e => e.category_id).HasColumnName("category_id");

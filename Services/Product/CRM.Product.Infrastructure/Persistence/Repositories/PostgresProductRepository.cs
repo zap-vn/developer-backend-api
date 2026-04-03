@@ -108,6 +108,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 .Include(v => v.product)
                     .ThenInclude(p => p!.status)
                         .ThenInclude(s => s!.translations.Where(t => t.locale_id == localeId))
+                .Include(v => v.bom_headers.Where(b => b.is_active))
                 .OrderByDescending(v => v.id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)

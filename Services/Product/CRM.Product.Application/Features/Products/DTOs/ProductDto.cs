@@ -34,6 +34,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         // Extra fields for List
         public string? image_url { get; set; }
         public string? item_name { get; set; }
+        public Guid? category_id { get; set; }
         public string? category_name { get; set; }
         public string? sku { get; set; }
         public string? barcode { get; set; }
@@ -42,6 +43,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public string? unit_name { get; set; }
         public string? location_name { get; set; }
         public Guid? warehouse_id { get; set; }
+        public Guid? uom_id { get; set; }
         public string? status_text { get; set; }
         public DateTime created_at { get; set; }
         public DateTime? updated_at { get; set; }

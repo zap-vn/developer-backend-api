@@ -13,6 +13,7 @@ using WarehouseEntity = CRM.Product.Domain.Entities.Warehouse;
 using UomItemEntity = CRM.Product.Domain.Entities.UomItem;
 using CRM.Product.Domain.Entities;
 using InventoryItemEntity = CRM.Product.Domain.Entities.InventoryItem;
+using BomHeaderEntity = CRM.Product.Domain.Entities.BomHeader;
 
 namespace CRM.Product.Infrastructure.Persistence
 {
@@ -35,6 +36,7 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<WarehouseEntity> Warehouses { get; set; }
         public DbSet<UomItemEntity> UomItems { get; set; }
         public DbSet<InventoryItemEntity> InventoryItems { get; set; }
+        public DbSet<BomHeaderEntity> BomHeaders { get; set; }
         
         // --- Catalog Menu System ---
         public DbSet<MenuHeader> MenuHeaders { get; set; }
@@ -120,6 +122,10 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.HasMany(e => e.inventory_items)
                     .WithOne(i => i.Variant)
                     .HasForeignKey(i => i.product_variant_id);
+
+                entity.HasMany(e => e.bom_headers)
+                    .WithOne(b => b.variant)
+                    .HasForeignKey(b => b.product_variant_id);
             });
 
             modelBuilder.Entity<ProductMediaEntity>(entity =>
@@ -227,6 +233,17 @@ namespace CRM.Product.Infrastructure.Persistence
                     .WithMany(e => e.sub_categories)
                     .HasForeignKey(e => e.parent_id);
             });
+            modelBuilder.Entity<BomHeaderEntity>(entity =>
+            {
+                entity.ToTable("bom_header", "catalog");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
+                entity.Property(e => e.product_variant_id).HasColumnName("product_variant_id");
+                entity.Property(e => e.uom_id).HasColumnName("uom_id");
+                entity.Property(e => e.is_active).HasColumnName("is_active");
+            });
+
             modelBuilder.Entity<BrandEntity>(entity => { entity.ToTable("brand", "catalog"); entity.HasKey(e => e.id); });
             modelBuilder.Entity<ModifierGroupEntity>(entity => { entity.ToTable("modifier_group", "catalog"); entity.HasKey(e => e.id); });
         }

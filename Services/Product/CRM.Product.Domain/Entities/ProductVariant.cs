@@ -24,6 +24,7 @@ namespace CRM.Product.Domain.Entities
         public ICollection<ProductMedia> media { get; set; } = new List<ProductMedia>();
         public ICollection<ProductLocationPricing> location_pricing { get; set; } = new List<ProductLocationPricing>();
         public ICollection<InventoryItem> inventory_items { get; set; } = new List<InventoryItem>();
+        public ICollection<BomHeader> bom_headers { get; set; } = new List<BomHeader>();
     }
 }
 

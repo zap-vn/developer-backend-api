@@ -51,19 +51,16 @@ namespace CRM.Product.Api.Controllers
                     items = result.Items.Select(x => new
                     {
                         id = x.id,
-                        image = x.image_url,
-                        item_name = x.item_name,
-                        sku = x.sku,
-                        barcode = x.barcode,
-                        product_type = x.product_type,
-                        category_name = x.category_name,
-                        price = x.price,
+                        media_url = x.image_url,
+                        variant_name = x.item_name,
+                        sku_code = x.sku,
+                        category_id = x.category_id,
+                        sale_price = x.price ?? 0,
                         warehouse_id = x.warehouse_id,
-                        location_name = x.location_name,
-                        stock = x.stock_qty ?? 0,
-                        unit_name = x.unit_name,
-                        status_id = x.status_id ?? 0,
-                        status_text = x.status_text
+                        qty_on_hand = x.stock_qty ?? 0,
+                        uom_id = x.uom_id,
+                        barcode = x.barcode,
+                        product_type = x.product_type
                     }).ToList()
                 }
             });

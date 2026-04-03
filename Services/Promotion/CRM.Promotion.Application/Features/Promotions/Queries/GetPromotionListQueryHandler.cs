@@ -8,7 +8,7 @@ using CRM.Promotion.Domain.Interfaces;
 
 namespace CRM.Promotion.Application.Features.Promotions.Queries
 {
-    public class GetPromotionListQueryHandler : IRequestHandler<GetPromotionListQuery, PagedResult<PromotionDto>>
+    public class GetPromotionListQueryHandler : IRequestHandler<GetPromotionListQuery, PagedResult<PromotionListDto>>
     {
         private readonly IPromotionRepository _repository;
 
@@ -17,24 +17,21 @@ namespace CRM.Promotion.Application.Features.Promotions.Queries
             _repository = repository;
         }
 
-        public async Task<PagedResult<PromotionDto>> Handle(GetPromotionListQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<PromotionListDto>> Handle(GetPromotionListQuery request, CancellationToken cancellationToken)
         {
-            // Simple mock implementation for template setup
-            // In a real scenario, this would apply the filters map to DTO
             var list = await _repository.GetAllAsync();
-            var dtos = list.Select(x => new PromotionDto 
-            { 
-                Id = x.Id.ToString(),
-                Code = x.Code,
-                Title = x.Title,
-                Description = x.Description,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                DiscountValue = x.DiscountValue,
-                DiscountType = x.DiscountType
+            var dtos = list.Select(x => new PromotionListDto
+            {
+                id = Guid.TryParse(x.Id, out var gid) ? gid : Guid.Empty,
+                name = x.Title ?? x.Code,
+                discount_type = x.DiscountType,
+                discount_value = x.DiscountValue,
+                start_date = x.StartDate,
+                end_date = x.EndDate,
+                status = "Active"
             }).ToList();
 
-            return new PagedResult<PromotionDto>(dtos, dtos.Count, request.Filter.PageIndex, request.Filter.PageSize);
+            return new PagedResult<PromotionListDto>(dtos, dtos.Count, request.Filter.PageIndex, request.Filter.PageSize);
         }
     }
 }

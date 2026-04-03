@@ -78,6 +78,7 @@ namespace CRM.Customer.Domain.Entities
         public Guid id { get; set; }
         public Guid? tenant_id { get; set; }
         public string? legacy_id { get; set; }
+        public string? email { get; set; }
         public string? phone_number { get; set; }
         public string? full_name { get; set; }
         public int? status_id { get; set; }

@@ -15,8 +15,6 @@ namespace CRM.Customer.Domain.Entities
     [BsonIgnoreExtraElements]
     public class CustomerEntity : BaseEntity, ILocalizable<CustomerTranslation>
     {
-        [BsonId]
-        public string _id { get; set; } = string.Empty;
         public long _key { get; set; }
         public string _rev { get; set; } = string.Empty;
         public string BusinessName { get; set; } = string.Empty;
@@ -81,6 +79,15 @@ namespace CRM.Customer.Domain.Entities
         public string? email { get; set; }
         public string? phone_number { get; set; }
         public string? full_name { get; set; }
+        public string? gender { get; set; }
+        public DateTime? birth_date { get; set; }
+        public int? country_id { get; set; }
+        public int? province_id { get; set; }
+        public int? district_id { get; set; }
+        public int? ward_id { get; set; }
+        public string? zipcode { get; set; }
+        public int? preferred_locale_id { get; set; }
+        public Guid? user_id { get; set; }
         public int? status_id { get; set; }
         public int? tier_id { get; set; }
         public Guid? group_id { get; set; }

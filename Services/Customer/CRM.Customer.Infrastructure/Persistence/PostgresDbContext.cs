@@ -27,13 +27,32 @@ namespace CRM.Customer.Infrastructure.Persistence
                 entity.Property(e => e.phone_number).HasColumnName("phone_number");
                 entity.Property(e => e.email).HasColumnName("email");
                 entity.Property(e => e.full_name).HasColumnName("full_name");
+                entity.Property(e => e.gender).HasColumnName("gender");
+                entity.Property(e => e.birth_date).HasColumnName("birth_date");
+                entity.Property(e => e.country_id).HasColumnName("country_id");
+                entity.Property(e => e.province_id).HasColumnName("province_id");
+                entity.Property(e => e.district_id).HasColumnName("district_id");
+                entity.Property(e => e.ward_id).HasColumnName("ward_id");
+                entity.Property(e => e.zipcode).HasColumnName("zipcode");
+                entity.Property(e => e.preferred_locale_id).HasColumnName("preferred_locale_id");
+                entity.Property(e => e.user_id).HasColumnName("user_id");
                 entity.Property(e => e.status_id).HasColumnName("status_id");
                 entity.Property(e => e.tier_id).HasColumnName("tier_id");
                 entity.Property(e => e.group_id).HasColumnName("group_id");
+                entity.Property(e => e.current_points_balance).HasColumnName("current_points_balance");
+                entity.Property(e => e.total_spent_amount).HasColumnName("total_spent_amount");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
 
                 entity.HasOne(e => e.loyalty_tier)
                     .WithMany(t => t.customers)
                     .HasForeignKey(e => e.tier_id);
+
+                entity.Ignore(e => e.Id);
+                entity.Ignore(e => e.UserGuid);
+                entity.Ignore(e => e.CreatedBy);
+                entity.Ignore(e => e.UpdatedBy);
+                entity.Ignore(e => e.IsDeleted);
             });
 
             modelBuilder.Entity<LoyaltyTier>(entity =>

@@ -54,7 +54,9 @@ namespace CRM.Product.Api.Controllers
                         cate_name = x.category_name ?? "TBD",
                         name = x.variant_name ?? x.name,
                         price = x.sale_price ?? 0,
-                        status = x.status_code ?? (x.status_id?.ToString() ?? "129")
+                        status = x.status_code ?? (x.status_id?.ToString() ?? "129"),
+                        warehouse_id = x.warehouse_id,
+                        warehouse_name = x.location_name
                     }).ToList()
                 }
             });

@@ -22,6 +22,7 @@ namespace CRM.Product.Api.Controllers
         }
 
         [HttpPost("list")]
+        [Consumes("application/json")]
         public async Task<IActionResult> List([FromBody] UnitListRequestDto requestBody)
         {
             var result = await _mediator.Send(new GetUnitsQuery { Request = requestBody });

@@ -22,6 +22,7 @@ namespace CRM.Product.Api.Controllers
         }
 
         [HttpPost("list")]
+        [Consumes("application/json")]
         public async Task<IActionResult> List([FromBody] ModifierGroupListRequestDto requestBody)
         {
             var result = await _mediator.Send(new GetModifierGroupsQuery { Request = requestBody });

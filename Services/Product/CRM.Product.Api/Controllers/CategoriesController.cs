@@ -20,6 +20,7 @@ namespace CRM.Product.Api.Controllers
         }
 
         [HttpPost("list")]
+        [Consumes("application/json")]
         public async Task<IActionResult> List([FromBody] CategoryListRequestDto requestBody)
         {
             var result = await _mediator.Send(new GetCategoryListQuery { Request = requestBody });

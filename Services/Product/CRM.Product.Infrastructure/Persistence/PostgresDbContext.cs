@@ -67,7 +67,7 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
                 entity.Property(e => e.brand_id).HasColumnName("brand_id");
-                entity.Property(e => e.product_type).HasColumnName("product_type_id");
+                entity.Property(e => e.product_type).HasColumnName("product_type");
                 entity.Property(e => e.name).HasColumnName("name");
                 entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
                 entity.Property(e => e.short_description).HasColumnName("short_description");

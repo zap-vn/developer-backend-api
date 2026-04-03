@@ -167,7 +167,7 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.ToTable("status_item", "platform");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
-                entity.Property(e => e.status_code).HasColumnName("status_code");
+                entity.Property(e => e.status_code).HasColumnName("code");
                 
                 entity.HasMany(e => e.translations)
                     .WithOne(t => t.status_item)

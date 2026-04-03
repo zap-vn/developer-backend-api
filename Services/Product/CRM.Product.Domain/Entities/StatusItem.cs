@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,7 @@ namespace CRM.Product.Domain.Entities
         public int id { get; set; }
 
         
-        [Column("status_code")]
+        [Column("code")]
         public string? status_code { get; set; }
 
         public ICollection<StatusItemTranslation> translations { get; set; } = new List<StatusItemTranslation>();

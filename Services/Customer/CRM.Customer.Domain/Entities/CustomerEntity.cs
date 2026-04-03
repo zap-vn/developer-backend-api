@@ -73,27 +73,48 @@ namespace CRM.Customer.Domain.Entities
         public bool IsVerifyApple { get; set; } = false;
         
         // --- Postgres Specific Fields ---
+        [BsonIgnore]
         public Guid id { get; set; }
+        [BsonIgnore]
         public Guid? tenant_id { get; set; }
+        [BsonIgnore]
         public string? legacy_id { get; set; }
+        [BsonIgnore]
         public string? email { get; set; }
+        [BsonIgnore]
         public string? phone_number { get; set; }
+        [BsonIgnore]
         public string? full_name { get; set; }
+        [BsonIgnore]
         public string? gender { get; set; }
+        [BsonIgnore]
         public DateTime? birth_date { get; set; }
+        [BsonIgnore]
         public int? country_id { get; set; }
+        [BsonIgnore]
         public int? province_id { get; set; }
+        [BsonIgnore]
         public int? district_id { get; set; }
+        [BsonIgnore]
         public int? ward_id { get; set; }
+        [BsonIgnore]
         public string? zipcode { get; set; }
+        [BsonIgnore]
         public int? preferred_locale_id { get; set; }
+        [BsonIgnore]
         public Guid? user_id { get; set; }
+        [BsonIgnore]
         public int? status_id { get; set; }
+        [BsonIgnore]
         public int? tier_id { get; set; }
+        [BsonIgnore]
         public Guid? group_id { get; set; }
+        [BsonIgnore]
         public decimal? current_points_balance { get; set; }
+        [BsonIgnore]
         public decimal? total_spent_amount { get; set; }
 
+        [BsonIgnore]
         public virtual LoyaltyTier? loyalty_tier { get; set; }
         // -------------------------------
 

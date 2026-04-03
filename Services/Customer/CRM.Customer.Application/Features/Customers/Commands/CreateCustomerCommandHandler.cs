@@ -20,7 +20,7 @@ namespace CRM.Customer.Application.Features.Customers.Commands
         {
             var entity = new CustomerEntity
             {
-                _id = request._id,
+                Id = request._id,
                 _key = request._key,
                 BusinessName = request.BusinessName,
                 MerchantName = request.MerchantName,
@@ -47,7 +47,7 @@ namespace CRM.Customer.Application.Features.Customers.Commands
             };
 
             await _repository.CreateAsync(entity);
-            return entity._id;
+            return entity.Id;
         }
     }
 }

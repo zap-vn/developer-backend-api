@@ -11,6 +11,23 @@ steps:
     args:
       - 'push'
       - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-promotion-api:latest'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'zapcrm-promotion-api'
+      - '--image'
+      - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-promotion-api:latest'
+      - '--region'
+      - 'asia-southeast1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+      - '--set-env-vars'
+      - 'MongoSettings__ConnectionString=mongodb://tommy_db_user:Tommy123456@ac-ewrdepk-shard-00-00.dcuwhnu.mongodb.net:27017,ac-ewrdepk-shard-00-01.dcuwhnu.mongodb.net:27017,ac-ewrdepk-shard-00-02.dcuwhnu.mongodb.net:27017/SinglePoint_en?ssl=true&authSource=admin&retryWrites=true&w=majority,MongoSettings__DatabaseName=SinglePoint_en,ASPNETCORE_ENVIRONMENT=Production,Jwt__Secret=a_very_secret_default_key_at_least_32_chars_long_1234567890,Jwt__Issuer=CRM.Authentication.Api,Jwt__Audience=CRM.GateWay.Api'
 
 images:
   - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-promotion-api:latest'

@@ -139,7 +139,7 @@ try {
                         name            VARCHAR(255) NOT NULL,
                         slug            VARCHAR(128) NOT NULL,
                         locale_id       INT DEFAULT 1,
-                        status_id       INT DEFAULT 50,
+                        status_id       INT DEFAULT 9001,
                         address_line_1  VARCHAR(255),
                         timezone        VARCHAR(64) DEFAULT 'Asia/Ho_Chi_Minh',
                         created_at      TIMESTAMPTZ DEFAULT now(),

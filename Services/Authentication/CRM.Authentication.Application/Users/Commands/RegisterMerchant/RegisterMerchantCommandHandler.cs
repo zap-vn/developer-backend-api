@@ -108,7 +108,7 @@ namespace CRM.Authentication.Application.Users.Commands.RegisterMerchant
                             legacy_id = customerIdStr, // Unified legacy_id
                             node_code = ("BR-" + merchantSlug.Replace("-", "_")).ToUpper(),
                             tier_level = 2, // 2: Brand
-                            status_id = 50, // 50: ACTIVE
+                            status_id = 9001, // 9001: ACTIVE (platform.status_item)
                             locale_id = langId > 0 ? (int?)langId : null,
                             timezone = "Asia/Ho_Chi_Minh",
                             created_at = System.DateTime.UtcNow,

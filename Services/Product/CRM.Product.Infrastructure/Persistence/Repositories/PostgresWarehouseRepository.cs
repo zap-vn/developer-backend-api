@@ -57,6 +57,8 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         public async Task<Warehouse?> GetByIdAsync(Guid id)
         {
             return await _context.Warehouses
+                .Include(x => x.location_type)
+                .Include(x => x.status)
                 .FirstOrDefaultAsync(w => w.id == id);
         }
 

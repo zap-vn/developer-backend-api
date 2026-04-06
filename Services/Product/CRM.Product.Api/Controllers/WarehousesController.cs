@@ -40,6 +40,16 @@ namespace CRM.Product.Api.Controllers
                 }
             });
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await _mediator.Send(new GetWarehouseByIdQuery { Id = id });
+            if (result == null)
+                return NotFound(new { success = false, code = 404, message = "Location not found" });
+
+            return Ok(new { success = true, code = 200, message = "OK", data = result });
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateWarehouseCommand command)
         {

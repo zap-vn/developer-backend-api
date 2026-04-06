@@ -227,14 +227,6 @@ try {
                     created_at    TIMESTAMPTZ DEFAULT now()
                 );
 
-                CREATE TABLE IF NOT EXISTS identity.system_config (
-                    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                    key         VARCHAR(255) NOT NULL,
-                    value       TEXT NOT NULL DEFAULT '',
-                    description TEXT,
-                    CONSTRAINT uq_system_config_key UNIQUE (key)
-                );
-
                 CREATE TABLE IF NOT EXISTS identity.system_error (
                     id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                     message       TEXT,

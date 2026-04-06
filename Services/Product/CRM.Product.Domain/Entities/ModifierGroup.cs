@@ -16,5 +16,11 @@ namespace CRM.Product.Domain.Entities
         public int max_selection { get; set; } = 1;
         public bool is_required { get; set; } = false;
         public int sort_order { get; set; } = 0;
+        
+        [Column("status_id")]
+        public int? status_id { get; set; }
+        
+        [ForeignKey("status_id")]
+        public StatusItem? status { get; set; }
     }
 }

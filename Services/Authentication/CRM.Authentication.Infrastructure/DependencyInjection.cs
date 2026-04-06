@@ -29,7 +29,7 @@ namespace CRM.Authentication.Infrastructure
             services.AddScoped<IUserRepository, PostgresUserRepository>();
             services.AddScoped<IPasswordResetRepository, LegacyPasswordResetRepository>();
             services.AddScoped<IOtpRepository, LegacyOtpRepository>();
-            services.AddScoped<ISystemConfigRepository, LegacySystemConfigRepository>();
+            // ISystemConfigRepository removed
             services.AddScoped<IEmailSettingRepository, LegacyEmailSettingRepository>();
             
             // Infrastructure Services

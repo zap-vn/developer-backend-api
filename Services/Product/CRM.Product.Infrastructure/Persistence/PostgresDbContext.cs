@@ -34,6 +34,7 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<LocationPriceEntity> ProductLocationPricing { get; set; }
         public DbSet<StatusItemEntity> StatusItems { get; set; }
         public DbSet<WarehouseEntity> Warehouses { get; set; }
+        public DbSet<Store> Stores { get; set; }
         public DbSet<UomItemEntity> UomItems { get; set; }
         public DbSet<ProductTypeItem> ProductTypeItems { get; set; }
         public DbSet<InventoryItemEntity> InventoryItems { get; set; }
@@ -203,39 +204,47 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<WarehouseEntity>(entity =>
             {
-                entity.ToTable("warehouse", "logistics");
+                entity.ToTable("location", "pos");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
+                entity.Property(e => e.node_id).HasColumnName("node_id");
                 entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
                 entity.Property(e => e.name).HasColumnName("name");
-                entity.Property(e => e.warehouse_type).HasColumnName("warehouse_type");
                 entity.Property(e => e.status_id).HasColumnName("status_id");
-                entity.Property(e => e.address_json).HasColumnName("address_json");
-                entity.Property(e => e.manager_id).HasColumnName("manager_id");
+                entity.Property(e => e.is_active).HasColumnName("is_active");
                 entity.Property(e => e.created_at).HasColumnName("created_at");
                 entity.Property(e => e.updated_at).HasColumnName("updated_at");
-                // Ignore properties not present in the current DB schema
-                entity.Ignore(e => e.nickname);
-                entity.Ignore(e => e.description);
-                entity.Ignore(e => e.address_line1);
-                entity.Ignore(e => e.address_line2);
-                entity.Ignore(e => e.city);
-                entity.Ignore(e => e.province);
-                entity.Ignore(e => e.postal_code);
-                entity.Ignore(e => e.email);
-                entity.Ignore(e => e.phone);
-                entity.Ignore(e => e.website);
-                entity.Ignore(e => e.x_link);
-                entity.Ignore(e => e.instagram_link);
-                entity.Ignore(e => e.facebook_link);
-                entity.Ignore(e => e.logo_url);
-                entity.Ignore(e => e.brand_color);
-                entity.Ignore(e => e.timezone);
-                entity.Ignore(e => e.business_hours);
-                entity.Ignore(e => e.preferred_language);
-                entity.Ignore(e => e.match_location_id);
-                entity.Ignore(e => e.status);
+            });
+
+            modelBuilder.Entity<Store>(entity =>
+            {
+                entity.ToTable("store", "pos");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.location_id).HasColumnName("location_id");
+                entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
+                entity.Property(e => e.store_code).HasColumnName("store_code");
+                entity.Property(e => e.store_name).HasColumnName("store_name");
+                entity.Property(e => e.address_line_1).HasColumnName("address_line_1");
+                entity.Property(e => e.phone_number).HasColumnName("phone_number");
+                entity.Property(e => e.email).HasColumnName("email");
+                entity.Property(e => e.business_address_id).HasColumnName("business_address_id");
+                entity.Property(e => e.node_type_id).HasColumnName("node_type_id");
+                entity.Property(e => e.country_id).HasColumnName("country_id");
+                entity.Property(e => e.province_id).HasColumnName("province_id");
+                entity.Property(e => e.district_id).HasColumnName("district_id");
+                entity.Property(e => e.ward_id).HasColumnName("ward_id");
+                entity.Property(e => e.timezone).HasColumnName("timezone");
+                entity.Property(e => e.opening_time).HasColumnName("opening_time");
+                entity.Property(e => e.closing_time).HasColumnName("closing_time");
+                entity.Property(e => e.status_id).HasColumnName("status_id");
+                entity.Property(e => e.created_at).HasColumnName("created_at");
+                entity.Property(e => e.updated_at).HasColumnName("updated_at");
+
+                entity.HasOne(e => e.location)
+                    .WithMany()
+                    .HasForeignKey(e => e.location_id);
             });
 
             modelBuilder.Entity<UomItemEntity>(entity =>

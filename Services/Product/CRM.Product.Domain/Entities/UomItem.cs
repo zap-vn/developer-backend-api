@@ -8,7 +8,7 @@ namespace CRM.Product.Domain.Entities
     public class UomItem
     {
         [Key]
-        public Guid id { get; set; } = Guid.NewGuid();
+        public int id { get; set; }
         public Guid tenant_id { get; set; }
         public string code { get; set; } = string.Empty;
         public string name { get; set; } = string.Empty;

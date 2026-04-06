@@ -17,7 +17,7 @@ namespace CRM.Authentication.Infrastructure.Persistence
         public DbSet<StatusItem> StatusItems { get; set; }
         public DbSet<Locale> Locales { get; set; }
         public DbSet<EmailSetting> EmailSettings { get; set; }
-        public DbSet<SystemConfig> SystemConfigs { get; set; }
+        // SystemConfig removed
         public DbSet<SystemError> SystemErrors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -132,15 +132,6 @@ namespace CRM.Authentication.Infrastructure.Persistence
                 entity.Property(e => e.from_email).HasColumnName("from_email");
                 entity.Property(e => e.from_name).HasColumnName("from_name");
                 entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("now()");
-            });
-
-            modelBuilder.Entity<SystemConfig>(entity =>
-            {
-                entity.ToTable("system_config", "identity");
-                entity.HasKey(e => e.id);
-                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
-                entity.Property(e => e.key).HasColumnName("key");
-                entity.Property(e => e.value).HasColumnName("value");
             });
 
             modelBuilder.Entity<SystemError>(entity =>

@@ -12,9 +12,6 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
         [JsonPropertyName("password")]
         public string? Password { get; set; }
 
-        [JsonPropertyName("otp")]
-        public string? Otp { get; set; }
-
         [JsonPropertyName("dialing_code")]
         public string? DialingCode { get; set; } = "+84";
     }

@@ -48,6 +48,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public string? status_text { get; set; }
         public string? status_code { get; set; }
         public string? uom_code { get; set; }
+        public Guid? product_id { get; set; }
         public DateTime created_at { get; set; }
         public DateTime? updated_at { get; set; }
     }

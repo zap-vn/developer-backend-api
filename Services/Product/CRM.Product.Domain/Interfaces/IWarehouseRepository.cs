@@ -14,6 +14,7 @@ namespace CRM.Product.Domain.Interfaces
             string? searchTerm = null);
         Task<Warehouse?> GetByIdAsync(Guid id);
         Task CreateAsync(Warehouse warehouse);
+        Task CreateStoreAsync(Store store);
         Task UpdateAsync(Warehouse warehouse);
         Task DeleteAsync(Guid id);
         Task<int> GetTotalCountAsync(Guid? tenantId = null, string? searchTerm = null);

@@ -4,7 +4,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
 {
     public class UnitDto
     {
-        public Guid id { get; set; }
+        public int id { get; set; }
         public Guid tenant_id { get; set; }
         public string? code { get; set; }
         public string? name { get; set; }

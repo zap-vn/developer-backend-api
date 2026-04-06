@@ -5,7 +5,7 @@ namespace CRM.Product.Application.Features.Products.Commands
 {
     public class UpdateUnitCommand : IRequest<bool>
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string? Code { get; set; }
         public string? Name { get; set; }
         public string? UomType { get; set; }
@@ -14,6 +14,6 @@ namespace CRM.Product.Application.Features.Products.Commands
 
     public class DeleteUnitCommand : IRequest<bool>
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }

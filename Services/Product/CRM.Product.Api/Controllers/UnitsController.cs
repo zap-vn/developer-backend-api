@@ -50,14 +50,14 @@ namespace CRM.Product.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateUnitCommand command)
+        public async Task<ActionResult<int>> Create([FromBody] CreateUnitCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUnitCommand command)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateUnitCommand command)
         {
             if (id != command.Id) return BadRequest();
             var result = await _mediator.Send(command);
@@ -66,7 +66,7 @@ namespace CRM.Product.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteUnitCommand { Id = id });
             if (!result) return NotFound();

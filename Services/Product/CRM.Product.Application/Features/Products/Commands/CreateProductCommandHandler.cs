@@ -28,7 +28,7 @@ namespace CRM.Product.Application.Features.Products.Commands
                 short_description = request.ShortDescription,
                 long_description_html = request.LongDescriptionHtml,
                 status_id = request.StatusId,
-                product_type = request.ProductType,
+                product_type_id = request.ProductTypeId,
                 is_featured = request.IsFeatured,
                 variants = request.Variants.Select(v => new ProductVariant
                 {

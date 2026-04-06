@@ -21,7 +21,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         public Task<IEnumerable<UomItem>> GetAllAsync(Guid? tenantId = null)
             => Task.FromResult<IEnumerable<UomItem>>(Array.Empty<UomItem>());
 
-        public Task<UomItem?> GetByIdAsync(Guid id)
+        public Task<UomItem?> GetByIdAsync(int id)
             => Task.FromResult<UomItem?>(null);
 
         public Task<(IEnumerable<UomItem> Items, int Total)> GetPagedAsync(
@@ -30,6 +30,6 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
 
         public Task CreateAsync(UomItem uomItem) => Task.CompletedTask;
         public Task UpdateAsync(UomItem uomItem) => Task.CompletedTask;
-        public Task DeleteAsync(Guid id) => Task.CompletedTask;
+        public Task DeleteAsync(int id) => Task.CompletedTask;
     }
 }

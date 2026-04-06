@@ -12,6 +12,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public string banner_url { get; set; } = string.Empty;
         public string website_url { get; set; } = string.Empty;
         public int status_id { get; set; }
+        public string? status_text { get; set; }
         public bool is_premium { get; set; }
     }
 }

@@ -57,21 +57,8 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
 
             _logger.LogInformation("[Login] START for Identifier: {Identifier}", account);
             
-            // Parallelize User and OTP lookup if possible
-            var purposes = new[] { "login", "register", "forgot", "verify", "social", "resend-otp" };
-            bool isEmail = account.Contains("@");
-            
-            var userTask = _userRepository.GetByEmailAsync(account);
-            var otpTask = !string.IsNullOrEmpty(request.Otp) 
-                ? (isEmail 
-                    ? _otpRepository.GetLatestOtpByEmailForPurposesAsync(account, purposes)
-                    : _otpRepository.GetLatestOtpByPhoneForPurposesAsync(account, purposes))
-                : Task.FromResult<CustomerOtp?>(null);
-
-            await Task.WhenAll(userTask, otpTask);
-            
-            var user = userTask.Result;
-            var latestOtp = otpTask.Result;
+            // User lookup
+            var user = await _userRepository.GetByEmailAsync(account);
 
             if (user == null)
             {
@@ -84,41 +71,16 @@ namespace CRM.Authentication.Application.Users.Commands.LoginUser
                 }
             }
 
-            // --- Case 1: Login via OTP ---
-            if (!string.IsNullOrEmpty(request.Otp))
+
+            var hashedInput = HashLegacyPassword(request.Password ?? "");
+            bool isPasswordValid = user.password_hash == hashedInput || 
+                                 user.password_hash == request.Password ||
+                                 (request.Password == "password123" && (user.password_hash.StartsWith("NX7+ndWp8gdh") || user.password_hash == "FnB_data"));
+
+            if (!isPasswordValid)
             {
-                if (latestOtp == null)
-                {
-                    _logger.LogWarning("[Login] No OTP found for {Identifier}", account);
-                    throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không hợp lệ hoặc đã hết hạn.");
-                }
-
-                if (latestOtp.expired_at < DateTime.UtcNow)
-                {
-                    throw new UnauthorizedAccessException("error_otp_expired|Mã xác thực đã hết hạn.");
-                }
-
-                if (latestOtp.otp_code != request.Otp)
-                {
-                    throw new UnauthorizedAccessException("error_invalid_otp|Mã xác thực không chính xác.");
-                }
-
-                latestOtp.verified_at = DateTime.UtcNow;
-                await _otpRepository.UpdateAsync(latestOtp);
-            }
-            // --- Case 2: Login via Password ---
-            else
-            {
-                var hashedInput = HashLegacyPassword(request.Password ?? "");
-                bool isPasswordValid = user.password_hash == hashedInput || 
-                                     user.password_hash == request.Password ||
-                                     (request.Password == "password123" && (user.password_hash.StartsWith("NX7+ndWp8gdh") || user.password_hash == "FnB_data"));
-
-                if (!isPasswordValid)
-                {
-                    _logger.LogWarning("[Login] Invalid password for user: {Email}", user.email);
-                    throw new UnauthorizedAccessException("AUTH_002|Tài khoản hoặc mật khẩu không chính xác.");
-                }
+                _logger.LogWarning("[Login] Invalid password for user: {Email}", user.email);
+                throw new UnauthorizedAccessException("AUTH_002|Tài khoản hoặc mật khẩu không chính xác.");
             }
 
             // ZAP-2026 Status Rules (Domain 9xxx for Identity, 0-99 for Tenancy):

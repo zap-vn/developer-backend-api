@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRM.Product.Application.Features.Products.Commands
 {
-    public class CreateUnitCommandHandler : IRequestHandler<CreateUnitCommand, Guid>
+    public class CreateUnitCommandHandler : IRequestHandler<CreateUnitCommand, int>
     {
         private readonly IUnitRepository _repository;
         private readonly ICurrentUserService _currentUserService;
@@ -19,7 +19,7 @@ namespace CRM.Product.Application.Features.Products.Commands
             _currentUserService = currentUserService;
         }
 
-        public async Task<Guid> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
         {
             var tenantIdString = _currentUserService.UserGuid;
             Guid tenantId = Guid.Empty;
@@ -27,7 +27,6 @@ namespace CRM.Product.Application.Features.Products.Commands
 
             var entity = new UomItem
             {
-                id = Guid.NewGuid(),
                 tenant_id = tenantId,
                 name = request.Name,
                 code = request.Code,

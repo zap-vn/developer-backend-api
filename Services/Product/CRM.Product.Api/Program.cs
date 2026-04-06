@@ -44,7 +44,14 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "CRM.Product.Api",
+        Version = "1.0"
+    });
+});
 
 var app = builder.Build();
 

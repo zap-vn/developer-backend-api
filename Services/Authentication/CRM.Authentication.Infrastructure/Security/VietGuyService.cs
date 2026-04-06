@@ -2,6 +2,7 @@ using CRM.Authentication.Application.Common.Interfaces;
 using CRM.Authentication.Application.Common.Models;
 using CRM.Authentication.Domain.Interfaces;
 using CRM.Authentication.Domain.Entities;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -18,16 +19,16 @@ namespace CRM.Authentication.Infrastructure.Security
     {
         private readonly ILogger<VietGuyService> _logger;
         private readonly HttpClient _httpClient;
-        private readonly ISystemConfigRepository _configRepository;
+        private readonly IMemoryCache _cache;
 
         public VietGuyService(
             ILogger<VietGuyService> logger,
             HttpClient httpClient,
-            ISystemConfigRepository configRepository)
+            IMemoryCache cache)
         {
             _logger = logger;
             _httpClient = httpClient;
-            _configRepository = configRepository;
+            _cache = cache;
         }
 
         private string GetAccessTokenKey(string accountName) => $"vietguy_access_token_{accountName}";
@@ -37,9 +38,8 @@ namespace CRM.Authentication.Infrastructure.Security
         public async Task<string> GetAccessTokenAsync(EmailSetting setting)
         {
             var accountName = setting.account_name ?? "default";
-            var expiredAtConfig = await _configRepository.GetByKeyAsync(GetExpiredAtKey(accountName));
             long expiredAt = 0;
-            if (expiredAtConfig != null && long.TryParse(expiredAtConfig.value, out long val))
+            if (_cache.TryGetValue(GetExpiredAtKey(accountName), out string? expiredAtStr) && long.TryParse(expiredAtStr, out long val))
             {
                 expiredAt = val;
             }
@@ -52,8 +52,8 @@ namespace CRM.Authentication.Infrastructure.Security
                 await RefreshAccessTokenAsync(setting);
             }
 
-            var accessTokenConfig = await _configRepository.GetByKeyAsync(GetAccessTokenKey(accountName));
-            return accessTokenConfig?.value ?? string.Empty;
+            _cache.TryGetValue(GetAccessTokenKey(accountName), out string? accessToken);
+            return accessToken ?? string.Empty;
         }
 
         public async Task RefreshAccessTokenAsync(EmailSetting setting)
@@ -61,10 +61,8 @@ namespace CRM.Authentication.Infrastructure.Security
             var accountName = setting.account_name ?? string.Empty;
             _logger.LogInformation($"[VIETGUY] Refreshing access token for {accountName}...");
 
-            var refreshTokenConfig = await _configRepository.GetByKeyAsync(GetRefreshTokenKey(accountName));
-            // In a real multi-account scenario, initial refresh token would be somewhere. 
-            // In the DB image, it wasn't shown. We'll use the one from config as fallback if we had it, but user wants ONLY DB.
-            var refreshToken = refreshTokenConfig?.value ?? string.Empty;
+            _cache.TryGetValue(GetRefreshTokenKey(accountName), out string? refreshTokenStr);
+            var refreshToken = refreshTokenStr ?? string.Empty;
 
             if (string.IsNullOrEmpty(refreshToken))
             {
@@ -96,9 +94,9 @@ namespace CRM.Authentication.Infrastructure.Security
                     var result = JsonSerializer.Deserialize<VietGuyAuthResponse>(content);
                     if (result != null && result.error == 0 && result.data != null)
                     {
-                        await _configRepository.UpsertAsync(new SystemConfig { key = GetAccessTokenKey(accountName), value = result.data.access_token });
-                        await _configRepository.UpsertAsync(new SystemConfig { key = GetRefreshTokenKey(accountName), value = result.data.refresh_token });
-                        await _configRepository.UpsertAsync(new SystemConfig { key = GetExpiredAtKey(accountName), value = result.data.expired_at.ToString() });
+                        _cache.Set(GetAccessTokenKey(accountName), result.data.access_token);
+                        _cache.Set(GetRefreshTokenKey(accountName), result.data.refresh_token);
+                        _cache.Set(GetExpiredAtKey(accountName), result.data.expired_at.ToString());
                         
                         _logger.LogInformation($"[VIETGUY] Token refreshed for {accountName} successfully.");
                     }

@@ -43,7 +43,9 @@ namespace CRM.Product.Application.Features.Products.Queries
                 min_selection = x.min_selection,
                 max_selection = x.max_selection,
                 is_required = x.is_required,
-                sort_order = x.sort_order
+                sort_order = x.sort_order,
+                status_id = x.status_id,
+                status_text = x.status?.code
             });
 
             return new PagedResult<ModifierGroupDto>(dtos.ToList(), total, request.Request.PageIndex, request.Request.PageSize);

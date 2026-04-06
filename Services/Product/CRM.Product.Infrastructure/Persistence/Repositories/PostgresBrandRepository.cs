@@ -31,7 +31,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
 
         public async Task<(IEnumerable<Brand> Items, int Total)> GetPagedAsync(int page, int pageSize, Guid? tenantId = null, string? search = null)
         {
-            var query = _context.Brands.AsQueryable();
+            var query = _context.Brands.Include(x => x.status).AsQueryable();
             if (tenantId.HasValue) query = query.Where(x => x.tenant_id == tenantId);
             if (!string.IsNullOrEmpty(search)) query = query.Where(x => x.name.Contains(search));
 

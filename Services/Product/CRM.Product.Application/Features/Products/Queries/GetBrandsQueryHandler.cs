@@ -44,6 +44,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 banner_url = x.banner_url,
                 website_url = x.website_url,
                 status_id = x.status_id,
+                status_text = x.status?.code,
                 is_premium = x.is_premium
             });
 

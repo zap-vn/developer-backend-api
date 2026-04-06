@@ -17,5 +17,8 @@ namespace CRM.Product.Domain.Entities
         public string website_url { get; set; } = string.Empty;
         public int status_id { get; set; } = 2101; 
         public bool is_premium { get; set; } = false;
+
+        [ForeignKey("status_id")]
+        public StatusItem? status { get; set; }
     }
 }

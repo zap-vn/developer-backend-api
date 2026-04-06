@@ -12,5 +12,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public int max_selection { get; set; }
         public bool is_required { get; set; }
         public int sort_order { get; set; }
+        public int? status_id { get; set; }
+        public string? status_text { get; set; }
     }
 }

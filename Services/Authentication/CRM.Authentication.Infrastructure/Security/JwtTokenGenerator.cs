@@ -11,12 +11,9 @@ namespace CRM.Authentication.Infrastructure.Security
     public class JwtTokenGenerator : ITokenGenerator
     {
         private readonly IConfiguration _configuration;
-        private readonly CRM.Authentication.Domain.Interfaces.ISystemConfigRepository _configRepository;
-
-        public JwtTokenGenerator(IConfiguration configuration, CRM.Authentication.Domain.Interfaces.ISystemConfigRepository configRepository)
+        public JwtTokenGenerator(IConfiguration configuration)
         {
             _configuration = configuration;
-            _configRepository = configRepository;
         }
 
         public async Task<string> GenerateTokenAsync(User user)
@@ -42,9 +39,11 @@ namespace CRM.Authentication.Infrastructure.Security
 
             claims.Add(new Claim(ClaimTypes.Role, "MerchantAdmin"));
 
-            var expiryConfig = await _configRepository.GetByKeyAsync("token_expiry_minutes_crm");
             double expiryMinutes = 120;
-            if (expiryConfig != null && double.TryParse(expiryConfig.value, out var parsed)) expiryMinutes = parsed;
+            if (double.TryParse(_configuration["Jwt:ExpiryMinutes"], out var parsed))
+            {
+                expiryMinutes = parsed;
+            }
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],

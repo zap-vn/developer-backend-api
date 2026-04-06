@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using CRM.Product.Application.Features.Warehouses.Queries;
 using CRM.Product.Application.Features.Warehouses.DTOs;
+using CRM.Product.Application.Features.Warehouses.Commands;
 using CRM.BuildingBlocks.Models;
 
 namespace CRM.Product.Api.Controllers
@@ -37,6 +38,18 @@ namespace CRM.Product.Api.Controllers
                     page_size = result.PageSize,
                     items = result.Items
                 }
+            });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateWarehouseCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(new 
+            {
+                success = true,
+                code = 200,
+                message = "Location created successfully",
+                data = result
             });
         }
     }

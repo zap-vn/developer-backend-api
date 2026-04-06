@@ -76,11 +76,19 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             // Step 1: build filter query (no Includes — avoids EF Core materializer column-order issues)
             var query = _context.ProductVariants.AsQueryable();
 
+            // Filter by tenant if provided
             if (tenantId.HasValue)
                 query = query.Where(v => v.product != null && v.product.tenant_id == tenantId);
 
+            // Filter by status: Exclude 0 (Draft/Deleted) by default, or use provided statusId
             if (statusId.HasValue)
+            {
                 query = query.Where(v => v.product != null && v.product.status_id == statusId);
+            }
+            else
+            {
+                query = query.Where(v => v.product != null && v.product.status_id != 0);
+            }
 
             if (categoryId.HasValue)
                 query = query.Where(v => _context.ProductCategoryMappings
@@ -100,7 +108,8 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
 
             // Step 2: get paginated IDs only
             var pagedIds = await query
-                .OrderByDescending(v => v.id)
+                .OrderByDescending(v => v.product != null ? v.product.created_at : DateTime.MinValue)
+                .ThenByDescending(v => v.id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(v => v.id)
@@ -126,7 +135,8 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                     .ThenInclude(i => i.Warehouse)
                 .Include(v => v.bom_headers.Where(b => b.is_active))
                 .Include(v => v.uom)
-                .OrderByDescending(v => v.id)
+                .OrderByDescending(v => v.product != null ? v.product.created_at : DateTime.MinValue)
+                .ThenByDescending(v => v.id)
                 .ToListAsync();
 
             return (items, total);

@@ -28,7 +28,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 tenant_id = entity.tenant_id,
                 brand_id = entity.brand_id,
                 legacy_id = entity.legacy_id,
-                product_type = entity.product_type,
+                product_type_id = entity.product_type_id,
                 name = entity.name,
                 short_description = entity.short_description,
                 long_description_html = entity.long_description_html,

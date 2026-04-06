@@ -25,6 +25,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             string? searchTerm = null)
         {
             var query = _context.Warehouses
+                .Include(x => x.status)
                 .AsQueryable();
 
             if (tenantId.HasValue)
@@ -60,6 +61,12 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         public async Task CreateAsync(Warehouse warehouse)
         {
             await _context.Warehouses.AddAsync(warehouse);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CreateStoreAsync(Store store)
+        {
+            await _context.Stores.AddAsync(store);
             await _context.SaveChangesAsync();
         }
 

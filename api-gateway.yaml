@@ -372,6 +372,17 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/v1/management/memberships:
+    get:
+      summary: "Memberships list"
+      operationId: "memberships_list"
+      x-google-backend:
+        address: "https://zapcrm-customer-api-204573236312.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/product:
     get:
       summary: "List Products"
@@ -702,6 +713,27 @@ paths:
         address: "https://zapcrm-report-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/promotions/list:
+    post:
+      summary: "Promotions list"
+      operationId: "promotions_list_post"
+      x-google-backend:
+        address: "https://zapcrm-promotion-api-204573236312.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Promotions list CORS"
+      operationId: "cors_promotions_list"
+      x-google-backend:
+        address: "https://zapcrm-promotion-api-204573236312.asia-southeast1.run.app/api/promotions/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"

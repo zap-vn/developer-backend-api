@@ -73,6 +73,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 return new ProductDto
                 {
                     id = v.id,
+                    product_id = p?.id,
                     tenant_id = p?.tenant_id,
                     product_type_id = p?.product_type_id ?? 1,
                     product_type_text = p?.product_type?.code ?? "",

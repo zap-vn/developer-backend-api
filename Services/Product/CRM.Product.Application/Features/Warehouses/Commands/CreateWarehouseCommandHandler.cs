@@ -59,6 +59,29 @@ namespace CRM.Product.Application.Features.Warehouses.Commands
 
             await _repository.CreateAsync(location);
 
+            // Create child Store record linked to this location
+            var store = new Store
+            {
+                id = Guid.NewGuid(),
+                location_id = location.id,
+                legacy_id = request.legacy_id,
+                store_code = ("STR-" + (request.slug ?? request.name.ToLower().Replace(" ", "-"))).ToUpper(),
+                store_name = request.business_name ?? request.name,
+                address_line_1 = request.address_line_1,
+                phone_number = request.phone_number,
+                email = request.email,
+                country_id = request.country_id,
+                province_id = request.province_id,
+                district_id = request.district_id,
+                ward_id = request.ward_id,
+                timezone = request.timezone,
+                status_id = request.status_id ?? 30001,
+                created_at = DateTime.UtcNow,
+                updated_at = DateTime.UtcNow
+            };
+
+            await _repository.CreateStoreAsync(store);
+
             return location.id;
         }
     }

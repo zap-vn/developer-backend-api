@@ -35,6 +35,7 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<StatusItemEntity> StatusItems { get; set; }
         public DbSet<WarehouseEntity> Warehouses { get; set; }
         public DbSet<UomItemEntity> UomItems { get; set; }
+        public DbSet<ProductTypeItem> ProductTypeItems { get; set; }
         public DbSet<InventoryItemEntity> InventoryItems { get; set; }
         public DbSet<BomHeaderEntity> BomHeaders { get; set; }
         
@@ -67,7 +68,7 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
                 entity.Property(e => e.brand_id).HasColumnName("brand_id");
-                entity.Property(e => e.product_type).HasColumnName("product_type");
+                entity.Property(e => e.product_type_id).HasColumnName("product_type_id");
                 entity.Property(e => e.name).HasColumnName("name");
                 entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
                 entity.Property(e => e.short_description).HasColumnName("short_description");
@@ -81,7 +82,8 @@ namespace CRM.Product.Infrastructure.Persistence
                 
                 entity.HasMany(e => e.variants)
                     .WithOne(v => v.product)
-                    .HasForeignKey(v => v.product_id);
+                    .HasForeignKey(v => v.product_id)
+                    .IsRequired(false);
 
                 entity.HasMany(e => e.category_mappings)
                     .WithOne(cm => cm.product)
@@ -90,6 +92,10 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.HasOne(e => e.status)
                     .WithMany()
                     .HasForeignKey(e => e.status_id);
+
+                entity.HasOne(e => e.product_type)
+                    .WithMany()
+                    .HasForeignKey(e => e.product_type_id);
             });
 
             modelBuilder.Entity<VariantEntity>(entity =>
@@ -110,6 +116,9 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.length_mm).HasColumnName("length_mm");
                 entity.Property(e => e.width_mm).HasColumnName("width_mm");
                 entity.Property(e => e.height_mm).HasColumnName("height_mm");
+                entity.Property(e => e.uom_id).HasColumnName("uom_id");
+                
+                entity.HasOne(e => e.uom).WithMany().HasForeignKey(e => e.uom_id);
 
                 entity.HasMany(e => e.media)
                     .WithOne(m => m.variant)
@@ -174,6 +183,14 @@ namespace CRM.Product.Infrastructure.Persistence
                     .HasForeignKey(t => t.status_item_id);
             });
 
+            modelBuilder.Entity<ProductTypeItem>(entity =>
+            {
+                entity.ToTable("product_type_item", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.code).HasColumnName("code");
+            });
+
             modelBuilder.Entity<StatusTranslationEntity>(entity =>
             {
                 entity.ToTable("status_item_translation", "platform");
@@ -198,6 +215,27 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.manager_id).HasColumnName("manager_id");
                 entity.Property(e => e.created_at).HasColumnName("created_at");
                 entity.Property(e => e.updated_at).HasColumnName("updated_at");
+                // Ignore properties not present in the current DB schema
+                entity.Ignore(e => e.nickname);
+                entity.Ignore(e => e.description);
+                entity.Ignore(e => e.address_line1);
+                entity.Ignore(e => e.address_line2);
+                entity.Ignore(e => e.city);
+                entity.Ignore(e => e.province);
+                entity.Ignore(e => e.postal_code);
+                entity.Ignore(e => e.email);
+                entity.Ignore(e => e.phone);
+                entity.Ignore(e => e.website);
+                entity.Ignore(e => e.x_link);
+                entity.Ignore(e => e.instagram_link);
+                entity.Ignore(e => e.facebook_link);
+                entity.Ignore(e => e.logo_url);
+                entity.Ignore(e => e.brand_color);
+                entity.Ignore(e => e.timezone);
+                entity.Ignore(e => e.business_hours);
+                entity.Ignore(e => e.preferred_language);
+                entity.Ignore(e => e.match_location_id);
+                entity.Ignore(e => e.status);
             });
 
             modelBuilder.Entity<UomItemEntity>(entity =>
@@ -205,8 +243,10 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.ToTable("uom_item", "platform");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
-                entity.Property(e => e.name).HasColumnName("name");
                 entity.Property(e => e.code).HasColumnName("code");
+                entity.Ignore(e => e.name);
+                entity.Ignore(e => e.tenant_id);
+                entity.Ignore(e => e.uom_type);
             });
 
             modelBuilder.Entity<InventoryItemEntity>(entity =>

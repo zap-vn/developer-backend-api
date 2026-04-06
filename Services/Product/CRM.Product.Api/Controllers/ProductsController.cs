@@ -60,8 +60,10 @@ namespace CRM.Product.Api.Controllers
                         qty_on_hand = x.qty_on_hand ?? 0,
                         uom_id = x.uom_id,
                         barcode = x.barcode,
-                        product_type = x.product_type,
-                        status_id = x.status_id
+                        product_type_id = x.product_type_id,
+                        product_type_text = x.product_type_text,
+                        status_id = x.status_id,
+                        status_text = x.status_text
                     }).ToList()
                 }
             });

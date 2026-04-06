@@ -54,8 +54,9 @@ namespace CRM.Product.Application.Features.Products.Queries
                 var primaryCategory = p?.category_mappings.FirstOrDefault(cm => cm.is_primary) ?? p?.category_mappings.FirstOrDefault();
                 
                 var statusItem = p?.status;
-                var translation = statusItem?.translations.FirstOrDefault(t => t.locale_id == localeId);
-                var statusText = translation?.name ?? statusItem?.code;
+                // Get translated status text if available, else use code
+                var translation = statusItem?.translations?.FirstOrDefault(t => t.locale_id == localeId);
+                var statusText = translation?.name ?? statusItem?.code ?? "";
 
                 // Inventory summing for the specific variant
                 var inventoryItems = v.inventory_items;
@@ -73,10 +74,11 @@ namespace CRM.Product.Application.Features.Products.Queries
                 {
                     id = v.id,
                     tenant_id = p?.tenant_id,
-                    product_type = p?.product_type ?? 1,
-                    status_id = p?.status_id,
+                    product_type_id = p?.product_type_id ?? 1,
+                    product_type_text = p?.product_type?.code ?? "",
+                    status_id = p?.status_id ?? 0,
                     status_text = statusText,
-                    status_code = statusItem?.code,
+                    status_code = statusItem?.code ?? "",
                     media_url = primaryMedia?.media_url,
                     variant_name = v.variant_name ?? p?.name ?? "",
                     category_id = primaryCategory?.category_id,
@@ -85,8 +87,8 @@ namespace CRM.Product.Application.Features.Products.Queries
                     barcode = v.barcode,
                     sale_price = price,
                     qty_on_hand = stockQty,
-                    uom_id = v.bom_headers.FirstOrDefault()?.uom_id ?? 
-                               (Guid.TryParse(System.Text.Json.JsonDocument.Parse(v.attributes ?? "{}").RootElement.TryGetProperty("uom_id", out var u) ? u.GetString() : null, out var ug) ? ug : (Guid?)null),
+                    uom_id = v.uom_id,
+                    uom_code = v.uom?.code ?? "",
                     warehouse_id = firstInv?.warehouse_id,
                     location_name = firstInv?.Warehouse?.name,
                     created_at = p?.created_at ?? DateTime.UtcNow,

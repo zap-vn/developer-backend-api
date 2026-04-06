@@ -9,7 +9,7 @@ namespace CRM.Product.Domain.Entities
         public Guid? tenant_id { get; set; }
         public Guid? brand_id { get; set; }
         public string? legacy_id { get; set; } // Dùng để đối chiếu với hệ thống cũ
-        public int product_type { get; set; } = 1; // 1: PHYSICAL, 2: SERVICE, 3: DIGITAL, 4: BUNDLE
+        public int product_type_id { get; set; } = 1; // 1: PHYSICAL, 2: SERVICE, 3: DIGITAL, 4: BUNDLE
         public string name { get; set; } = string.Empty;
         public string? short_description { get; set; }
         public string? long_description_html { get; set; }
@@ -22,6 +22,7 @@ namespace CRM.Product.Domain.Entities
 
         // Navigation
         public StatusItem? status { get; set; }
+        public ProductTypeItem? product_type { get; set; }
         public ICollection<ProductVariant> variants { get; set; } = new List<ProductVariant>();
         public ICollection<ProductCategoryMap> category_mappings { get; set; } = new List<ProductCategoryMap>();
     }

@@ -5,7 +5,7 @@ $SERVICE_NAME = "zapcrm-authentication-api"
 $IMAGE_PATH = "asia-southeast1-docker.pkg.dev/$PROJECT_ID/crm-repo/$SERVICE_NAME:latest"
 
 Write-Host "--- 1. Building Docker Image for Authentication Service ---" -ForegroundColor Cyan
-gcloud builds submit --tag $IMAGE_PATH .
+gcloud builds submit --config cloudbuild.zapcrm-identity.yaml .
 
 Write-Host "--- 2. Deploying to Cloud Run ---" -ForegroundColor Cyan
 gcloud run deploy $SERVICE_NAME `

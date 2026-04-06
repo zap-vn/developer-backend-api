@@ -34,7 +34,9 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<LocationPriceEntity> ProductLocationPricing { get; set; }
         public DbSet<StatusItemEntity> StatusItems { get; set; }
         public DbSet<WarehouseEntity> Warehouses { get; set; }
+        public DbSet<LocationTypeItem> LocationTypeItems { get; set; }
         public DbSet<Store> Stores { get; set; }
+
         public DbSet<UomItemEntity> UomItems { get; set; }
         public DbSet<ProductTypeItem> ProductTypeItems { get; set; }
         public DbSet<InventoryItemEntity> InventoryItems { get; set; }
@@ -215,6 +217,43 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.is_active).HasColumnName("is_active");
                 entity.Property(e => e.created_at).HasColumnName("created_at");
                 entity.Property(e => e.updated_at).HasColumnName("updated_at");
+                entity.Property(e => e.slug).HasColumnName("slug");
+                entity.Property(e => e.business_name).HasColumnName("business_name");
+                entity.Property(e => e.description).HasColumnName("description");
+                entity.Property(e => e.location_type_id).HasColumnName("location_type_id");
+                entity.Property(e => e.address_line_1).HasColumnName("address_line_1");
+                entity.Property(e => e.city).HasColumnName("city");
+                entity.Property(e => e.state).HasColumnName("state");
+                entity.Property(e => e.country_id).HasColumnName("country_id");
+                entity.Property(e => e.province_id).HasColumnName("province_id");
+                entity.Property(e => e.district_id).HasColumnName("district_id");
+                entity.Property(e => e.ward_id).HasColumnName("ward_id");
+                entity.Property(e => e.zipcode).HasColumnName("zipcode");
+                entity.Property(e => e.phone_number).HasColumnName("phone_number");
+                entity.Property(e => e.email).HasColumnName("email");
+                entity.Property(e => e.website).HasColumnName("website");
+                entity.Property(e => e.twitter).HasColumnName("twitter");
+                entity.Property(e => e.instagram).HasColumnName("instagram");
+                entity.Property(e => e.facebook).HasColumnName("facebook");
+                entity.Property(e => e.logo_url).HasColumnName("logo_url");
+                entity.Property(e => e.cover_image_url).HasColumnName("cover_image_url");
+                entity.Property(e => e.brand_color).HasColumnName("brand_color");
+                entity.Property(e => e.timezone).HasColumnName("timezone");
+                entity.Property(e => e.operating_hours).HasColumnName("operating_hours");
+                entity.Property(e => e.transfer_account).HasColumnName("transfer_account");
+                entity.Property(e => e.transfer_tag).HasColumnName("transfer_tag");
+                entity.Property(e => e.parent_location_id).HasColumnName("parent_location_id");
+            });
+
+            modelBuilder.Entity<LocationTypeItem>(entity =>
+            {
+                entity.ToTable("location_type_item", "pos");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.code).HasColumnName("code");
+                entity.Property(e => e.label_en).HasColumnName("label_en");
+                entity.Property(e => e.label_vi).HasColumnName("label_vi");
+                entity.Property(e => e.is_active).HasColumnName("is_active");
             });
 
             modelBuilder.Entity<Store>(entity =>

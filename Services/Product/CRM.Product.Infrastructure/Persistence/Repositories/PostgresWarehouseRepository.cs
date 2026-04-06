@@ -26,7 +26,9 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         {
             var query = _context.Warehouses
                 .Include(x => x.status)
+                .Include(x => x.location_type)
                 .AsQueryable();
+
 
             if (tenantId.HasValue)
                 query = query.Where(x => x.tenant_id == tenantId);

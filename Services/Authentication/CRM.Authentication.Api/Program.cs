@@ -97,146 +97,160 @@ try {
         try
         {
             // Block 1: Schema & Sequences
-            await dbContext.Database.ExecuteSqlRawAsync(@"
-                CREATE SCHEMA IF NOT EXISTS identity;
-                CREATE SEQUENCE IF NOT EXISTS identity.customer_id START 1;
-            ");
+            try {
+                await dbContext.Database.ExecuteSqlRawAsync(@"
+                    CREATE SCHEMA IF NOT EXISTS identity;
+                    CREATE SEQUENCE IF NOT EXISTS identity.customer_id START 1;
+                ");
+            } catch (Exception ex) { Console.Error.WriteLine($"⚠️ Block 1 Error: {ex.Message}"); }
 
             // Block 2: Fundamental Tables
-            await dbContext.Database.ExecuteSqlRawAsync(@"
-                CREATE TABLE IF NOT EXISTS identity.locale (
-                    id   INT PRIMARY KEY,
-                    name VARCHAR(128) NOT NULL
-                );
-                INSERT INTO identity.locale (id, name) VALUES (0, 'Unknown'), (1, 'vi-VN'), (2, 'en-US'), (3, 'th-TH'), (4, 'id-ID'), (5, 'ms-MY'), (6, 'zh-CN'), (7, 'zh-TW'), (8, 'ja-JP'), (9, 'ko-KR'), (10, 'lo-LA') ON CONFLICT (id) DO NOTHING;
+            try {
+                await dbContext.Database.ExecuteSqlRawAsync(@"
+                    CREATE TABLE IF NOT EXISTS identity.locale (
+                        id   INT PRIMARY KEY,
+                        name VARCHAR(128) NOT NULL
+                    );
+                    INSERT INTO identity.locale (id, name) VALUES (0, 'Unknown'), (1, 'vi-VN'), (2, 'en-US'), (3, 'th-TH'), (4, 'id-ID'), (5, 'ms-MY'), (6, 'zh-CN'), (7, 'zh-TW'), (8, 'ja-JP'), (9, 'ko-KR'), (10, 'lo-LA') ON CONFLICT (id) DO NOTHING;
 
-                CREATE TABLE IF NOT EXISTS identity.language (
-                    id   INT PRIMARY KEY,
-                    name VARCHAR(128) NOT NULL
-                );
-                INSERT INTO identity.language (id, name) VALUES (0, 'Unknown'), (1, 'Vietnamese'), (2, 'English'), (3, 'Thai'), (4, 'Indonesian'), (5, 'Malay'), (6, 'Chinese'), (7, 'Taiwanese'), (8, 'Japanese'), (9, 'Korean'), (10, 'Lao') ON CONFLICT (id) DO NOTHING;
+                    CREATE TABLE IF NOT EXISTS identity.language (
+                        id   INT PRIMARY KEY,
+                        name VARCHAR(128) NOT NULL
+                    );
+                    INSERT INTO identity.language (id, name) VALUES (0, 'Unknown'), (1, 'Vietnamese'), (2, 'English'), (3, 'Thai'), (4, 'Indonesian'), (5, 'Malay'), (6, 'Chinese'), (7, 'Taiwanese'), (8, 'Japanese'), (9, 'Korean'), (10, 'Lao') ON CONFLICT (id) DO NOTHING;
 
-                CREATE TABLE IF NOT EXISTS identity.status (
-                    id   INT PRIMARY KEY,
-                    name VARCHAR(128) NOT NULL
-                );
-                INSERT INTO identity.status (id, name) VALUES (1, 'PENDING'), (50, 'ACTIVE'), (99, 'SUSPENDED'), (9001, 'ACTIVE_USER'), (9002, 'LOCKED'), (9003, 'PENDING_MFA'), (9101, 'ACTIVE_KEY') ON CONFLICT (id) DO NOTHING;
-            ");
+                    CREATE TABLE IF NOT EXISTS identity.status (
+                        id   INT PRIMARY KEY,
+                        name VARCHAR(128) NOT NULL
+                    );
+                    INSERT INTO identity.status (id, name) VALUES (1, 'PENDING'), (50, 'ACTIVE'), (99, 'SUSPENDED'), (9001, 'ACTIVE_USER'), (9002, 'LOCKED'), (9003, 'PENDING_MFA'), (9101, 'ACTIVE_KEY') ON CONFLICT (id) DO NOTHING;
+                ");
+            } catch (Exception ex) { Console.Error.WriteLine($"⚠️ Block 2 Error: {ex.Message}"); }
 
-            // Block 3: Tenant & User Tables (with constraint fixes)
-            await dbContext.Database.ExecuteSqlRawAsync(@"
-                CREATE TABLE IF NOT EXISTS identity.tenant_node (
-                    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                    parent_id       UUID,
-                    node_code       VARCHAR(64) NOT NULL,
-                    legacy_id       VARCHAR(128),
-                    tier_level      INT NOT NULL DEFAULT 2,
-                    name            VARCHAR(255) NOT NULL,
-                    slug            VARCHAR(128) NOT NULL,
-                    locale_id       INT DEFAULT 1,
-                    status_id       INT DEFAULT 50,
-                    address_line_1  VARCHAR(255),
-                    timezone        VARCHAR(64) DEFAULT 'Asia/Ho_Chi_Minh',
-                    created_at      TIMESTAMPTZ DEFAULT now(),
-                    updated_at      TIMESTAMPTZ DEFAULT now(),
-                    CONSTRAINT uq_tenant_node_code UNIQUE (node_code),
-                    CONSTRAINT uq_tenant_slug UNIQUE (slug),
-                    CONSTRAINT fk_tenant_node_parent FOREIGN KEY (parent_id) REFERENCES identity.tenant_node(id)
-                );
-                
-                DO $$ BEGIN
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenant_node_locale_id_fkey') THEN
-                        ALTER TABLE identity.tenant_node DROP CONSTRAINT tenant_node_locale_id_fkey;
-                    END IF;
-                    ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_locale_id_fkey FOREIGN KEY (locale_id) REFERENCES identity.locale(id);
+            // Block 3: Tenant & User Tables
+            try {
+                await dbContext.Database.ExecuteSqlRawAsync(@"
+                    CREATE TABLE IF NOT EXISTS identity.tenant_node (
+                        id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        parent_id       UUID,
+                        node_code       VARCHAR(64) NOT NULL,
+                        legacy_id       VARCHAR(128),
+                        tier_level      INT NOT NULL DEFAULT 2,
+                        name            VARCHAR(255) NOT NULL,
+                        slug            VARCHAR(128) NOT NULL,
+                        locale_id       INT DEFAULT 1,
+                        status_id       INT DEFAULT 50,
+                        address_line_1  VARCHAR(255),
+                        timezone        VARCHAR(64) DEFAULT 'Asia/Ho_Chi_Minh',
+                        created_at      TIMESTAMPTZ DEFAULT now(),
+                        updated_at      TIMESTAMPTZ DEFAULT now(),
+                        CONSTRAINT uq_tenant_node_code UNIQUE (node_code),
+                        CONSTRAINT uq_tenant_slug UNIQUE (slug),
+                        CONSTRAINT fk_tenant_node_parent FOREIGN KEY (parent_id) REFERENCES identity.tenant_node(id)
+                    );
                     
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenant_node_status_id_fkey') THEN
-                        ALTER TABLE identity.tenant_node DROP CONSTRAINT tenant_node_status_id_fkey;
-                    END IF;
-                    ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_status_id_fkey FOREIGN KEY (status_id) REFERENCES identity.status(id);
-                END $$;
+                    DO $$ BEGIN
+                        -- Fix Locale FK
+                        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='identity' AND table_name='locale') THEN
+                           IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenant_node_locale_id_fkey') THEN
+                               ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_locale_id_fkey FOREIGN KEY (locale_id) REFERENCES identity.locale(id);
+                           END IF;
+                        END IF;
+                        
+                        -- Fix Status FK (Supports both identity.status and platform.status_item)
+                        IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenant_node_status_id_fkey') THEN
+                           IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='platform' AND table_name='status_item') THEN
+                               ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_status_id_fkey FOREIGN KEY (status_id) REFERENCES platform.status_item(id);
+                           ELSEIF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='identity' AND table_name='status') THEN
+                               ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_status_id_fkey FOREIGN KEY (status_id) REFERENCES identity.status(id);
+                           END IF;
+                        END IF;
+                    END $$;
 
-                CREATE TABLE IF NOT EXISTS identity.user (
-                    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                    tenant_id       UUID REFERENCES identity.tenant_node(id),
-                    legacy_id       VARCHAR(128) UNIQUE,
-                    username        VARCHAR(128) UNIQUE NOT NULL,
-                    email           VARCHAR(128) UNIQUE NOT NULL,
-                    password_hash   TEXT NOT NULL,
-                    full_name       VARCHAR(255) NOT NULL DEFAULT 'SYSTEM_USER',
-                    status_id       INT DEFAULT 9001,
-                    created_at      TIMESTAMPTZ DEFAULT now(),
-                    updated_at      TIMESTAMPTZ DEFAULT now()
-                );
+                    CREATE TABLE IF NOT EXISTS identity.user (
+                        id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        tenant_id       UUID REFERENCES identity.tenant_node(id),
+                        legacy_id       VARCHAR(128) UNIQUE,
+                        username        VARCHAR(128) UNIQUE NOT NULL,
+                        email           VARCHAR(128) UNIQUE NOT NULL,
+                        password_hash   TEXT NOT NULL,
+                        full_name       VARCHAR(255) NOT NULL DEFAULT 'SYSTEM_USER',
+                        status_id       INT DEFAULT 9001,
+                        created_at      TIMESTAMPTZ DEFAULT now(),
+                        updated_at      TIMESTAMPTZ DEFAULT now()
+                    );
+                ");
+            } catch (Exception ex) { Console.Error.WriteLine($"⚠️ Block 3 Error: {ex.Message}"); }
 
-                DO $$ BEGIN
-                    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'user_status_id_fkey') THEN
-                        ALTER TABLE identity.user DROP CONSTRAINT user_status_id_fkey;
-                    END IF;
-                    ALTER TABLE identity.user ADD CONSTRAINT user_status_id_fkey FOREIGN KEY (status_id) REFERENCES identity.status(id);
-                END $$;
-            ");
+            // Block 4: Other tables (Independent)
+            try {
+                await dbContext.Database.ExecuteSqlRawAsync(@"
+                    CREATE TABLE IF NOT EXISTS identity.user_role_scope (
+                        id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        user_id     UUID REFERENCES identity.user(id),
+                        scope_type  VARCHAR(16) DEFAULT 'GLOBAL',
+                        scope_id    UUID,
+                        assigned_at TIMESTAMPTZ DEFAULT now()
+                    );
 
-            // Block 4: Other tables
-            await dbContext.Database.ExecuteSqlRawAsync(@"
-                CREATE TABLE IF NOT EXISTS identity.user_role_scope (
-                    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                    user_id     UUID REFERENCES identity.user(id),
-                    scope_type  VARCHAR(16) DEFAULT 'GLOBAL',
-                    scope_id    UUID,
-                    assigned_at TIMESTAMPTZ DEFAULT now()
-                );
+                    CREATE TABLE IF NOT EXISTS identity.otp (
+                        id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        email       VARCHAR(128),
+                        phone       VARCHAR(32),
+                        otp_code    VARCHAR(16) NOT NULL,
+                        purpose     VARCHAR(64),
+                        customer_id VARCHAR(128),
+                        created_at  TIMESTAMPTZ DEFAULT now(),
+                        expired_at  TIMESTAMPTZ,
+                        verified_at TIMESTAMPTZ
+                    );
 
-                CREATE TABLE IF NOT EXISTS identity.otp (
-                    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                    email       VARCHAR(128),
-                    phone       VARCHAR(32),
-                    otp_code    VARCHAR(16) NOT NULL,
-                    purpose     VARCHAR(64),
-                    customer_id VARCHAR(128),
-                    created_at  TIMESTAMPTZ DEFAULT now(),
-                    expired_at  TIMESTAMPTZ,
-                    verified_at TIMESTAMPTZ
-                );
+                    CREATE TABLE IF NOT EXISTS identity.password_reset (
+                        id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        user_guid     VARCHAR(128),
+                        email         VARCHAR(128) NOT NULL DEFAULT '',
+                        phone         VARCHAR(32),
+                        method        VARCHAR(16),
+                        channel       VARCHAR(16),
+                        otp_hash      TEXT,
+                        token         TEXT NOT NULL DEFAULT '',
+                        confirm_token TEXT,
+                        attempts      INT DEFAULT 0,
+                        is_used       BOOLEAN DEFAULT false,
+                        expired_at    TIMESTAMPTZ,
+                        created_at    TIMESTAMPTZ DEFAULT now()
+                    );
 
-                CREATE TABLE IF NOT EXISTS identity.password_reset (
-                    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                    user_guid     VARCHAR(128),
-                    email         VARCHAR(128) NOT NULL DEFAULT '',
-                    phone         VARCHAR(32),
-                    method        VARCHAR(16),
-                    channel       VARCHAR(16),
-                    otp_hash      TEXT,
-                    token         TEXT NOT NULL DEFAULT '',
-                    confirm_token TEXT,
-                    attempts      INT DEFAULT 0,
-                    is_used       BOOLEAN DEFAULT false,
-                    expired_at    TIMESTAMPTZ,
-                    created_at    TIMESTAMPTZ DEFAULT now()
-                );
+                    CREATE TABLE IF NOT EXISTS identity.email_setting (
+                        id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        customer_guid VARCHAR(128),
+                        smtp_host     VARCHAR(255),
+                        smtp_port     INT,
+                        smtp_user     VARCHAR(255),
+                        smtp_pass     TEXT,
+                        from_email    VARCHAR(255),
+                        from_name     VARCHAR(255),
+                        created_at    TIMESTAMPTZ DEFAULT now()
+                    );
 
-                CREATE TABLE IF NOT EXISTS identity.email_setting (
-                    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                    customer_guid VARCHAR(128),
-                    smtp_host     VARCHAR(255),
-                    smtp_port     INT,
-                    smtp_user     VARCHAR(255),
-                    smtp_pass     TEXT,
-                    from_email    VARCHAR(255),
-                    from_name     VARCHAR(255),
-                    created_at    TIMESTAMPTZ DEFAULT now()
-                );
+                    CREATE TABLE IF NOT EXISTS identity.system_config (
+                        id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        key         VARCHAR(255) NOT NULL UNIQUE,
+                        value       TEXT NOT NULL DEFAULT '',
+                        description TEXT
+                    );
 
-                CREATE TABLE IF NOT EXISTS identity.system_error (
-                    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                    message       TEXT,
-                    detail        TEXT,
-                    source        VARCHAR(255),
-                    user_id       VARCHAR(128),
-                    merchant_name VARCHAR(255),
-                    created_at    TIMESTAMPTZ DEFAULT now()
-                );
-            ");
+                    CREATE TABLE IF NOT EXISTS identity.system_error (
+                        id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        message       TEXT,
+                        detail        TEXT,
+                        source        VARCHAR(255),
+                        user_id       VARCHAR(128),
+                        merchant_name VARCHAR(255),
+                        created_at    TIMESTAMPTZ DEFAULT now()
+                    );
+                ");
+            } catch (Exception ex) { Console.Error.WriteLine($"⚠️ Block 4 Error: {ex.Message}"); }
 
             // Block 5: Seed hierarchical data (Optional/Independent)
             try {
@@ -252,10 +266,11 @@ try {
                     SELECT 'L6_PREM_Q1', id, 6, 'Showroom Quận 1', 'showroom-q1', 50
                     FROM identity.tenant_node WHERE node_code = 'L2_ZAP_PREMIUM' ON CONFLICT (node_code) DO NOTHING;
                 ");
-                Console.WriteLine("✅ Database schema initialized.");
+                Console.WriteLine("✅ Database schema sections initialized.");
             } catch (Exception ex) {
                 Console.Error.WriteLine($"⚠️ Seed Data Warning: {ex.Message}");
             }
+
         }
         catch (Exception dbEx)
         {

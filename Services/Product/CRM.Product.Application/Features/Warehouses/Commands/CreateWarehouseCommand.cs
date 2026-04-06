@@ -5,26 +5,37 @@ namespace CRM.Product.Application.Features.Warehouses.Commands
 {
     public class CreateWarehouseCommand : IRequest<Guid>
     {
-        public string Name { get; set; } = string.Empty;
-        public string? Nickname { get; set; }
-        public string? Description { get; set; }
-        public string? WarehouseType { get; set; }
-        public string? AddressLine1 { get; set; }
-        public string? AddressLine2 { get; set; }
-        public string? City { get; set; }
-        public string? Province { get; set; }
-        public string? PostalCode { get; set; }
-        public string? Email { get; set; }
-        public string? Phone { get; set; }
-        public string? Website { get; set; }
-        public string? XLink { get; set; }
-        public string? InstagramLink { get; set; }
-        public string? FacebookLink { get; set; }
-        public string? LogoUrl { get; set; }
-        public string? BrandColor { get; set; }
-        public string? Timezone { get; set; }
-        public string? BusinessHours { get; set; }
-        public string? PreferredLanguage { get; set; }
-        public Guid? MatchLocationId { get; set; }
+        public Guid? tenant_id { get; set; }
+        public Guid? node_id { get; set; }
+        public string? legacy_id { get; set; }
+        public string name { get; set; } = string.Empty;
+        public int? status_id { get; set; }
+        public bool? is_active { get; set; } = true;
+        public string? slug { get; set; }
+        public string? business_name { get; set; }
+        public string? description { get; set; }
+        public int? location_type_id { get; set; }
+        public string? address_line_1 { get; set; }
+        public string? city { get; set; }
+        public string? state { get; set; }
+        public int? country_id { get; set; }
+        public int? province_id { get; set; }
+        public int? district_id { get; set; }
+        public int? ward_id { get; set; }
+        public string? zipcode { get; set; }
+        public string? phone_number { get; set; }
+        public string? email { get; set; }
+        public string? website { get; set; }
+        public string? twitter { get; set; }
+        public string? instagram { get; set; }
+        public string? facebook { get; set; }
+        public string? logo_url { get; set; }
+        public string? cover_image_url { get; set; }
+        public string? brand_color { get; set; }
+        public string? timezone { get; set; }
+        public string? operating_hours { get; set; }
+        public string? transfer_account { get; set; }
+        public string? transfer_tag { get; set; }
+        public Guid? parent_location_id { get; set; }
     }
 }

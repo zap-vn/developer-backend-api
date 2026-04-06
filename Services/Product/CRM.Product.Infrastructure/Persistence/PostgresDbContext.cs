@@ -239,7 +239,7 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.cover_image_url).HasColumnName("cover_image_url");
                 entity.Property(e => e.brand_color).HasColumnName("brand_color");
                 entity.Property(e => e.timezone).HasColumnName("timezone");
-                entity.Property(e => e.operating_hours).HasColumnName("operating_hours");
+                entity.Property(e => e.operating_hours).HasColumnName("operating_hours").HasColumnType("jsonb");
                 entity.Property(e => e.transfer_account).HasColumnName("transfer_account");
                 entity.Property(e => e.transfer_tag).HasColumnName("transfer_tag");
                 entity.Property(e => e.parent_location_id).HasColumnName("parent_location_id");

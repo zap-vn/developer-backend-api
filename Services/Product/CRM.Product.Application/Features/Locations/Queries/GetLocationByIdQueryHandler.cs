@@ -35,8 +35,10 @@ namespace CRM.Product.Application.Features.Locations.Queries
                 description = x.description,
                 location_type_id = x.location_type_id,
                 location_type_text = x.location_type != null 
-                    ? $"{x.location_type.translations.FirstOrDefault(t => t.locale_id == 1)?.name} ({x.location_type.translations.FirstOrDefault(t => t.locale_id == 2)?.name})" 
+                    ? (x.location_type.translations?.FirstOrDefault(t => t.locale_id == request.LocaleId)?.name ?? 
+                       $"{x.location_type.translations?.FirstOrDefault(t => t.locale_id == 2)?.name} ({x.location_type.translations?.FirstOrDefault(t => t.locale_id == 1)?.name})")
                     : null,
+
                 address_line_1 = x.address_line_1,
                 city = x.city,
                 state = x.state,

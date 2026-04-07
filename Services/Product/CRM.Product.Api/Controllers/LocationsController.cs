@@ -41,14 +41,18 @@ namespace CRM.Product.Api.Controllers
             });
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id, [FromHeader(Name = "Accept-Language")] string acceptLanguage)
         {
-            var result = await _mediator.Send(new GetLocationByIdQuery { Id = id });
+            int localeId = 2; // Default VI
+            if (int.TryParse(acceptLanguage, out int parsedLocale)) localeId = parsedLocale;
+
+            var result = await _mediator.Send(new GetLocationByIdQuery { Id = id, LocaleId = localeId });
             if (result == null)
                 return NotFound(new { success = false, code = 404, message = "Location not found" });
 
             return Ok(new { success = true, code = 200, message = "OK", data = result });
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateLocationCommand command)

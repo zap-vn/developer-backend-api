@@ -12,6 +12,15 @@ namespace CRM.Product.Domain.Entities
 
         [Column("tenant_id")]
         public Guid? tenant_id { get; set; }
+
+        [Column("serial_id")]
+        public int? serial_id { get; set; }
+
+        [Column("serial_number")]
+        public string? serial_number { get; set; }
+
+        [Column("location_code")]
+        public string? location_code { get; set; }
         
         [Column("node_id")]
         public Guid? node_id { get; set; }

@@ -4,24 +4,30 @@ using System.Threading;
 using System.Threading.Tasks;
 using CRM.Product.Domain.Entities;
 using CRM.Product.Domain.Interfaces;
+using CRM.BuildingBlocks.Interfaces;
 
 namespace CRM.Product.Application.Features.Warehouses.Commands
 {
     public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouseCommand, Guid>
     {
         private readonly IWarehouseRepository _repository;
+        private readonly ICurrentUserService _currentUserService;
 
-        public CreateWarehouseCommandHandler(IWarehouseRepository repository)
+        public CreateWarehouseCommandHandler(IWarehouseRepository repository, ICurrentUserService currentUserService)
         {
             _repository = repository;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Guid> Handle(CreateWarehouseCommand request, CancellationToken cancellationToken)
         {
+            // tenant_id always comes from JWT token, not from client
+            Guid? tenantId = Guid.TryParse(_currentUserService.UserGuid, out var tGuid) ? tGuid : (Guid?)null;
+
             var location = new Warehouse
             {
                 id = Guid.NewGuid(),
-                tenant_id = request.tenant_id,
+                tenant_id = tenantId,
                 node_id = request.node_id,
                 legacy_id = request.legacy_id,
                 name = request.name,

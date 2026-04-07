@@ -30,7 +30,6 @@ namespace CRM.Product.Application.Features.Warehouses.Queries
             {
                 PageIndex    = req.page_index,
                 PageSize     = req.page_size,
-                TenantId     = tenantId,
                 SearchName       = req.search?.name,
                 SearchLocationId = req.search?.location_id,
                 SearchAddress    = req.search?.address,

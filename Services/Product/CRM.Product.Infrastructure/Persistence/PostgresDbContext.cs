@@ -288,13 +288,16 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<UomItemEntity>(entity =>
             {
-                entity.ToTable("uom_item", "platform");
+                entity.ToTable("custom_unit", "catalog");
                 entity.HasKey(e => e.id);
-                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.id).HasColumnName("id").UseIdentityColumn();
+                entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
                 entity.Property(e => e.code).HasColumnName("code");
-                entity.Ignore(e => e.name);
-                entity.Ignore(e => e.tenant_id);
-                entity.Ignore(e => e.uom_type);
+                entity.Property(e => e.name).HasColumnName("name");
+                entity.Property(e => e.abbreviation).HasColumnName("abbreviation");
+                entity.Property(e => e.precision).HasColumnName("precision");
+                entity.Property(e => e.status_id).HasColumnName("status_id");
+                entity.HasOne(e => e.status).WithMany().HasForeignKey(e => e.status_id);
             });
 
             modelBuilder.Entity<InventoryItemEntity>(entity =>

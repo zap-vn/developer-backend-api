@@ -9,7 +9,14 @@ namespace CRM.Product.Domain.Interfaces
     {
         Task<IEnumerable<Category>> GetAllAsync();
         Task<Category?> GetByIdAsync(Guid id);
-        Task<(IEnumerable<Category> Items, int Total)> GetPagedAsync(int page, int pageSize, Guid? tenantId = null, string? search = null);
+        Task<(IEnumerable<Category> Items, int Total)> GetPagedAsync(
+            int page,
+            int pageSize,
+            Guid? tenantId = null,
+            string? search = null,
+            int? statusId = null,
+            string sortField = "name",
+            bool sortDescending = false);
 
         Task CreateAsync(Category category);
         Task UpdateAsync(Category category);

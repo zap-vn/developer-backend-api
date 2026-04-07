@@ -29,10 +29,13 @@ namespace CRM.Product.Application.Features.Products.Queries
             if (Guid.TryParse(tenantIdString, out var guid)) tenantId = guid;
 
             var (items, total) = await _repository.GetPagedAsync(
-                request.Request.PageIndex, 
-                request.Request.PageSize, 
-                tenantId, 
-                request.Request.SearchTerm);
+                request.Request.PageIndex,
+                request.Request.PageSize,
+                tenantId,
+                request.Request.Search,
+                request.Request.Filters?.StatusId,
+                request.Request.Sort?.Field ?? "name",
+                request.Request.Sort?.Descending ?? false);
 
             var dtos = items.Select(x => new CategoryDto
             {
@@ -55,6 +58,7 @@ namespace CRM.Product.Application.Features.Products.Queries
             }).ToList();
 
             return new PagedResult<CategoryDto>(dtos, total, request.Request.PageIndex, request.Request.PageSize);
+
         }
     }
 }

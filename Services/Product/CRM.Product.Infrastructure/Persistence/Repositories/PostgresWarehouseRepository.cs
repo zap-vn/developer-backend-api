@@ -53,9 +53,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             {
                 var term = filter.SearchLocationId;
                 if (Guid.TryParse(term, out var idGuid))
-                    query = query.Where(x => x.id == idGuid || x.node_code!.Contains(term));
-                else
-                    query = query.Where(x => x.node_code!.Contains(term));
+                    query = query.Where(x => x.id == idGuid);
             }
 
             // Search: address
@@ -81,9 +79,6 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         {
             return filter.SortField?.ToLower() switch
             {
-                "node_code" => filter.SortDescending
-                    ? query.OrderByDescending(x => x.node_code)
-                    : query.OrderBy(x => x.node_code),
                 "status" => filter.SortDescending
                     ? query.OrderByDescending(x => x.status_id)
                     : query.OrderBy(x => x.status_id),

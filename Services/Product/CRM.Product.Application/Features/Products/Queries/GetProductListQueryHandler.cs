@@ -45,7 +45,10 @@ namespace CRM.Product.Application.Features.Products.Queries
                 req.Filters?.StatusId,
                 categoryId,
                 warehouseId,
-                localeId);
+                localeId,
+                req.Filters?.ProductTypeId,
+                req.Sort?.Field ?? "created_at",
+                req.Sort?.Descending ?? true);
 
             var dtos = items.Select(v =>
             {

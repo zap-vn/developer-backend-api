@@ -6,8 +6,6 @@ namespace CRM.Product.Application.Features.Warehouses.DTOs
     {
         public Guid id { get; set; }
         public Guid? tenant_id { get; set; }
-        public Guid? node_id { get; set; }
-        public string? node_code { get; set; }
         public string? legacy_id { get; set; }
         public string name { get; set; } = string.Empty;
         public int? status_id { get; set; }

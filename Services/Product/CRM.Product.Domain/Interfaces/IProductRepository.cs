@@ -12,14 +12,17 @@ namespace CRM.Product.Domain.Interfaces
         Task UpdateAsync(CRM.Product.Domain.Entities.Product product);
         Task DeleteAsync(string id);
         Task<(IEnumerable<CRM.Product.Domain.Entities.ProductVariant> Items, int TotalCount)> GetPagedAsync(
-            int page, 
-            int pageSize, 
+            int page,
+            int pageSize,
             Guid? tenantId = null,
             string? searchTerm = null,
             int? statusId = null,
             Guid? categoryId = null,
             Guid? warehouseId = null,
-            int localeId = 2);
+            int localeId = 2,
+            int? productTypeId = null,
+            string sortField = "created_at",
+            bool sortDescending = true);
     }
 }
 

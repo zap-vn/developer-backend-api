@@ -29,17 +29,61 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             return await _context.ModifierGroups.FindAsync(id);
         }
 
-        public async Task<(IEnumerable<ModifierGroup> Items, int Total)> GetPagedAsync(int page, int pageSize, Guid? tenantId = null, string? search = null)
+        public async Task<(IEnumerable<ModifierGroup> Items, int Total)> GetPagedAsync(
+            int page,
+            int pageSize,
+            Guid? tenantId = null,
+            string? search = null,
+            int? statusId = null,
+            string? displayType = null,
+            string sortField = "name",
+            bool sortDescending = false)
         {
             var query = _context.ModifierGroups.Include(x => x.status).AsQueryable();
-            if (tenantId.HasValue) query = query.Where(x => x.tenant_id == tenantId);
-            if (!string.IsNullOrEmpty(search)) query = query.Where(x => x.name.Contains(search));
+
+            if (tenantId.HasValue)
+                query = query.Where(x => x.tenant_id == tenantId);
+
+            if (statusId.HasValue)
+                query = query.Where(x => x.status_id == statusId);
+
+            // display_type derived from max_selection: "single"=1, "multi">1
+            if (!string.IsNullOrEmpty(displayType))
+            {
+                if (displayType == "single")
+                    query = query.Where(x => x.max_selection == 1);
+                else if (displayType == "multi")
+                    query = query.Where(x => x.max_selection > 1);
+            }
+
+            // Search by ID (exact), name, or legacy_id (internal name)
+            if (!string.IsNullOrEmpty(search))
+            {
+                Guid? searchGuid = Guid.TryParse(search, out var sg) ? sg : (Guid?)null;
+                query = searchGuid.HasValue
+                    ? query.Where(x => x.id == searchGuid)
+                    : query.Where(x =>
+                        x.name.Contains(search) ||
+                        (x.legacy_id != null && x.legacy_id.Contains(search)));
+            }
 
             var total = await query.CountAsync();
-            var items = await query.OrderBy(x => x.sort_order).ThenBy(x => x.name)
-                                   .Skip((page - 1) * pageSize)
-                                   .Take(pageSize)
-                                   .ToListAsync();
+
+            IOrderedQueryable<ModifierGroup> ordered = sortField switch
+            {
+                "sort_order" => sortDescending
+                    ? query.OrderByDescending(x => x.sort_order).ThenByDescending(x => x.name)
+                    : query.OrderBy(x => x.sort_order).ThenBy(x => x.name),
+                _ => sortDescending
+                    ? query.OrderByDescending(x => x.name)
+                    : query.OrderBy(x => x.name),
+            };
+
+            var items = await ordered
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
             return (items, total);
         }
 

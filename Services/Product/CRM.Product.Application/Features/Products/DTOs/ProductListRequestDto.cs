@@ -16,6 +16,9 @@ namespace CRM.Product.Application.Features.Products.DTOs
 
         [JsonPropertyName("filters")]
         public ProductListFilterDto Filters { get; set; } = new();
+
+        [JsonPropertyName("sort")]
+        public ProductListSortDto Sort { get; set; } = new();
     }
 
     public class ProductListFilterDto
@@ -31,5 +34,20 @@ namespace CRM.Product.Application.Features.Products.DTOs
 
         [JsonPropertyName("locale_id")]
         public int? LocaleId { get; set; }
+
+        [JsonPropertyName("product_type_id")]
+        public int? ProductTypeId { get; set; }
+    }
+
+    /// <summary>
+    /// Sort config. field: "name" | "price" | "stock" | "created_at" (default)
+    /// </summary>
+    public class ProductListSortDto
+    {
+        [JsonPropertyName("field")]
+        public string Field { get; set; } = "created_at";
+
+        [JsonPropertyName("descending")]
+        public bool Descending { get; set; } = true;
     }
 }

@@ -48,8 +48,6 @@ namespace CRM.Product.Application.Features.Warehouses.Queries
             {
                 id                 = x.id,
                 tenant_id          = x.tenant_id,
-                node_id            = x.node_id,
-                node_code          = x.node_code,
                 legacy_id          = x.legacy_id,
                 name               = x.name,
                 status_id          = x.status_id,

@@ -71,7 +71,10 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             int? statusId = null,
             Guid? categoryId = null,
             Guid? warehouseId = null,
-            int localeId = 2)
+            int localeId = 2,
+            int? productTypeId = null,
+            string sortField = "created_at",
+            bool sortDescending = true)
         {
             // Step 1: build filter query (no Includes — avoids EF Core materializer column-order issues)
             var query = _context.ProductVariants.AsQueryable();
@@ -97,19 +100,41 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             if (warehouseId.HasValue)
                 query = query.Where(v => v.inventory_items.Any(ii => ii.warehouse_id == warehouseId));
 
+            if (productTypeId.HasValue)
+                query = query.Where(v => v.product != null && v.product.product_type_id == productTypeId);
+
             if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // If the term is a valid GUID, also match by variant id or product id
+                Guid? searchGuid = Guid.TryParse(searchTerm, out var sg) ? sg : (Guid?)null;
                 query = query.Where(v =>
+                    (searchGuid.HasValue && (v.id == searchGuid || v.product_id == searchGuid)) ||
                     (v.variant_name != null && v.variant_name.Contains(searchTerm)) ||
                     (v.sku_code != null && v.sku_code.Contains(searchTerm)) ||
                     (v.barcode != null && v.barcode.Contains(searchTerm)) ||
                     (v.product != null && v.product.name.Contains(searchTerm)));
+            }
 
             int total = await query.CountAsync();
 
-            // Step 2: get paginated IDs only
-            var pagedIds = await query
-                .OrderByDescending(v => v.product != null ? v.product.created_at : DateTime.MinValue)
-                .ThenByDescending(v => v.id)
+            // Step 2: get paginated IDs only with dynamic sort
+            IOrderedQueryable<CRM.Product.Domain.Entities.ProductVariant> orderedQuery = sortField switch
+            {
+                "name" => sortDescending
+                    ? query.OrderByDescending(v => v.variant_name ?? (v.product != null ? v.product.name : "")).ThenByDescending(v => v.id)
+                    : query.OrderBy(v => v.variant_name ?? (v.product != null ? v.product.name : "")).ThenBy(v => v.id),
+                "price" => sortDescending
+                    ? query.OrderByDescending(v => v.sale_price ?? v.base_price ?? 0).ThenByDescending(v => v.id)
+                    : query.OrderBy(v => v.sale_price ?? v.base_price ?? 0).ThenBy(v => v.id),
+                "stock" => sortDescending
+                    ? query.OrderByDescending(v => v.inventory_items.Sum(i => (decimal?)i.qty_on_hand) ?? 0).ThenByDescending(v => v.id)
+                    : query.OrderBy(v => v.inventory_items.Sum(i => (decimal?)i.qty_on_hand) ?? 0).ThenBy(v => v.id),
+                _ => sortDescending
+                    ? query.OrderByDescending(v => v.product != null ? v.product.created_at : DateTime.MinValue).ThenByDescending(v => v.id)
+                    : query.OrderBy(v => v.product != null ? v.product.created_at : DateTime.MinValue).ThenBy(v => v.id),
+            };
+
+            var pagedIds = await orderedQuery
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(v => v.id)
@@ -118,8 +143,8 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             if (!pagedIds.Any())
                 return (Enumerable.Empty<CRM.Product.Domain.Entities.ProductVariant>(), total);
 
-            // Step 3: load full data for those IDs — clean query, no navigation joins in WHERE
-            var items = await _context.ProductVariants
+            // Step 3: load full data for those IDs — preserve page order from Step 2
+            var rawItems = await _context.ProductVariants
                 .Where(v => pagedIds.Contains(v.id))
                 .Include(v => v.product!)
                     .ThenInclude(p => p.status!)
@@ -135,9 +160,14 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                     .ThenInclude(i => i.Warehouse)
                 .Include(v => v.bom_headers.Where(b => b.is_active))
                 .Include(v => v.uom)
-                .OrderByDescending(v => v.product != null ? v.product.created_at : DateTime.MinValue)
-                .ThenByDescending(v => v.id)
                 .ToListAsync();
+
+            // Re-apply the page order (pagedIds is already sorted correctly by Step 2)
+            var items = pagedIds
+                .Select(id => rawItems.FirstOrDefault(v => v.id == id))
+                .Where(v => v != null)
+                .Select(v => v!)
+                .ToList();
 
             return (items, total);
         }

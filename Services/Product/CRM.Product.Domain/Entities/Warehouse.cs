@@ -16,8 +16,6 @@ namespace CRM.Product.Domain.Entities
         [Column("node_id")]
         public Guid? node_id { get; set; }
 
-        [Column("node_code")]
-        public string? node_code { get; set; }
 
         [Column("legacy_id")]
         public string? legacy_id { get; set; }

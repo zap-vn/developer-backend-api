@@ -53,6 +53,44 @@ namespace CRM.Customer.Infrastructure.Persistence
                 entity.Ignore(e => e.CreatedBy);
                 entity.Ignore(e => e.UpdatedBy);
                 entity.Ignore(e => e.IsDeleted);
+
+                // Ignore MongoDB-specific complex types and other non-Postgres fields
+                entity.Ignore(e => e.TaxSyncSetting);
+                entity.Ignore(e => e._key);
+                entity.Ignore(e => e._rev);
+                entity.Ignore(e => e.BusinessName);
+                entity.Ignore(e => e.BussinessTypeId);
+                entity.Ignore(e => e.CurrencyId);
+                entity.Ignore(e => e.CurrencyNativeName);
+                entity.Ignore(e => e.CurrencySymbol);
+                entity.Ignore(e => e.CustomerCode);
+                entity.Ignore(e => e.Language);
+                entity.Ignore(e => e.FirstName);
+                entity.Ignore(e => e.LastName);
+                entity.Ignore(e => e.Phone);
+                entity.Ignore(e => e.Point);
+                entity.Ignore(e => e.MerchantUrl);
+                entity.Ignore(e => e.Name);
+                entity.Ignore(e => e.Address);
+                entity.Ignore(e => e.PhoneNumber);
+                entity.Ignore(e => e.IsActive);
+                entity.Ignore(e => e.CreateDate);
+                entity.Ignore(e => e.StartedDate);
+                entity.Ignore(e => e.TimeZoneDisplayName);
+                entity.Ignore(e => e.TimeZoneId);
+                entity.Ignore(e => e.Websites);
+                entity.Ignore(e => e.MerchantName);
+                entity.Ignore(e => e.RegistrationSource);
+                entity.Ignore(e => e.PublicKey);
+                entity.Ignore(e => e.AdminUpdate);
+                entity.Ignore(e => e.BatchCode);
+                entity.Ignore(e => e.LinkVAT);
+                entity.Ignore(e => e.InterestGrade);
+                entity.Ignore(e => e.PassCode);
+                entity.Ignore(e => e.Password);
+                entity.Ignore(e => e.Plural);
+                entity.Ignore(e => e.Singular);
+                entity.Ignore(e => e.EmpGuid);
             });
 
             modelBuilder.Entity<LoyaltyTier>(entity =>

@@ -51,9 +51,11 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 bool isGuid = Guid.TryParse(term, out var idGuid);
                 
                 query = query.Where(x => 
-                    x.name.Contains(term) || 
+                    EF.Functions.ILike(x.name, $"%{term}%") || 
+                    EF.Functions.ILike(EF.Functions.Unaccent(x.name), $"%{term}%") ||
                     (isGuid && x.id == idGuid) ||
-                    (x.address_line_1 != null && x.address_line_1.Contains(term))
+                    (x.address_line_1 != null && EF.Functions.ILike(x.address_line_1, $"%{term}%")) ||
+                    (x.address_line_1 != null && EF.Functions.ILike(EF.Functions.Unaccent(x.address_line_1), $"%{term}%"))
                 );
             }
 
@@ -65,9 +67,18 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             if (filter.ProvinceId.HasValue)
                 query = query.Where(x => x.province_id == filter.ProvinceId);
 
-            // Filter: location type (tier level)
-            if (filter.LocationTypeId.HasValue)
-                query = query.Where(x => x.location_type_id == filter.LocationTypeId);
+            // Filter: location type (list string)
+            if (filter.LocationTypeIds != null && filter.LocationTypeIds.Count > 0)
+            {
+                // Parse string IDs to int for comparison
+                var ids = filter.LocationTypeIds
+                    .Select(s => int.TryParse(s, out var n) ? (int?)n : null)
+                    .Where(n => n.HasValue)
+                    .Select(n => n!.Value)
+                    .ToList();
+                if (ids.Count > 0)
+                    query = query.Where(x => x.location_type_id != null && ids.Contains(x.location_type_id.Value));
+            }
 
             return query;
         }

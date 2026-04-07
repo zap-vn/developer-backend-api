@@ -388,7 +388,7 @@ paths:
       summary: "List Products"
       operationId: "products_list"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -399,7 +399,7 @@ paths:
       summary: "Product Swagger JSON"
       operationId: "get_product_swagger"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/swagger/v1/swagger.json"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/swagger/v1/swagger.json"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -409,7 +409,7 @@ paths:
       summary: "Create Product"
       operationId: "products_create"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -420,7 +420,7 @@ paths:
       summary: "List Products (Plural)"
       operationId: "products_list_plural"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -431,7 +431,7 @@ paths:
       summary: "Products (Plural) Swagger JSON"
       operationId: "get_products_plural_swagger"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/swagger/v1/swagger.json"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/swagger/v1/swagger.json"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -442,7 +442,7 @@ paths:
       summary: "Product List POST"
       operationId: "products_list_post"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -458,7 +458,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -474,7 +474,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "h2"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -485,7 +485,7 @@ paths:
       summary: "Categories list"
       operationId: "categories_list_post"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -495,7 +495,7 @@ paths:
       summary: "Categories list CORS"
       operationId: "cors_categories_list"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/categories/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/categories/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -506,7 +506,7 @@ paths:
       summary: "Categories all"
       operationId: "categories_all_get"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -517,7 +517,7 @@ paths:
       summary: "locations list"
       operationId: "locations_list_post"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/locations/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/locations/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -527,7 +527,7 @@ paths:
       summary: "locations list CORS"
       operationId: "cors_locations_list"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/locations/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/locations/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -538,7 +538,7 @@ paths:
       summary: "Create Location"
       operationId: "locations_create_post"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/locations"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/locations"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -548,7 +548,7 @@ paths:
       summary: "locations create CORS"
       operationId: "cors_locations_create"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/locations"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/locations"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -564,7 +564,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -579,7 +579,7 @@ paths:
           required: true
           type: string
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -590,7 +590,7 @@ paths:
       summary: "Brands list"
       operationId: "brands_list_post"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -600,7 +600,7 @@ paths:
       summary: "Brands list CORS"
       operationId: "cors_brands_list"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/brands/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/brands/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -611,7 +611,7 @@ paths:
       summary: "Units list"
       operationId: "units_list_post"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -621,7 +621,7 @@ paths:
       summary: "Units list CORS"
       operationId: "cors_units_list"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/units/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/units/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -632,7 +632,7 @@ paths:
       summary: "Modifier groups list"
       operationId: "modifier_list_post"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -642,7 +642,7 @@ paths:
       summary: "Modifier groups list CORS"
       operationId: "cors_modifier_list"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/modifiergroups/list"
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/modifiergroups/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
@@ -773,7 +773,7 @@ paths:
       summary: "Promotions list"
       operationId: "promotions_list_post"
       x-google-backend:
-        address: "https://zapcrm-promotion-api-6r5doqgaaa-as.a.run.app"
+        address: "https://zapcrm-promotion-api-204573236312.asia-southeast1.run.app"
         protocol: "http/1.1"
         path_translation: APPEND_PATH_TO_ADDRESS
       responses:
@@ -783,7 +783,7 @@ paths:
       summary: "Promotions list CORS"
       operationId: "cors_promotions_list"
       x-google-backend:
-        address: "https://zapcrm-promotion-api-6r5doqgaaa-as.a.run.app/api/promotions/list"
+        address: "https://zapcrm-promotion-api-204573236312.asia-southeast1.run.app/api/promotions/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:

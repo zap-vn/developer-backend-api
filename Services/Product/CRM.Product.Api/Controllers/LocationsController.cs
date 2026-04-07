@@ -1,29 +1,29 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using CRM.Product.Application.Features.Warehouses.Queries;
-using CRM.Product.Application.Features.Warehouses.DTOs;
-using CRM.Product.Application.Features.Warehouses.Commands;
+using CRM.Product.Application.Features.Locations.Queries;
+using CRM.Product.Application.Features.Locations.DTOs;
+using CRM.Product.Application.Features.Locations.Commands;
 using CRM.BuildingBlocks.Models;
 
 namespace CRM.Product.Api.Controllers
 {
     [ApiController]
-    [Route("api/warehouses")]
-    public class WarehousesController : ControllerBase
+    [Route("api/Locations")]
+    public class LocationsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public WarehousesController(IMediator mediator)
+        public LocationsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpPost("list")]
         [Consumes("application/json")]
-        public async Task<IActionResult> List([FromBody] WarehouseListRequestDto requestBody)
+        public async Task<IActionResult> List([FromBody] LocationListRequestDto requestBody)
         {
-            var result = await _mediator.Send(new GetWarehouseListQuery { Request = requestBody });
+            var result = await _mediator.Send(new GetLocationListQuery { Request = requestBody });
             
             return Ok(new 
             {
@@ -43,7 +43,7 @@ namespace CRM.Product.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _mediator.Send(new GetWarehouseByIdQuery { Id = id });
+            var result = await _mediator.Send(new GetLocationByIdQuery { Id = id });
             if (result == null)
                 return NotFound(new { success = false, code = 404, message = "Location not found" });
 
@@ -51,7 +51,7 @@ namespace CRM.Product.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateWarehouseCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateLocationCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(new 
@@ -59,6 +59,19 @@ namespace CRM.Product.Api.Controllers
                 success = true,
                 code = 200,
                 message = "Location created successfully",
+                data = result
+            });
+        }
+
+        [HttpGet("provinces")]
+        public async Task<IActionResult> GetProvinces([FromQuery] int locale_id = 1)
+        {
+            var result = await _mediator.Send(new GetProvinceListQuery { LocaleId = locale_id });
+            return Ok(new 
+            {
+                success = true,
+                code = 200,
+                message = "OK",
                 data = result
             });
         }

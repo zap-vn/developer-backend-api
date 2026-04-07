@@ -1,27 +1,15 @@
-namespace CRM.Product.Application.Features.Warehouses.DTOs
+namespace CRM.Product.Application.Features.Locations.DTOs
 {
-    public class WarehouseListRequestDto
+    public class LocationListRequestDto
     {
         public int page_index { get; set; } = 1;
         public int page_size { get; set; } = 10;
-        public WarehouseSearchDto? search { get; set; }
-        public WarehouseFiltersDto? filters { get; set; }
-        public WarehouseSortDto? sort { get; set; }
+        public string? search { get; set; }
+        public LocationFiltersDto? filters { get; set; }
+        public LocationSortDto? sort { get; set; }
     }
 
-    public class WarehouseSearchDto
-    {
-        /// <summary>Tên vị trí (name)</summary>
-        public string? name { get; set; }
-
-        /// <summary>Mã vị trí: node_code hoặc id</summary>
-        public string? location_id { get; set; }
-
-        /// <summary>Địa chỉ (address_line_1)</summary>
-        public string? address { get; set; }
-    }
-
-    public class WarehouseFiltersDto
+    public class LocationFiltersDto
     {
         /// <summary>Trạng thái (status_id): ACTIVE / INACTIVE</summary>
         public int? status_id { get; set; }
@@ -33,7 +21,7 @@ namespace CRM.Product.Application.Features.Warehouses.DTOs
         public int? location_type_id { get; set; }
     }
 
-    public class WarehouseSortDto
+    public class LocationSortDto
     {
         /// <summary>Field to sort by: "name" | "node_code" | "status"</summary>
         public string? field { get; set; }

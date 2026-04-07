@@ -1,26 +1,26 @@
 using MediatR;
-using CRM.Product.Application.Features.Warehouses.DTOs;
+using CRM.Product.Application.Features.Locations.DTOs;
 using CRM.Product.Domain.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CRM.Product.Application.Features.Warehouses.Queries
+namespace CRM.Product.Application.Features.Locations.Queries
 {
-    public class GetWarehouseByIdQueryHandler : IRequestHandler<GetWarehouseByIdQuery, WarehouseDto?>
+    public class GetLocationByIdQueryHandler : IRequestHandler<GetLocationByIdQuery, LocationDto?>
     {
-        private readonly IWarehouseRepository _repository;
+        private readonly ILocationRepository _repository;
 
-        public GetWarehouseByIdQueryHandler(IWarehouseRepository repository)
+        public GetLocationByIdQueryHandler(ILocationRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<WarehouseDto?> Handle(GetWarehouseByIdQuery request, CancellationToken cancellationToken)
+        public async Task<LocationDto?> Handle(GetLocationByIdQuery request, CancellationToken cancellationToken)
         {
             var x = await _repository.GetByIdAsync(request.Id);
             if (x == null) return null;
 
-            return new WarehouseDto
+            return new LocationDto
             {
                 id = x.id,
                 tenant_id = x.tenant_id,

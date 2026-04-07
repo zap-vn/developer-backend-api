@@ -512,52 +512,52 @@ paths:
       responses:
         200:
           description: "OK"
-  /api/warehouses/list:
+  /api/locations/list:
     post:
-      summary: "Warehouses list"
-      operationId: "warehouses_list_post"
+      summary: "locations list"
+      operationId: "locations_list_post"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/warehouses/list"
+        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/locations/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
     options:
-      summary: "Warehouses list CORS"
-      operationId: "cors_warehouses_list"
+      summary: "locations list CORS"
+      operationId: "cors_locations_list"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/warehouses/list"
+        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/locations/list"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/warehouses:
+  /api/locations:
     post:
-      summary: "Create warehouse"
-      operationId: "warehouses_create_post"
+      summary: "Create Location"
+      operationId: "locations_create_post"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/warehouses"
+        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/locations"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
     options:
-      summary: "Warehouses create CORS"
-      operationId: "cors_warehouses_create"
+      summary: "locations create CORS"
+      operationId: "cors_locations_create"
       x-google-backend:
-        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/warehouses"
+        address: "https://zapcrm-product-api-6r5doqgaaa-as.a.run.app/api/locations"
         protocol: "http/1.1"
         path_translation: CONSTANT_ADDRESS
       responses:
         200:
           description: "OK"
-  /api/warehouses/{id}:
+  /api/locations/{id}:
     get:
-      summary: "Get warehouse by id"
-      operationId: "warehouses_get_by_id"
+      summary: "Get Location by id"
+      operationId: "locations_get_by_id"
       parameters:
         - name: id
           in: path
@@ -571,8 +571,8 @@ paths:
         200:
           description: "OK"
     options:
-      summary: "Warehouses get by id CORS"
-      operationId: "cors_warehouses_get_by_id"
+      summary: "locations get by id CORS"
+      operationId: "cors_locations_get_by_id"
       parameters:
         - name: id
           in: path

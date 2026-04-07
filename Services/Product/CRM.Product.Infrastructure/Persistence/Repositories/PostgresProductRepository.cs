@@ -70,7 +70,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             string? searchTerm = null,
             int? statusId = null,
             Guid? categoryId = null,
-            Guid? warehouseId = null,
+            Guid? locationId = null,
             int localeId = 2,
             int? productTypeId = null,
             string sortField = "created_at",
@@ -97,8 +97,8 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 query = query.Where(v => _context.ProductCategoryMappings
                     .Any(cm => cm.product_id == v.product_id && cm.category_id == categoryId));
 
-            if (warehouseId.HasValue)
-                query = query.Where(v => v.inventory_items.Any(ii => ii.warehouse_id == warehouseId));
+            if (locationId.HasValue)
+                query = query.Where(v => v.inventory_items.Any(ii => ii.location_id == locationId));
 
             if (productTypeId.HasValue)
                 query = query.Where(v => v.product != null && v.product.product_type_id == productTypeId);
@@ -155,9 +155,9 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                     .ThenInclude(p => p.category_mappings)
                         .ThenInclude(cm => cm.category)
                 .Include(v => v.media.Where(m => m.is_primary))
-                .Include(v => v.location_pricing.Where(lp => lp.is_active && (!warehouseId.HasValue || lp.warehouse_id == warehouseId)))
-                .Include(v => v.inventory_items.Where(ii => !warehouseId.HasValue || ii.warehouse_id == warehouseId))
-                    .ThenInclude(i => i.Warehouse)
+                .Include(v => v.location_pricing.Where(lp => lp.is_active && (!locationId.HasValue || lp.location_id == locationId)))
+                .Include(v => v.inventory_items.Where(ii => !locationId.HasValue || ii.location_id == locationId))
+                    .ThenInclude(i => i.Location)
                 .Include(v => v.bom_headers.Where(b => b.is_active))
                 .Include(v => v.uom)
                 .ToListAsync();

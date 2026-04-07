@@ -18,7 +18,7 @@ namespace CRM.Product.Domain.Interfaces
             string? searchTerm = null,
             int? statusId = null,
             Guid? categoryId = null,
-            Guid? warehouseId = null,
+            Guid? locationId = null,
             int localeId = 2,
             int? productTypeId = null,
             string sortField = "created_at",

@@ -9,8 +9,8 @@ namespace CRM.Product.Domain.Entities
         [Column("product_variant_id")]
         public Guid product_variant_id { get; set; }
         
-        [Column("warehouse_id")]
-        public Guid warehouse_id { get; set; }
+        [Column("location_id")]
+        public Guid location_id { get; set; }
         
         [Column("sale_price_override")]
         public decimal? sale_price_override { get; set; }

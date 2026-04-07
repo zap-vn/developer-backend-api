@@ -9,7 +9,7 @@ using CategoryMappingEntity = CRM.Product.Domain.Entities.ProductCategoryMap;
 using LocationPriceEntity = CRM.Product.Domain.Entities.ProductLocationPricing;
 using StatusItemEntity = CRM.Product.Domain.Entities.StatusItem;
 using StatusTranslationEntity = CRM.Product.Domain.Entities.StatusItemTranslation;
-using WarehouseEntity = CRM.Product.Domain.Entities.Warehouse;
+using LocationEntity = CRM.Product.Domain.Entities.Location;
 using UomItemEntity = CRM.Product.Domain.Entities.UomItem;
 using CRM.Product.Domain.Entities;
 using InventoryItemEntity = CRM.Product.Domain.Entities.InventoryItem;
@@ -33,7 +33,7 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<CategoryMappingEntity> ProductCategoryMappings { get; set; }
         public DbSet<LocationPriceEntity> ProductLocationPricing { get; set; }
         public DbSet<StatusItemEntity> StatusItems { get; set; }
-        public DbSet<WarehouseEntity> Warehouses { get; set; }
+        public DbSet<LocationEntity> Locations { get; set; }
         public DbSet<LocationTypeItem> LocationTypeItems { get; set; }
         public DbSet<Store> Stores { get; set; }
 
@@ -41,6 +41,8 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<ProductTypeItem> ProductTypeItems { get; set; }
         public DbSet<InventoryItemEntity> InventoryItems { get; set; }
         public DbSet<BomHeaderEntity> BomHeaders { get; set; }
+        public DbSet<CRM.Product.Domain.Entities.ProvinceItem> ProvinceItems { get; set; }
+        public DbSet<CRM.Product.Domain.Entities.ProvinceTranslation> ProvinceTranslations { get; set; }
         
         // --- Catalog Menu System ---
         public DbSet<MenuHeader> MenuHeaders { get; set; }
@@ -167,11 +169,10 @@ namespace CRM.Product.Infrastructure.Persistence
             modelBuilder.Entity<LocationPriceEntity>(entity =>
             {
                 entity.ToTable("product_location_pricing", "catalog");
-                entity.HasKey(e => new { e.product_variant_id, e.warehouse_id });
+                entity.HasKey(e => new { e.product_variant_id, e.location_id });
                 entity.Property(e => e.product_variant_id).HasColumnName("product_variant_id");
-                entity.Property(e => e.warehouse_id).HasColumnName("warehouse_id");
+                entity.Property(e => e.location_id).HasColumnName("location_id");
                 entity.Property(e => e.sale_price_override).HasColumnName("sale_price_override");
-                entity.Property(e => e.is_active).HasColumnName("is_active");
             });
 
             modelBuilder.Entity<StatusItemEntity>(entity =>
@@ -204,7 +205,30 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.name).HasColumnName("name");
             });
 
-            modelBuilder.Entity<WarehouseEntity>(entity =>
+            modelBuilder.Entity<CRM.Product.Domain.Entities.ProvinceItem>(entity =>
+            {
+                entity.ToTable("province_item", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.code).HasColumnName("code");
+                entity.Property(e => e.is_active).HasColumnName("is_active");
+                
+                entity.HasMany(e => e.translations)
+                    .WithOne(t => t.province_item)
+                    .HasForeignKey(t => t.province_id);
+            });
+
+            modelBuilder.Entity<CRM.Product.Domain.Entities.ProvinceTranslation>(entity =>
+            {
+                entity.ToTable("province_translation", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.province_id).HasColumnName("province_id");
+                entity.Property(e => e.locale_id).HasColumnName("locale_id");
+                entity.Property(e => e.name).HasColumnName("name");
+            });
+
+            modelBuilder.Entity<LocationEntity>(entity =>
             {
                 entity.ToTable("location", "pos");
                 entity.HasKey(e => e.id);
@@ -306,12 +330,12 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.product_variant_id).HasColumnName("product_variant_id");
-                entity.Property(e => e.warehouse_id).HasColumnName("warehouse_id");
+                entity.Property(e => e.location_id).HasColumnName("location_id");
                 entity.Property(e => e.qty_on_hand).HasColumnName("qty_on_hand");
 
-                entity.HasOne(e => e.Warehouse)
+                entity.HasOne(e => e.Location)
                     .WithMany()
-                    .HasForeignKey(e => e.warehouse_id);
+                    .HasForeignKey(e => e.location_id);
             });
 
             modelBuilder.Entity<CategoryEntity>(entity =>

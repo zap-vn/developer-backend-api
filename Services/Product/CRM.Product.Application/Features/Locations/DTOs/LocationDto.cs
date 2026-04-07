@@ -1,8 +1,8 @@
 using System;
 
-namespace CRM.Product.Application.Features.Warehouses.DTOs
+namespace CRM.Product.Application.Features.Locations.DTOs
 {
-    public class WarehouseDto
+    public class LocationDto
     {
         public Guid id { get; set; }
         public Guid? tenant_id { get; set; }

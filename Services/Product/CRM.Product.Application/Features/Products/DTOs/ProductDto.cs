@@ -43,7 +43,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public decimal? qty_on_hand { get; set; }
         public string? unit_name { get; set; }
         public string? location_name { get; set; }
-        public Guid? warehouse_id { get; set; }
+        public Guid? location_id { get; set; }
         public int? uom_id { get; set; }
         public string? status_text { get; set; }
         public string? status_code { get; set; }

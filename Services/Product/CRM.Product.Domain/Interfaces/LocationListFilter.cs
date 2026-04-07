@@ -8,10 +8,8 @@ namespace CRM.Product.Domain.Interfaces
         public int PageSize { get; set; } = 10;
         public Guid? TenantId { get; set; }
 
-        // Search fields
-        public string? SearchName { get; set; }
-        public string? SearchLocationId { get; set; }   // matches node_code or id (as string)
-        public string? SearchAddress { get; set; }
+        // Search field
+        public string? Search { get; set; }
 
         // Filter fields
         public int? StatusId { get; set; }

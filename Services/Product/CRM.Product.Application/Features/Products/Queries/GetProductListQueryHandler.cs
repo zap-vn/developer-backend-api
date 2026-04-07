@@ -32,8 +32,8 @@ namespace CRM.Product.Application.Features.Products.Queries
             Guid? categoryId = null;
             if (Guid.TryParse(req.Filters?.CategoryId, out var catGuid)) categoryId = catGuid;
 
-            Guid? warehouseId = null;
-            if (Guid.TryParse(req.Filters?.WarehouseId, out var whGuid)) warehouseId = whGuid;
+            Guid? LocationId = null;
+            if (Guid.TryParse(req.Filters?.LocationId, out var whGuid)) LocationId = whGuid;
 
             int localeId = req.Filters?.LocaleId ?? 2;
 
@@ -44,7 +44,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 req.Search,
                 req.Filters?.StatusId,
                 categoryId,
-                warehouseId,
+                LocationId,
                 localeId,
                 req.Filters?.ProductTypeId,
                 req.Sort?.Field ?? "created_at",
@@ -63,14 +63,14 @@ namespace CRM.Product.Application.Features.Products.Queries
 
                 // Inventory summing for the specific variant
                 var inventoryItems = v.inventory_items;
-                if (warehouseId.HasValue)
-                    inventoryItems = inventoryItems.Where(i => i.warehouse_id == warehouseId).ToList();
+                if (LocationId.HasValue)
+                    inventoryItems = inventoryItems.Where(i => i.location_id == LocationId).ToList();
                 
                 var stockQty = inventoryItems.Sum(i => i.qty_on_hand);
                 var firstInv = inventoryItems.FirstOrDefault();
 
                 // Pricing: Check for override first
-                var locationPrice = v.location_pricing.FirstOrDefault(lp => !warehouseId.HasValue || lp.warehouse_id == warehouseId);
+                var locationPrice = v.location_pricing.FirstOrDefault(lp => !LocationId.HasValue || lp.location_id == LocationId);
                 var price = locationPrice?.sale_price_override ?? v.sale_price ?? v.base_price;
 
                 return new ProductDto
@@ -93,8 +93,8 @@ namespace CRM.Product.Application.Features.Products.Queries
                     qty_on_hand = stockQty,
                     uom_id = v.uom_id,
                     uom_code = v.uom?.code ?? "",
-                    warehouse_id = firstInv?.warehouse_id,
-                    location_name = firstInv?.Warehouse?.name,
+                    location_id = firstInv?.location_id,
+                    location_name = firstInv?.Location?.name,
                     created_at = p?.created_at ?? DateTime.UtcNow,
                     updated_at = p?.updated_at
                 };

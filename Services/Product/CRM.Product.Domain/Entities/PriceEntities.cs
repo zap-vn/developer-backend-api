@@ -19,7 +19,7 @@ namespace CRM.Product.Domain.Entities
     {
         public Guid id { get; set; }
         public Guid product_variant_id { get; set; }
-        public Guid location_id { get; set; } // also known as warehouse_id in some contexts
+        public Guid location_id { get; set; } // also known as location_id in some contexts
         public decimal price_override { get; set; }
         public bool is_active { get; set; } = true;
 

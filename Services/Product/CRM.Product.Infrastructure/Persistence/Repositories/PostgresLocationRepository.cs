@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace CRM.Product.Infrastructure.Persistence.Repositories
 {
-    public class PostgresWarehouseRepository : IWarehouseRepository
+    public class PostgresLocationRepository : ILocationRepository
     {
         private readonly PostgresDbContext _context;
 
-        public PostgresWarehouseRepository(PostgresDbContext context)
+        public PostgresLocationRepository(PostgresDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<Warehouse>> GetPagedAsync(LocationListFilter filter)
+        public async Task<IEnumerable<Location>> GetPagedAsync(LocationListFilter filter)
         {
-            IQueryable<Warehouse> query = BuildQuery(filter)
+            IQueryable<Location> query = BuildQuery(filter)
                 .Include(x => x.status)
                 .Include(x => x.location_type);
 
@@ -37,28 +37,25 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             return await BuildQuery(filter).CountAsync();
         }
 
-        private IQueryable<Warehouse> BuildQuery(LocationListFilter filter)
+        private IQueryable<Location> BuildQuery(LocationListFilter filter)
         {
-            var query = _context.Warehouses.AsQueryable();
+            var query = _context.Locations.AsQueryable();
 
             if (filter.TenantId.HasValue)
                 query = query.Where(x => x.tenant_id == filter.TenantId);
 
-            // Search: name
-            if (!string.IsNullOrWhiteSpace(filter.SearchName))
-                query = query.Where(x => x.name.Contains(filter.SearchName));
-
-            // Search: node_code or id
-            if (!string.IsNullOrWhiteSpace(filter.SearchLocationId))
+            // Search
+            if (!string.IsNullOrWhiteSpace(filter.Search))
             {
-                var term = filter.SearchLocationId;
-                if (Guid.TryParse(term, out var idGuid))
-                    query = query.Where(x => x.id == idGuid);
+                var term = filter.Search;
+                bool isGuid = Guid.TryParse(term, out var idGuid);
+                
+                query = query.Where(x => 
+                    x.name.Contains(term) || 
+                    (isGuid && x.id == idGuid) ||
+                    (x.address_line_1 != null && x.address_line_1.Contains(term))
+                );
             }
-
-            // Search: address
-            if (!string.IsNullOrWhiteSpace(filter.SearchAddress))
-                query = query.Where(x => x.address_line_1!.Contains(filter.SearchAddress));
 
             // Filter: status
             if (filter.StatusId.HasValue)
@@ -75,7 +72,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             return query;
         }
 
-        private IQueryable<Warehouse> ApplySort(IQueryable<Warehouse> query, LocationListFilter filter)
+        private IQueryable<Location> ApplySort(IQueryable<Location> query, LocationListFilter filter)
         {
             return filter.SortField?.ToLower() switch
             {
@@ -88,17 +85,17 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             };
         }
 
-        public async Task<Warehouse?> GetByIdAsync(Guid id)
+        public async Task<Location?> GetByIdAsync(Guid id)
         {
-            return await _context.Warehouses
+            return await _context.Locations
                 .Include(x => x.location_type)
                 .Include(x => x.status)
                 .FirstOrDefaultAsync(w => w.id == id);
         }
 
-        public async Task CreateAsync(Warehouse warehouse)
+        public async Task CreateAsync(Location location)
         {
-            await _context.Warehouses.AddAsync(warehouse);
+            await _context.Locations.AddAsync(location);
             await _context.SaveChangesAsync();
         }
 
@@ -108,20 +105,28 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Warehouse warehouse)
+        public async Task UpdateAsync(Location location)
         {
-            _context.Warehouses.Update(warehouse);
+            _context.Locations.Update(location);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var warehouse = await _context.Warehouses.FindAsync(id);
-            if (warehouse != null)
+            var location = await _context.Locations.FindAsync(id);
+            if (location != null)
             {
-                _context.Warehouses.Remove(warehouse);
+                _context.Locations.Remove(location);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<ProvinceItem>> GetProvincesAsync(int localeId)
+        {
+            return await _context.ProvinceItems
+                .Include(p => p.translations.Where(t => t.locale_id == localeId))
+                .Where(p => p.is_active)
+                .ToListAsync();
         }
     }
 }

@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CRM.Product.Domain.Entities
 {
     [Table("location", Schema = "pos")]
-    public class Warehouse
+    public class Location
     {
         [Key]
         public Guid id { get; set; } = Guid.NewGuid();
 
         [Column("tenant_id")]
         public Guid? tenant_id { get; set; }
-
+        
         [Column("node_id")]
         public Guid? node_id { get; set; }
 

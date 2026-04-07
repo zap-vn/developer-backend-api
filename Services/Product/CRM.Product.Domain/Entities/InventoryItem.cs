@@ -13,13 +13,13 @@ namespace CRM.Product.Domain.Entities
         [Column("product_variant_id")]
         public Guid product_variant_id { get; set; }
         
-        [Column("warehouse_id")]
-        public Guid warehouse_id { get; set; }
+        [Column("location_id")]
+        public Guid location_id { get; set; }
         
         [Column("qty_on_hand")]
         public decimal qty_on_hand { get; set; }
 
         public ProductVariant? Variant { get; set; }
-        public Warehouse? Warehouse { get; set; }
+        public Location? Location { get; set; }
     }
 }

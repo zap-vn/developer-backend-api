@@ -6,25 +6,25 @@ using CRM.Product.Domain.Entities;
 using CRM.Product.Domain.Interfaces;
 using CRM.BuildingBlocks.Interfaces;
 
-namespace CRM.Product.Application.Features.Warehouses.Commands
+namespace CRM.Product.Application.Features.Locations.Commands
 {
-    public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouseCommand, Guid>
+    public class CreateLocationCommandHandler : IRequestHandler<CreateLocationCommand, Guid>
     {
-        private readonly IWarehouseRepository _repository;
+        private readonly ILocationRepository _repository;
         private readonly ICurrentUserService _currentUserService;
 
-        public CreateWarehouseCommandHandler(IWarehouseRepository repository, ICurrentUserService currentUserService)
+        public CreateLocationCommandHandler(ILocationRepository repository, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _currentUserService = currentUserService;
         }
 
-        public async Task<Guid> Handle(CreateWarehouseCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateLocationCommand request, CancellationToken cancellationToken)
         {
-            // tenant_id always comes from JWT token, not from client
-            Guid? tenantId = Guid.TryParse(_currentUserService.UserGuid, out var tGuid) ? tGuid : (Guid?)null;
+            // tenant_id from JWT token, fallback to request if not present (for testing/internal calls)
+            Guid? tenantId = Guid.TryParse(_currentUserService.UserGuid, out var tGuid) ? tGuid : request.tenant_id;
 
-            var location = new Warehouse
+            var location = new Location
             {
                 id = Guid.NewGuid(),
                 tenant_id = tenantId,

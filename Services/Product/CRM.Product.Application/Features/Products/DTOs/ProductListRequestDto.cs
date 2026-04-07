@@ -29,8 +29,8 @@ namespace CRM.Product.Application.Features.Products.DTOs
         [JsonPropertyName("status")]
         public int? StatusId { get; set; }
 
-        [JsonPropertyName("warehouse_id")]
-        public string? WarehouseId { get; set; }
+        [JsonPropertyName("location_id")]
+        public string? LocationId { get; set; }
 
         [JsonPropertyName("locale_id")]
         public int? LocaleId { get; set; }

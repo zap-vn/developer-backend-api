@@ -1,5 +1,5 @@
 using MediatR;
-using CRM.Product.Application.Features.Warehouses.DTOs;
+using CRM.Product.Application.Features.Locations.DTOs;
 using CRM.BuildingBlocks.Models;
 using CRM.Product.Domain.Interfaces;
 using CRM.BuildingBlocks.Interfaces;
@@ -8,42 +8,40 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 
-namespace CRM.Product.Application.Features.Warehouses.Queries
+namespace CRM.Product.Application.Features.Locations.Queries
 {
-    public class GetWarehouseListQueryHandler : IRequestHandler<GetWarehouseListQuery, PagedResult<WarehouseDto>>
+    public class GetLocationListQueryHandler : IRequestHandler<GetLocationListQuery, PagedResult<LocationDto>>
     {
-        private readonly IWarehouseRepository _repository;
+        private readonly ILocationRepository _repository;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetWarehouseListQueryHandler(IWarehouseRepository repository, ICurrentUserService currentUserService)
+        public GetLocationListQueryHandler(ILocationRepository repository, ICurrentUserService currentUserService)
         {
             _repository = repository;
             _currentUserService = currentUserService;
         }
 
-        public async Task<PagedResult<WarehouseDto>> Handle(GetWarehouseListQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<LocationDto>> Handle(GetLocationListQuery request, CancellationToken cancellationToken)
         {
             var req = request.Request;
             Guid? tenantId = Guid.TryParse(_currentUserService.UserGuid, out var guid) ? guid : null;
 
             var filter = new LocationListFilter
             {
-                PageIndex    = req.page_index,
-                PageSize     = req.page_size,
-                SearchName       = req.search?.name,
-                SearchLocationId = req.search?.location_id,
-                SearchAddress    = req.search?.address,
-                StatusId         = req.filters?.status_id,
-                ProvinceId       = req.filters?.province_id,
-                LocationTypeId   = req.filters?.location_type_id,
-                SortField        = req.sort?.field,
-                SortDescending   = req.sort?.descending ?? false,
+                PageIndex      = req.page_index,
+                PageSize       = req.page_size,
+                Search         = req.search,
+                StatusId       = req.filters?.status_id,
+                ProvinceId     = req.filters?.province_id,
+                LocationTypeId = req.filters?.location_type_id,
+                SortField      = req.sort?.field,
+                SortDescending = req.sort?.descending ?? false,
             };
 
             var items = await _repository.GetPagedAsync(filter);
             var total = await _repository.GetTotalCountAsync(filter);
 
-            var dtos = items.Select(x => new WarehouseDto
+            var dtos = items.Select(x => new LocationDto
             {
                 id                 = x.id,
                 tenant_id          = x.tenant_id,
@@ -85,7 +83,7 @@ namespace CRM.Product.Application.Features.Warehouses.Queries
                 parent_location_id = x.parent_location_id
             }).ToList();
 
-            return new PagedResult<WarehouseDto>(dtos, total, req.page_index, req.page_size);
+            return new PagedResult<LocationDto>(dtos, total, req.page_index, req.page_size);
         }
     }
 }

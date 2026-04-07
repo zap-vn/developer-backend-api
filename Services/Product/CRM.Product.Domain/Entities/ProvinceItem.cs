@@ -1,0 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CRM.Product.Domain.Entities
+{
+    [Table("province_item", Schema = "platform")]
+    public class ProvinceItem
+    {
+        [Key]
+        [Column("id")]
+        public int id { get; set; }
+
+        [Column("code")]
+        public string code { get; set; } = string.Empty;
+
+        [Column("is_active")]
+        public bool is_active { get; set; } = true;
+
+        public ICollection<ProvinceTranslation> translations { get; set; } = new List<ProvinceTranslation>();
+    }
+}

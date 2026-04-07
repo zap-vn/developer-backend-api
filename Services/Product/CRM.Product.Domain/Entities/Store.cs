@@ -68,9 +68,12 @@ namespace CRM.Product.Domain.Entities
         public DateTime? updated_at { get; set; }
 
         [ForeignKey("location_id")]
-        public Warehouse? location { get; set; }
+        public Location? location { get; set; }
+
+        [ForeignKey("status_id")]
+        public StatusItem? status { get; set; }
         
-        // Extended fields from the old Warehouse model if needed
+        // Extended fields from the old Location model if needed
         [NotMapped]
         public string? nickname { get; set; }
         [NotMapped]

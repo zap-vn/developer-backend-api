@@ -1,9 +1,9 @@
 using MediatR;
 using System;
 
-namespace CRM.Product.Application.Features.Warehouses.Commands
+namespace CRM.Product.Application.Features.Locations.Commands
 {
-    public class CreateWarehouseCommand : IRequest<Guid>
+    public class CreateLocationCommand : IRequest<Guid>
     {
         public Guid? tenant_id { get; set; }
         public Guid? node_id { get; set; }

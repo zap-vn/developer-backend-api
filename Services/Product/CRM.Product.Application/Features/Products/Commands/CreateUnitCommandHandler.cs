@@ -29,8 +29,7 @@ namespace CRM.Product.Application.Features.Products.Commands
             {
                 tenant_id = tenantId,
                 name = request.Name,
-                code = request.Code,
-                uom_type = request.UomType ?? "UNIT"
+                code = request.Code
             };
 
             await _repository.CreateAsync(entity);

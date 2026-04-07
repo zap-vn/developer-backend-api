@@ -52,8 +52,10 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 
                 query = query.Where(x => 
                     EF.Functions.ILike(x.name, $"%{term}%") || 
+                    EF.Functions.ILike(EF.Functions.Unaccent(x.name), $"%{term}%") ||
                     (isGuid && x.id == idGuid) ||
-                    (x.address_line_1 != null && EF.Functions.ILike(x.address_line_1, $"%{term}%"))
+                    (x.address_line_1 != null && EF.Functions.ILike(x.address_line_1, $"%{term}%")) ||
+                    (x.address_line_1 != null && EF.Functions.ILike(EF.Functions.Unaccent(x.address_line_1), $"%{term}%"))
                 );
             }
 

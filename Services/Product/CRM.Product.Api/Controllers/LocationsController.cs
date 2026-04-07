@@ -21,8 +21,13 @@ namespace CRM.Product.Api.Controllers
 
         [HttpPost("list")]
         [Consumes("application/json")]
-        public async Task<IActionResult> List([FromBody] LocationListRequestDto requestBody)
+        public async Task<IActionResult> List([FromBody] LocationListRequestDto requestBody, [FromHeader(Name = "Accept-Language")] string? acceptLanguage)
         {
+            // Logic: Default to 2 (VI). If Header is provided, use Header.
+            requestBody.locale_id = 2;
+            if (!string.IsNullOrEmpty(acceptLanguage) && int.TryParse(acceptLanguage, out var parsedLocale))
+                requestBody.locale_id = parsedLocale;
+
             var result = await _mediator.Send(new GetLocationListQuery { Request = requestBody });
             
             return Ok(new 
@@ -41,10 +46,10 @@ namespace CRM.Product.Api.Controllers
             });
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id, [FromHeader(Name = "Accept-Language")] string acceptLanguage)
+        public async Task<IActionResult> GetById(Guid id, [FromHeader(Name = "Accept-Language")] string? acceptLanguage)
         {
             int localeId = 2; // Default VI
-            if (int.TryParse(acceptLanguage, out int parsedLocale)) localeId = parsedLocale;
+            if (!string.IsNullOrEmpty(acceptLanguage) && int.TryParse(acceptLanguage, out int parsedLocale)) localeId = parsedLocale;
 
             var result = await _mediator.Send(new GetLocationByIdQuery { Id = id, LocaleId = localeId });
             if (result == null)
@@ -52,6 +57,7 @@ namespace CRM.Product.Api.Controllers
 
             return Ok(new { success = true, code = 200, message = "OK", data = result });
         }
+
 
 
         [HttpPost]

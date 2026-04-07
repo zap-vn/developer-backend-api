@@ -48,10 +48,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 website_url = x.website_url,
                 status_id = x.status_id,
                 status_text = x.status?.code,
-                is_premium = x.is_premium,
-                vendor_name = x.vendor_name,
-                phone_number = x.phone_number,
-                email_address = x.email_address
+                is_premium = x.is_premium
             });
 
             return new PagedResult<BrandDto>(dtos.ToList(), total, request.Request.PageIndex, request.Request.PageSize);

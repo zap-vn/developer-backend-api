@@ -53,10 +53,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 query = searchGuid.HasValue
                     ? query.Where(x => x.id == searchGuid)
                     : query.Where(x =>
-                        x.name.Contains(search) ||
-                        (x.vendor_name != null && x.vendor_name.Contains(search)) ||
-                        (x.phone_number != null && x.phone_number.Contains(search)) ||
-                        (x.email_address != null && x.email_address.Contains(search)));
+                        x.name.Contains(search));
             }
 
             var total = await query.CountAsync();

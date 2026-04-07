@@ -18,15 +18,6 @@ namespace CRM.Product.Domain.Entities
         public int status_id { get; set; } = 2101;
         public bool is_premium { get; set; } = false;
 
-        /// <summary>Legal / display vendor name (may differ from brand name).</summary>
-        public string? vendor_name { get; set; }
-
-        /// <summary>Contact phone number.</summary>
-        public string? phone_number { get; set; }
-
-        /// <summary>Contact email address.</summary>
-        public string? email_address { get; set; }
-
         [ForeignKey("status_id")]
         public StatusItem? status { get; set; }
     }

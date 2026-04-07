@@ -7,16 +7,12 @@ namespace CRM.Product.Domain.Interfaces
 {
     public interface IWarehouseRepository
     {
-        Task<IEnumerable<Warehouse>> GetPagedAsync(
-            int page, 
-            int pageSize, 
-            Guid? tenantId = null,
-            string? searchTerm = null);
+        Task<IEnumerable<Warehouse>> GetPagedAsync(LocationListFilter filter);
+        Task<int> GetTotalCountAsync(LocationListFilter filter);
         Task<Warehouse?> GetByIdAsync(Guid id);
         Task CreateAsync(Warehouse warehouse);
         Task CreateStoreAsync(Store store);
         Task UpdateAsync(Warehouse warehouse);
         Task DeleteAsync(Guid id);
-        Task<int> GetTotalCountAsync(Guid? tenantId = null, string? searchTerm = null);
     }
 }

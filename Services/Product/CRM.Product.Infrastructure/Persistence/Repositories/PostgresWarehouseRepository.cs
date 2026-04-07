@@ -18,40 +18,79 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Warehouse>> GetPagedAsync(
-            int page, 
-            int pageSize, 
-            Guid? tenantId = null,
-            string? searchTerm = null)
+        public async Task<IEnumerable<Warehouse>> GetPagedAsync(LocationListFilter filter)
         {
-            var query = _context.Warehouses
+            var query = BuildQuery(filter)
                 .Include(x => x.status)
-                .Include(x => x.location_type)
-                .AsQueryable();
+                .Include(x => x.location_type);
 
+            query = ApplySort(query, filter);
 
-            if (tenantId.HasValue)
-                query = query.Where(x => x.tenant_id == tenantId);
-
-            if (!string.IsNullOrEmpty(searchTerm))
-                query = query.Where(x => x.name.Contains(searchTerm));
-
-            return await query.Skip((page - 1) * pageSize)
-                               .Take(pageSize)
-                               .ToListAsync();
+            return await query
+                .Skip((filter.PageIndex - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToListAsync();
         }
 
-        public async Task<int> GetTotalCountAsync(Guid? tenantId = null, string? searchTerm = null)
+        public async Task<int> GetTotalCountAsync(LocationListFilter filter)
+        {
+            return await BuildQuery(filter).CountAsync();
+        }
+
+        private IQueryable<Warehouse> BuildQuery(LocationListFilter filter)
         {
             var query = _context.Warehouses.AsQueryable();
 
-            if (tenantId.HasValue)
-                query = query.Where(x => x.tenant_id == tenantId);
+            if (filter.TenantId.HasValue)
+                query = query.Where(x => x.tenant_id == filter.TenantId);
 
-            if (!string.IsNullOrEmpty(searchTerm))
-                query = query.Where(x => x.name.Contains(searchTerm));
+            // Search: name
+            if (!string.IsNullOrWhiteSpace(filter.SearchName))
+                query = query.Where(x => x.name.Contains(filter.SearchName));
 
-            return await query.CountAsync();
+            // Search: node_code or id
+            if (!string.IsNullOrWhiteSpace(filter.SearchLocationId))
+            {
+                var term = filter.SearchLocationId;
+                if (Guid.TryParse(term, out var idGuid))
+                    query = query.Where(x => x.id == idGuid || x.node_code!.Contains(term));
+                else
+                    query = query.Where(x => x.node_code!.Contains(term));
+            }
+
+            // Search: address
+            if (!string.IsNullOrWhiteSpace(filter.SearchAddress))
+                query = query.Where(x => x.address_line_1!.Contains(filter.SearchAddress));
+
+            // Filter: status
+            if (filter.StatusId.HasValue)
+                query = query.Where(x => x.status_id == filter.StatusId);
+
+            // Filter: province
+            if (filter.ProvinceId.HasValue)
+                query = query.Where(x => x.province_id == filter.ProvinceId);
+
+            // Filter: location type (tier level)
+            if (filter.LocationTypeId.HasValue)
+                query = query.Where(x => x.location_type_id == filter.LocationTypeId);
+
+            return query;
+        }
+
+        private IQueryable<Warehouse> ApplySort(IQueryable<Warehouse> query, LocationListFilter filter)
+        {
+            return filter.SortField?.ToLower() switch
+            {
+                "node_code" => filter.SortDescending
+                    ? query.OrderByDescending(x => x.node_code)
+                    : query.OrderBy(x => x.node_code),
+                "status" => filter.SortDescending
+                    ? query.OrderByDescending(x => x.status_id)
+                    : query.OrderBy(x => x.status_id),
+                _ => filter.SortDescending
+                    ? query.OrderByDescending(x => x.name)
+                    : query.OrderBy(x => x.name)
+            };
         }
 
         public async Task<Warehouse?> GetByIdAsync(Guid id)

@@ -43,7 +43,7 @@ namespace CRM.Promotion.Infrastructure.Persistence.Queries
             var totalCount = await query.CountAsync(cancellationToken);
 
             var items = await query
-                .OrderByDescending(p => p.created_at)
+                .OrderByDescending(p => p.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(p => new PromotionListDto
@@ -58,8 +58,8 @@ namespace CRM.Promotion.Infrastructure.Persistence.Queries
                     is_automatic = p.is_automatic,
                     is_visible_pos = p.is_visible_pos,
                     status_id = p.status_id,
-                    created_at = p.created_at,
-                    updated_at = p.updated_at
+                    created_at = p.CreatedAt,
+                    updated_at = p.UpdatedAt ?? p.CreatedAt
                 })
                 .ToListAsync(cancellationToken);
 

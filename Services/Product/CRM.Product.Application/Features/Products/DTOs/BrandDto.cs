@@ -15,7 +15,6 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public string? status_text { get; set; }
         public bool is_premium { get; set; }
         public string? vendor_name { get; set; }
-        public string? account_number { get; set; }
         public string? phone_number { get; set; }
         public string? email_address { get; set; }
     }

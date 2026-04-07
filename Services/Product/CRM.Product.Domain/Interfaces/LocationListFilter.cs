@@ -14,7 +14,7 @@ namespace CRM.Product.Domain.Interfaces
         // Filter fields
         public int? StatusId { get; set; }
         public int? ProvinceId { get; set; }
-        public int? LocationTypeId { get; set; }        // tier_level / location_type_id
+        public List<string>? LocationTypeIds { get; set; }  // filter by multiple location_type_id (as strings)
 
         // Sort fields
         public string? SortField { get; set; }          // "name" | "node_code" | "status"

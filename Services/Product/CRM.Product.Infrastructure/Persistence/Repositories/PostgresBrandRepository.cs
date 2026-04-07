@@ -46,7 +46,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             if (statusId.HasValue)
                 query = query.Where(x => x.status_id == statusId);
 
-            // Search across name, vendor_name, account_number, phone_number, email_address
+            // Search across name, vendor_name, phone_number, email_address
             if (!string.IsNullOrEmpty(search))
             {
                 Guid? searchGuid = Guid.TryParse(search, out var sg) ? sg : (Guid?)null;
@@ -55,7 +55,6 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                     : query.Where(x =>
                         x.name.Contains(search) ||
                         (x.vendor_name != null && x.vendor_name.Contains(search)) ||
-                        (x.account_number != null && x.account_number.Contains(search)) ||
                         (x.phone_number != null && x.phone_number.Contains(search)) ||
                         (x.email_address != null && x.email_address.Contains(search)));
             }

@@ -33,9 +33,9 @@ namespace CRM.Product.Application.Features.Locations.Queries
                 Search         = req.search,
                 StatusId       = req.filters?.status_id,
                 ProvinceId     = req.filters?.province_id,
-                LocationTypeId = req.filters?.location_type_id,
                 SortField      = req.sort?.field,
                 SortDescending = req.sort?.descending ?? false,
+                LocationTypeIds = req.filters?.location_type_id,
             };
 
             var items = await _repository.GetPagedAsync(filter);

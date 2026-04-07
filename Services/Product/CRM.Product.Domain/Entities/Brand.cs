@@ -21,9 +21,6 @@ namespace CRM.Product.Domain.Entities
         /// <summary>Legal / display vendor name (may differ from brand name).</summary>
         public string? vendor_name { get; set; }
 
-        /// <summary>Internal brand code or account number (e.g. Square ID).</summary>
-        public string? account_number { get; set; }
-
         /// <summary>Contact phone number.</summary>
         public string? phone_number { get; set; }
 

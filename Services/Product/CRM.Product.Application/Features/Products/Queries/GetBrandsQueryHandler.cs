@@ -50,7 +50,6 @@ namespace CRM.Product.Application.Features.Products.Queries
                 status_text = x.status?.code,
                 is_premium = x.is_premium,
                 vendor_name = x.vendor_name,
-                account_number = x.account_number,
                 phone_number = x.phone_number,
                 email_address = x.email_address
             });

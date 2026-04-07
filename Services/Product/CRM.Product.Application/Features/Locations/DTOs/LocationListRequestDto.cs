@@ -17,8 +17,8 @@ namespace CRM.Product.Application.Features.Locations.DTOs
         /// <summary>Thành phố / tỉnh (province_id)</summary>
         public int? province_id { get; set; }
 
-        /// <summary>Loại hình vị trí (location_type_id / tier_level)</summary>
-        public int? location_type_id { get; set; }
+        /// <summary>Loại hình vị trí: truyền mảng string, VD: ["1", "2"]</summary>
+        public List<string>? location_type_id { get; set; }
     }
 
     public class LocationSortDto

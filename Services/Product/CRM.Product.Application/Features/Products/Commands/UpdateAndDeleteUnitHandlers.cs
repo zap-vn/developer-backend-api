@@ -21,7 +21,6 @@ namespace CRM.Product.Application.Features.Products.Commands
 
             if (request.Code != null) entity.code = request.Code;
             if (request.Name != null) entity.name = request.Name;
-            if (request.UomType != null) entity.uom_type = request.UomType;
 
             await _repository.UpdateAsync(entity);
             return true;

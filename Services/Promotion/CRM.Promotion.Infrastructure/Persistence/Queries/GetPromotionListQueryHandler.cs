@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using CRM.BuildingBlocks.Models;
 using CRM.Promotion.Application.Features.Promotions.DTOs;
 using CRM.Promotion.Application.Features.Promotions.Queries;
-using CRM.Promotion.Infrastructure.Persistence;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,39 +22,48 @@ namespace CRM.Promotion.Infrastructure.Persistence.Queries
         {
             var query = _context.Promotions.AsNoTracking();
 
-            if (request.IsActive.HasValue)
-            {
-                query = query.Where(p => p.is_active == request.IsActive.Value);
-            }
+            if (!string.IsNullOrEmpty(request.Filter.Keyword))
+                query = query.Where(p => p.name.Contains(request.Filter.Keyword) ||
+                                         (p.short_name != null && p.short_name.Contains(request.Filter.Keyword)));
 
-            if (!string.IsNullOrEmpty(request.PromotionType))
-            {
-                query = query.Where(p => p.discount_type == request.PromotionType);
-            }
+            if (request.PromotionClassId.HasValue)
+                query = query.Where(p => p.promotion_class_id == request.PromotionClassId.Value);
 
-            if (request.ValidAt.HasValue)
-            {
-                query = query.Where(p => p.start_date <= request.ValidAt.Value && (!p.end_date.HasValue || p.end_date >= request.ValidAt.Value));
-            }
+            if (request.DiscountTypeId.HasValue)
+                query = query.Where(p => p.discount_type_id == request.DiscountTypeId.Value);
 
+            if (request.CampaignTypeId.HasValue)
+                query = query.Where(p => p.campaign_type_id == request.CampaignTypeId.Value);
+
+            if (request.StatusId.HasValue)
+                query = query.Where(p => p.status_id == request.StatusId.Value);
+
+            var page = request.Page > 0 ? request.Page : 1;
+            var pageSize = request.PageSize > 0 ? request.PageSize : 10;
             var totalCount = await query.CountAsync(cancellationToken);
-            var results = await query
-                .OrderByDescending(p => p.start_date)
-                .Skip((request.Page - 1) * request.PageSize)
-                .Take(request.PageSize)
+
+            var items = await query
+                .OrderByDescending(p => p.created_at)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .Select(p => new PromotionListDto
                 {
                     id = p.id,
                     name = p.name,
-                    discount_type = p.discount_type,
+                    short_name = p.short_name,
+                    promotion_class_id = p.promotion_class_id,
+                    discount_type_id = p.discount_type_id,
+                    campaign_type_id = p.campaign_type_id,
                     discount_value = p.discount_value,
-                    start_date = p.start_date,
-                    end_date = p.end_date,
-                    status = p.is_active ? "Active" : "Disabled"
+                    is_automatic = p.is_automatic,
+                    is_visible_pos = p.is_visible_pos,
+                    status_id = p.status_id,
+                    created_at = p.created_at,
+                    updated_at = p.updated_at
                 })
                 .ToListAsync(cancellationToken);
 
-            return new PagedResult<PromotionListDto>(results, totalCount, request.Page, request.PageSize);
+            return new PagedResult<PromotionListDto>(items, totalCount, page, pageSize);
         }
     }
 }

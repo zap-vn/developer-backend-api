@@ -533,6 +533,58 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/warehouses:
+    post:
+      summary: "Create warehouse"
+      operationId: "warehouses_create_post"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/warehouses"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Warehouses create CORS"
+      operationId: "cors_warehouses_create"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/warehouses"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+  /api/warehouses/{id}:
+    get:
+      summary: "Get warehouse by id"
+      operationId: "warehouses_get_by_id"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Warehouses get by id CORS"
+      operationId: "cors_warehouses_get_by_id"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
   /api/brands/list:
     post:
       summary: "Brands list"

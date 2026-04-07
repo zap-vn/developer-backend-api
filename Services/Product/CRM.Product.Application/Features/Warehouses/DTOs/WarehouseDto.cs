@@ -37,7 +37,7 @@ namespace CRM.Product.Application.Features.Warehouses.DTOs
         public string? cover_image_url { get; set; }
         public string? brand_color { get; set; }
         public string? timezone { get; set; }
-        public string? operating_hours { get; set; }
+        public System.Text.Json.JsonElement? operating_hours { get; set; }
         public string? transfer_account { get; set; }
         public string? transfer_tag { get; set; }
         public Guid? parent_location_id { get; set; }

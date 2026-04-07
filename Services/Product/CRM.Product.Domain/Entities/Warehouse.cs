@@ -101,7 +101,7 @@ namespace CRM.Product.Domain.Entities
         public string? timezone { get; set; }
 
         [Column("operating_hours")]
-        public string? operating_hours { get; set; }
+        public System.Text.Json.JsonElement? operating_hours { get; set; }
 
         [Column("transfer_account")]
         public string? transfer_account { get; set; }

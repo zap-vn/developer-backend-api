@@ -11,6 +11,23 @@ steps:
     args:
       - 'push'
       - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-customer-api:latest'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'zapcrm-customer-api'
+      - '--image'
+      - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-customer-api:latest'
+      - '--region'
+      - 'asia-southeast1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+      - '--set-env-vars'
+      - 'ConnectionStrings__PostgreSql=Host=136.118.121.105;Port=5432;Username=postgres;Password=Pg@Secret2026!;Database=zap_ecosystem,ASPNETCORE_ENVIRONMENT=Production,Jwt__Secret=ThisVerifySecretMustBeLongEnoughForZapCrmProductApiAndNotSharedInPublicRepo1234567890'
 
 images:
   - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-customer-api:latest'

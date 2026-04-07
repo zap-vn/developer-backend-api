@@ -20,7 +20,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
 
         public async Task<IEnumerable<Warehouse>> GetPagedAsync(LocationListFilter filter)
         {
-            var query = BuildQuery(filter)
+            IQueryable<Warehouse> query = BuildQuery(filter)
                 .Include(x => x.status)
                 .Include(x => x.location_type);
 

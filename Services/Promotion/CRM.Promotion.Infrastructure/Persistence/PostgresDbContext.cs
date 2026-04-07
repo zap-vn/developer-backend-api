@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using CRM.Promotion.Domain.Entities;
 using System;
-using System.Collections.Generic;
 
 namespace CRM.Promotion.Infrastructure.Persistence
 {
@@ -11,27 +11,22 @@ namespace CRM.Promotion.Infrastructure.Persistence
         {
         }
 
-        public DbSet<PromotionHeader> Promotions { get; set; }
+        public DbSet<PromotionEntity> Promotions { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PromotionHeader>(entity =>
+            modelBuilder.Entity<PromotionEntity>(entity =>
             {
                 entity.ToTable("promotion", "marketing");
                 entity.HasKey(e => e.id);
+                
+                // Keep ID column and BaseEntity ID mapping
+                entity.Ignore(e => e.Id);
+                entity.Ignore(e => e.UserGuid);
+                entity.Ignore(e => e.CreatedBy);
+                entity.Ignore(e => e.UpdatedBy);
+                entity.Ignore(e => e.IsDeleted);
             });
         }
-    }
-
-    public class PromotionHeader
-    {
-        public Guid id { get; set; }
-        public Guid tenant_id { get; set; }
-        public string name { get; set; } = string.Empty;
-        public string discount_type { get; set; } = "PERCENTAGE";
-        public decimal discount_value { get; set; }
-        public DateTime start_date { get; set; }
-        public DateTime? end_date { get; set; }
-        public bool is_active { get; set; } = true;
     }
 }

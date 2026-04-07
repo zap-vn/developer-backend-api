@@ -29,7 +29,7 @@ namespace CRM.Customer.Infrastructure
                 options.UseNpgsql(configuration.GetConnectionString("PostgreSql")));
 
             services.AddScoped<ICustomerGroupRepository, CustomerGroupRepository>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerRepository, PostgresCustomerRepository>();
             services.AddSingleton<MongoDbContext>();
             services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
 

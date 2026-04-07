@@ -14,13 +14,11 @@ namespace CRM.Product.Domain.Entities
         [Column("code")]
         public string? code { get; set; }
 
-        [Column("label_en")]
-        public string? label_en { get; set; }
-
-        [Column("label_vi")]
-        public string? label_vi { get; set; }
 
         [Column("is_active")]
         public bool? is_active { get; set; }
+
+
+        public virtual System.Collections.Generic.ICollection<LocationTypeTranslation> translations { get; set; } = new System.Collections.Generic.List<LocationTypeTranslation>();
     }
 }

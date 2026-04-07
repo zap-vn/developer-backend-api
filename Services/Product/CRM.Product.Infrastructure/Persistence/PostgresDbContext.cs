@@ -43,6 +43,7 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<BomHeaderEntity> BomHeaders { get; set; }
         public DbSet<CRM.Product.Domain.Entities.ProvinceItem> ProvinceItems { get; set; }
         public DbSet<CRM.Product.Domain.Entities.ProvinceTranslation> ProvinceTranslations { get; set; }
+        public DbSet<LocationTypeTranslation> LocationTypeTranslations { get; set; }
         
         // --- Catalog Menu System ---
         public DbSet<MenuHeader> MenuHeaders { get; set; }
@@ -278,9 +279,19 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.code).HasColumnName("code");
-                entity.Property(e => e.label_en).HasColumnName("label_en");
-                entity.Property(e => e.label_vi).HasColumnName("label_vi");
                 entity.Property(e => e.is_active).HasColumnName("is_active");
+
+                entity.HasMany(e => e.translations).WithOne(t => t.location_type).HasForeignKey(t => t.location_type_id);
+            });
+
+            modelBuilder.Entity<LocationTypeTranslation>(entity =>
+            {
+                entity.ToTable("location_type_translation", "pos");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.location_type_id).HasColumnName("location_type_id");
+                entity.Property(e => e.locale_id).HasColumnName("locale_id");
+                entity.Property(e => e.name).HasColumnName("name");
             });
 
             modelBuilder.Entity<Store>(entity =>

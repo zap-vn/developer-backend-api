@@ -22,7 +22,8 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         {
             IQueryable<Location> query = BuildQuery(filter)
                 .Include(x => x.status)
-                .Include(x => x.location_type);
+                .Include(x => x.location_type)
+                    .ThenInclude(lt => lt.translations);
 
             query = ApplySort(query, filter);
 
@@ -102,6 +103,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         {
             return await _context.Locations
                 .Include(x => x.location_type)
+                    .ThenInclude(lt => lt.translations)
                 .Include(x => x.status)
                 .FirstOrDefaultAsync(w => w.id == id);
         }

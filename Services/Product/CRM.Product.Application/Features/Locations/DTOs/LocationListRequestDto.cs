@@ -7,8 +7,8 @@ namespace CRM.Product.Application.Features.Locations.DTOs
         public string? search { get; set; }
         public LocationFiltersDto? filters { get; set; }
         public LocationSortDto? sort { get; set; }
+        public int locale_id { get; set; } = 2; // Default to 2 (VI) or 1 (EN)
     }
-
     public class LocationFiltersDto
     {
         /// <summary>Trạng thái (status_id): ACTIVE / INACTIVE</summary>

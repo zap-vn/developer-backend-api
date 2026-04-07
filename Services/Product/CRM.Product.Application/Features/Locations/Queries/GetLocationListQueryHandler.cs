@@ -47,6 +47,9 @@ namespace CRM.Product.Application.Features.Locations.Queries
                 tenant_id          = x.tenant_id,
                 legacy_id          = x.legacy_id,
                 name               = x.name,
+                serial_id          = x.serial_id,
+                serial_number      = x.serial_number,
+                location_code      = x.location_code,
                 status_id          = x.status_id,
                 status_code        = x.status?.code,
                 is_active          = x.is_active,
@@ -57,7 +60,9 @@ namespace CRM.Product.Application.Features.Locations.Queries
                 description        = x.description,
                 location_type_id   = x.location_type_id,
                 location_type_text = x.location_type != null
-                    ? $"{x.location_type.label_en} ({x.location_type.label_vi})"
+                    ? (req.locale_id == 2 
+                        ? $"{x.location_type.label_vi} ({x.location_type.label_en})"
+                        : $"{x.location_type.label_en} ({x.location_type.label_vi})")
                     : null,
                 address_line_1     = x.address_line_1,
                 city               = x.city,

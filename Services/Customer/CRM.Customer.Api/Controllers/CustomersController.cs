@@ -27,15 +27,15 @@ namespace CRM.Customer.Api.Controllers
         }
 
         [HttpPost("list")]
-        public async Task<IActionResult> List([FromBody] FilterDTOs filter)
+        public async Task<IActionResult> List([FromBody] CustomerListRequestDto requestBody)
         {
-            var result = await _mediator.Send(new GetCustomerListQuery { Filter = filter });
-            return Ok(new 
+            var result = await _mediator.Send(new GetCustomerListQuery { Request = requestBody });
+            return Ok(new
             {
                 success = true,
                 code = 200,
                 message = "OK",
-                data = new 
+                data = new
                 {
                     total_page = result.PageSize > 0 ? (int)System.Math.Ceiling((double)result.TotalCount / result.PageSize) : 1,
                     total_record = result.TotalCount,

@@ -19,23 +19,78 @@ namespace CRM.Customer.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<PagedResult<CustomerEntity>> GetPagedAsync(int pageIndex, int pageSize, Guid? tenantId = null, string? search = null)
+        public async Task<PagedResult<CustomerEntity>> GetPagedAsync(
+            int pageIndex,
+            int pageSize,
+            Guid? tenantId = null,
+            string? search = null,
+            int? statusId = null,
+            int? tierId = null,
+            decimal? minTotalSpent = null,
+            decimal? maxTotalSpent = null,
+            decimal? minPoints = null,
+            decimal? maxPoints = null,
+            string sortField = "full_name",
+            bool sortDescending = false)
         {
-            var query = _context.Customers.AsQueryable();
+            var query = _context.Customers
+                .Include(c => c.loyalty_tier)
+                .AsNoTracking()
+                .AsQueryable();
 
             if (tenantId.HasValue)
-            {
                 query = query.Where(c => c.tenant_id == tenantId.Value);
-            }
 
+            if (statusId.HasValue)
+                query = query.Where(c => c.status_id == statusId.Value);
+
+            if (tierId.HasValue)
+                query = query.Where(c => c.tier_id == tierId.Value);
+
+            if (minTotalSpent.HasValue)
+                query = query.Where(c => c.total_spent_amount >= minTotalSpent.Value);
+            if (maxTotalSpent.HasValue)
+                query = query.Where(c => c.total_spent_amount <= maxTotalSpent.Value);
+
+            if (minPoints.HasValue)
+                query = query.Where(c => c.current_points_balance >= minPoints.Value);
+            if (maxPoints.HasValue)
+                query = query.Where(c => c.current_points_balance <= maxPoints.Value);
+
+            // Search: full_name, phone_number, legacy_id, or exact Guid id
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(c => c.full_name!.Contains(search) || c.email!.Contains(search) || c.phone_number!.Contains(search));
+                Guid? searchGuid = Guid.TryParse(search, out var sg) ? sg : (Guid?)null;
+                query = searchGuid.HasValue
+                    ? query.Where(c => c.id == searchGuid)
+                    : query.Where(c =>
+                        (c.full_name != null && c.full_name.Contains(search)) ||
+                        (c.phone_number != null && c.phone_number.Contains(search)) ||
+                        (c.legacy_id != null && c.legacy_id.Contains(search)));
             }
 
             var totalCount = await query.CountAsync();
-            var items = await query
-                .OrderByDescending(c => c.CreatedAt)
+
+            IOrderedQueryable<CustomerEntity> ordered = sortField switch
+            {
+                "total_spent_amount" => sortDescending
+                    ? query.OrderByDescending(c => c.total_spent_amount)
+                    : query.OrderBy(c => c.total_spent_amount),
+                "current_points_balance" => sortDescending
+                    ? query.OrderByDescending(c => c.current_points_balance)
+                    : query.OrderBy(c => c.current_points_balance),
+                "tier_id" => sortDescending
+                    ? query.OrderByDescending(c => c.tier_id)
+                    : query.OrderBy(c => c.tier_id),
+                "status_id" => sortDescending
+                    ? query.OrderByDescending(c => c.status_id)
+                    : query.OrderBy(c => c.status_id),
+                _ => sortDescending
+                    ? query.OrderByDescending(c => c.full_name)
+                    : query.OrderBy(c => c.full_name),
+            };
+
+            var items = await ordered
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

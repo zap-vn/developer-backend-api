@@ -15,8 +15,20 @@ namespace CRM.Product.Domain.Entities
         public string logo_url { get; set; } = string.Empty;
         public string banner_url { get; set; } = string.Empty;
         public string website_url { get; set; } = string.Empty;
-        public int status_id { get; set; } = 2101; 
+        public int status_id { get; set; } = 2101;
         public bool is_premium { get; set; } = false;
+
+        /// <summary>Legal / display vendor name (may differ from brand name).</summary>
+        public string? vendor_name { get; set; }
+
+        /// <summary>Internal brand code or account number (e.g. Square ID).</summary>
+        public string? account_number { get; set; }
+
+        /// <summary>Contact phone number.</summary>
+        public string? phone_number { get; set; }
+
+        /// <summary>Contact email address.</summary>
+        public string? email_address { get; set; }
 
         [ForeignKey("status_id")]
         public StatusItem? status { get; set; }

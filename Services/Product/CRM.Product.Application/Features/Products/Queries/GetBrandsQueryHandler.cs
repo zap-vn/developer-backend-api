@@ -29,10 +29,13 @@ namespace CRM.Product.Application.Features.Products.Queries
             if (Guid.TryParse(tenantIdString, out var guid)) tenantId = guid;
 
             var (items, total) = await _repository.GetPagedAsync(
-                request.Request.PageIndex, 
-                request.Request.PageSize, 
-                tenantId, 
-                request.Request.SearchTerm);
+                request.Request.PageIndex,
+                request.Request.PageSize,
+                tenantId,
+                request.Request.Search,
+                request.Request.Filters?.StatusId,
+                request.Request.Sort?.Field ?? "name",
+                request.Request.Sort?.Descending ?? false);
 
             var dtos = items.Select(x => new BrandDto
             {
@@ -45,7 +48,11 @@ namespace CRM.Product.Application.Features.Products.Queries
                 website_url = x.website_url,
                 status_id = x.status_id,
                 status_text = x.status?.code,
-                is_premium = x.is_premium
+                is_premium = x.is_premium,
+                vendor_name = x.vendor_name,
+                account_number = x.account_number,
+                phone_number = x.phone_number,
+                email_address = x.email_address
             });
 
             return new PagedResult<BrandDto>(dtos.ToList(), total, request.Request.PageIndex, request.Request.PageSize);

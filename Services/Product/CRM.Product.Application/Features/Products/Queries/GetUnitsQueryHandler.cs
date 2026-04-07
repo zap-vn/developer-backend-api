@@ -29,10 +29,14 @@ namespace CRM.Product.Application.Features.Products.Queries
             if (Guid.TryParse(tenantIdString, out var guid)) tenantId = guid;
 
             var (items, total) = await _repository.GetPagedAsync(
-                request.Request.PageIndex, 
-                request.Request.PageSize, 
-                tenantId, 
-                request.Request.SearchTerm);
+                request.Request.PageIndex,
+                request.Request.PageSize,
+                tenantId,
+                request.Request.Search,
+                request.Request.Filters?.StatusId,
+                request.Request.Filters?.Precision,
+                request.Request.Sort?.Field ?? "name",
+                request.Request.Sort?.Descending ?? false);
 
             var dtos = items.Select(x => new UnitDto
             {
@@ -40,8 +44,11 @@ namespace CRM.Product.Application.Features.Products.Queries
                 tenant_id = x.tenant_id,
                 code = x.code,
                 name = x.name,
-                uom_type = x.uom_type,
-                is_active = true
+                abbreviation = x.abbreviation,
+                precision = x.precision,
+                status_id = x.status_id,
+                status_text = x.status?.code,
+                is_active = x.status_id != 0
             });
 
             return new PagedResult<UnitDto>(dtos.ToList(), total, request.Request.PageIndex, request.Request.PageSize);

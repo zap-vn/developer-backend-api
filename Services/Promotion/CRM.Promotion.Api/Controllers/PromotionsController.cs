@@ -5,7 +5,6 @@ using CRM.Promotion.Application.Features.Promotions.Commands;
 using CRM.Promotion.Application.Features.Promotions.Queries;
 using CRM.Promotion.Application.Features.Promotions.DTOs;
 using CRM.BuildingBlocks.Models;
-using CRM.BuildingBlocks.Extensions;
 
 namespace CRM.Promotion.Api.Controllers
 {
@@ -27,10 +26,10 @@ namespace CRM.Promotion.Api.Controllers
         }
 
         [HttpPost("list")]
-        public async Task<IActionResult> List()
+        [Consumes("application/json")]
+        public async Task<IActionResult> List([FromBody] PromotionListRequestDto requestBody)
         {
-            var filter = await Request.GetRawBodyAsync<FilterDTOs>();
-            var result = await _mediator.Send(new GetPromotionListQuery { Filter = filter });
+            var result = await _mediator.Send(new GetPromotionListQuery { Request = requestBody });
             return Ok(new 
             {
                 success = true,

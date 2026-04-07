@@ -29,17 +29,54 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             return await _context.Brands.FindAsync(id);
         }
 
-        public async Task<(IEnumerable<Brand> Items, int Total)> GetPagedAsync(int page, int pageSize, Guid? tenantId = null, string? search = null)
+        public async Task<(IEnumerable<Brand> Items, int Total)> GetPagedAsync(
+            int page,
+            int pageSize,
+            Guid? tenantId = null,
+            string? search = null,
+            int? statusId = null,
+            string sortField = "name",
+            bool sortDescending = false)
         {
             var query = _context.Brands.Include(x => x.status).AsQueryable();
-            if (tenantId.HasValue) query = query.Where(x => x.tenant_id == tenantId);
-            if (!string.IsNullOrEmpty(search)) query = query.Where(x => x.name.Contains(search));
+
+            if (tenantId.HasValue)
+                query = query.Where(x => x.tenant_id == tenantId);
+
+            if (statusId.HasValue)
+                query = query.Where(x => x.status_id == statusId);
+
+            // Search across name, vendor_name, account_number, phone_number, email_address
+            if (!string.IsNullOrEmpty(search))
+            {
+                Guid? searchGuid = Guid.TryParse(search, out var sg) ? sg : (Guid?)null;
+                query = searchGuid.HasValue
+                    ? query.Where(x => x.id == searchGuid)
+                    : query.Where(x =>
+                        x.name.Contains(search) ||
+                        (x.vendor_name != null && x.vendor_name.Contains(search)) ||
+                        (x.account_number != null && x.account_number.Contains(search)) ||
+                        (x.phone_number != null && x.phone_number.Contains(search)) ||
+                        (x.email_address != null && x.email_address.Contains(search)));
+            }
 
             var total = await query.CountAsync();
-            var items = await query.OrderBy(x => x.name)
-                                   .Skip((page - 1) * pageSize)
-                                   .Take(pageSize)
-                                   .ToListAsync();
+
+            IOrderedQueryable<Brand> ordered = sortField switch
+            {
+                "status" => sortDescending
+                    ? query.OrderByDescending(x => x.status_id).ThenBy(x => x.name)
+                    : query.OrderBy(x => x.status_id).ThenBy(x => x.name),
+                _ => sortDescending
+                    ? query.OrderByDescending(x => x.name)
+                    : query.OrderBy(x => x.name),
+            };
+
+            var items = await ordered
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
             return (items, total);
         }
 

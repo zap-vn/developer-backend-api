@@ -13,9 +13,12 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public decimal? sale_price { get; set; }
         public decimal? cost_price { get; set; }
         public bool is_active { get; set; }
-        public string? unit_name { get; set; }
         public decimal? weight_grams { get; set; }
+        public int location_count { get; set; }
+        public string? media_url { get; set; }
+        public decimal? qty_on_hand { get; set; }
     }
+
 
     public class ProductDto
     {
@@ -41,15 +44,13 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public string? barcode { get; set; }
         public decimal? sale_price { get; set; }
         public decimal? qty_on_hand { get; set; }
-        public string? unit_name { get; set; }
         public string? location_name { get; set; }
         public Guid? location_id { get; set; }
-        public int? uom_id { get; set; }
         public string? status_text { get; set; }
         public string? status_code { get; set; }
-        public string? uom_code { get; set; }
         public Guid? product_id { get; set; }
         public DateTime created_at { get; set; }
         public DateTime? updated_at { get; set; }
     }
+
 }

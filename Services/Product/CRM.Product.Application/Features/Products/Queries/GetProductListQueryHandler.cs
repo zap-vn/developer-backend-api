@@ -50,55 +50,70 @@ namespace CRM.Product.Application.Features.Products.Queries
                 req.Sort?.Field ?? "created_at",
                 req.Sort?.Descending ?? true);
 
-            var dtos = items.Select(v =>
-            {
-                var p = v.product;
-                var primaryMedia = v.media.FirstOrDefault(m => m.is_primary) ?? v.media.FirstOrDefault();
-                var primaryCategory = p?.category_mappings.FirstOrDefault(cm => cm.is_primary) ?? p?.category_mappings.FirstOrDefault();
-                
-                var statusItem = p?.status;
-                // Get translated status text if available, else use code
-                var translation = statusItem?.translations?.FirstOrDefault(t => t.locale_id == localeId);
-                var statusText = translation?.name ?? statusItem?.code ?? "";
-
-                // Inventory summing for the specific variant
-                var inventoryItems = v.inventory_items;
-                if (LocationId.HasValue)
-                    inventoryItems = inventoryItems.Where(i => i.location_id == LocationId).ToList();
-                
-                var stockQty = inventoryItems.Sum(i => i.qty_on_hand);
-                var firstInv = inventoryItems.FirstOrDefault();
-
-                // Pricing: Check for override first
-                var locationPrice = v.location_pricing.FirstOrDefault(lp => !LocationId.HasValue || lp.location_id == LocationId);
-                var price = locationPrice?.sale_price_override ?? v.sale_price ?? v.base_price;
-
-                return new ProductDto
+            var dtos = items.GroupBy(v => v.product_id)
+                .Select(group => 
                 {
-                    id = v.id,
-                    product_id = p?.id,
-                    tenant_id = p?.tenant_id,
-                    product_type_id = p?.product_type_id ?? 1,
-                    product_type_text = p?.product_type?.code ?? "",
-                    status_id = p?.status_id ?? 0,
-                    status_text = statusText,
-                    status_code = statusItem?.code ?? "",
-                    media_url = primaryMedia?.media_url,
-                    variant_name = v.variant_name ?? p?.name ?? "",
-                    category_id = primaryCategory?.category_id,
-                    category_name = primaryCategory?.category?.name,
-                    sku_code = v.sku_code,
-                    barcode = v.barcode,
-                    sale_price = price,
-                    qty_on_hand = stockQty,
-                    uom_id = v.uom_id,
-                    uom_code = v.uom?.code ?? "",
-                    location_id = firstInv?.location_id,
-                    location_name = firstInv?.Location?.name,
-                    created_at = p?.created_at ?? DateTime.UtcNow,
-                    updated_at = p?.updated_at
-                };
-            }).ToList();
+                    var firstVariantWithProduct = group.First();
+                    var p = firstVariantWithProduct.product;
+                    var primaryCategory = p?.category_mappings.FirstOrDefault(cm => cm.is_primary) ?? p?.category_mappings.FirstOrDefault();
+                    
+                    var statusItem = p?.status;
+                    var translation = statusItem?.translations?.FirstOrDefault(t => t.locale_id == localeId);
+                    var statusText = translation?.name ?? statusItem?.code ?? "";
+
+                    // Map all variants in this group
+                    var productVariants = group.Select(v => {
+                        var primaryMedia = v.media.FirstOrDefault(m => m.is_primary) ?? v.media.FirstOrDefault();
+                        
+                        var inventoryItems = v.inventory_items;
+                        if (LocationId.HasValue)
+                            inventoryItems = inventoryItems.Where(i => i.location_id == LocationId).ToList();
+
+                        var locationPrice = v.location_pricing.FirstOrDefault(lp => !LocationId.HasValue || lp.location_id == LocationId);
+                        var price = locationPrice?.sale_price_override ?? v.sale_price ?? v.base_price;
+
+                        return new ProductVariantDto {
+                            id = v.id,
+                            sku_code = v.sku_code,
+                            barcode = v.barcode,
+                            variant_name = v.variant_name ?? "",
+                            base_price = v.base_price,
+                            sale_price = price,
+                            cost_price = v.cost_price,
+                            is_active = true, // Consider status mapping if needed
+                            media_url = primaryMedia?.media_url,
+                            qty_on_hand = inventoryItems.Sum(i => i.qty_on_hand),
+                            location_count = inventoryItems.Select(i => i.location_id).Distinct().Count()
+                        };
+                    }).ToList();
+
+                    // Lead variant info for the Product level display
+                    var leadVariant = productVariants.FirstOrDefault();
+
+                    return new ProductDto
+                    {
+                        id = p?.id ?? Guid.Empty,
+                        product_id = p?.id,
+                        name = p?.name ?? "",
+                        tenant_id = p?.tenant_id,
+                        product_type_id = p?.product_type_id ?? 1,
+                        product_type_text = p?.product_type?.code ?? "",
+                        status_id = p?.status_id ?? 0,
+                        status_text = statusText,
+                        status_code = statusItem?.code ?? "",
+                        category_id = primaryCategory?.category_id,
+                        category_name = primaryCategory?.category?.name,
+                        media_url = leadVariant?.media_url,
+                        variant_name = leadVariant?.variant_name,
+                        sku_code = leadVariant?.sku_code,
+                        barcode = leadVariant?.barcode,
+                        sale_price = leadVariant?.sale_price,
+                        qty_on_hand = productVariants.Sum(v => v.qty_on_hand),
+                        created_at = p?.created_at ?? DateTime.UtcNow,
+                        updated_at = p?.updated_at,
+                        variants = productVariants
+                    };
+                }).ToList();
 
             return new PagedResult<ProductDto>(dtos, total, req.Page, req.PageSize);
         }

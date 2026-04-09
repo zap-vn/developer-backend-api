@@ -6,24 +6,12 @@ class Program
     static void Main()
     {
         string connString = "Host=136.118.121.105;Port=5432;Username=postgres;Password=Pg@Secret2026!;Database=zap_ecosystem";
-        using var conn = new NpgsqlConnection(connString);
-        conn.Open();
-        string[] tables = { "status_item", "product_type_item", "uom_item", "brand", "category" };
-        foreach (var table in tables)
-        {
-            using var cmd = new NpgsqlCommand($"SELECT table_schema FROM information_schema.tables WHERE table_name = '{table}'", conn);
+        try {
+            using var conn = new NpgsqlConnection(connString);
+            conn.Open();
+            using var cmd = new NpgsqlCommand("SELECT nspname FROM pg_namespace WHERE nspname NOT LIKE 'pg_%' AND nspname != 'information_schema'", conn);
             using var reader = cmd.ExecuteReader();
-            bool found = false;
-            while (reader.Read())
-            {
-                Console.WriteLine($"{table}: {reader.GetString(0)}");
-                found = true;
-            }
-            if (!found)
-            {
-                Console.WriteLine($"{table}: NOT FOUND");
-            }
-            reader.Close();
-        }
+            while (reader.Read()) Console.WriteLine("SCHEMA: " + reader.GetString(0));
+        } catch (Exception ex) { Console.WriteLine("ERROR: " + ex.Message); }
     }
 }

@@ -10,8 +10,17 @@ namespace CRM.Product.Domain.Entities
         [Key]
         public Guid id { get; set; } = Guid.NewGuid();
         public Guid tenant_id { get; set; }
+        
+        [Column("serial_id")]
+        public int? serial_id { get; set; }
+
+        [Column("serial_number")]
+        public string? serial_number { get; set; }
+        
         public string? legacy_id { get; set; }
         public string name { get; set; } = string.Empty;
+        public string? description { get; set; }
+        public string? image_url { get; set; }
         public int min_selection { get; set; } = 0;
         public int max_selection { get; set; } = 1;
         public bool is_required { get; set; } = false;

@@ -418,7 +418,28 @@ namespace CRM.Product.Infrastructure.Persistence
             });
 
             modelBuilder.Entity<BrandEntity>(entity => { entity.ToTable("brand", "catalog"); entity.HasKey(e => e.id); });
-            modelBuilder.Entity<ModifierGroupEntity>(entity => { entity.ToTable("modifier_group", "catalog"); entity.HasKey(e => e.id); });
+            modelBuilder.Entity<ModifierGroupEntity>(entity =>
+            {
+                entity.ToTable("modifier_group", "catalog");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.serial_id).HasColumnName("serial_id");
+                entity.Property(e => e.serial_number).HasColumnName("serial_number");
+                entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
+                entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
+                entity.Property(e => e.name).HasColumnName("name");
+                entity.Property(e => e.description).HasColumnName("description");
+                entity.Property(e => e.image_url).HasColumnName("image_url");
+                entity.Property(e => e.min_selection).HasColumnName("min_selection");
+                entity.Property(e => e.max_selection).HasColumnName("max_selection");
+                entity.Property(e => e.is_required).HasColumnName("is_required");
+                entity.Property(e => e.sort_order).HasColumnName("sort_order");
+                entity.Property(e => e.status_id).HasColumnName("status_id");
+
+                entity.HasOne(e => e.status)
+                    .WithMany()
+                    .HasForeignKey(e => e.status_id);
+            });
 
             // --- Dining Options ---
             modelBuilder.Entity<DiningOption>(entity =>

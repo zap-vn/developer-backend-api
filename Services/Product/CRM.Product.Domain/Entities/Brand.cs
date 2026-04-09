@@ -9,6 +9,10 @@ namespace CRM.Product.Domain.Entities
     {
         [Key]
         public Guid id { get; set; } = Guid.NewGuid();
+
+        [Column("serial_id")]
+        public int? serial_id { get; set; }
+
         public Guid? tenant_id { get; set; }
         public string name { get; set; } = string.Empty;
         public string slug { get; set; } = string.Empty;

@@ -109,6 +109,8 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.HasOne(e => e.product_type)
                     .WithMany()
                     .HasForeignKey(e => e.product_type_id);
+
+                entity.Property(e => e.serial_id).HasColumnName("serial_id");
             });
 
             modelBuilder.Entity<VariantEntity>(entity =>
@@ -116,6 +118,7 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.ToTable("product_variant", "catalog");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.serial_id).HasColumnName("serial_id");
                 entity.Property(e => e.product_id).HasColumnName("product_id");
                 entity.Property(e => e.sku_code).HasColumnName("sku_code");
                 entity.Property(e => e.barcode).HasColumnName("barcode");
@@ -197,7 +200,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<ProductTypeItem>(entity =>
             {
-                entity.ToTable("product_type_item", "platform");
+                entity.ToTable("product_type_item", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.code).HasColumnName("code");
@@ -207,7 +210,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<ProductTypeTranslation>(entity =>
             {
-                entity.ToTable("product_type_translation", "platform");
+                entity.ToTable("product_type_translation", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.product_type_id).HasColumnName("product_type_id");
@@ -347,7 +350,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<UomItem>(entity =>
             {
-                entity.ToTable("uom_item", "platform");
+                entity.ToTable("uom_item", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
@@ -363,7 +366,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<UomItemTranslation>(entity =>
             {
-                entity.ToTable("uom_item_translation", "platform");
+                entity.ToTable("uom_item_translation", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.uom_item_id).HasColumnName("uom_item_id");
@@ -417,7 +420,12 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.is_active).HasColumnName("is_active");
             });
 
-            modelBuilder.Entity<BrandEntity>(entity => { entity.ToTable("brand", "catalog"); entity.HasKey(e => e.id); });
+            modelBuilder.Entity<BrandEntity>(entity => 
+            { 
+                entity.ToTable("brand", "catalog"); 
+                entity.HasKey(e => e.id); 
+                entity.Property(e => e.serial_id).HasColumnName("serial_id");
+            });
             modelBuilder.Entity<ModifierGroupEntity>(entity =>
             {
                 entity.ToTable("modifier_group", "catalog");

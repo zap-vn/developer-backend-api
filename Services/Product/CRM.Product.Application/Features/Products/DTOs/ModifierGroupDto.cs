@@ -5,6 +5,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
     public class ModifierGroupDto
     {
         public Guid id { get; set; }
+        public int? serial_id { get; set; }
         public Guid tenant_id { get; set; }
         public string? legacy_id { get; set; }
         public string name { get; set; } = string.Empty;

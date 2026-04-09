@@ -8,6 +8,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
     public class CategoryDto
     {
         public Guid id { get; set; }
+        public int? serial_id { get; set; }
         public Guid? parent_id { get; set; }
         public string? legacy_id { get; set; }
         public string? materialized_path { get; set; }

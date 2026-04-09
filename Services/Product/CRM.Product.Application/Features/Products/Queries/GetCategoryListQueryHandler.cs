@@ -40,6 +40,7 @@ namespace CRM.Product.Application.Features.Products.Queries
             var dtos = items.Select(x => new CategoryDto
             {
                 id = x.id,
+                serial_id = x.serial_id,
                 parent_id = x.parent_id,
                 legacy_id = x.legacy_id,
                 materialized_path = x.materialized_path,

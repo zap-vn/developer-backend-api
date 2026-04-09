@@ -35,6 +35,8 @@ namespace CRM.Customer.Infrastructure.Persistence.Repositories
         {
             var query = _context.Customers
                 .Include(c => c.loyalty_tier)
+                .Include(c => c.status)
+                    .ThenInclude(s => s.translations)
                 .AsNoTracking()
                 .AsQueryable();
 
@@ -64,9 +66,9 @@ namespace CRM.Customer.Infrastructure.Persistence.Repositories
                 query = searchGuid.HasValue
                     ? query.Where(c => c.id == searchGuid)
                     : query.Where(c =>
-                        (c.full_name != null && c.full_name.Contains(search)) ||
-                        (c.phone_number != null && c.phone_number.Contains(search)) ||
-                        (c.legacy_id != null && c.legacy_id.Contains(search)));
+                        (c.full_name != null && EF.Functions.ILike(c.full_name, $"%{search}%")) ||
+                        (c.phone_number != null && EF.Functions.ILike(c.phone_number, $"%{search}%")) ||
+                        (c.legacy_id != null && EF.Functions.ILike(c.legacy_id, $"%{search}%")));
             }
 
             var totalCount = await query.CountAsync();

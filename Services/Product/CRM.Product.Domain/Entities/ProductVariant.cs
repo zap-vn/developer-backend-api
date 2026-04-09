@@ -1,10 +1,15 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
     public class ProductVariant
     {
         public Guid id { get; set; } = Guid.NewGuid();
+
+        [Column("serial_id")]
+        public int? serial_id { get; set; }
+
         public Guid? product_id { get; set; }
         public string? sku_code { get; set; } // Mã SKU
         public string? barcode { get; set; }

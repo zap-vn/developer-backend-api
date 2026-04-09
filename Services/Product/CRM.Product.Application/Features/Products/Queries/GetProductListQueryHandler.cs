@@ -72,6 +72,7 @@ namespace CRM.Product.Application.Features.Products.Queries
 
                     return new ProductVariantDto {
                         id = v.id,
+                        serial_id = v.serial_id,
                         sku_code = v.sku_code,
                         barcode = v.barcode,
                         variant_name = v.variant_name ?? "",
@@ -91,6 +92,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 return new ProductDto
                 {
                     id = p.id,
+                    serial_id = p.serial_id,
                     product_id = p.id,
                     name = p.name,
                     tenant_id = p.tenant_id,

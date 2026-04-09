@@ -116,6 +116,9 @@ namespace CRM.Customer.Domain.Entities
 
         [BsonIgnore]
         public virtual LoyaltyTier? loyalty_tier { get; set; }
+
+        [BsonIgnore]
+        public virtual StatusItem? status { get; set; }
         // -------------------------------
 
         // Legacy fields for compilation if needed

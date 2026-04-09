@@ -40,6 +40,7 @@ namespace CRM.Product.Application.Features.Products.Queries
             var dtos = items.Select(x => new BrandDto
             {
                 id = x.id,
+                serial_id = x.serial_id,
                 tenant_id = x.tenant_id,
                 name = x.name,
                 slug = x.slug,

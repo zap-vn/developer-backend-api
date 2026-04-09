@@ -6,6 +6,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
     public class ProductVariantDto
     {
         public Guid id { get; set; }
+        public int? serial_id { get; set; }
         public string? sku_code { get; set; }
         public string? barcode { get; set; }
         public string? variant_name { get; set; }
@@ -23,6 +24,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
     public class ProductDto
     {
         public Guid id { get; set; }
+        public int? serial_id { get; set; }
         public Guid? tenant_id { get; set; }
         public Guid? brand_id { get; set; }
         public string? legacy_id { get; set; }

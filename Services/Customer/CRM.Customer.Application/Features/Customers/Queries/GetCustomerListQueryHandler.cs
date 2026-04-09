@@ -54,7 +54,12 @@ namespace CRM.Customer.Application.Features.Customers.Queries
                 total_spent_amount = c.total_spent_amount ?? 0,
                 tier_id = c.tier_id,
                 tier_name = c.loyalty_tier?.tier_name,
-                status_id = c.status_id ?? 0
+                status_id = c.status_id ?? 0,
+                status_code = c.status?.code,
+                status_name = c.status != null
+                    ? (c.status.translations?.FirstOrDefault(t => t.locale_id == _currentUserService.LocaleId)?.name ??
+                       $"{c.status.translations?.FirstOrDefault(t => t.locale_id == 2)?.name} ({c.status.translations?.FirstOrDefault(t => t.locale_id == 1)?.name})")
+                    : null
             }).ToList();
 
             return new PagedResult<CustomerListDto>(dtos, pagedResult.TotalCount, pagedResult.CurrentPage, pagedResult.PageSize);

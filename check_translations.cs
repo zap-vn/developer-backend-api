@@ -6,11 +6,11 @@ try {
     using (var conn = new NpgsqlConnection(connString))
     {
         conn.Open();
-        using (var cmd = new NpgsqlCommand("SELECT location_type_id, locale_id, name FROM pos.location_type_translation LIMIT 10;", conn))
+        using (var cmd = new NpgsqlCommand("SELECT lookup_id, locale_id, name FROM system.lookup_translations LIMIT 10;", conn))
         {
             using (var reader = cmd.ExecuteReader())
             {
-                Console.WriteLine("Data mapping of pos.location_type_translation:");
+                Console.WriteLine("Data mapping of system.lookup_translations:");
                 while (reader.Read())
                 {
                     Console.WriteLine($"Type: {reader.GetInt32(0)}, Locale: {reader.GetInt32(1)}, Name: {reader.GetString(2)}");

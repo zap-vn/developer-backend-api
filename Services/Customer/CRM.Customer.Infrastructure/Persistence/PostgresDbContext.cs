@@ -14,6 +14,8 @@ namespace CRM.Customer.Infrastructure.Persistence
         public DbSet<LoyaltyTier> LoyaltyTiers { get; set; }
         public DbSet<MembershipPlan> MembershipPlans { get; set; }
         public DbSet<MembershipSubscription> MembershipSubscriptions { get; set; }
+        public DbSet<StatusItem> StatusItems { get; set; }
+        public DbSet<StatusItemTranslation> StatusItemTranslations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,6 +49,10 @@ namespace CRM.Customer.Infrastructure.Persistence
                 entity.HasOne(e => e.loyalty_tier)
                     .WithMany(t => t.customers)
                     .HasForeignKey(e => e.tier_id);
+
+                entity.HasOne(e => e.status)
+                    .WithMany()
+                    .HasForeignKey(e => e.status_id);
 
                 entity.Ignore(e => e.Id);
                 entity.Ignore(e => e.UserGuid);
@@ -108,9 +114,6 @@ namespace CRM.Customer.Infrastructure.Persistence
                 entity.Ignore(e => e.Visible);
                 entity.Ignore(e => e.Websites);
                 entity.Ignore(e => e.CreateDate);
-                // BaseEntity audit fields not in Postgres schema
-                entity.Ignore(e => e.CreatedBy);
-                entity.Ignore(e => e.UpdatedBy);
             });
 
             modelBuilder.Entity<LoyaltyTier>(entity =>
@@ -149,6 +152,31 @@ namespace CRM.Customer.Infrastructure.Persistence
                 entity.HasOne(e => e.plan)
                     .WithMany()
                     .HasForeignKey(e => e.plan_id);
+            });
+
+            modelBuilder.Entity<StatusItem>(entity =>
+            {
+                entity.ToTable("status_item", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id");
+                entity.Property(e => e.group_id).HasColumnName("group_id");
+                entity.Property(e => e.domain).HasColumnName("domain");
+                entity.Property(e => e.code).HasColumnName("code");
+                entity.Property(e => e.sort_order).HasColumnName("sort_order");
+
+                entity.HasMany(e => e.translations)
+                    .WithOne(t => t.status_item)
+                    .HasForeignKey(t => t.status_item_id);
+            });
+
+            modelBuilder.Entity<StatusItemTranslation>(entity =>
+            {
+                entity.ToTable("status_item_translation", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.status_item_id).HasColumnName("status_item_id");
+                entity.Property(e => e.locale_id).HasColumnName("locale_id");
+                entity.Property(e => e.name).HasColumnName("name");
             });
         }
     }

@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
     public class Product
     {
         public Guid id { get; set; } = Guid.NewGuid();
+        [Column("serial_id")]
+        public int? serial_id { get; set; }
         public Guid? tenant_id { get; set; }
+        
         public Guid? brand_id { get; set; }
         public string? legacy_id { get; set; } // Dùng để đối chiếu với hệ thống cũ
         public int product_type_id { get; set; } = 1; // 1: PHYSICAL, 2: SERVICE, 3: DIGITAL, 4: BUNDLE

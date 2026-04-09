@@ -51,6 +51,7 @@ namespace CRM.Product.Api.Controllers
                     items = result.Items.Select(x => new
                     {
                         id = x.id,
+                        serial_id = x.serial_id,
                         media_url = x.media_url,
                         variant_name = x.variant_name,
                         sku_code = x.sku_code,

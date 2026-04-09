@@ -19,13 +19,16 @@ namespace CRM.Promotion.Infrastructure.Persistence
             {
                 entity.ToTable("promotion", "marketing");
                 entity.HasKey(e => e.id);
-                
-                // Keep ID column and BaseEntity ID mapping
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+
                 entity.Ignore(e => e.Id);
                 entity.Ignore(e => e.UserGuid);
                 entity.Ignore(e => e.CreatedBy);
                 entity.Ignore(e => e.UpdatedBy);
                 entity.Ignore(e => e.IsDeleted);
+                entity.Ignore(e => e.Translations);
             });
         }
     }

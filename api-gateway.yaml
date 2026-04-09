@@ -797,3 +797,104 @@ paths:
         200:
           description: "OK"
 
+  /api/menus/list:
+    post:
+      summary: "Menus list"
+      operationId: "menus_list_post"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/menus/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Menus list CORS"
+      operationId: "cors_menus_list"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/menus/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+
+  /api/menus:
+    get:
+      summary: "Get Menus"
+      operationId: "menus_get"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    post:
+      summary: "Create Menu"
+      operationId: "menus_create"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Menus CORS"
+      operationId: "cors_menus"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/menus"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+
+  /api/menus/{id}:
+    put:
+      summary: "Update Menu"
+      operationId: "menus_update"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    delete:
+      summary: "Delete Menu"
+      operationId: "menus_delete"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Menus by ID CORS"
+      operationId: "cors_menus_by_id"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app"
+        protocol: "http/1.1"
+        path_translation: APPEND_PATH_TO_ADDRESS
+      responses:
+        200:
+          description: "OK"
+

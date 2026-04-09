@@ -21,7 +21,7 @@ namespace CRM.Product.Application.Features.DiningOptions.Commands
             {
                 code = request.Code,
                 is_active = request.IsActive,
-                order_tracking_enabled = request.OrderTrackingEnabled
+                sort_order = request.SortOrder
             };
 
             await _repository.CreateAsync(entity);

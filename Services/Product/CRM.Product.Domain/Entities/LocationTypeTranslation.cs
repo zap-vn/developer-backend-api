@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
-    [Table("location_type_translation", Schema = "pos")]
+    [Table("lookup_translations", Schema = "system")]
     public class LocationTypeTranslation
     {
         [Key]
         [Column("id")]
         public Guid id { get; set; } = Guid.NewGuid();
 
-        [Column("location_type_id")]
-        public int location_type_id { get; set; }
+        [Column("lookup_id")]
+        public int lookup_id { get; set; }
 
         [Column("locale_id")]
         public int locale_id { get; set; }

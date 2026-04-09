@@ -6,6 +6,6 @@ namespace CRM.Product.Application.Features.DiningOptions.Commands
     {
         public string Code { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
-        public bool OrderTrackingEnabled { get; set; } = false;
+        public int SortOrder { get; set; } = 0;
     }
 }

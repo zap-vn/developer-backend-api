@@ -33,6 +33,7 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<CategoryMappingEntity> ProductCategoryMappings { get; set; }
         public DbSet<LocationPriceEntity> ProductLocationPricing { get; set; }
         public DbSet<StatusItemEntity> StatusItems { get; set; }
+        public DbSet<StatusTranslationEntity> StatusItemTranslations { get; set; }
         public DbSet<LocationEntity> Locations { get; set; }
         public DbSet<LocationTypeItem> LocationTypeItems { get; set; }
         public DbSet<Store> Stores { get; set; }
@@ -184,7 +185,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<StatusItemEntity>(entity =>
             {
-                entity.ToTable("status_item", "platform");
+                entity.ToTable("status_item", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.code).HasColumnName("code");
@@ -216,7 +217,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<StatusTranslationEntity>(entity =>
             {
-                entity.ToTable("status_item_translation", "platform");
+                entity.ToTable("status_item_translation", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.status_item_id).HasColumnName("status_item_id");
@@ -249,13 +250,14 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<LocationEntity>(entity =>
             {
-                entity.ToTable("location", "pos");
+                entity.ToTable("location", "commerce");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
-
+                entity.Property(e => e.serial_id).HasColumnName("serial_id");
+                entity.Property(e => e.serial_number).HasColumnName("serial_number");
                 entity.Property(e => e.location_code).HasColumnName("location_code");
-                // entity.Property(e => e.node_id).HasColumnName("node_id");
+                entity.Property(e => e.node_id).HasColumnName("node_id");
                 entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
                 entity.Property(e => e.name).HasColumnName("name");
                 entity.Property(e => e.status_id).HasColumnName("status_id");
@@ -267,6 +269,7 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.description).HasColumnName("description");
                 entity.Property(e => e.location_type_id).HasColumnName("location_type_id");
                 entity.Property(e => e.address_line_1).HasColumnName("address_line_1");
+                entity.Property(e => e.address_line_2).HasColumnName("address_line_2");
                 entity.Property(e => e.city).HasColumnName("city");
                 entity.Property(e => e.state).HasColumnName("state");
                 entity.Property(e => e.country_id).HasColumnName("country_id");
@@ -284,6 +287,8 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.cover_image_url).HasColumnName("cover_image_url");
                 entity.Property(e => e.brand_color).HasColumnName("brand_color");
                 entity.Property(e => e.timezone).HasColumnName("timezone");
+                entity.Property(e => e.latitude).HasColumnName("latitude");
+                entity.Property(e => e.longitude).HasColumnName("longitude");
                 entity.Property(e => e.operating_hours).HasColumnName("operating_hours").HasColumnType("jsonb");
                 entity.Property(e => e.transfer_account).HasColumnName("transfer_account");
                 entity.Property(e => e.transfer_tag).HasColumnName("transfer_tag");
@@ -292,21 +297,20 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<LocationTypeItem>(entity =>
             {
-                entity.ToTable("location_type_item", "pos");
+                entity.ToTable("lookups", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.code).HasColumnName("code");
-                entity.Property(e => e.is_active).HasColumnName("is_active");
 
-                entity.HasMany(e => e.translations).WithOne(t => t.location_type).HasForeignKey(t => t.location_type_id);
+                entity.HasMany(e => e.translations).WithOne(t => t.location_type).HasForeignKey(t => t.lookup_id);
             });
 
             modelBuilder.Entity<LocationTypeTranslation>(entity =>
             {
-                entity.ToTable("location_type_translation", "pos");
+                entity.ToTable("lookup_translations", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
-                entity.Property(e => e.location_type_id).HasColumnName("location_type_id");
+                entity.Property(e => e.lookup_id).HasColumnName("lookup_id");
                 entity.Property(e => e.locale_id).HasColumnName("locale_id");
                 entity.Property(e => e.name).HasColumnName("name");
             });
@@ -371,7 +375,7 @@ namespace CRM.Product.Infrastructure.Persistence
             {
                 entity.ToTable("inventory_item", "logistics");
                 entity.HasKey(e => e.id);
-                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.product_variant_id).HasColumnName("product_variant_id");
                 entity.Property(e => e.location_id).HasColumnName("location_id");
                 entity.Property(e => e.qty_on_hand).HasColumnName("qty_on_hand");
@@ -412,19 +416,19 @@ namespace CRM.Product.Infrastructure.Persistence
             // --- Dining Options ---
             modelBuilder.Entity<DiningOption>(entity =>
             {
-                entity.ToTable("dining_option", "platform");
+                entity.ToTable("dining_option", "commerce");
                 entity.HasKey(e => e.id);
             });
 
             modelBuilder.Entity<DiningOptionTranslation>(entity =>
             {
-                entity.ToTable("dining_option_translation", "platform");
+                entity.ToTable("dining_option_translation", "commerce");
                 entity.HasKey(e => e.id);
             });
 
             modelBuilder.Entity<DiningOptionLocationLink>(entity =>
             {
-                entity.ToTable("dining_option_location_link", "platform");
+                entity.ToTable("location_dining_option", "commerce");
                 entity.HasKey(e => new { e.dining_option_id, e.location_id });
             });
         }

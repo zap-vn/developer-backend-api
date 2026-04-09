@@ -35,7 +35,7 @@ namespace CRM.Product.Application.Features.DiningOptions.Queries
                 code = entity.code,
                 display_name = entity.DisplayName ?? entity.code,
                 used_in_locations = entity.UsedInLocations,
-                order_tracking_enabled = entity.order_tracking_enabled,
+                sort_order = entity.sort_order,
                 is_active = entity.is_active
             };
         }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
-    [Table("dining_option", Schema = "platform")]
+    [Table("dining_option", Schema = "commerce")]
     public class DiningOption
     {
         [Key]
@@ -16,28 +16,27 @@ namespace CRM.Product.Domain.Entities
         public string code { get; set; } = string.Empty;
 
         [Column("is_active")]
-        public bool is_active { get; set; } = true;
+        public bool is_active { get; set; }
 
-        [Column("order_tracking_enabled")]
-        public bool order_tracking_enabled { get; set; } = false;
+        [Column("sort_order")]
+        public int sort_order { get; set; }
 
-        // Navigation
-        public ICollection<DiningOptionTranslation> translations { get; set; } = new List<DiningOptionTranslation>();
-
-        // Transient properties for UI
+        // Non-mapped properties for DTOs
         [NotMapped]
         public string? DisplayName { get; set; }
         
         [NotMapped]
         public int UsedInLocations { get; set; }
+
+        public ICollection<DiningOptionTranslation> translations { get; set; } = new List<DiningOptionTranslation>();
     }
 
-    [Table("dining_option_translation", Schema = "platform")]
+    [Table("dining_option_translation", Schema = "commerce")]
     public class DiningOptionTranslation
     {
         [Key]
         [Column("id")]
-        public Guid id { get; set; } = Guid.NewGuid();
+        public Guid id { get; set; }
 
         [Column("dining_option_id")]
         public int dining_option_id { get; set; }
@@ -47,22 +46,37 @@ namespace CRM.Product.Domain.Entities
 
         [Column("name")]
         public string name { get; set; } = string.Empty;
-
-        // Navigation
-        [ForeignKey("dining_option_id")]
-        public DiningOption? dining_option { get; set; }
     }
 
-    [Table("dining_option_location_link", Schema = "platform")]
+    [Table("location_dining_option", Schema = "commerce")]
     public class DiningOptionLocationLink
     {
-        [Column("dining_option_id")]
-        public int dining_option_id { get; set; }
+        [Key]
+        [Column("id")]
+        public Guid id { get; set; }
 
         [Column("location_id")]
         public Guid location_id { get; set; }
 
-        [Column("is_active")]
-        public bool is_active { get; set; } = true;
+        [Column("dining_option_id")]
+        public int dining_option_id { get; set; }
+
+        [Column("custom_label")]
+        public string? custom_label { get; set; }
+
+        [Column("is_enabled")]
+        public bool is_enabled { get; set; }
+
+        [Column("available_on_pos")]
+        public bool available_on_pos { get; set; }
+
+        [Column("available_online")]
+        public bool available_online { get; set; }
+
+        [Column("sort_order")]
+        public int sort_order { get; set; }
+
+        [Column("created_at")]
+        public DateTime created_at { get; set; }
     }
 }

@@ -9,7 +9,8 @@ namespace CRM.Product.Application.Features.Locations.Commands
         public Guid Id { get; set; }
         public string? legacy_id { get; set; }
         public string? name { get; set; }
-        public int? location_code { get; set; }
+        public string? serial_number { get; set; }
+        public string? location_code { get; set; }
         public int? status_id { get; set; }
         public bool? is_active { get; set; }
         public string? slug { get; set; }
@@ -17,6 +18,7 @@ namespace CRM.Product.Application.Features.Locations.Commands
         public string? description { get; set; }
         public int? location_type_id { get; set; }
         public string? address_line_1 { get; set; }
+        public string? address_line_2 { get; set; }
         public string? city { get; set; }
         public string? state { get; set; }
         public int? country_id { get; set; }
@@ -34,6 +36,8 @@ namespace CRM.Product.Application.Features.Locations.Commands
         public string? cover_image_url { get; set; }
         public string? brand_color { get; set; }
         public string? timezone { get; set; }
+        public decimal? latitude { get; set; }
+        public decimal? longitude { get; set; }
         public JsonElement? operating_hours { get; set; }
         public string? transfer_account { get; set; }
         public string? transfer_tag { get; set; }

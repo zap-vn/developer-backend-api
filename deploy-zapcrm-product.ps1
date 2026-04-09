@@ -24,7 +24,7 @@ gcloud run deploy $serviceName `
     --region $region `
     --allow-unauthenticated `
     --port 8080 `
-    --set-env-vars "ConnectionStrings__PostgreSql=Host=136.118.121.105;Port=5432;Username=postgres;Password=Pg@Secret2026!;Database=zap_ecosystem_v303,ASPNETCORE_ENVIRONMENT=Production,Jwt:Secret=ThisVerifySecretMustBeLongEnoughForZapCrmProductApiAndNotSharedInPublicRepo1234567890" `
+    --set-env-vars "ConnectionStrings__PostgreSql=Host=136.118.121.105;Port=5432;Username=postgres;Password=Pg@Secret2026!;Database=zap_ecosystem,ASPNETCORE_ENVIRONMENT=Production,Jwt:Secret=ThisVerifySecretMustBeLongEnoughForZapCrmProductApiAndNotSharedInPublicRepo1234567890" `
     --quiet
 
 Write-Host "✅ Deployment Complete!" -ForegroundColor Green

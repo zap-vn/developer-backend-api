@@ -4,45 +4,39 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
-    [Table("location", Schema = "pos")]
+    [Table("location", Schema = "commerce")]
     public class Location
     {
         [Key]
+        [Column("id")]
         public Guid id { get; set; } = Guid.NewGuid();
+
+        [Column("serial_id")]
+        public long serial_id { get; set; }
+
+        [Column("serial_number")]
+        public string serial_number { get; set; } = string.Empty;
+
+        [Column("location_code")]
+        public string location_code { get; set; } = string.Empty;
 
         [Column("tenant_id")]
         public Guid? tenant_id { get; set; }
 
-        [Column("location_code")]
-        public int? location_code { get; set; }
-        
-        // [Column("node_id")]
-        // public Guid? node_id { get; set; }
-
+        [Column("node_id")]
+        public Guid? node_id { get; set; }
 
         [Column("legacy_id")]
         public string? legacy_id { get; set; }
-        
+
+        [Column("business_name")]
+        public string business_name { get; set; } = "Phở 24";
+
         [Column("name")]
         public string name { get; set; } = string.Empty;
 
-        [Column("status_id")]
-        public int? status_id { get; set; }
-
-        [Column("is_active")]
-        public bool? is_active { get; set; }
-        
-        [Column("created_at")]
-        public DateTime created_at { get; set; } = DateTime.UtcNow;
-
-        [Column("updated_at")]
-        public DateTime? updated_at { get; set; }
-
         [Column("slug")]
-        public string? slug { get; set; }
-
-        [Column("business_name")]
-        public string? business_name { get; set; }
+        public string slug { get; set; } = string.Empty;
 
         [Column("description")]
         public string? description { get; set; }
@@ -52,6 +46,9 @@ namespace CRM.Product.Domain.Entities
 
         [Column("address_line_1")]
         public string? address_line_1 { get; set; }
+
+        [Column("address_line_2")]
+        public string? address_line_2 { get; set; }
 
         [Column("city")]
         public string? city { get; set; }
@@ -102,7 +99,13 @@ namespace CRM.Product.Domain.Entities
         public string? brand_color { get; set; }
 
         [Column("timezone")]
-        public string? timezone { get; set; }
+        public string? timezone { get; set; } = "Asia/Ho Chi Minh";
+
+        [Column("latitude")]
+        public decimal? latitude { get; set; }
+
+        [Column("longitude")]
+        public decimal? longitude { get; set; }
 
         [Column("operating_hours")]
         public System.Text.Json.JsonElement? operating_hours { get; set; }
@@ -116,6 +119,18 @@ namespace CRM.Product.Domain.Entities
         [Column("parent_location_id")]
         public Guid? parent_location_id { get; set; }
 
+        [Column("status_id")]
+        public int status_id { get; set; } = 30001;
+
+        [Column("is_active")]
+        public bool is_active { get; set; } = true;
+
+        [Column("created_at")]
+        public DateTime created_at { get; set; } = DateTime.UtcNow;
+
+        [Column("updated_at")]
+        public DateTime updated_at { get; set; } = DateTime.UtcNow;
+
         [ForeignKey("location_type_id")]
         public LocationTypeItem? location_type { get; set; }
 
@@ -123,5 +138,3 @@ namespace CRM.Product.Domain.Entities
         public StatusItem? status { get; set; }
     }
 }
-
-

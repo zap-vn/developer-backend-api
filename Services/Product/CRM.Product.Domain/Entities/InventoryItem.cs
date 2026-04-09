@@ -8,7 +8,8 @@ namespace CRM.Product.Domain.Entities
     public class InventoryItem
     {
         [Key]
-        public Guid id { get; set; } = Guid.NewGuid();
+        [Column("id")]
+        public int id { get; set; }
         
         [Column("product_variant_id")]
         public Guid product_variant_id { get; set; }

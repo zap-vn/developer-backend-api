@@ -27,7 +27,7 @@ steps:
       - '--port'
       - '8080'
       - '--set-env-vars'
-      - 'ConnectionStrings__PostgreSql=Host=136.118.121.105;Port=5432;Username=postgres;Password=Pg@Secret2026!;Database=zap_ecosystem_v303,ASPNETCORE_ENVIRONMENT=Production,Jwt__Secret=a_very_secret_default_key_at_least_32_chars_long_1234567890,Jwt__Issuer=CRM.Authentication.Api,Jwt__Audience=CRM.GateWay.Api'
+      - 'ConnectionStrings__PostgreSql=Host=136.118.121.105;Port=5432;Username=postgres;Password=Pg@Secret2026!;Database=zap_ecosystem,ASPNETCORE_ENVIRONMENT=Production,Jwt__Secret=a_very_secret_default_key_at_least_32_chars_long_1234567890,Jwt__Issuer=CRM.Authentication.Api,Jwt__Audience=CRM.GateWay.Api'
 
 images:
   - 'asia-southeast1-docker.pkg.dev/zapcrm-492101/crm-repo/zapcrm-product-api:latest'

@@ -26,10 +26,10 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                             id = do_opt.id,
                             code = do_opt.code,
                             is_active = do_opt.is_active,
-                            order_tracking_enabled = do_opt.order_tracking_enabled,
+                            sort_order = do_opt.sort_order,
                             DisplayName = dotTransl != null ? dotTransl.name : do_opt.code,
                             UsedInLocations = _context.DiningOptionLocationLinks
-                                .Count(l => l.dining_option_id == do_opt.id && l.is_active)
+                                .Count(l => l.dining_option_id == do_opt.id && l.is_enabled)
                         };
 
             return await query.ToListAsync();
@@ -46,10 +46,10 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                             id = do_opt.id,
                             code = do_opt.code,
                             is_active = do_opt.is_active,
-                            order_tracking_enabled = do_opt.order_tracking_enabled,
+                            sort_order = do_opt.sort_order,
                             DisplayName = dotTransl != null ? dotTransl.name : do_opt.code,
                             UsedInLocations = _context.DiningOptionLocationLinks
-                                .Count(l => l.dining_option_id == do_opt.id && l.is_active)
+                                .Count(l => l.dining_option_id == do_opt.id && l.is_enabled)
                         };
 
             return await query.FirstOrDefaultAsync();

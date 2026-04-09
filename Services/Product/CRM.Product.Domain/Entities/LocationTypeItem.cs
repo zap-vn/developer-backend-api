@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
-    [Table("location_type_item", Schema = "pos")]
+    [Table("lookups", Schema = "system")]
     public class LocationTypeItem
     {
         [Key]
@@ -13,11 +13,6 @@ namespace CRM.Product.Domain.Entities
 
         [Column("code")]
         public string? code { get; set; }
-
-
-        [Column("is_active")]
-        public bool? is_active { get; set; }
-
 
         public virtual System.Collections.Generic.ICollection<LocationTypeTranslation> translations { get; set; } = new System.Collections.Generic.List<LocationTypeTranslation>();
     }

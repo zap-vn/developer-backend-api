@@ -38,7 +38,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         {
             // Join with translations to get the status label
             var query = from m in _context.MenuHeaders
-                        join st in _context.StatusTranslations.Where(t => t.locale_id == localeId)
+                        join st in _context.StatusItemTranslations.Where(t => t.locale_id == localeId)
                             on m.status_id equals st.status_item_id into stGroup
                         from st in stGroup.DefaultIfEmpty()
                         select new { m, StatusLabel = st != null ? st.name : "Unknown" };

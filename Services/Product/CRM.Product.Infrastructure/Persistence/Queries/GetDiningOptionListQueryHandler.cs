@@ -32,7 +32,7 @@ namespace CRM.Product.Infrastructure.Persistence.Queries
                 code = e.code,
                 display_name = e.DisplayName ?? e.code,
                 used_in_locations = e.UsedInLocations,
-                order_tracking_enabled = e.order_tracking_enabled,
+                sort_order = e.sort_order,
                 is_active = e.is_active
             });
         }

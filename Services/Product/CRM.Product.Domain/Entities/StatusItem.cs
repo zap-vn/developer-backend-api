@@ -25,8 +25,8 @@ namespace CRM.Product.Domain.Entities
         [Column("sort_order")]
         public int? sort_order { get; set; }
 
-        [Column("is_active")]
-        public bool is_active { get; set; } = true;
+        // [Column("is_active")]
+        // public bool is_active { get; set; } = true;
 
         public ICollection<StatusItemTranslation> translations { get; set; } = new List<StatusItemTranslation>();
     }

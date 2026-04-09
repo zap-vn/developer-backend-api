@@ -45,6 +45,8 @@ namespace CRM.Product.Application.Features.Locations.Queries
             {
                 id                 = x.id,
                 tenant_id          = x.tenant_id,
+                serial_id          = x.serial_id,
+                serial_number      = x.serial_number,
                 legacy_id          = x.legacy_id,
                 name               = x.name,
 
@@ -67,6 +69,7 @@ namespace CRM.Product.Application.Features.Locations.Queries
                        $"{x.location_type.translations?.FirstOrDefault(t => t.locale_id == 2)?.name} ({x.location_type.translations?.FirstOrDefault(t => t.locale_id == 1)?.name})")
                     : null,
                 address_line_1     = x.address_line_1,
+                address_line_2     = x.address_line_2,
                 city               = x.city,
                 state              = x.state,
                 country_id         = x.country_id,
@@ -84,6 +87,8 @@ namespace CRM.Product.Application.Features.Locations.Queries
                 cover_image_url    = x.cover_image_url,
                 brand_color        = x.brand_color,
                 timezone           = x.timezone,
+                latitude           = x.latitude,
+                longitude          = x.longitude,
                 operating_hours    = x.operating_hours,
                 transfer_account   = x.transfer_account,
                 transfer_tag       = x.transfer_tag,

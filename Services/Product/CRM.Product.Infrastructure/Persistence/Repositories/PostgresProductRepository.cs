@@ -186,6 +186,21 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             string sortField = "created_at",
             bool sortDescending = true)
         {
+            // Diagnostic: List all status related tables
+            var tables = new System.Collections.Generic.List<string>();
+            try {
+                using var conn = _context.Database.GetDbConnection();
+                if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT table_schema || '.' || table_name FROM information_schema.tables WHERE table_name LIKE '%status%'";
+                using var reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync()) tables.Add(reader.GetString(0));
+            } catch {}
+            if (tables.Count > 0) {
+                 // Throw with the list so we can see it in the exception output in logs
+                 throw new Exception("DEBUG_TABLES: " + string.Join(", ", tables));
+            }
+
             var query = _context.Products.AsQueryable();
 
             if (tenantId.HasValue)

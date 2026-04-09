@@ -1,7 +1,7 @@
 using MediatR;
 using CRM.Product.Application.Features.Collections.DTOs;
 using CRM.Product.Domain.Interfaces;
-using CRM.BuildingBlocks.Domain.Common;
+using CRM.BuildingBlocks.Models;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;

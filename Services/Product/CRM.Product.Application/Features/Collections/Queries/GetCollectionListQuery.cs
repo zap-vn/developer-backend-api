@@ -1,7 +1,7 @@
 using MediatR;
 using System.Collections.Generic;
 using CRM.Product.Application.Features.Collections.DTOs;
-using CRM.BuildingBlocks.Domain.Common;
+using CRM.BuildingBlocks.Models;
 
 namespace CRM.Product.Application.Features.Collections.Queries
 {

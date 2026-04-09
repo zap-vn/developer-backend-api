@@ -390,7 +390,14 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.ToTable("category", "catalog");
                 entity.HasKey(e => e.id);
 
-                // Explicitly link parent_id to avoid shadow properties like Parentid
+                entity.Property(e => e.serial_id).HasColumnName("serial_id");
+                entity.Property(e => e.serial_number).HasColumnName("serial_number");
+                entity.Property(e => e.category_code).HasColumnName("category_code");
+                entity.Property(e => e.meta_keywords).HasColumnName("meta_keywords");
+                entity.Property(e => e.canonical_url).HasColumnName("canonical_url");
+                entity.Property(e => e.display_initial).HasColumnName("display_initial");
+                entity.Property(e => e.applicable_channels).HasColumnName("applicable_channels");
+
                 entity.HasOne(e => e.parent_category)
                     .WithMany(e => e.sub_categories)
                     .HasForeignKey(e => e.parent_id);

@@ -16,6 +16,15 @@ namespace CRM.Product.Domain.Entities
         [Column("parent_id")]
         public Guid? parent_id { get; set; }
 
+        [Column("serial_id")]
+        public int? serial_id { get; set; }
+
+        [Column("serial_number")]
+        public string? serial_number { get; set; }
+
+        [Column("category_code")]
+        public string? category_code { get; set; }
+
         [Column("legacy_id")]
         public string? legacy_id { get; set; }
 
@@ -43,11 +52,23 @@ namespace CRM.Product.Domain.Entities
         [Column("meta_description")]
         public string? meta_description { get; set; }
 
+        [Column("meta_keywords")]
+        public string? meta_keywords { get; set; }
+
+        [Column("canonical_url")]
+        public string? canonical_url { get; set; }
+
         [Column("status_id")]
         public int? status_id { get; set; }
 
         [Column("is_active")]
         public bool is_active { get; set; } = true;
+
+        [Column("display_initial")]
+        public string? display_initial { get; set; }
+
+        [Column("applicable_channels")]
+        public string[]? applicable_channels { get; set; }
 
         [Column("seo_title")]
         public string? seo_title { get; set; }

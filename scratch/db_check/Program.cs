@@ -1,5 +1,7 @@
 using System;
 using Npgsql;
+using System.IO;
+using System.Collections.Generic;
 
 class Program
 {
@@ -9,9 +11,14 @@ class Program
         try {
             using var conn = new NpgsqlConnection(connString);
             conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT nspname FROM pg_namespace WHERE nspname NOT LIKE 'pg_%' AND nspname != 'information_schema'", conn);
+            using var cmd = new NpgsqlCommand("SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog', 'information_schema')", conn);
             using var reader = cmd.ExecuteReader();
-            while (reader.Read()) Console.WriteLine("SCHEMA: " + reader.GetString(0));
-        } catch (Exception ex) { Console.WriteLine("ERROR: " + ex.Message); }
+            while (reader.Read())
+            {
+                Console.WriteLine($"{reader.GetString(0)}.{reader.GetString(1)}");
+            }
+        } catch (Exception ex) {
+            Console.WriteLine("Error: " + ex.Message);
+        }
     }
 }

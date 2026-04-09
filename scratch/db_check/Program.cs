@@ -8,11 +8,20 @@ class Program
         string connString = "Host=136.118.121.105;Port=5432;Username=postgres;Password=Pg@Secret2026!;Database=zap_ecosystem";
         using var conn = new NpgsqlConnection(connString);
         conn.Open();
-        using var cmd = new NpgsqlCommand("SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema NOT IN ('information_schema', 'pg_catalog') ORDER BY table_schema, table_name", conn);
-        using var reader = cmd.ExecuteReader();
-        while (reader.Read())
+        string[] tables = { "product_type_item", "status_item", "uom_item", "lookups", "category" };
+        foreach (var table in tables)
         {
-            Console.WriteLine($"{reader.GetString(0)}.{reader.GetString(1)}");
+            using var cmd = new NpgsqlCommand($"SELECT table_schema FROM information_schema.tables WHERE table_name = '{table}'", conn);
+            using var reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                Console.WriteLine($"{table}: {reader.GetString(0)}");
+            }
+            else
+            {
+                Console.WriteLine($"{table}: NOT FOUND");
+            }
+            reader.Close();
         }
     }
 }

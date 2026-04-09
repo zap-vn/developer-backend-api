@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
-    [Table("province_item", Schema = "platform")]
-    public class ProvinceItem
+    [Table("geo_province", Schema = "platform")]
+    public class GeoProvince
     {
         [Key]
         [Column("id")]
@@ -18,6 +18,6 @@ namespace CRM.Product.Domain.Entities
         [Column("is_active")]
         public bool is_active { get; set; } = true;
 
-        public ICollection<ProvinceTranslation> translations { get; set; } = new List<ProvinceTranslation>();
+        public ICollection<GeoProvinceTranslation> translations { get; set; } = new List<GeoProvinceTranslation>();
     }
 }

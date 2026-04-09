@@ -42,8 +42,10 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<ProductTypeItem> ProductTypeItems { get; set; }
         public DbSet<InventoryItemEntity> InventoryItems { get; set; }
         public DbSet<BomHeaderEntity> BomHeaders { get; set; }
-        public DbSet<CRM.Product.Domain.Entities.ProvinceItem> ProvinceItems { get; set; }
-        public DbSet<CRM.Product.Domain.Entities.ProvinceTranslation> ProvinceTranslations { get; set; }
+        public DbSet<GeoProvince> GeoProvinces { get; set; }
+        public DbSet<GeoProvinceTranslation> GeoProvinceTranslations { get; set; }
+        public DbSet<Collection> Collections { get; set; }
+        public DbSet<CollectionItem> CollectionItems { get; set; }
         public DbSet<LocationTypeTranslation> LocationTypeTranslations { get; set; }
         
         // --- Catalog Menu System ---
@@ -228,9 +230,9 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.name).HasColumnName("name");
             });
 
-            modelBuilder.Entity<CRM.Product.Domain.Entities.ProvinceItem>(entity =>
+            modelBuilder.Entity<GeoProvince>(entity =>
             {
-                entity.ToTable("province_item", "platform");
+                entity.ToTable("geo_province", "platform");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.code).HasColumnName("code");
@@ -241,9 +243,9 @@ namespace CRM.Product.Infrastructure.Persistence
                     .HasForeignKey(t => t.province_id);
             });
 
-            modelBuilder.Entity<CRM.Product.Domain.Entities.ProvinceTranslation>(entity =>
+            modelBuilder.Entity<GeoProvinceTranslation>(entity =>
             {
-                entity.ToTable("province_translation", "platform");
+                entity.ToTable("geo_province_translation", "platform");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.province_id).HasColumnName("province_id");
@@ -466,6 +468,25 @@ namespace CRM.Product.Infrastructure.Persistence
             {
                 entity.ToTable("location_dining_option", "commerce");
                 entity.HasKey(e => new { e.dining_option_id, e.location_id });
+            });
+
+            modelBuilder.Entity<Collection>(entity =>
+            {
+                entity.ToTable("collection", "catalog");
+                entity.HasKey(e => e.id);
+                entity.HasMany(e => e.items)
+                    .WithOne(i => i.collection)
+                    .HasForeignKey(i => i.collection_id);
+            });
+
+            modelBuilder.Entity<CollectionItem>(entity =>
+            {
+                entity.ToTable("collection_item", "catalog");
+                entity.HasKey(e => new { e.collection_id, e.product_id });
+                
+                entity.HasOne(e => e.product)
+                    .WithMany()
+                    .HasForeignKey(e => e.product_id);
             });
         }
     }

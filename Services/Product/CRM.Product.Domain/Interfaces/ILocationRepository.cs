@@ -14,6 +14,6 @@ namespace CRM.Product.Domain.Interfaces
         Task CreateStoreAsync(Store store);
         Task UpdateAsync(Location location);
         Task DeleteAsync(Guid id);
-        Task<IEnumerable<ProvinceItem>> GetProvincesAsync(int localeId);
+        Task<IEnumerable<GeoProvince>> GetProvincesAsync(int localeId);
     }
 }

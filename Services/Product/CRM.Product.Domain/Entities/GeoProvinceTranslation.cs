@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
-    [Table("province_translation", Schema = "platform")]
-    public class ProvinceTranslation
+    [Table("geo_province_translation", Schema = "platform")]
+    public class GeoProvinceTranslation
     {
         [Key]
         [Column("id")]
@@ -19,6 +19,6 @@ namespace CRM.Product.Domain.Entities
         [Column("name")]
         public string name { get; set; } = string.Empty;
 
-        public ProvinceItem? province_item { get; set; }
+        public GeoProvince? province_item { get; set; }
     }
 }

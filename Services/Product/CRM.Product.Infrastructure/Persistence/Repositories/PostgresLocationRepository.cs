@@ -129,9 +129,9 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             }
         }
 
-        public async Task<IEnumerable<ProvinceItem>> GetProvincesAsync(int localeId)
+        public async Task<IEnumerable<GeoProvince>> GetProvincesAsync(int localeId)
         {
-            return await _context.ProvinceItems
+            return await _context.GeoProvinces
                 .Include(p => p.translations.Where(t => t.locale_id == localeId))
                 .Where(p => p.is_active)
                 .ToListAsync();

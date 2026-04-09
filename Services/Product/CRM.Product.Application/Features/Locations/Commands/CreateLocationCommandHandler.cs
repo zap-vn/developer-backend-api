@@ -28,9 +28,10 @@ namespace CRM.Product.Application.Features.Locations.Commands
             {
                 id = Guid.NewGuid(),
                 tenant_id = tenantId,
-                node_id = request.node_id,
+                // node_id = request.node_id,
                 legacy_id = request.legacy_id,
                 name = request.name,
+                location_code = request.location_code,
                 status_id = request.status_id ?? 30001,
                 is_active = request.is_active ?? true,
                 slug = request.slug,

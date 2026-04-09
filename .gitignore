@@ -2,6 +2,8 @@
 # .NET
 [Bb]in/
 [Oo]bj/
+[Pp]ublish/
+publish_single/
 *.user
 *.userosscache
 *.sln.docstates
@@ -12,6 +14,7 @@
 *.swp
 *.swo
 .DS_Store
+node_modules/
 
 # Secrets
 appsettings.Development.json

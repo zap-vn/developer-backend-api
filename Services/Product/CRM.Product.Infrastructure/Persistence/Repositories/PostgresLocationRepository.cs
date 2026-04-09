@@ -22,6 +22,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         {
             IQueryable<Location> query = BuildQuery(filter)
                 .Include(x => x.status)
+                    .ThenInclude(s => s.translations)
                 .Include(x => x.location_type)
                     .ThenInclude(lt => lt.translations);
 
@@ -51,14 +52,11 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 var term = filter.Search;
                 bool isGuid = Guid.TryParse(term, out var idGuid);
                 
-                query = query.Where(x => 
-                    EF.Functions.ILike(x.name, $"%{term}%") || 
-                    EF.Functions.ILike(EF.Functions.Unaccent(x.name), $"%{term}%") ||
-                    (x.location_code != null && EF.Functions.ILike(x.location_code, $"%{term}%")) ||
-                    (x.serial_number != null && EF.Functions.ILike(x.serial_number, $"%{term}%")) ||
+                query = query.Where(x =>
+                    EF.Functions.ILike(EF.Functions.Unaccent(x.name), "%" + EF.Functions.Unaccent(term) + "%") ||
+                    (x.business_name != null && EF.Functions.ILike(EF.Functions.Unaccent(x.business_name), "%" + EF.Functions.Unaccent(term) + "%")) ||
                     (isGuid && x.id == idGuid) ||
-                    (x.address_line_1 != null && EF.Functions.ILike(x.address_line_1, $"%{term}%")) ||
-                    (x.address_line_1 != null && EF.Functions.ILike(EF.Functions.Unaccent(x.address_line_1), $"%{term}%"))
+                    (x.address_line_1 != null && EF.Functions.ILike(EF.Functions.Unaccent(x.address_line_1), "%" + EF.Functions.Unaccent(term) + "%"))
                 );
             }
 
@@ -70,18 +68,9 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             if (filter.ProvinceId.HasValue)
                 query = query.Where(x => x.province_id == filter.ProvinceId);
 
-            // Filter: location type (list string)
+            // Filter: location type (list int)
             if (filter.LocationTypeIds != null && filter.LocationTypeIds.Count > 0)
-            {
-                // Parse string IDs to int for comparison
-                var ids = filter.LocationTypeIds
-                    .Select(s => int.TryParse(s, out var n) ? (int?)n : null)
-                    .Where(n => n.HasValue)
-                    .Select(n => n!.Value)
-                    .ToList();
-                if (ids.Count > 0)
-                    query = query.Where(x => x.location_type_id != null && ids.Contains(x.location_type_id.Value));
-            }
+                query = query.Where(x => x.location_type_id != null && filter.LocationTypeIds.Contains(x.location_type_id.Value));
 
             return query;
         }
@@ -90,6 +79,9 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         {
             return filter.SortField?.ToLower() switch
             {
+                "location_code" => filter.SortDescending
+                    ? query.OrderByDescending(x => x.location_code)
+                    : query.OrderBy(x => x.location_code),
                 "status" => filter.SortDescending
                     ? query.OrderByDescending(x => x.status_id)
                     : query.OrderBy(x => x.status_id),
@@ -105,6 +97,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 .Include(x => x.location_type)
                     .ThenInclude(lt => lt.translations)
                 .Include(x => x.status)
+                    .ThenInclude(s => s.translations)
                 .FirstOrDefaultAsync(w => w.id == id);
         }
 

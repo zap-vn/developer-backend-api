@@ -9,6 +9,8 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.SetMinimumLevel(LogLevel.Trace);
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 // Add services to the container.
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -40,6 +42,13 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddBuildingBlocks();
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// Register MediatR for all assemblies
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+    typeof(Program).Assembly,
+    typeof(CRM.Product.Application.DependencyInjection).Assembly,
+    typeof(CRM.Product.Infrastructure.DependencyInjection).Assembly
+));
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 

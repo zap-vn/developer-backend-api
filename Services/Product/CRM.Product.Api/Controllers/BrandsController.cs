@@ -4,7 +4,6 @@ using CRM.Product.Application.Features.Products.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using CRM.BuildingBlocks.Models;
 
@@ -26,51 +25,80 @@ namespace CRM.Product.Api.Controllers
         public async Task<IActionResult> List([FromBody] BrandListRequestDto requestBody)
         {
             var result = await _mediator.Send(new GetBrandsQuery { Request = requestBody });
-            
-            return Ok(new 
+            return Ok(new
             {
                 success = true,
-                data = new 
+                code = 200,
+                message = "OK",
+                data = new
                 {
-                    items = result.Items,
-                    total = result.TotalCount,
                     total_page = result.PageSize > 0 ? (int)System.Math.Ceiling((double)result.TotalCount / result.PageSize) : 1,
                     total_record = result.TotalCount,
                     page_index = result.CurrentPage,
-                    page_size = result.PageSize
+                    page_size = result.PageSize,
+                    items = result.Items
                 }
             });
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<BrandDto>>> Get([FromQuery] BrandListRequestDto pagination)
+        public async Task<IActionResult> Get([FromQuery] BrandListRequestDto pagination)
         {
             var result = await _mediator.Send(new GetBrandsQuery { Request = pagination });
-            return Ok(result);
+            return Ok(new
+            {
+                success = true,
+                code = 200,
+                message = "OK",
+                data = new
+                {
+                    total_page = result.PageSize > 0 ? (int)System.Math.Ceiling((double)result.TotalCount / result.PageSize) : 1,
+                    total_record = result.TotalCount,
+                    page_index = result.CurrentPage,
+                    page_size = result.PageSize,
+                    items = result.Items
+                }
+            });
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await _mediator.Send(new GetBrandByIdQuery { Id = id });
+            if (result == null)
+                return NotFound(new { success = false, code = 404, message = "Brand not found", data = (object?)null });
+
+            return Ok(new { success = true, code = 200, message = "OK", data = result });
         }
 
         [HttpPost]
+        [Consumes("application/json")]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateBrandCommand command)
         {
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            var id = await _mediator.Send(command);
+            return Ok(new { success = true, code = 200, message = "Created successfully", data = new { id } });
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
+        [Consumes("application/json")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateBrandCommand command)
         {
-            if (id != command.Id) return BadRequest();
+            command.Id = id;
             var result = await _mediator.Send(command);
-            if (!result) return NotFound();
-            return Ok(result);
+            if (!result)
+                return NotFound(new { success = false, code = 404, message = "Brand not found", data = (object?)null });
+
+            return Ok(new { success = true, code = 200, message = "Updated successfully", data = new { id } });
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _mediator.Send(new DeleteBrandCommand { Id = id });
-            if (!result) return NotFound();
-            return Ok(result);
+            if (!result)
+                return NotFound(new { success = false, code = 404, message = "Brand not found", data = (object?)null });
+
+            return Ok(new { success = true, code = 200, message = "Deleted successfully", data = new { id } });
         }
     }
 }

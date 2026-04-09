@@ -9,6 +9,7 @@ namespace CRM.Product.Application.Features.Locations.Commands
         public Guid? node_id { get; set; }
         public string? legacy_id { get; set; }
         public string name { get; set; } = string.Empty;
+        public int? location_code { get; set; }
         public int? status_id { get; set; }
         public bool? is_active { get; set; } = true;
         public string? slug { get; set; }

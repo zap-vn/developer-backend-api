@@ -21,8 +21,15 @@ namespace CRM.BuildingBlocks.Services
 
         public string? UserName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
 
-        public string LanguageCode => _httpContextAccessor.HttpContext?.Request.Headers["Accept-Language"].FirstOrDefault() ?? "vi-VN";
-
+        public string LanguageCode => _httpContextAccessor.HttpContext?.Request.Headers["Accept-Language"].FirstOrDefault()?.Split(',')[0] ?? "vi-VN";
+        public int LocaleId 
+        {
+            get 
+            {
+                if (int.TryParse(LanguageCode, out var id)) return id;
+                return LanguageCode.StartsWith("vi") ? 2 : 1;
+            }
+        }
         public IEnumerable<string> Roles => _httpContextAccessor.HttpContext?.User?.FindAll(ClaimTypes.Role).Select(x => x.Value) ?? Enumerable.Empty<string>();
 
         public bool IsAuthenticated => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;

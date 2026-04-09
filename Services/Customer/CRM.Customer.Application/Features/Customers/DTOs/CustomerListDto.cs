@@ -14,5 +14,7 @@ namespace CRM.Customer.Application.Features.Customers.DTOs
         public int? tier_id { get; set; }
         public string? tier_name { get; set; }
         public int status_id { get; set; }
+        public string? status_code { get; set; }
+        public string? status_name { get; set; }
     }
 }

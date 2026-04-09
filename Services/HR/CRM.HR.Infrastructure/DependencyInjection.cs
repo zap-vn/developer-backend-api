@@ -33,7 +33,7 @@ namespace CRM.HR.Infrastructure
             services.AddSingleton<IMongoDatabase>(sp => sp.GetRequiredService<MongoDbContext>().Database);
 
             services.AddScoped<IEmployeeRepository, MongoEmployeeRepository>();
-            services.AddScoped<ICurrentUserService, MockCurrentUserService>();
+            services.AddScoped<ICurrentUserService, CRM.BuildingBlocks.Services.CurrentUserService>();
 
             return services;
         }

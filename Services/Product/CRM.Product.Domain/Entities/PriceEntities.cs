@@ -7,6 +7,7 @@ namespace CRM.Product.Domain.Entities
         public Guid id { get; set; }
         public Guid? tenant_id { get; set; }
         public Guid product_variant_id { get; set; }
+        public Guid section_id { get; set; }
         public string name { get; set; } = string.Empty;
         public string? description { get; set; }
         public decimal base_price { get; set; }

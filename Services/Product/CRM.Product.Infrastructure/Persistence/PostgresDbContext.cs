@@ -52,8 +52,14 @@ namespace CRM.Product.Infrastructure.Persistence
         public DbSet<MenuItemHd> MenuItems { get; set; }
         public DbSet<MenuPriceOverride> MenuPriceOverrides { get; set; }
 
+        // --- Dining Options ---
+        public DbSet<DiningOption> DiningOptions { get; set; }
+        public DbSet<DiningOptionTranslation> DiningOptionTranslations { get; set; }
+        public DbSet<DiningOptionLocationLink> DiningOptionLocationLinks { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasPostgresExtension("unaccent");
             modelBuilder.Entity<MenuItemHd>(entity =>
             {
                 entity.ToTable("menu_item_hd", "catalog");
@@ -194,6 +200,18 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.code).HasColumnName("code");
+                
+                entity.HasMany(e => e.translations).WithOne().HasForeignKey(e => e.product_type_id);
+            });
+
+            modelBuilder.Entity<ProductTypeTranslation>(entity =>
+            {
+                entity.ToTable("product_type_translation", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.product_type_id).HasColumnName("product_type_id");
+                entity.Property(e => e.locale_id).HasColumnName("locale_id");
+                entity.Property(e => e.name).HasColumnName("name");
             });
 
             modelBuilder.Entity<StatusTranslationEntity>(entity =>
@@ -235,10 +253,9 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
-                entity.Property(e => e.serial_id).HasColumnName("serial_id");
-                entity.Property(e => e.serial_number).HasColumnName("serial_number");
+
                 entity.Property(e => e.location_code).HasColumnName("location_code");
-                entity.Property(e => e.node_id).HasColumnName("node_id");
+                // entity.Property(e => e.node_id).HasColumnName("node_id");
                 entity.Property(e => e.legacy_id).HasColumnName("legacy_id");
                 entity.Property(e => e.name).HasColumnName("name");
                 entity.Property(e => e.status_id).HasColumnName("status_id");
@@ -324,18 +341,30 @@ namespace CRM.Product.Infrastructure.Persistence
                     .HasForeignKey(e => e.location_id);
             });
 
-            modelBuilder.Entity<UomItemEntity>(entity =>
+            modelBuilder.Entity<UomItem>(entity =>
             {
-                entity.ToTable("custom_unit", "catalog");
+                entity.ToTable("uom_item", "platform");
                 entity.HasKey(e => e.id);
-                entity.Property(e => e.id).HasColumnName("id").UseIdentityColumn();
+                entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.tenant_id).HasColumnName("tenant_id");
                 entity.Property(e => e.code).HasColumnName("code");
                 entity.Property(e => e.name).HasColumnName("name");
                 entity.Property(e => e.abbreviation).HasColumnName("abbreviation");
                 entity.Property(e => e.precision).HasColumnName("precision");
                 entity.Property(e => e.status_id).HasColumnName("status_id");
+                
                 entity.HasOne(e => e.status).WithMany().HasForeignKey(e => e.status_id);
+                entity.HasMany(e => e.translations).WithOne().HasForeignKey(e => e.uom_item_id);
+            });
+
+            modelBuilder.Entity<UomItemTranslation>(entity =>
+            {
+                entity.ToTable("uom_item_translation", "platform");
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.uom_item_id).HasColumnName("uom_item_id");
+                entity.Property(e => e.locale_id).HasColumnName("locale_id");
+                entity.Property(e => e.name).HasColumnName("name");
             });
 
             modelBuilder.Entity<InventoryItemEntity>(entity =>
@@ -379,6 +408,25 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<BrandEntity>(entity => { entity.ToTable("brand", "catalog"); entity.HasKey(e => e.id); });
             modelBuilder.Entity<ModifierGroupEntity>(entity => { entity.ToTable("modifier_group", "catalog"); entity.HasKey(e => e.id); });
+
+            // --- Dining Options ---
+            modelBuilder.Entity<DiningOption>(entity =>
+            {
+                entity.ToTable("dining_option", "platform");
+                entity.HasKey(e => e.id);
+            });
+
+            modelBuilder.Entity<DiningOptionTranslation>(entity =>
+            {
+                entity.ToTable("dining_option_translation", "platform");
+                entity.HasKey(e => e.id);
+            });
+
+            modelBuilder.Entity<DiningOptionLocationLink>(entity =>
+            {
+                entity.ToTable("dining_option_location_link", "platform");
+                entity.HasKey(e => new { e.dining_option_id, e.location_id });
+            });
         }
     }
 }

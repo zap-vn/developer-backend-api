@@ -28,8 +28,6 @@ namespace CRM.Promotion.Infrastructure
                        .EnableSensitiveDataLogging()
                        .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information));
 
-            // Register MediatR handlers from Infrastructure assembly
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             return services;
         }

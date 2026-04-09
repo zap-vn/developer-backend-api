@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using CRM.Product.Application.Features.Locations.Queries;
 using CRM.Product.Application.Features.Locations.DTOs;
@@ -61,16 +62,23 @@ namespace CRM.Product.Api.Controllers
 
 
         [HttpPost]
+        [Consumes("application/json")]
         public async Task<IActionResult> Create([FromBody] CreateLocationCommand command)
         {
+            var id = await _mediator.Send(command);
+            return Ok(new { success = true, code = 200, message = "Created successfully", data = new { id } });
+        }
+
+        [HttpPut("{id:guid}")]
+        [Consumes("application/json")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateLocationCommand command)
+        {
+            command.Id = id;
             var result = await _mediator.Send(command);
-            return Ok(new 
-            {
-                success = true,
-                code = 200,
-                message = "Location created successfully",
-                data = result
-            });
+            if (!result)
+                return NotFound(new { success = false, code = 404, message = "Location not found", data = (object?)null });
+
+            return Ok(new { success = true, code = 200, message = "Updated successfully", data = new { id } });
         }
 
         [HttpGet("provinces")]

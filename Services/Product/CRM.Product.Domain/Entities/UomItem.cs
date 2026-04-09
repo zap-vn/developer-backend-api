@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
-    [Table("custom_unit", Schema = "catalog")]
+    [Table("uom_item", Schema = "platform")]
     public class UomItem
     {
         [Key]
@@ -24,5 +24,16 @@ namespace CRM.Product.Domain.Entities
         // Navigation
         [ForeignKey("status_id")]
         public StatusItem? status { get; set; }
+        public ICollection<UomItemTranslation> translations { get; set; } = new List<UomItemTranslation>();
+    }
+
+    [Table("uom_item_translation", Schema = "platform")]
+    public class UomItemTranslation
+    {
+        [Key]
+        public Guid id { get; set; }
+        public int uom_item_id { get; set; }
+        public int locale_id { get; set; }
+        public string? name { get; set; }
     }
 }

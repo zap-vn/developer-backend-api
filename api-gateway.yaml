@@ -523,6 +523,8 @@ paths:
       responses:
         200:
           description: "OK"
+    x-google-allow:
+      - Accept-Language
     options:
       summary: "locations list CORS"
       operationId: "cors_locations_list"
@@ -544,6 +546,8 @@ paths:
       responses:
         200:
           description: "OK"
+    x-google-allow:
+      - Accept-Language
     options:
       summary: "locations create CORS"
       operationId: "cors_locations_create"
@@ -570,6 +574,9 @@ paths:
       responses:
         200:
           description: "OK"
+    x-google-allow:
+      - Accept-Language
+
     options:
       summary: "locations get by id CORS"
       operationId: "cors_locations_get_by_id"

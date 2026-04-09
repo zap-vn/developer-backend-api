@@ -7,11 +7,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+// builder.Services.AddOpenApi();
 
 builder.Services.AddBuildingBlocks();
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// Register MediatR for all assemblies
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+    typeof(Program).Assembly,
+    typeof(CRM.Promotion.Application.DependencyInjection).Assembly,
+    typeof(CRM.Promotion.Infrastructure.DependencyInjection).Assembly
+));
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -25,7 +33,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    // app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -38,4 +46,14 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<CRM.BuildingBlocks.Middleware.LocalizationMiddleware>();
 
-app.Run();
+try
+{
+    Console.WriteLine("🚀 CRM Promotion API is starting...");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Console.Error.WriteLine("FATAL ERROR DURING PROMOTION API STARTUP:");
+    Console.Error.WriteLine(ex.ToString());
+    throw;
+}

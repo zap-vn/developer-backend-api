@@ -14,10 +14,10 @@ namespace CRM.Product.Domain.Interfaces
         // Filter fields
         public int? StatusId { get; set; }
         public int? ProvinceId { get; set; }
-        public List<string>? LocationTypeIds { get; set; }  // filter by multiple location_type_id (as strings)
+        public List<int>? LocationTypeIds { get; set; }  // filter by multiple location_type_id
 
         // Sort fields
-        public string? SortField { get; set; }          // "name" | "node_code" | "status"
+        public string? SortField { get; set; }          // "name" | "location_code" | "status"
         public bool SortDescending { get; set; } = false;
     }
 }

@@ -58,7 +58,6 @@ namespace CRM.Product.Api.Controllers
                         sale_price = x.sale_price ?? 0,
                         location_id = x.location_id,
                         qty_on_hand = x.qty_on_hand ?? 0,
-                        uom_id = x.uom_id,
                         barcode = x.barcode,
                         product_type_id = x.product_type_id,
                         product_type_text = x.product_type_text,

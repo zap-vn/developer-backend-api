@@ -4,6 +4,8 @@ using CRM.BuildingBlocks.Models;
 using CRM.Product.Application.Features.Menus.DTOs;
 using CRM.Product.Application.Features.Menus.Queries;
 using CRM.Product.Infrastructure.Persistence;
+using CRM.Product.Domain.Interfaces;
+using CRM.BuildingBlocks.Interfaces;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,56 +14,47 @@ namespace CRM.Product.Infrastructure.Persistence.Queries
 {
     public class GetMenuListQueryHandler : IRequestHandler<GetMenuListQuery, PagedResult<MenuListResultDto>>
     {
-        private readonly PostgresDbContext _context;
+        private readonly IMenuRepository _repository;
+        private readonly ILocalizationService _localizationService;
 
-        public GetMenuListQueryHandler(PostgresDbContext context)
+        public GetMenuListQueryHandler(IMenuRepository repository, ILocalizationService localizationService)
         {
-            _context = context;
+            _repository = repository;
+            _localizationService = localizationService;
         }
 
         public async Task<PagedResult<MenuListResultDto>> Handle(GetMenuListQuery request, CancellationToken cancellationToken)
         {
-            var query = _context.MenuHeaders
-                .Include(m => m.sections)
-                .AsNoTracking();
+            var req = request.Request;
+            var localeId = _localizationService.GetCurrentLocaleId();
+            
+            var (items, totalCount) = await _repository.GetPagedAsync(
+                req.PageIndex,
+                req.PageSize,
+                request.TenantId,
+                req.Search,
+                req.Filters?.IsActive,
+                req.Filters?.MenuType,
+                localeId,
+                req.Sort?.Field ?? "name",
+                req.Sort?.Descending ?? false
+            );
 
-            if (request.TenantId.HasValue)
+            var results = items.Select(m => new MenuListResultDto
             {
-                query = query.Where(m => m.tenant_id == request.TenantId.Value);
-            }
+                id = m.id,
+                name = m.name,
+                menu_type = m.menu_type,
+                app_id = m.app_id,
+                status_id = m.status_id,
+                status_label = m.StatusLabel,
+                timezone_id = m.timezone_id,
+                is_active = m.is_active,
+                sections_count = m.SectionsCount,
+                total_items = m.TotalItems
+            }).ToList();
 
-            if (!string.IsNullOrEmpty(request.Name))
-            {
-                query = query.Where(m => m.name.Contains(request.Name));
-            }
-
-            if (!string.IsNullOrEmpty(request.MenuType))
-            {
-                query = query.Where(m => m.menu_type == request.MenuType);
-            }
-
-            if (request.IsActive.HasValue)
-            {
-                query = query.Where(m => m.is_active == request.IsActive.Value);
-            }
-
-            var totalCount = await query.CountAsync(cancellationToken);
-            var results = await query
-                .OrderBy(m => m.name)
-                .Skip((request.Page - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .Select(m => new MenuListResultDto
-                {
-                    id = m.id,
-                    name = m.name,
-                    menu_type = m.menu_type,
-                    timezone_id = m.timezone_id,
-                    is_active = m.is_active,
-                    sections_count = m.sections.Count
-                })
-                .ToListAsync(cancellationToken);
-
-            return new PagedResult<MenuListResultDto>(results, totalCount, request.Page, request.PageSize);
+            return new PagedResult<MenuListResultDto>(results, totalCount, req.PageIndex, req.PageSize);
         }
     }
 }

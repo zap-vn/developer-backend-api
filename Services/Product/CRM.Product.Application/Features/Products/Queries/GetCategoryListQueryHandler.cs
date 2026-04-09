@@ -50,8 +50,10 @@ namespace CRM.Product.Application.Features.Products.Queries
                 sort_order = x.sort_order ?? 0,
                 meta_title = x.meta_title,
                 meta_description = x.meta_description,
-                status_id = x.status_id,
-                status_text = x.status?.code,
+                status_id        = x.status_id,
+                status_code      = x.status?.code,
+                status_name      = x.status?.translations?.FirstOrDefault(t => t.locale_id == _currentUserService.LocaleId)?.name ?? 
+                                   x.status?.translations?.FirstOrDefault(t => t.locale_id == 2)?.name,
                 is_active = x.is_active,
                 seo_title = x.seo_title,
                 seo_description = x.seo_description

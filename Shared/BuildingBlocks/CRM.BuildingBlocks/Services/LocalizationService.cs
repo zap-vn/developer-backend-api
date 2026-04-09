@@ -22,5 +22,12 @@ namespace CRM.BuildingBlocks.Services
         {
             return CultureInfo.CurrentCulture;
         }
+
+        public int GetCurrentLocaleId()
+        {
+            var lang = CultureInfo.CurrentCulture.Name.ToLower();
+            if (lang.StartsWith("vi")) return 2;
+            return 1; // Default to English (1)
+        }
     }
 }

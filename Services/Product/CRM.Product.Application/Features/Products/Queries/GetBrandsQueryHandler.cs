@@ -46,8 +46,10 @@ namespace CRM.Product.Application.Features.Products.Queries
                 logo_url = x.logo_url,
                 banner_url = x.banner_url,
                 website_url = x.website_url,
-                status_id = x.status_id,
-                status_text = x.status?.code,
+                status_id   = x.status_id,
+                status_code = x.status?.code,
+                status_name = x.status?.translations?.FirstOrDefault(t => t.locale_id == _currentUserService.LocaleId)?.name ?? 
+                              x.status?.translations?.FirstOrDefault(t => t.locale_id == 2)?.name,
                 is_premium = x.is_premium
             });
 

@@ -13,7 +13,7 @@ namespace CRM.BuildingBlocks
             services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<ISystemLanguageProvider, SystemLanguageProvider>();
             services.AddScoped<ISystemErrorProvider, SystemErrorProvider>();
-            services.AddScoped<ICurrentUserService, MockCurrentUserService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             // Configure JSON Response to return PascalCase for all APIs (Minimal & MVC), except _id
             services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>

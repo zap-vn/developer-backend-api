@@ -7,5 +7,6 @@ namespace CRM.BuildingBlocks.Interfaces
     {
         string GetCurrentLanguage();
         CultureInfo GetCurrentCulture();
+        int GetCurrentLocaleId();
     }
 }

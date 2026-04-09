@@ -50,24 +50,30 @@ namespace CRM.Promotion.Api.Controllers
         public async Task<IActionResult> GetById(string id)
         {
             var result = await _mediator.Send(new GetPromotionByIdQuery(id));
-            if (result == null) return NotFound();
-            return Ok(result);
+            if (result == null)
+                return NotFound(new { success = false, code = 404, message = "Promotion not found", data = (object?)null });
+
+            return Ok(new { success = true, code = 200, message = "OK", data = result });
         }
 
         [HttpPost]
+        [Consumes("application/json")]
         public async Task<IActionResult> Create([FromBody] CreatePromotionCommand command)
         {
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            var id = await _mediator.Send(command);
+            return Ok(new { success = true, code = 200, message = "Created successfully", data = new { id } });
         }
 
         [HttpPut("{id}")]
+        [Consumes("application/json")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdatePromotionCommand command)
         {
-            command.Id = id; 
+            command.Id = id;
             var result = await _mediator.Send(command);
-            if (!result) return NotFound();
-            return Ok(result);
+            if (!result)
+                return NotFound(new { success = false, code = 404, message = "Promotion not found", data = (object?)null });
+
+            return Ok(new { success = true, code = 200, message = "Updated successfully", data = new { id } });
         }
     }
 }

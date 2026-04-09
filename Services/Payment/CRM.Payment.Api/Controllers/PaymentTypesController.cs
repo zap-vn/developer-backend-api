@@ -27,35 +27,54 @@ namespace CRM.Payment.Api.Controllers
         }
 
         [HttpPost("list")]
-        public async Task<IActionResult> List()
+        [Consumes("application/json")]
+        public async Task<IActionResult> List([FromBody] FilterDTOs filter)
         {
-            var filter = await Request.GetRawBodyAsync<FilterDTOs>();
             var result = await _mediator.Send(new GetPaymentTypeListQuery { Filter = filter });
-            return Ok(result);
+            return Ok(new
+            {
+                success = true,
+                code = 200,
+                message = "OK",
+                data = new
+                {
+                    total_page = result.PageSize > 0 ? (int)System.Math.Ceiling((double)result.TotalCount / result.PageSize) : 1,
+                    total_record = result.TotalCount,
+                    page_index = result.CurrentPage,
+                    page_size = result.PageSize,
+                    items = result.Items
+                }
+            });
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
             var result = await _mediator.Send(new GetPaymentTypeByIdQuery(id));
-            if (result == null) return NotFound();
-            return Ok(result);
+            if (result == null)
+                return NotFound(new { success = false, code = 404, message = "PaymentType not found", data = (object?)null });
+
+            return Ok(new { success = true, code = 200, message = "OK", data = result });
         }
 
         [HttpPost]
+        [Consumes("application/json")]
         public async Task<IActionResult> Create([FromBody] CreatePaymentTypeCommand command)
         {
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            var id = await _mediator.Send(command);
+            return Ok(new { success = true, code = 200, message = "Created successfully", data = new { id } });
         }
 
         [HttpPut("{id}")]
+        [Consumes("application/json")]
         public async Task<IActionResult> Update(string id, [FromBody] UpdatePaymentTypeCommand command)
         {
-            command.Id = id; 
+            command.Id = id;
             var result = await _mediator.Send(command);
-            if (!result) return NotFound();
-            return Ok(result);
+            if (!result)
+                return NotFound(new { success = false, code = 404, message = "PaymentType not found", data = (object?)null });
+
+            return Ok(new { success = true, code = 200, message = "Updated successfully", data = new { id } });
         }
     }
 }

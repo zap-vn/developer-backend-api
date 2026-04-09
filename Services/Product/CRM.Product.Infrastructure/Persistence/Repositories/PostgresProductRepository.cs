@@ -151,6 +151,7 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                         .ThenInclude(s => s.translations)
                 .Include(v => v.product!)
                     .ThenInclude(p => p.product_type!)
+                        .ThenInclude(pt => pt.translations)
                 .Include(v => v.product!)
                     .ThenInclude(p => p.category_mappings)
                         .ThenInclude(cm => cm.category)
@@ -167,6 +168,79 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 .Select(id => rawItems.FirstOrDefault(v => v.id == id))
                 .Where(v => v != null)
                 .Select(v => v!)
+                .ToList();
+
+            return (items, total);
+        }
+
+        public async Task<(IEnumerable<CRM.Product.Domain.Entities.Product> Items, int TotalCount)> GetPagedProductsAsync(
+            int page,
+            int pageSize,
+            Guid? tenantId = null,
+            string? searchTerm = null,
+            int? statusId = null,
+            Guid? categoryId = null,
+            Guid? locationId = null,
+            int localeId = 2,
+            int? productTypeId = null,
+            string sortField = "created_at",
+            bool sortDescending = true)
+        {
+            var query = _context.Products.AsQueryable();
+
+            if (tenantId.HasValue)
+                query = query.Where(p => p.tenant_id == tenantId);
+
+            if (statusId.HasValue)
+                query = query.Where(p => p.status_id == statusId);
+            else
+                query = query.Where(p => p.status_id != 0);
+
+            if (categoryId.HasValue)
+                query = query.Where(p => p.category_mappings.Any(cm => cm.category_id == categoryId));
+
+            if (locationId.HasValue)
+                query = query.Where(p => p.variants.Any(v => v.inventory_items.Any(ii => ii.location_id == locationId)));
+
+            if (productTypeId.HasValue)
+                query = query.Where(p => p.product_type_id == productTypeId);
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(p => 
+                    p.name.Contains(searchTerm) || 
+                    p.variants.Any(v => (v.sku_code != null && v.sku_code.Contains(searchTerm)) || (v.variant_name != null && v.variant_name.Contains(searchTerm))));
+            }
+
+            int total = await query.CountAsync();
+
+            IOrderedQueryable<CRM.Product.Domain.Entities.Product> orderedQuery = sortField switch
+            {
+                "name" => sortDescending ? query.OrderByDescending(p => p.name) : query.OrderBy(p => p.name),
+                _ => sortDescending ? query.OrderByDescending(p => p.created_at) : query.OrderBy(p => p.created_at),
+            };
+
+            var pagedIds = await orderedQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => p.id)
+                .ToListAsync();
+
+            var rawItems = await _context.Products
+                .Where(p => pagedIds.Contains(p.id))
+                .Include(p => p.status).ThenInclude(s => s != null ? s.translations : null)
+                .Include(p => p.product_type).ThenInclude(pt => pt.translations)
+                .Include(p => p.category_mappings).ThenInclude(cm => cm.category)
+                .Include(p => p.variants).ThenInclude(v => v.media)
+                .Include(p => p.variants).ThenInclude(v => v.inventory_items).ThenInclude(i => i.Location)
+                .Include(p => p.variants).ThenInclude(v => v.location_pricing)
+                .Include(p => p.variants).ThenInclude(v => v.uom)
+                .ToListAsync();
+
+            var items = pagedIds
+                .Select(id => rawItems.FirstOrDefault(p => p.id == id))
+                .Where(p => p != null)
+                .Select(p => p!)
                 .ToList();
 
             return (items, total);

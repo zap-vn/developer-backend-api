@@ -25,6 +25,8 @@ namespace CRM.Product.Infrastructure
             services.AddScoped<IModifierGroupRepository, PostgresModifierGroupRepository>();
             services.AddScoped<IUnitRepository, PostgresUnitRepository>();
             services.AddScoped<ILocationRepository, PostgresLocationRepository>();
+            services.AddScoped<IMenuRepository, PostgresMenuRepository>();
+            services.AddScoped<IDiningOptionRepository, PostgresDiningOptionRepository>();
 
             return services;
         }

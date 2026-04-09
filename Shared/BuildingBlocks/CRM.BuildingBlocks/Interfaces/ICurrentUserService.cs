@@ -9,6 +9,7 @@ namespace CRM.BuildingBlocks.Interfaces
         string? UserGuid { get; }
         string? UserName { get; }
         string LanguageCode { get; }
+        int LocaleId { get; }
         IEnumerable<string> Roles { get; }
         bool IsAuthenticated { get; }
     }

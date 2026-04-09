@@ -20,13 +20,19 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
 
         public async Task<IEnumerable<UomItem>> GetAllAsync(Guid? tenantId = null)
         {
-            var query = _context.UomItems.Include(x => x.status).AsQueryable();
+            var query = _context.UomItems
+                .Include(x => x.status).ThenInclude(s => s != null ? s.translations : null)
+                .Include(x => x.translations)
+                .AsQueryable();
             if (tenantId.HasValue) query = query.Where(x => x.tenant_id == tenantId);
             return await query.OrderBy(x => x.name).ToListAsync();
         }
 
         public async Task<UomItem?> GetByIdAsync(int id)
-            => await _context.UomItems.Include(x => x.status).FirstOrDefaultAsync(x => x.id == id);
+            => await _context.UomItems
+                .Include(x => x.status).ThenInclude(s => s != null ? s.translations : null)
+                .Include(x => x.translations)
+                .FirstOrDefaultAsync(x => x.id == id);
 
         public async Task<(IEnumerable<UomItem> Items, int Total)> GetPagedAsync(
             int page,
@@ -38,7 +44,10 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
             string sortField = "name",
             bool sortDescending = false)
         {
-            var query = _context.UomItems.Include(x => x.status).AsQueryable();
+            var query = _context.UomItems
+                .Include(x => x.status).ThenInclude(s => s != null ? s.translations : null)
+                .Include(x => x.translations)
+                .AsQueryable();
 
             if (tenantId.HasValue)
                 query = query.Where(x => x.tenant_id == tenantId);

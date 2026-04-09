@@ -38,16 +38,19 @@ namespace CRM.Product.Application.Features.Products.Queries
                 request.Request.Sort?.Field ?? "name",
                 request.Request.Sort?.Descending ?? false);
 
+            var localeId = _currentUserService.LocaleId;
             var dtos = items.Select(x => new UnitDto
             {
                 id = x.id,
                 tenant_id = x.tenant_id,
                 code = x.code,
-                name = x.name,
+                name = x.translations?.FirstOrDefault(t => t.locale_id == localeId)?.name ?? x.name,
                 abbreviation = x.abbreviation,
                 precision = x.precision,
                 status_id = x.status_id,
-                status_text = x.status?.code,
+                status_code = x.status?.code,
+                status_name = x.status?.translations?.FirstOrDefault(t => t.locale_id == localeId)?.name ?? 
+                              x.status?.translations?.FirstOrDefault(t => t.locale_id == 1)?.name,
                 is_active = x.status_id != 0
             });
 

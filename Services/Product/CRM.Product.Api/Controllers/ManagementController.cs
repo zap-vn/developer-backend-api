@@ -1,8 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using CRM.BuildingBlocks.Models;
-using CRM.Product.Application.Features.Menus.Queries;
-using CRM.Product.Application.Features.Menus.DTOs;
 using CRM.Product.Application.Features.Prices.Queries;
 using CRM.Product.Application.Features.Prices.DTOs;
 using System.Threading.Tasks;
@@ -19,15 +17,6 @@ namespace CRM.Product.Api.Controllers
         public ManagementController(IMediator mediator)
         {
             _mediator = mediator;
-        }
-
-        [HttpGet("menus")]
-        public async Task<IActionResult> GetMenus([FromQuery] GetMenuListQuery query)
-        {
-            var result = await _mediator.Send(query);
-            return Ok(ApiResponse<IReadOnlyList<MenuListResultDto>>.SuccessResult(
-                result.Items, 
-                new PaginationMetadata(result.CurrentPage, result.PageSize, result.TotalCount)));
         }
 
         [HttpGet("prices")]

@@ -47,11 +47,14 @@ namespace CRM.Product.Application.Features.Locations.Queries
                 tenant_id          = x.tenant_id,
                 legacy_id          = x.legacy_id,
                 name               = x.name,
-                serial_id          = x.serial_id,
-                serial_number      = x.serial_number,
+
                 location_code      = x.location_code,
                 status_id          = x.status_id,
                 status_code        = x.status?.code,
+                status_name        = x.status != null
+                    ? (x.status.translations?.FirstOrDefault(t => t.locale_id == _currentUserService.LocaleId)?.name ??
+                       $"{x.status.translations?.FirstOrDefault(t => t.locale_id == 2)?.name} ({x.status.translations?.FirstOrDefault(t => t.locale_id == 1)?.name})")
+                    : null,
                 is_active          = x.is_active,
                 created_at         = x.created_at,
                 updated_at         = x.updated_at,
@@ -60,7 +63,7 @@ namespace CRM.Product.Application.Features.Locations.Queries
                 description        = x.description,
                 location_type_id   = x.location_type_id,
                 location_type_text = x.location_type != null 
-                    ? (x.location_type.translations?.FirstOrDefault(t => t.locale_id == req.locale_id)?.name ?? 
+                    ? (x.location_type.translations?.FirstOrDefault(t => t.locale_id == _currentUserService.LocaleId)?.name ?? 
                        $"{x.location_type.translations?.FirstOrDefault(t => t.locale_id == 2)?.name} ({x.location_type.translations?.FirstOrDefault(t => t.locale_id == 1)?.name})")
                     : null,
                 address_line_1     = x.address_line_1,

@@ -50,7 +50,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                 is_required = x.is_required,
                 sort_order = x.sort_order,
                 status_id = x.status_id,
-                status_text = x.status?.code
+                status_code = x.status?.code
             });
 
             return new PagedResult<ModifierGroupDto>(dtos.ToList(), total, request.Request.PageIndex, request.Request.PageSize);

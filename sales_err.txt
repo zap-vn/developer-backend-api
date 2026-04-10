@@ -1,1 +1,0 @@
-The application to execute does not exist: 'd:\PROJECTS\4_2026\01042026\Services\Sales\CRM.Sales.Api\bin\Debug\net9.0\CRM.Sales.Api.dll'

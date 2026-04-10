@@ -420,7 +420,13 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Ignore(e => e.meta_keywords);
                 entity.Property(e => e.canonical_url).HasColumnName("canonical_url");
                 entity.Ignore(e => e.display_initial);
-                entity.Property(e => e.applicable_channels).HasColumnName("applicable_channels");
+                entity.Property(e => e.applicable_channels)
+                    .HasColumnName("applicable_channels")
+                    .HasColumnType("jsonb")
+                    .HasConversion(
+                        v => v == null ? null : System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                        v => v == null ? null : System.Text.Json.JsonSerializer.Deserialize<string[]>(v, (System.Text.Json.JsonSerializerOptions?)null)
+                    );
 
                 entity.HasOne(e => e.parent_category)
                     .WithMany(e => e.sub_categories)
@@ -502,6 +508,13 @@ namespace CRM.Product.Infrastructure.Persistence
             {
                 entity.ToTable("collection_item", "catalog");
                 entity.HasKey(e => new { e.collection_id, e.product_id });
+                entity.Property(e => e.product_id).HasColumnName("product_id");
+                // Explicitly wire FK to the Postgres Product entity (Guid PK) to prevent EF from
+                // auto-discovering a shadow navigation to the MongoDB ProductEntity (string Id).
+                entity.HasOne<ProductEntity>()
+                    .WithMany()
+                    .HasForeignKey(e => e.product_id)
+                    .HasPrincipalKey(p => p.id);
             });
         }
     }

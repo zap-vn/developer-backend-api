@@ -21,10 +21,10 @@ namespace CRM.Product.Domain.Entities
         [Column("slug")]
         public string slug { get; set; } = string.Empty;
 
-        [Column("description_html")]
+        [Column("description")]
         public string? description_html { get; set; }
 
-        [Column("banner_url")]
+        [Column("image_url")]
         public string? banner_url { get; set; }
 
         [Column("status_id")]

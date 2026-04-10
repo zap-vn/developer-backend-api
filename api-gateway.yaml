@@ -898,3 +898,25 @@ paths:
         200:
           description: "OK"
 
+
+  /api/collections/list:
+    post:
+      summary: "Collections list"
+      operationId: "collections_list_post"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/collections/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"
+    options:
+      summary: "Collections list CORS"
+      operationId: "cors_collections_list"
+      x-google-backend:
+        address: "https://zapcrm-product-api-204573236312.asia-southeast1.run.app/api/collections/list"
+        protocol: "http/1.1"
+        path_translation: CONSTANT_ADDRESS
+      responses:
+        200:
+          description: "OK"

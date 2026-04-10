@@ -11,12 +11,13 @@ class Program
         try {
             using var conn = new NpgsqlConnection(connString);
             conn.Open();
-            using var cmd = new NpgsqlCommand("SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog', 'information_schema')", conn);
+            using var cmd = new NpgsqlCommand("SELECT column_name, data_type FROM information_schema.columns WHERE table_schema='people' AND table_name='loyalty_tier'", conn);
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                Console.WriteLine($"{reader.GetString(0)}.{reader.GetString(1)}");
+                Console.WriteLine($"{reader.GetString(0)}: {reader.GetString(1)}");
             }
+            Console.WriteLine("Done");
         } catch (Exception ex) {
             Console.WriteLine("Error: " + ex.Message);
         }

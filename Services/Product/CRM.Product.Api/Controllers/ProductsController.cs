@@ -63,7 +63,7 @@ namespace CRM.Product.Api.Controllers
                         product_type_id = x.product_type_id,
                         product_type_text = x.product_type_text,
                         status_id = x.status_id,
-                        status_text = x.status_text
+                        status_code = x.status_code
                     }).ToList()
                 }
             });

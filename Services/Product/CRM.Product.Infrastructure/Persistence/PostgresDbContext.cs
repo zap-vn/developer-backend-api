@@ -251,7 +251,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<GeoProvince>(entity =>
             {
-                entity.ToTable("geo_province", "system");
+                entity.ToTable("geo_province", "platform");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.code).HasColumnName("code");
@@ -264,7 +264,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<GeoProvinceTranslation>(entity =>
             {
-                entity.ToTable("geo_province_translation", "system");
+                entity.ToTable("geo_province_translation", "platform");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.province_id).HasColumnName("province_id");

@@ -6,7 +6,17 @@
       "Bash(curl -v -X POST \"https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/customers/list\" -H \"Content-Type: application/json\" -d '{\"page_index\":1,\"page_size\":5}')",
       "Bash(curl -s -w \"\\\\nHTTP_STATUS:%{http_code}\" \"https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/customers/health\")",
       "Bash(curl -s -X POST \"https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/customers/list\" -H \"Content-Type: application/json\" -H \"Accept: application/json\" -d '{\"page_index\":1,\"page_size\":1}' -w \"\\\\nHTTP_STATUS:%{http_code}\\\\nTRACE:%{header.x-cloud-trace-context}\")",
-      "Bash(curl -s -X POST \"https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/promotions/list\" -H \"Content-Type: application/json\" -d '{\"page_index\":1,\"page_size\":5}' -w \"\\\\nHTTP_STATUS:%{http_code}\")"
+      "Bash(curl -s -X POST \"https://crm-gateway-v1-c7wqwyi1.uc.gateway.dev/api/promotions/list\" -H \"Content-Type: application/json\" -d '{\"page_index\":1,\"page_size\":5}' -w \"\\\\nHTTP_STATUS:%{http_code}\")",
+      "Bash(gcloud config:*)",
+      "Bash(gcloud auth:*)",
+      "Bash(where gcloud:*)",
+      "Bash(\"C:\\\\Program Files \\(x86\\)\\\\Google\\\\Cloud SDK\\\\google-cloud-sdk\\\\bin\\\\gcloud.cmd\" config get-value project)",
+      "Bash(\"C:\\\\Program Files \\(x86\\)\\\\Google\\\\Cloud SDK\\\\google-cloud-sdk\\\\bin\\\\gcloud.cmd\" auth list --filter=status:ACTIVE --format=\"value\\(account\\)\")",
+      "Bash(\"C:\\\\Program Files \\(x86\\)\\\\Google\\\\Cloud SDK\\\\google-cloud-sdk\\\\bin\\\\gcloud.cmd\" run services list --project=zapcrm-492101 --region=asia-southeast1 --format=\"value\\(metadata.name\\)\")",
+      "Bash(\"C:\\\\Program Files \\(x86\\)\\\\Google\\\\Cloud SDK\\\\google-cloud-sdk\\\\bin\\\\gcloud.cmd\" run services describe zapcrm-product-api --project=zapcrm-492101 --region=asia-southeast1 --format=\"value\\(spec.template.spec.containers[0].image\\)\")",
+      "Read(//mnt/c/Users/Monkey/AppData/Local/Temp/claude/d--PROJECTS-4-2026-01042026/a2858bc9-2653-4804-bc91-619fd9d5b730/tasks/**)",
+      "Read(//mnt/c/Users/Monkey/AppData/Local/Temp/claude/d--PROJECTS-4-2026-01042026/a2858bc9-2653-4804-bc91-619fd9d5b730/**)",
+      "Bash(\"C:\\\\Program Files \\(x86\\)\\\\Google\\\\Cloud SDK\\\\google-cloud-sdk\\\\bin\\\\gcloud.cmd\" builds list --project=zapcrm-492101 --limit=3 --format=\"table\\(id,status,createTime,duration\\)\")"
     ]
   }
 }

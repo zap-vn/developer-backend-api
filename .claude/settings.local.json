@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"C:\\\\Program Files \\(x86\\)\\\\Google\\\\Cloud SDK\\\\google-cloud-sdk\\\\bin\\\\gcloud.cmd\" run services describe zapcrm-product-api --project=zapcrm-492101 --region=asia-southeast1 --format=\"yaml\\(spec.template.spec.containers[0].env\\)\")"
+    ]
+  }
+}

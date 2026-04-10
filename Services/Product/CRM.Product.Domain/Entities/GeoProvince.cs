@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRM.Product.Domain.Entities
 {
-    [Table("geo_province", Schema = "system")]
+    [Table("geo_province", Schema = "platform")]
     public class GeoProvince
     {
         [Key]

@@ -6,6 +6,7 @@ using CRM.BuildingBlocks.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Customer.Api.Controllers
 {
@@ -26,6 +27,8 @@ namespace CRM.Customer.Api.Controllers
             return Ok(new { Status = "CRM Customer API is running", Time = System.DateTime.UtcNow });
         }
 
+
+
         [HttpPost("list")]
         public async Task<IActionResult> List([FromBody] CustomerListRequestDto requestBody)
         {
@@ -37,7 +40,7 @@ namespace CRM.Customer.Api.Controllers
                 message = "OK",
                 data = new
                 {
-                    total_page = result.PageSize > 0 ? (int)System.Math.Ceiling((double)result.TotalCount / result.PageSize) : 1,
+                    total_page = result.PageSize > 0 ? (result.TotalCount + result.PageSize - 1) / result.PageSize : 1,
                     total_record = result.TotalCount,
                     page_index = result.CurrentPage,
                     page_size = result.PageSize,

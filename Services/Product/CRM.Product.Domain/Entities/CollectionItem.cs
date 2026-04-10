@@ -16,6 +16,5 @@ namespace CRM.Product.Domain.Entities
         public int sort_order { get; set; } = 0;
 
         public Collection? collection { get; set; }
-        public ProductEntity? product { get; set; }
     }
 }

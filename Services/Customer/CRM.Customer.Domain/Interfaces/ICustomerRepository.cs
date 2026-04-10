@@ -13,7 +13,7 @@ namespace CRM.Customer.Domain.Interfaces
             Guid? tenantId = null,
             string? search = null,
             int? statusId = null,
-            int? tierId = null,
+            Guid? tierId = null,
             decimal? minTotalSpent = null,
             decimal? maxTotalSpent = null,
             decimal? minPoints = null,

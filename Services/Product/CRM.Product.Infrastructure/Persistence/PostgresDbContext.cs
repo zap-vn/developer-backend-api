@@ -63,6 +63,25 @@ namespace CRM.Product.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresExtension("unaccent");
+
+            modelBuilder.Entity<MenuHeader>(entity =>
+            {
+                entity.ToTable("menu_header", "catalog");
+                entity.HasKey(e => e.id);
+            });
+
+            modelBuilder.Entity<MenuSection>(entity =>
+            {
+                entity.ToTable("menu_section", "catalog");
+                entity.HasKey(e => e.id);
+            });
+
+            modelBuilder.Entity<MenuAvailabilitySchedule>(entity =>
+            {
+                entity.ToTable("menu_availability_schedule", "catalog");
+                entity.HasKey(e => e.id);
+            });
+
             modelBuilder.Entity<MenuItemHd>(entity =>
             {
                 entity.ToTable("menu_item_hd", "catalog");
@@ -190,7 +209,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<StatusItemEntity>(entity =>
             {
-                entity.ToTable("status_item", "catalog");
+                entity.ToTable("status_item", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.code).HasColumnName("code");
@@ -222,7 +241,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<StatusTranslationEntity>(entity =>
             {
-                entity.ToTable("status_item_translation", "catalog");
+                entity.ToTable("status_item_translation", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.status_item_id).HasColumnName("status_item_id");
@@ -232,7 +251,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<GeoProvince>(entity =>
             {
-                entity.ToTable("geo_province", "platform");
+                entity.ToTable("geo_province", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.code).HasColumnName("code");
@@ -245,7 +264,7 @@ namespace CRM.Product.Infrastructure.Persistence
 
             modelBuilder.Entity<GeoProvinceTranslation>(entity =>
             {
-                entity.ToTable("geo_province_translation", "platform");
+                entity.ToTable("geo_province_translation", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.province_id).HasColumnName("province_id");
@@ -398,9 +417,9 @@ namespace CRM.Product.Infrastructure.Persistence
                 entity.Property(e => e.serial_id).HasColumnName("serial_id");
                 entity.Property(e => e.serial_number).HasColumnName("serial_number");
                 entity.Property(e => e.category_code).HasColumnName("category_code");
-                entity.Property(e => e.meta_keywords).HasColumnName("meta_keywords");
+                entity.Ignore(e => e.meta_keywords);
                 entity.Property(e => e.canonical_url).HasColumnName("canonical_url");
-                entity.Property(e => e.display_initial).HasColumnName("display_initial");
+                entity.Ignore(e => e.display_initial);
                 entity.Property(e => e.applicable_channels).HasColumnName("applicable_channels");
 
                 entity.HasOne(e => e.parent_category)
@@ -483,10 +502,6 @@ namespace CRM.Product.Infrastructure.Persistence
             {
                 entity.ToTable("collection_item", "catalog");
                 entity.HasKey(e => new { e.collection_id, e.product_id });
-                
-                entity.HasOne(e => e.product)
-                    .WithMany()
-                    .HasForeignKey(e => e.product_id);
             });
         }
     }

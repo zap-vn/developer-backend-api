@@ -63,9 +63,9 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
                 ? query.OrderByDescending(x => x.m.name)
                 : query.OrderBy(x => x.m.name);
 
-            if (sortField == "created_at")
+            if (sortField == "created_at" || sortField == "id")
             {
-                ordered = sortDescending ? query.OrderByDescending(x => x.m.created_at) : query.OrderBy(x => x.m.created_at);
+                ordered = sortDescending ? query.OrderByDescending(x => x.m.id) : query.OrderBy(x => x.m.id);
             }
 
             var results = await ordered

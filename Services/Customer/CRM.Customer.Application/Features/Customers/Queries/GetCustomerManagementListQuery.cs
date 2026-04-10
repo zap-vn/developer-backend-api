@@ -10,7 +10,7 @@ namespace CRM.Customer.Application.Features.Customers.Queries
         public Guid? TenantId { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
-        public int? TierId { get; set; }
+        public Guid? TierId { get; set; }
         public int? StatusId { get; set; }
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 20;

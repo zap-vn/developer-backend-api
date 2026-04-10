@@ -9,11 +9,13 @@ namespace CRM.Product.Domain.Entities
         public Guid? tenant_id { get; set; }
         public string name { get; set; } = string.Empty;
         public string menu_type { get; set; } = "DIGITAL";
-        public string? app_id { get; set; }
+        public Guid? app_id { get; set; }
         public int? status_id { get; set; }
         public string? timezone_id { get; set; }
         public bool is_active { get; set; } = true;
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public DateTime created_at { get; set; } = DateTime.UtcNow;
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public DateTime updated_at { get; set; } = DateTime.UtcNow;
 
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]

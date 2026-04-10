@@ -21,7 +21,6 @@ namespace CRM.Product.Infrastructure.Persistence.Repositories
         {
             return await _context.Collections
                 .Include(c => c.items)
-                    .ThenInclude(i => i.product)
                 .FirstOrDefaultAsync(c => c.id == id);
         }
 

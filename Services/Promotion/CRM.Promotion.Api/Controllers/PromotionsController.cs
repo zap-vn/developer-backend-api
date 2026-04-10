@@ -26,7 +26,6 @@ namespace CRM.Promotion.Api.Controllers
         }
 
         [HttpPost("list")]
-        [Consumes("application/json")]
         public async Task<IActionResult> List([FromBody] PromotionListRequestDto requestBody)
         {
             var result = await _mediator.Send(new GetPromotionListQuery { Request = requestBody });

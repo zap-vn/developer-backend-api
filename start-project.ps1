@@ -21,7 +21,7 @@ taskkill /IM dotnet.exe /F 2>$null | Out-Null
 Start-Sleep -Seconds 2
 
 Write-Host "Building solution..."
-& $dotnet build "$root\CRM.sln"
+# & $dotnet build "$root\CRM.sln"
 
 foreach ($s in $services) {
     Write-Host "Starting $($s.Name)..."

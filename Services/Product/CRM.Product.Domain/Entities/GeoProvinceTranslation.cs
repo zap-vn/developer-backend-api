@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,7 +9,7 @@ namespace CRM.Product.Domain.Entities
     {
         [Key]
         [Column("id")]
-        public int id { get; set; }
+        public Guid id { get; set; }
 
         [Column("province_id")]
         public int province_id { get; set; }

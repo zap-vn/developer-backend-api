@@ -15,6 +15,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = new CRM.BuildingBlocks.Serialization.CrmSnakeCaseNamingPolicy();
         options.JsonSerializerOptions.DictionaryKeyPolicy = new CRM.BuildingBlocks.Serialization.CrmSnakeCaseNamingPolicy();
+        options.JsonSerializerOptions.Converters.Add(new CRM.BuildingBlocks.Serialization.EmptyStringToNullableGuidConverter());
     });
 
 // Authentication setup
@@ -57,10 +58,8 @@ app.UseMiddleware<CRM.BuildingBlocks.Middleware.LocalizationMiddleware>();
 
 app.MapControllers();
 
+Console.WriteLine("Starting CRM.Customer.Api with updated hash v3...");
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+
 

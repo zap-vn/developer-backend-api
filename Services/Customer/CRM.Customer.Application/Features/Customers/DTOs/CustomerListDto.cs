@@ -11,7 +11,7 @@ namespace CRM.Customer.Application.Features.Customers.DTOs
         public string? email { get; set; }
         public decimal current_points_balance { get; set; }
         public decimal total_spent_amount { get; set; }
-        public int? tier_id { get; set; }
+        public Guid? tier_id { get; set; }
         public string? tier_name { get; set; }
         public int status_id { get; set; }
         public string? status_code { get; set; }

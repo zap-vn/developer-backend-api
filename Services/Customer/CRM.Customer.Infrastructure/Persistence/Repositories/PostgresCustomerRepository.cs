@@ -25,7 +25,7 @@ namespace CRM.Customer.Infrastructure.Persistence.Repositories
             Guid? tenantId = null,
             string? search = null,
             int? statusId = null,
-            int? tierId = null,
+            Guid? tierId = null,
             decimal? minTotalSpent = null,
             decimal? maxTotalSpent = null,
             decimal? minPoints = null,

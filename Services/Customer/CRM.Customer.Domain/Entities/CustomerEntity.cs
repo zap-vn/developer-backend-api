@@ -106,7 +106,7 @@ namespace CRM.Customer.Domain.Entities
         [BsonIgnore]
         public int? status_id { get; set; }
         [BsonIgnore]
-        public int? tier_id { get; set; }
+        public Guid? tier_id { get; set; }
         [BsonIgnore]
         public Guid? group_id { get; set; }
         [BsonIgnore]

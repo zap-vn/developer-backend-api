@@ -121,12 +121,12 @@ namespace CRM.Customer.Infrastructure.Persistence
                 entity.ToTable("loyalty_tier", "people");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
-                entity.Property(e => e.tier_name).HasColumnName("tier_name");
-                entity.Property(e => e.tier_code).HasColumnName("tier_code");
-                entity.Property(e => e.priority_level).HasColumnName("priority_level");
-                entity.Property(e => e.is_active).HasColumnName("is_active");
-                entity.Property(e => e.created_at).HasColumnName("created_at");
-                entity.Property(e => e.updated_at).HasColumnName("updated_at");
+                entity.Property(e => e.tier_name).HasColumnName("name");
+                entity.Ignore(e => e.tier_code);
+                entity.Ignore(e => e.priority_level);
+                entity.Ignore(e => e.is_active);
+                entity.Ignore(e => e.created_at);
+                entity.Ignore(e => e.updated_at);
             });
 
             modelBuilder.Entity<MembershipPlan>(entity =>
@@ -156,7 +156,7 @@ namespace CRM.Customer.Infrastructure.Persistence
 
             modelBuilder.Entity<StatusItem>(entity =>
             {
-                entity.ToTable("status_item", "platform");
+                entity.ToTable("status_item", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id");
                 entity.Property(e => e.group_id).HasColumnName("group_id");
@@ -171,7 +171,7 @@ namespace CRM.Customer.Infrastructure.Persistence
 
             modelBuilder.Entity<StatusItemTranslation>(entity =>
             {
-                entity.ToTable("status_item_translation", "platform");
+                entity.ToTable("status_item_translation", "system");
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.status_item_id).HasColumnName("status_item_id");

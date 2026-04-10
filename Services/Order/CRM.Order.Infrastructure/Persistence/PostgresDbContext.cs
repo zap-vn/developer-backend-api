@@ -29,7 +29,7 @@ namespace CRM.Order.Infrastructure.Persistence
 
             modelBuilder.Entity<OrderStatusInfo>(entity =>
             {
-                entity.ToTable("status_item", "platform");
+                entity.ToTable("status_item", "system");
                 entity.HasKey(e => e.id);
             });
         }

@@ -46,13 +46,13 @@ namespace CRM.Product.Domain.Entities
         [Column("sort_order")]
         public int? sort_order { get; set; }
 
-        [Column("meta_title")]
+        [NotMapped]
         public string? meta_title { get; set; }
 
-        [Column("meta_description")]
+        [NotMapped]
         public string? meta_description { get; set; }
 
-        [Column("meta_keywords")]
+        [NotMapped]
         public string? meta_keywords { get; set; }
 
         [Column("canonical_url")]
@@ -64,16 +64,16 @@ namespace CRM.Product.Domain.Entities
         [Column("is_active")]
         public bool is_active { get; set; } = true;
 
-        [Column("display_initial")]
+        [NotMapped]
         public string? display_initial { get; set; }
 
         [Column("applicable_channels")]
         public string[]? applicable_channels { get; set; }
 
-        [Column("seo_title")]
+        [NotMapped]
         public string? seo_title { get; set; }
 
-        [Column("seo_description")]
+        [NotMapped]
         public string? seo_description { get; set; }
 
         // Navigation properties (Renamed to avoid EF conventions)

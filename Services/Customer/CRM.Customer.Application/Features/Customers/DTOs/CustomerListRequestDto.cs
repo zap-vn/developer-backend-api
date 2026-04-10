@@ -27,7 +27,7 @@ namespace CRM.Customer.Application.Features.Customers.DTOs
         public int? StatusId { get; set; }
 
         [JsonPropertyName("tier_id")]
-        public int? TierId { get; set; }
+        public Guid? TierId { get; set; }
 
         /// <summary>Filter: total_spent_amount >= value.</summary>
         [JsonPropertyName("min_total_spent")]

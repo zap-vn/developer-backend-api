@@ -157,10 +157,10 @@ try {
                            END IF;
                         END IF;
                         
-                        -- Fix Status FK (Supports both identity.status and platform.status_item)
+                        -- Fix Status FK (Supports both identity.status and system.status_item)
                         IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'tenant_node_status_id_fkey') THEN
-                           IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='platform' AND table_name='status_item') THEN
-                               ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_status_id_fkey FOREIGN KEY (status_id) REFERENCES platform.status_item(id);
+                           IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='system' AND table_name='status_item') THEN
+                               ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_status_id_fkey FOREIGN KEY (status_id) REFERENCES system.status_item(id);
                            ELSEIF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='identity' AND table_name='status') THEN
                                ALTER TABLE identity.tenant_node ADD CONSTRAINT tenant_node_status_id_fkey FOREIGN KEY (status_id) REFERENCES identity.status(id);
                            END IF;

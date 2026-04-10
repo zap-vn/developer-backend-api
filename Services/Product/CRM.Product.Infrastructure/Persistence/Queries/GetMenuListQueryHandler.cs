@@ -45,7 +45,7 @@ namespace CRM.Product.Infrastructure.Persistence.Queries
                 id = m.id,
                 name = m.name,
                 menu_type = m.menu_type,
-                app_id = m.app_id,
+                app_id = m.app_id?.ToString(),
                 status_id = m.status_id,
                 status_label = m.StatusLabel,
                 timezone_id = m.timezone_id,

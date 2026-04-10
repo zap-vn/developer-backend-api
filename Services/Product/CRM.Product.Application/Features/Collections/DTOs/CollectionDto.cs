@@ -11,6 +11,8 @@ namespace CRM.Product.Application.Features.Collections.DTOs
         public string? description_html { get; set; }
         public string? banner_url { get; set; }
         public int status_id { get; set; }
+        public string? status_code { get; set; }
+        public string? status_name { get; set; }
         public int sort_order { get; set; }
         public List<CollectionItemDto> items { get; set; } = new List<CollectionItemDto>();
     }

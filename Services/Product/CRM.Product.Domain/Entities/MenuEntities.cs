@@ -17,9 +17,11 @@ namespace CRM.Product.Domain.Entities
         public DateTime created_at { get; set; } = DateTime.UtcNow;
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public DateTime updated_at { get; set; } = DateTime.UtcNow;
-
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public string? StatusLabel { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("status_id")]
+        public virtual StatusItem? status { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public int TotalItems { get; set; }

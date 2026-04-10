@@ -47,7 +47,11 @@ namespace CRM.Product.Infrastructure.Persistence.Queries
                 menu_type = m.menu_type,
                 app_id = m.app_id?.ToString(),
                 status_id = m.status_id,
-                status_label = m.StatusLabel,
+                status_code = m.status?.code,
+                status_name = m.status != null
+                    ? (m.status.translations?.FirstOrDefault(t => t.locale_id == localeId)?.name ?? 
+                       $"{m.status.translations?.FirstOrDefault(t => t.locale_id == 2)?.name} ({m.status.translations?.FirstOrDefault(t => t.locale_id == 1)?.name})")
+                    : null,
                 timezone_id = m.timezone_id,
                 is_active = m.is_active,
                 sections_count = m.SectionsCount,

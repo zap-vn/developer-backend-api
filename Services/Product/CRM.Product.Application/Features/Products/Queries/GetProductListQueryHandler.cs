@@ -99,7 +99,7 @@ namespace CRM.Product.Application.Features.Products.Queries
                     product_type_id = p.product_type_id,
                     product_type_text = p.product_type?.translations?.FirstOrDefault(t => t.locale_id == localeId)?.name ?? p.product_type?.code ?? "",
                     status_id = p.status_id,
-                    status_text = statusText,
+                    status_name = statusText,
                     status_code = statusItem?.code ?? "",
                     category_id = primaryCategory?.category_id,
                     category_name = primaryCategory?.category?.name,

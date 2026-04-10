@@ -10,7 +10,8 @@ namespace CRM.Product.Application.Features.Menus.DTOs
         public string channel => menu_type; // Match SQL alias
         public string? app_id { get; set; }
         public int? status_id { get; set; }
-        public string? status_label { get; set; }
+        public string? status_code { get; set; }
+        public string? status_name { get; set; }
         public string? timezone_id { get; set; }
         public bool is_active { get; set; }
         public int sections_count { get; set; }

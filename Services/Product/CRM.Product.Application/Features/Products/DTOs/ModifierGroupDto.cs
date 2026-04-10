@@ -14,6 +14,7 @@ namespace CRM.Product.Application.Features.Products.DTOs
         public bool is_required { get; set; }
         public int sort_order { get; set; }
         public int? status_id { get; set; }
-        public string? status_text { get; set; }
+        public string? status_code { get; set; }
+        public string? status_name { get; set; }
     }
 }
